@@ -982,7 +982,7 @@
     find-root "^1.1.0"
     source-map "^0.5.7"
 
-"@emotion/cache@11.0.0-next.12", "@emotion/cache@^11.0.0-next.12":
+"@emotion/cache@^11.0.0-next.12":
   version "11.0.0-next.12"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.0.0-next.12.tgz#e2445b48997ababb54a03eb06dbb1bc67c0d6f0f"
   integrity sha512-6fMuPtXQcORvFaoAkyrtCntBnyLn7SRX7hsg/bz/1rXgQUxB3hawFDLMTKttvwr2zDd1Jfy9iit8Jz4Bz5jlcA==
@@ -992,7 +992,7 @@
     "@emotion/utils" "0.11.3"
     "@emotion/weak-memoize" "0.2.5"
 
-"@emotion/css@11.0.0-next.12":
+"@emotion/css@^11.0.0-next.12":
   version "11.0.0-next.12"
   resolved "https://registry.yarnpkg.com/@emotion/css/-/css-11.0.0-next.12.tgz#b25618539206f0c1148333f03289d190b5bd5f85"
   integrity sha512-uJTRcpwG1dkLwGiLfj/HBzcH3N+9N7O+BfO8J+QM9nRHfjkSjOlQEDr6gUvfXKfm81+KMS/xT1OtCJF2oem2EQ==
@@ -1025,7 +1025,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
   integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
 
-"@emotion/react@11.0.0-next.12":
+"@emotion/react@^11.0.0-next.12":
   version "11.0.0-next.12"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.0.0-next.12.tgz#535897164bc242f474af51f597cae46a6a0ea6b8"
   integrity sha512-HpurlvmgfAoyn4gVRuXbVtP6ACc10F5/qLN63DSmXgmSp2FTn1PcCw6i8l1Yj9HAq8M1ohmOmcco1fj//30vig==
@@ -1049,7 +1049,7 @@
     "@emotion/utils" "0.11.3"
     csstype "^2.6.7"
 
-"@emotion/server@11.0.0-next.12":
+"@emotion/server@^11.0.0-next.12":
   version "11.0.0-next.12"
   resolved "https://registry.yarnpkg.com/@emotion/server/-/server-11.0.0-next.12.tgz#388cd3e2af3bf25aa2d4204afbdc215cd162e0f8"
   integrity sha512-GwCpiGhp2HEeYISq4Vt29ALtmS5CIFDtq6lUqiyEVOgrSMY6ULOoT+qlO+6sbl68btirOBW1MYb0JMtleZu61A==
@@ -1064,7 +1064,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-0.10.0-next.1.tgz#53b0c4e72b0055e8b377190f00eec56568132d21"
   integrity sha512-dKzGmnML1bDTvKDZ3joyiNghIMCKgCwjUQZjqwFvPRN1n/M9HFZR+Iq3/I8xnfUhUDmFGIsL2A2ER4Dol75hyw==
 
-"@emotion/styled@11.0.0-next.12":
+"@emotion/styled@^11.0.0-next.12":
   version "11.0.0-next.12"
   resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.0.0-next.12.tgz#21346761a62ad2d9ccd0af2353e0230e91fb3a2d"
   integrity sha512-x7sH5XKb2dZP5pCgDOjqxTG8XxQ09XLnwkNNWlIDs7jmJUb3r6eKs7UhTDBMGAxDjF0ENzSSiywISw0ry2wX+w==
@@ -2344,6 +2344,11 @@ data-uri-to-buffer@3.0.0:
   integrity sha512-MJ6mFTZ+nPQO+39ua/ltwNePXrfdF3Ww0wP1Od7EePySXN1cP9XNqRQOG3FxTfipp8jx898LUCgBCEP11Qw/ZQ==
   dependencies:
     buffer-from "^1.1.1"
+
+date-fns@^2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.14.0.tgz#359a87a265bb34ef2e38f93ecf63ac453f9bc7ba"
+  integrity sha512-1zD+68jhFgDIM0rF05rcwYO8cExdNqxjq4xP1QKM60Q45mnO6zaMWB4tOzrIr4M4GSLntsKeE4c9Bdl2jhL/yw==
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
@@ -3816,7 +3821,7 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-next@latest:
+next@^9.4.2:
   version "9.4.2"
   resolved "https://registry.yarnpkg.com/next/-/next-9.4.2.tgz#5d086aaaf9d683b457f615073dca39ed96a78cce"
   integrity sha512-T/3Rmz/R++OyrWNZ3ZQn+RR9Tbu6DWxZGVXUc+2z4/FxIkeZXggB/494i3IsAssiK1Fu8WVDIwYxOWQ0RgITUg==
@@ -4587,6 +4592,11 @@ prepend-http@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
+
+prettier@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.5.tgz#d6d56282455243f2f92cc1716692c08aa31522d4"
+  integrity sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
 
 private@^0.1.8:
   version "0.1.8"
