@@ -15,6 +15,7 @@ export async function getStaticProps() {
   const data = await readFile(path.join(process.cwd(), `/__data__/${year}.json`), "UTF-8");
 
   return {
+    unstable_revalidate: 3600,
     props: {
       data: JSON.parse(data ?? {})
     }
