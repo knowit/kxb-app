@@ -11,10 +11,20 @@ import CalculateEarningsInputs, {
 
 const getDateFromYearDataAndMonth = (year, month) => {
   const now = new Date();
-  return new Date(year.year ?? now.getFullYear(), month ?? now.getMonth(), 1);
+  return new Date(year?.year ?? now.getFullYear(), month ?? now.getMonth(), 1);
 };
 
-const getMonthFromYearDataAndDate = (year, date) => year?.months[date?.getMonth()] ?? 0;
+const getMonthFromYearDataAndDate = (year, date) => {
+  const months = year?.months;
+
+  if (months === null || months === undefined || months?.length <= 0) {
+    return 0;
+  }
+
+  const month = date?.getMonth() ?? 0;
+
+  return year.months[month];
+};
 
 export default function YearlyEarnings({ year, month }) {
   const initialDate = getDateFromYearDataAndMonth(year, month);

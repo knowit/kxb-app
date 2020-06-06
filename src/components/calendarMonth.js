@@ -5,7 +5,7 @@ import Flex from "./flex";
 
 export default function CalendarMonth({ month, width = "sm", ...other }) {
   const renderSpacingDays = days => {
-    if (days?.length <= 0) {
+    if (days === null || days === undefined || days?.length <= 0) {
       return null;
     }
 

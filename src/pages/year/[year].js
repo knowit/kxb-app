@@ -3,8 +3,11 @@ import YearlyEarnings from "../../containers/yearlyEarnings";
 import { getYearPageProps, getYearPageStaticPaths } from "../../logic/staticPageLogic";
 import { getFileSystemDataForYear } from "../../utils/fileSystemData";
 
-export default function YearPage(props) {
-  return <YearlyEarnings year={props?.data?.data ?? {}} />;
+export default function YearPage({ data }) {
+  const now = new Date();
+  const month = now.getMonth();
+
+  return <YearlyEarnings year={data?.data ?? {}} month={month} />;
 }
 
 export async function getStaticProps({ params }) {
