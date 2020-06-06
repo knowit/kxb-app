@@ -51,12 +51,14 @@ export default function CalculateEarningsInputs({
         placeholder="Provisjon"
         type="number"
         onChange={inputValue => setCommission(inputValue)}
+        step={0.01}
       />
       <BouncyInput
         initialValue={tax}
         placeholder="Skatteprosent"
         type="number"
         onChange={inputValue => setTax(inputValue)}
+        step={0.01}
       />
       <BouncyInput
         initialValue={nonCommissionedHours}
