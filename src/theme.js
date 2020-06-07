@@ -76,7 +76,7 @@ export const theme = {
     "12rem"
   ],
   fonts: {
-    default: "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif"
+    default: `-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif`
   },
   borders: [0, `1px solid ${colors.main}`],
   radii: ["0.4rem", "0.8rem", "1.6rem", "3.2rem", "50%"]

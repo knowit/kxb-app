@@ -10,8 +10,7 @@ export default function GlobalStyles() {
           line-height: 1.15;
           -webkit-text-size-adjust: 100%;
           font-size: 62.5%;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial",
-            sans-serif;
+          font-family: ${theme.fonts.default};
         }
         body {
           background: ${theme.colors.bg500};
