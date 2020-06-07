@@ -9,7 +9,7 @@ const StyledCalendarDay = styled.div`
   width: 40px;
   line-height: 40px;
   text-align: center;
-  color: ${props => (props.isWorkDay ? "hotpink" : "gray")};
+  color: ${props => (props.isWorkDay ? props.theme.colors.text300 : props.theme.colors.bg200)};
 `;
 
 export default function CalendarDay({ day, ...other }) {

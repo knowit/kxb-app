@@ -1,17 +1,13 @@
 import styled from "@emotion/styled";
-import * as React from "react";
+import { Box } from "./box";
 
-const StyledContainer = styled.div`
-  width: ${props => {
-    switch (props.width) {
-      case "sm":
-        return "35rem";
-      default:
-        return "auto";
-    }
-  }};
+export const Container = styled(Box)`
+  width: 100%;
+
+  ${props => props.center && `margin: 0 auto;`}
 `;
 
-export default function Container({ children, ...other }) {
-  return <StyledContainer {...other}>{children}</StyledContainer>;
-}
+Container.defaultProps = {
+  minWidth: 288,
+  maxWidth: 1440
+};

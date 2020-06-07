@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 
 const StyledNavLink = styled.a`
-  color: ${props => (props.active ? `black` : `hotpink`)};
+  color: ${props => (props.active ? props.theme.colors.text500 : props.theme.colors.bg200)};
   font-size: 2rem;
   text-decoration: none;
   text-transform: uppercase;

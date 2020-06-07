@@ -1,28 +1,7 @@
-import { css, keyframes } from "@emotion/react";
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as React from "react";
 
-const basicStyles = css`
-  font-size: 2.4rem;
-  background-color: white;
-  color: cornflowerblue;
-  border: 1px solid lightgreen;
-  border-right: none;
-  border-bottom: none;
-  box-shadow: 5px 5px 0 0 lightgreen, 10px 10px 0 0 lightyellow;
-  transition: all 0.1s linear;
-  margin: 3rem 0;
-  padding: 2rem 1.5rem;
-`;
-
-const hoverStyles = css`
-  &:hover {
-    color: white;
-    background-color: lightgray;
-    border-color: aqua;
-    box-shadow: -15px -15px 0 0 aqua, -30px -30px 0 0 cornflowerblue;
-  }
-`;
 const bounce = keyframes`
   from {
     transform: scale(1.01);
@@ -32,8 +11,26 @@ const bounce = keyframes`
   }
 `;
 const StyledBouncyInput = styled.input`
-  ${basicStyles};
-  ${hoverStyles};
+  font-size: 2.4rem;
+  background-color: ${props => props.theme.colors.bg500};
+  color: ${props => props.theme.colors.text500};
+  border: 1px solid ${props => props.theme.colors.text500};
+  border-right: none;
+  border-bottom: none;
+  box-shadow: 5px 5px 0 0 ${props => props.theme.colors.text500},
+    10px 10px 0 0 ${props => props.theme.colors.bg300};
+  transition: all 0.1s linear;
+  margin: 3rem 0;
+  padding: 2rem 1.5rem;
+
+  &:hover {
+    color: ${props => props.theme.colors.bg500};
+    background-color: ${props => props.theme.colors.text500};
+    border-color: ${props => props.theme.colors.text100};
+    box-shadow: -15px -15px 0 0 ${props => props.theme.colors.text300},
+      -30px -30px 0 0 ${props => props.theme.colors.text100};
+  }
+
   & code {
     background-color: linen;
   }

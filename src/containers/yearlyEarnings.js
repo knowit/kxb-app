@@ -1,7 +1,9 @@
 import * as React from "react";
 import CalendarMonth from "../components/calendarMonth";
-import Flex from "../components/flex";
-import Typography from "../components/typography";
+import { Flex } from "../components/flex";
+import { FlexItem } from "../components/flexItem";
+import { Heading } from "../components/heading";
+import { Paragraph } from "../components/paragraph";
 import { getWorkDays } from "../logic/calendarLogic";
 import { getFormattedMonth } from "../logic/dateLogic";
 import { getGrossIncome, getNetIncome, getWorkHours } from "../logic/earningsLogic";
@@ -68,27 +70,27 @@ export default function YearlyEarnings({ year, month }) {
   ]);
 
   return (
-    <>
-      <Flex>
+    <Flex p={[3]} flexDirection={["column", "column", "row"]}>
+      <FlexItem mr={[0, 0, 8, 8]} order={[1, 1, 0, 0]}>
         <CalculateEarningsInputs
           onChange={earningsValues => setEarningInputValues(earningsValues)}
         />
-        <Flex direction="column">
-          <Typography as="h1" uppercase>
-            {formattedMonth} {year?.year}
-          </Typography>
-          <CalendarMonth month={currentMonth} />
-          <Typography>
-            Arbeidstimer i {formattedMonth}: {workHours} timer
-          </Typography>
-          <Typography>
-            Brutto i {formattedMonth}: {gross},-
-          </Typography>
-          <Typography>
-            Netto i {formattedMonth}: {net},-
-          </Typography>
-        </Flex>
-      </Flex>
-    </>
+      </FlexItem>
+      <FlexItem>
+        <Heading as="h1" textTransform="uppercase">
+          {formattedMonth} {year?.year}
+        </Heading>
+        <CalendarMonth month={currentMonth} mb={5} />
+        <Paragraph>
+          Arbeidstimer i {formattedMonth}: {workHours} timer
+        </Paragraph>
+        <Paragraph>
+          Brutto i {formattedMonth}: {gross},-
+        </Paragraph>
+        <Paragraph>
+          Netto i {formattedMonth}: {net},-
+        </Paragraph>
+      </FlexItem>
+    </Flex>
   );
 }

@@ -1,7 +1,8 @@
-import { css, Global } from "@emotion/react";
+import { css, Global, useTheme } from "@emotion/react";
 import * as React from "react";
 
 export default function GlobalStyles() {
+  const theme = useTheme();
   return (
     <Global
       styles={css`
@@ -13,7 +14,7 @@ export default function GlobalStyles() {
             sans-serif;
         }
         body {
-          background: papayawhip;
+          background: ${theme.colors.bg500};
           margin: 0;
         }
         ul {

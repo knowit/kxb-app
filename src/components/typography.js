@@ -1,34 +1,16 @@
 import styled from "@emotion/styled";
-import * as React from "react";
+import { compose, lineHeight } from "styled-system";
+import { Box } from "./box";
 
-const StyledTypography = styled.p`
-  ${props => props.uppercase && "text-transform: uppercase;"}
+export const composedHelpers = compose(lineHeight);
 
-  ${props => {
-    switch (props.as) {
-      case "h1":
-        return `
-            font-size: 4.8rem;
-            margin: 0 0 0.5rem;
-        `;
-      case "h2":
-        return `
-            font-size: 3.6rem;
-            margin: 0 0 0.5rem;
-        `;
-      default:
-        return `
-            font-size: 2.4rem;
-            margin: 0 0 0.5rem;
-        `;
-    }
-  }}
+export const Typography = styled(Box)`
+  ${composedHelpers}
+  ${props => props.textTransform && `text-transform: ${props.textTransform}`};
 `;
 
-export default function Typography({ children, as = "p", ...other }) {
-  return (
-    <StyledTypography as={as} {...other}>
-      {children}
-    </StyledTypography>
-  );
-}
+Typography.defaultProps = {
+  as: "p",
+  fontWeight: 1,
+  color: "text500"
+};
