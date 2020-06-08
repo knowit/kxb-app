@@ -1,6 +1,6 @@
 import * as React from "react";
 import BouncyInput from "../components/bouncyInput";
-import Flex from "../components/flex";
+import { Flex } from "../components/flex";
 
 export const calculateEarningsInputsDefaultOptions = {
   workHoursPerDay: 7.5,
@@ -33,7 +33,7 @@ export default function CalculateEarningsInputs({
   }, [workHoursPerDay, hourlyRate, commission, tax, nonCommissionedHours]);
 
   return (
-    <Flex direction="column">
+    <Flex flexDirection="column">
       <BouncyInput
         initialValue={workHoursPerDay}
         placeholder="Arbeidstimer per dag"
@@ -51,12 +51,14 @@ export default function CalculateEarningsInputs({
         placeholder="Provisjon"
         type="number"
         onChange={inputValue => setCommission(inputValue)}
+        step={0.01}
       />
       <BouncyInput
         initialValue={tax}
         placeholder="Skatteprosent"
         type="number"
         onChange={inputValue => setTax(inputValue)}
+        step={0.01}
       />
       <BouncyInput
         initialValue={nonCommissionedHours}

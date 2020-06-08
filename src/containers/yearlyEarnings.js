@@ -1,24 +1,51 @@
 import * as React from "react";
 import CalendarMonth from "../components/calendarMonth";
-import Flex from "../components/flex";
-import Typography from "../components/typography";
+import { Flex } from "../components/flex";
+import { FlexItem } from "../components/flexItem";
+import { Heading } from "../components/heading";
+import { Paragraph } from "../components/paragraph";
 import { getWorkDays } from "../logic/calendarLogic";
-import { getFormattedLongDate, getFormattedMonth } from "../logic/dateLogic";
+import { getFormattedMonth } from "../logic/dateLogic";
 import { getGrossIncome, getNetIncome, getWorkHours } from "../logic/earningsLogic";
 import CalculateEarningsInputs, {
   calculateEarningsInputsDefaultOptions
 } from "./calculateEarningsInputs";
 
-export default function YearlyEarnings({ year }) {
-  const [currentDate, setCurrentDate] = React.useState(new Date());
-  const [currentMonth, setCurrentMonth] = React.useState(year?.months[currentDate.getMonth()] ?? 0);
+const getDateFromYearDataAndMonth = (year, month) => {
+  const now = new Date();
+  return new Date(year?.year ?? now.getFullYear(), month ?? now.getMonth(), 1);
+};
+
+const getMonthFromYearDataAndDate = (year, date) => {
+  const months = year?.months;
+
+  if (months === null || months === undefined || months?.length <= 0) {
+    return 0;
+  }
+
+  const month = date?.getMonth() ?? 0;
+
+  return year.months[month];
+};
+
+export default function YearlyEarnings({ year, month }) {
+  const initialDate = getDateFromYearDataAndMonth(year, month);
+  const [currentDate, setCurrentDate] = React.useState(initialDate);
+  const [currentMonth, setCurrentMonth] = React.useState(
+    getMonthFromYearDataAndDate(year, initialDate)
+  );
+
+  React.useEffect(() => {
+    const newDate = getDateFromYearDataAndMonth(year, month);
+    setCurrentDate(newDate);
+    setCurrentMonth(getMonthFromYearDataAndDate(year, newDate));
+  }, [year, month]);
 
   const [earningInputValues, setEarningInputValues] = React.useState(
     calculateEarningsInputsDefaultOptions
   );
 
   const formattedMonth = React.useMemo(() => getFormattedMonth(currentDate), [currentDate]);
-  const formattedLongDate = React.useMemo(() => getFormattedLongDate(currentDate), [currentDate]);
 
   const workDays = React.useMemo(() => getWorkDays(currentMonth), [currentMonth]);
 
@@ -43,28 +70,27 @@ export default function YearlyEarnings({ year }) {
   ]);
 
   return (
-    <>
-      <Flex>
+    <Flex p={[3]} flexDirection={["column", "column", "row"]}>
+      <FlexItem mr={[0, 0, 8, 8]} order={[1, 1, 0, 0]}>
         <CalculateEarningsInputs
           onChange={earningsValues => setEarningInputValues(earningsValues)}
         />
-        <Flex direction="column">
-          <Typography as="h1" uppercase>
-            {formattedMonth}
-          </Typography>
-          <Typography as="h2">{formattedLongDate}</Typography>
-          <CalendarMonth month={currentMonth} />
-          <Typography>
-            Arbeidstimer i {formattedMonth}: {workHours} timer
-          </Typography>
-          <Typography>
-            Brutto i {formattedMonth}: {gross},-
-          </Typography>
-          <Typography>
-            Netto i {formattedMonth}: {net},-
-          </Typography>
-        </Flex>
-      </Flex>
-    </>
+      </FlexItem>
+      <FlexItem>
+        <Heading as="h1" textTransform="uppercase">
+          {formattedMonth} {year?.year}
+        </Heading>
+        <CalendarMonth month={currentMonth} mb={5} />
+        <Paragraph>
+          Arbeidstimer i {formattedMonth}: {workHours} timer
+        </Paragraph>
+        <Paragraph>
+          Brutto i {formattedMonth}: {gross},-
+        </Paragraph>
+        <Paragraph>
+          Netto i {formattedMonth}: {net},-
+        </Paragraph>
+      </FlexItem>
+    </Flex>
   );
 }

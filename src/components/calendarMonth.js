@@ -1,11 +1,11 @@
 import * as React from "react";
 import CalendarDay from "./calendarDay";
-import Container from "./container";
-import Flex from "./flex";
+import { Container } from "./container";
+import { Flex } from "./flex";
 
-export default function CalendarMonth({ month, width = "sm", ...other }) {
+export default function CalendarMonth({ month, maxWidth = "350px", ...other }) {
   const renderSpacingDays = days => {
-    if (days?.length <= 0) {
+    if (days === null || days === undefined || days?.length <= 0) {
       return null;
     }
 
@@ -25,8 +25,8 @@ export default function CalendarMonth({ month, width = "sm", ...other }) {
   };
 
   return (
-    <Container width={width} {...other}>
-      <Flex noMargin noPadding>
+    <Container maxWidth={maxWidth} {...other}>
+      <Flex flexWrap="wrap">
         {renderSpacingDays(month?.days)}
         {month?.days?.map((day, i) => (
           <CalendarDay key={`calendar-day-${i}`} day={day} />

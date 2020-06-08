@@ -1,18 +1,13 @@
 import styled from "@emotion/styled";
-import * as React from "react";
+import { compose, flexbox } from "styled-system";
+import { Box } from "./box";
 
-const StyledFlex = styled.div`
+const composedHelpers = compose(flexbox);
+
+export const Flex = styled(Box)`
   display: flex;
-  flex-direction: ${props => props.direction ?? "row"};
-  flex-wrap: wrap;
-  padding: ${props => !props.noPadding && "1rem"};
-  margin: ${props => !props.noMargin && "1rem"};
+
+  ${composedHelpers}
 `;
 
-export default function Flex({ children, direction, noPadding, noMargin }) {
-  return (
-    <StyledFlex direction={direction} noPadding={noPadding} noMargin={noMargin}>
-      {children}
-    </StyledFlex>
-  );
-}
+Flex.defaultProps = {};
