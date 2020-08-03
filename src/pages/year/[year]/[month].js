@@ -12,7 +12,7 @@ export async function getStaticProps({ params }) {
   const data = await getFileSystemDataForYear(params.year ?? new Date().getFullYear());
 
   return {
-    unstable_revalidate: 3600,
+    revalidate: 3600,
     props: await getYearPageProps({
       data,
       year: params.year,
