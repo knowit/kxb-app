@@ -10,6 +10,19 @@ const bounce = keyframes`
     transform: scale(0.99);
   }
 `;
+
+const StyledBouncyInputContainer = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+`;
+
+const StyledBouncyInputLabel = styled.label`
+  font-size: 1.4rem;
+  color: ${props => props.theme.colors.text500};
+  transform: translate(0, 20px);
+  transition: transform 0.1s linear;
+`;
+
 const StyledBouncyInput = styled.input`
   font-size: 2.4rem;
   background-color: ${props => props.theme.colors.bg500};
@@ -31,24 +44,39 @@ const StyledBouncyInput = styled.input`
       -30px -30px 0 0 ${props => props.theme.colors.text100};
   }
 
+  &:hover + label {
+    transform: translate(0);
+  }
+
   & code {
     background-color: linen;
   }
   animation: ${props => props.animation} 0.2s infinite ease-in-out alternate;
 `;
 
-export default function BouncyInput({ animation = bounce, initialValue, onChange, ...other }) {
+export default function BouncyInput({
+  id,
+  animation = bounce,
+  initialValue,
+  onChange,
+  label,
+  ...other
+}) {
   const [value, setValue] = React.useState(initialValue);
 
   return (
-    <StyledBouncyInput
-      animation={animation}
-      value={value}
-      onChange={e => {
-        setValue(e.target.value);
-        onChange(e.target.value);
-      }}
-      {...other}
-    />
+    <StyledBouncyInputContainer>
+      <StyledBouncyInput
+        id={id}
+        animation={animation}
+        value={value}
+        onChange={e => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        {...other}
+      />
+      {label && <StyledBouncyInputLabel for={id}>{label}</StyledBouncyInputLabel>}
+    </StyledBouncyInputContainer>
   );
 }

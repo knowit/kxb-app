@@ -35,18 +35,24 @@ export default function CalculateEarningsInputs({
   return (
     <Flex flexDirection="column">
       <BouncyInput
+        id="work-hours-per-day"
+        label="Arbeidstimer per dag"
         initialValue={workHoursPerDay}
         placeholder="Arbeidstimer per dag"
         type="number"
         onChange={inputValue => setWorkHoursPerDay(inputValue)}
       />
       <BouncyInput
+        id="hourly-rate"
+        label="Timesats"
         initialValue={hourlyRate}
         placeholder="Timesats"
         type="number"
         onChange={inputValue => setHourlyRate(inputValue)}
       />
       <BouncyInput
+        id="commission"
+        label="Provisjon"
         initialValue={commission}
         placeholder="Provisjon"
         type="number"
@@ -54,6 +60,8 @@ export default function CalculateEarningsInputs({
         step={0.01}
       />
       <BouncyInput
+        id="tax"
+        label="Skatteprosent"
         initialValue={tax}
         placeholder="Skatteprosent"
         type="number"
@@ -61,6 +69,8 @@ export default function CalculateEarningsInputs({
         step={0.01}
       />
       <BouncyInput
+        id="non-commissioned-hours"
+        label="Ikke fakturerbare timer"
         initialValue={nonCommissionedHours}
         placeholder="Ikke fakturerbare timer"
         type="number"
