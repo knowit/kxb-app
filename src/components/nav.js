@@ -17,7 +17,7 @@ export default function Nav({ year, years, months }) {
     <StyledNav>
       <StyledItems>
         {years?.map(year => (
-          <StyledItem>
+          <StyledItem key={`styled-item-year-${year}`}>
             <NavLink href="/year/[year]" as={`/year/${year}`}>
               {year}
             </NavLink>
@@ -26,7 +26,7 @@ export default function Nav({ year, years, months }) {
       </StyledItems>
       <StyledItems>
         {months?.map(month => (
-          <StyledItem>
+          <StyledItem key={`styled-item-year-${year}-month-${month}`}>
             <NavLink href="/year/[year]/[month]" as={`/year/${year}/${month?.toLowerCase()}`}>
               {month?.toLowerCase()}
             </NavLink>
