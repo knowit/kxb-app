@@ -2,14 +2,14 @@ import * as React from "react";
 import YearlyEarnings from "../../../containers/yearlyEarnings";
 import { getMonthFromName } from "../../../logic/dateLogic";
 import { getMonthPageStaticPaths, getYearPageProps } from "../../../logic/staticPageLogic";
-import { getFileSystemDataForYear } from "../../../utils/fileSystemData";
+import CalendarService from "../../../services/CalendarService";
 
 export default function MonthPage({ data, month }) {
-  return <YearlyEarnings year={data?.data ?? {}} month={month} />;
+  return <YearlyEarnings year={data ?? {}} month={month} />;
 }
 
 export async function getStaticProps({ params }) {
-  const data = await getFileSystemDataForYear(params.year ?? new Date().getFullYear());
+  const data = await CalendarService.getCalendarMonthsForYear(params.year);
 
   return {
     revalidate: 3600,

@@ -76,7 +76,7 @@ export default function BouncyInput({
         }}
         {...other}
       />
-      {label && <StyledBouncyInputLabel for={id}>{label}</StyledBouncyInputLabel>}
+      {label && <StyledBouncyInputLabel htmlFor={id}>{label}</StyledBouncyInputLabel>}
     </StyledBouncyInputContainer>
   );
 }
