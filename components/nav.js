@@ -1,20 +1,8 @@
 import { useTheme } from "next-themes";
 import * as React from "react";
-import { useClickAway } from "react-use";
-import { useCalendar } from "../utils/calendarProvider";
 import Link from "./link";
 
 export default function Nav() {
-  const { year, years, months } = useCalendar();
-
-  const [open, setOpen] = React.useState(false);
-
-  const ref = React.useRef(null);
-
-  useClickAway(ref, () => {
-    setOpen(false);
-  });
-
   const [mounted, setMounted] = React.useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -22,8 +10,8 @@ export default function Nav() {
   React.useEffect(() => setMounted(true), []);
 
   return (
-    <nav className="flex">
-      <div className="flex overflow-x-scroll">
+    <nav className="flex p-6 w-full max-w-7xl justify-center items-center my-0 mx-auto">
+      <div className="flex overflow-x-scroll flex-grow">
         <Link href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,28 +28,6 @@ export default function Nav() {
             />
           </svg>
         </Link>
-        <ul className="flex">
-          {years?.map(year => (
-            <li key={`styled-item-year-${year}`}>
-              <Link className="p-2" href="/year/[year]" as={`/year/${year}`}>
-                {year}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <ul className="flex">
-          {months?.map(month => (
-            <li key={`styled-item-year-${year?.year}-month-${month}`}>
-              <Link
-                className="p-2"
-                href="/year/[year]/[month]"
-                as={`/year/${year?.year}/${month?.toLowerCase()}`}
-              >
-                {month?.toLowerCase()}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </div>
       <div className="flex items-center ml-6">
         <button

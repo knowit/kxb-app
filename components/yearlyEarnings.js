@@ -74,14 +74,14 @@ export default function YearlyEarnings() {
       <CalculateEarningsInputs onChange={earningsValues => setEarningInputValues(earningsValues)} />
       <div className="w-full max-w-sm order-first lg:order-last">
         <CalendarMonth title={`${formattedMonth} ${year?.year}`} month={currentMonth} />
-        <Text>
-          Arbeidstimer i {formattedMonth}: {workHours} timer
+        <Text className="mt-6">
+          Work hours in {formattedMonth}: {workHours} hours
         </Text>
         <Text>
-          Brutto i {formattedMonth}: {gross},-
+          Gross salary {formattedMonth}: {gross},-
         </Text>
         <Text>
-          Netto i {formattedMonth}: {net},-
+          Net salary {formattedMonth}: {net},-
         </Text>
       </div>
     </div>

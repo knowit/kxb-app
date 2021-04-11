@@ -1,6 +1,6 @@
 // src/count-context.js
 import * as React from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import {
   getFormattedMonth,
   getMonthNames,
@@ -14,7 +14,8 @@ const now = new Date();
 
 const initialState = {
   year: now.getFullYear(),
-  month: now.getMonth()
+  month: now.getMonth(),
+  prefetchYear: now.getFullYear()
 };
 
 const getDateFromYearDataAndMonth = (year, month) => {
@@ -52,11 +53,6 @@ function CalendarProvider({
     }
   );
 
-  React.useEffect(() => {
-    setYear(year);
-    setMonth(month);
-  }, [year, month]);
-
   const setYear = year => dispatch({ type: "SET_YEAR", year: year });
   const incrementYear = () => dispatch({ type: "SET_YEAR", year: state.year + 1 });
   const decrementYear = () => dispatch({ type: "SET_YEAR", year: state.year - 1 });
@@ -84,6 +80,17 @@ function CalendarProvider({
     dispatch({ type: "SET_MONTH", month: shouldDecrementYear ? 11 : newMonth });
   };
 
+  const prefetchYear = async year => {
+    const key = `https://tommy-api.vercel.app/api/calendar/${year}/locale/nb-no/months`;
+    const data = await fetcher(key);
+    mutate(key, data, false);
+  };
+
+  React.useEffect(() => {
+    setYear(year);
+    setMonth(month);
+  }, [year, month]);
+
   const value = React.useMemo(() => {
     const date = getDateFromYearDataAndMonth(state.year, state.month);
     const monthNames = getMonthNames();
@@ -99,7 +106,8 @@ function CalendarProvider({
       incrementYear,
       decrementYear,
       incrementMonth,
-      decrementMonth
+      decrementMonth,
+      prefetchYear
     };
   }, [data, state, dispatch]);
 

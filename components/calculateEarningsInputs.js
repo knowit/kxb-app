@@ -3,7 +3,7 @@ import BouncyInput from "./bouncyInput";
 
 export const calculateEarningsInputsDefaultOptions = {
   workHoursPerDay: 7.5,
-  hourlyRate: 1250,
+  hourlyRate: 1300,
   commission: 0.48,
   tax: 0.39,
   nonCommissionedHours: 0
@@ -35,43 +35,43 @@ export default function CalculateEarningsInputs({
     <div className="flex flex-col">
       <BouncyInput
         id="work-hours-per-day"
-        label="Arbeidstimer per dag"
+        label="Work hours per day"
         initialValue={workHoursPerDay}
-        placeholder="Arbeidstimer per dag"
+        placeholder="Work hours per day"
         type="number"
         onChange={inputValue => setWorkHoursPerDay(inputValue)}
       />
       <BouncyInput
         id="hourly-rate"
-        label="Timesats"
+        label="Hourly rate"
         initialValue={hourlyRate}
-        placeholder="Timesats"
+        placeholder="TimHourly rateesats"
         type="number"
         onChange={inputValue => setHourlyRate(inputValue)}
       />
       <BouncyInput
         id="commission"
-        label="Provisjon"
+        label="Commission"
         initialValue={commission}
-        placeholder="Provisjon"
+        placeholder="Commission"
         type="number"
         onChange={inputValue => setCommission(inputValue)}
         step={0.01}
       />
       <BouncyInput
         id="tax"
-        label="Skatteprosent"
+        label="Tax"
         initialValue={tax}
-        placeholder="Skatteprosent"
+        placeholder="Tax"
         type="number"
         onChange={inputValue => setTax(inputValue)}
         step={0.01}
       />
       <BouncyInput
         id="non-commissioned-hours"
-        label="Ikke fakturerbare timer"
+        label="Non-commissioned hours"
         initialValue={nonCommissionedHours}
-        placeholder="Ikke fakturerbare timer"
+        placeholder="Non-commissioned hours"
         type="number"
         onChange={inputValue => setNonCommissionedHours(inputValue)}
       />
