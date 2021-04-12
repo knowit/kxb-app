@@ -92,7 +92,7 @@ function useSalary() {
   const context = React.useContext(SalaryContext);
 
   if (context === undefined) {
-    throw new Error("useCalendar must be used within a SalaryProvider");
+    throw new Error("useSalary must be used within a SalaryProvider");
   }
 
   return context;
