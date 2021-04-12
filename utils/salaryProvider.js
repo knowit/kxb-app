@@ -1,13 +1,12 @@
 import * as React from "react";
-import { getWorkDays } from "../logic/calendarLogic";
-import { getGrossIncome, getNetIncome, getWorkHours } from "../logic/earningsLogic";
+import { getEarningsForMonth } from "../logic/earningsLogic";
 import { useCalendar } from "./calendarProvider";
 
 const initialState = {
   workHoursPerDay: 7.5,
   hourlyRate: 1300,
   commission: 0.48,
-  tax: 0.39,
+  tax: 0.414,
   nonCommissionedHours: 0
 };
 
@@ -39,22 +38,7 @@ SalaryContext.displayName = "SalaryContext";
 
 function SalaryProvider({ children }) {
   const [state, dispatch] = React.useReducer(salaryReducer, initialState);
-  const { monthDetail } = useCalendar();
-
-  const workDays = React.useMemo(() => getWorkDays(monthDetail), [monthDetail]);
-
-  const workHours = React.useMemo(
-    () => getWorkHours(state.workHoursPerDay, workDays.length, state.nonCommissionedHours),
-    [state.workHoursPerDay, workDays, state.nonCommissionedHours]
-  );
-
-  const gross = React.useMemo(() => getGrossIncome(workHours, state.hourlyRate, state.commission), [
-    workHours,
-    state.hourlyRate,
-    state.commission
-  ]);
-
-  const net = React.useMemo(() => getNetIncome(gross, state.tax), [gross, state.tax]);
+  const { monthDetail, currentMonthDetail, lastMonthDetail, nextMonthDetail } = useCalendar();
 
   const value = React.useMemo(
     () => ({
@@ -66,21 +50,51 @@ function SalaryProvider({ children }) {
       setTax: value => dispatch({ type: "SET_TAX", tax: value }),
       setNonCommissionedHors: value =>
         dispatch({ type: "SET_NON_COMMISSIONED_HOURS", nonCommissionedHours: value }),
-      workDays,
-      workHours,
-      gross,
-      net
+      monthStatistics: getEarningsForMonth(
+        monthDetail,
+        state.workHoursPerDay,
+        state.hourlyRate,
+        state.commission,
+        state.tax,
+        state.nonCommissionedHours
+      ),
+      currentMonthStatistics: getEarningsForMonth(
+        currentMonthDetail,
+        state.workHoursPerDay,
+        state.hourlyRate,
+        state.commission,
+        state.tax,
+        state.nonCommissionedHours
+      ),
+      lastMonthStatistics: getEarningsForMonth(
+        lastMonthDetail,
+        state.workHoursPerDay,
+        state.hourlyRate,
+        state.commission,
+        state.tax,
+        state.nonCommissionedHours
+      ),
+      nextMonthStatistics: getEarningsForMonth(
+        nextMonthDetail,
+        state.workHoursPerDay,
+        state.hourlyRate,
+        state.commission,
+        state.tax,
+        state.nonCommissionedHours
+      )
     }),
-    [state, workDays, workHours, gross, net]
+    [state, monthDetail]
   );
 
   return <SalaryContext.Provider value={value}>{children}</SalaryContext.Provider>;
 }
 function useSalary() {
   const context = React.useContext(SalaryContext);
+
   if (context === undefined) {
     throw new Error("useCalendar must be used within a SalaryProvider");
   }
+
   return context;
 }
 export { SalaryProvider, useSalary };

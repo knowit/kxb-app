@@ -1,5 +1,6 @@
 import { useTheme } from "next-themes";
 import * as React from "react";
+import { useSalary } from "../utils/salaryProvider";
 import Link from "./link";
 
 export default function Nav() {
@@ -8,6 +9,8 @@ export default function Nav() {
 
   // After mounting, we have access to the theme
   React.useEffect(() => setMounted(true), []);
+
+  const { currentMonthStatistics, lastMonthStatistics, nextMonthStatistics } = useSalary();
 
   return (
     <nav className="flex p-6 w-full max-w-7xl justify-center items-center my-0 mx-auto">
@@ -28,6 +31,27 @@ export default function Nav() {
             />
           </svg>
         </Link>
+      </div>
+      <div className="flex items-center ml-6 items-end">
+        <div className="ml-6">
+          <div className="text-xs text-gray-500 dark:text-gray-400">Next paycheck</div>
+          <div className="text-xs">{lastMonthStatistics.payDay}</div>
+          <div className="text-sm font-bold text-green-500 dark:text-green-400">
+            {lastMonthStatistics.net}
+          </div>
+        </div>
+        <div className="hidden sm:block ml-6">
+          <div className="text-xs">{currentMonthStatistics.payDay}</div>
+          <div className="text-sm font-bold text-green-500 dark:text-green-400">
+            {currentMonthStatistics.net}
+          </div>
+        </div>
+        <div className="hidden sm:block ml-6">
+          <div className="text-xs">{nextMonthStatistics.payDay}</div>
+          <div className="text-sm font-bold text-green-500 dark:text-green-400">
+            {nextMonthStatistics.net}
+          </div>
+        </div>
       </div>
       <div className="flex items-center ml-6">
         <button
@@ -67,7 +91,9 @@ export default function Nav() {
                 />
               </svg>
             )
-          ) : null}
+          ) : (
+            <div className="h-6 w-6"></div>
+          )}
         </button>
       </div>
     </nav>

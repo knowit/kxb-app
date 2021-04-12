@@ -8,7 +8,7 @@ export default function CalendarDay({ day, ...other }) {
   return (
     <div
       className={clsx("flex justify-center items-center p-2", {
-        "text-green-400": dayIsWorkDay
+        "text-green-500 dark:text-green-400 font-bold": dayIsWorkDay
       })}
       {...other}
     >

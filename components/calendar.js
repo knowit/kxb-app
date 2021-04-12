@@ -2,12 +2,16 @@ import { motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
 import { useCalendar } from "../utils/calendarProvider";
+import { useSalary } from "../utils/salaryProvider";
 import CalendarDay from "./calendarDay";
 import Container from "./container";
 import Heading from "./heading";
+import Text from "./text";
 
-export default function CalendarMonth({ title, month, ...other }) {
-  const { yearName, monthName, years, setYear, incrementMonth, decrementMonth } = useCalendar();
+export default function Calendar({ ...other }) {
+  const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
+  const { monthStatistics } = useSalary();
+
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
   const renderSpacingDays = days => {
@@ -55,8 +59,8 @@ export default function CalendarMonth({ title, month, ...other }) {
             />
           </svg>
         </div>
-        <Heading className="mb-0" as="h2" onClick={toggleYearPicker}>
-          {`${monthName} ${yearName}`}
+        <Heading className="!mb-0" as="h2" onClick={toggleYearPicker}>
+          {`${monthDetail?.month} ${yearName}`}
         </Heading>
         <div
           className="p-2 cursor-pointer"
@@ -76,13 +80,13 @@ export default function CalendarMonth({ title, month, ...other }) {
           </svg>
         </div>
       </div>
-      <div className="relative grid grid-cols-7 gap-1 max-w-lg shadow-lg rounded-lg h-72 bg-gray-800">
-        {renderSpacingDays(month?.days)}
-        {month?.days?.map((day, i) => (
+      <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-72 dark:bg-gray-900">
+        {renderSpacingDays(monthDetail?.days)}
+        {monthDetail?.days?.map((day, i) => (
           <CalendarDay key={`calendar-day-${i}`} day={day} />
         ))}
         <motion.div
-          className="absolute top-0 left-0 right-0 bottom-0 bg-gray-800 rounded-lg"
+          className="absolute top-0 left-0 right-0 bottom-0 dark:bg-gray-900 rounded-lg"
           initial={showYearPicker ? "open" : "collapsed"}
           animate={showYearPicker ? "open" : "collapsed"}
           variants={{
@@ -112,6 +116,15 @@ export default function CalendarMonth({ title, month, ...other }) {
           </div>
         </motion.div>
       </div>
+      <Text className="mt-6">
+        Work hours in {monthDetail?.month}: {monthStatistics.workHours} hours
+      </Text>
+      <Text>
+        Gross salary {monthDetail?.month}: {monthStatistics.gross}
+      </Text>
+      <Text>
+        Net salary {monthDetail?.month}: {monthStatistics.net}
+      </Text>
     </Container>
   );
 }

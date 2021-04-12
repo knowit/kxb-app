@@ -6,7 +6,9 @@ export default function Layout({ children }) {
   return (
     <>
       <Nav />
-      <Container as="main">{children}</Container>
+      <Container as="main" className="px-8">
+        {children}
+      </Container>
     </>
   );
 }

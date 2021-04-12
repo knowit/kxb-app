@@ -1,11 +1,7 @@
-// src/count-context.js
 import * as React from "react";
-import useSWR, { mutate } from "swr";
-import {
-  getFormattedMonth,
-  getMonthNames,
-  getThisYearAndTwoYearsIntoTheFuture
-} from "../logic/dateLogic";
+import useSWR from "swr";
+import { getPayDay } from "../logic/calendarLogic";
+import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "../logic/dateLogic";
 import fetcher from "./fetcher";
 
 const CalendarContext = React.createContext();
@@ -15,9 +11,13 @@ const now = new Date();
 
 const initialState = {
   year: now.getFullYear(),
-  month: now.getMonth(),
-  prefetchYear: now.getFullYear()
+  month: now.getMonth()
 };
+
+const getLastMonth = (month, year, lastYear) =>
+  month === 0 ? lastYear?.months?.[11] : year?.months?.[month - 1];
+const getNextMonth = (month, year, nextYear) =>
+  month === 11 ? nextYear?.months?.[0] : year?.months?.[month + 1];
 
 const getDateFromYearDataAndMonth = (year, month) => {
   const now = new Date();
@@ -47,11 +47,21 @@ function CalendarProvider({
   const [state, dispatch] = React.useReducer(calendarReducer, { year, month });
 
   const { data } = useSWR(
-    `https://tommy-api.vercel.app/api/calendar/${state.year}/months`,
+    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${state.year}/months`,
     fetcher,
     {
       initialData: initialData
     }
+  );
+
+  const { data: lastYear } = useSWR(
+    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data.year - 1}/months`,
+    fetcher
+  );
+
+  const { data: nextYear } = useSWR(
+    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data.year + 1}/months`,
+    fetcher
   );
 
   const setYear = year => dispatch({ type: "SET_YEAR", year: year });
@@ -81,35 +91,60 @@ function CalendarProvider({
     dispatch({ type: "SET_MONTH", month: shouldDecrementYear ? 11 : newMonth });
   };
 
-  const prefetchYear = async year => {
-    const key = `https://tommy-api.vercel.app/api/calendar/${year}/months`;
-    const data = await fetcher(key);
-    mutate(key, data, false);
-  };
-
   React.useEffect(() => {
     setYear(year);
     setMonth(month);
   }, [year, month]);
 
   const value = React.useMemo(() => {
+    const currentMonth = new Date().getMonth();
+
     const date = getDateFromYearDataAndMonth(state.year, state.month);
     const monthNames = getMonthNames();
 
+    const monthDetail = {
+      ...data?.months?.[date.getMonth()],
+      payDay: getPayDay(getNextMonth(date.getMonth(), data, nextYear))
+    };
+
+    const nextMonthDetail = {
+      ...getNextMonth(currentMonth, data, nextYear),
+      payDay: getPayDay(
+        currentMonth === 11
+          ? nextYear?.months?.[1]
+          : currentMonth === 10
+          ? nextYear?.months?.[0]
+          : data?.months?.[currentMonth + 2]
+      )
+    };
+
+    const currentMonthDetail = {
+      ...data?.months?.[currentMonth],
+      payDay: getPayDay(nextMonthDetail)
+    };
+
+    const lastMonthDetail = {
+      ...getLastMonth(currentMonth, data, lastYear),
+      payDay: getPayDay(currentMonthDetail)
+    };
+
     return {
       year: data,
+      lastYear,
+      nextYear,
       yearName: state.year,
       months: monthNames,
       years: getThisYearAndTwoYearsIntoTheFuture(),
       month: state.month,
-      monthDetail: data?.months?.[date.getMonth() ?? 0],
-      monthName: getFormattedMonth(date),
+      monthDetail,
+      currentMonthDetail,
+      lastMonthDetail,
+      nextMonthDetail,
       setYear,
       incrementYear,
       decrementYear,
       incrementMonth,
       decrementMonth,
-      prefetchYear,
       date
     };
   }, [data, state, dispatch]);
@@ -122,9 +157,11 @@ function CalendarProvider({
 }
 function useCalendar() {
   const context = React.useContext(CalendarContext);
+
   if (context === undefined) {
     throw new Error("useCalendar must be used within a CalendarProvider");
   }
+
   return context;
 }
 export { CalendarProvider, useCalendar };
