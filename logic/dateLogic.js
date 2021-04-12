@@ -9,7 +9,7 @@ export const getFormattedDate = (date, dateFormat, options = {}) =>
 
 export const getFormattedLongDate = date => getFormattedDate(date, "EEEE d. MMMM yyyy");
 
-export const getFormattedMonth = date => getFormattedDate(date, "MMMM");
+export const getFormattedMonth = date => getFormattedDate(date, "LLLL");
 
 export const getMonthFromName = monthName => {
   switch (monthName?.toUpperCase()) {

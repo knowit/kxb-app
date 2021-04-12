@@ -7,6 +7,7 @@ import {
   getThisYearAndTwoYearsIntoTheFuture
 } from "../logic/dateLogic";
 import fetcher from "./fetcher";
+
 const CalendarContext = React.createContext();
 CalendarContext.displayName = "CalendarContext";
 
@@ -46,7 +47,7 @@ function CalendarProvider({
   const [state, dispatch] = React.useReducer(calendarReducer, { year, month });
 
   const { data } = useSWR(
-    `https://tommy-api.vercel.app/api/calendar/${state.year}/locale/nb-no/months`,
+    `https://tommy-api.vercel.app/api/calendar/${state.year}/months`,
     fetcher,
     {
       initialData: initialData
@@ -81,7 +82,7 @@ function CalendarProvider({
   };
 
   const prefetchYear = async year => {
-    const key = `https://tommy-api.vercel.app/api/calendar/${year}/locale/nb-no/months`;
+    const key = `https://tommy-api.vercel.app/api/calendar/${year}/months`;
     const data = await fetcher(key);
     mutate(key, data, false);
   };
@@ -101,15 +102,21 @@ function CalendarProvider({
       months: monthNames,
       years: getThisYearAndTwoYearsIntoTheFuture(),
       month: state.month,
-      monthName: monthNames?.[state.month] ?? getFormattedMonth(date),
+      monthDetail: data?.months?.[date.getMonth() ?? 0],
+      monthName: getFormattedMonth(date),
       setYear,
       incrementYear,
       decrementYear,
       incrementMonth,
       decrementMonth,
-      prefetchYear
+      prefetchYear,
+      date
     };
   }, [data, state, dispatch]);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }

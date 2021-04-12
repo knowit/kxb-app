@@ -16,16 +16,16 @@ export default function CalendarMonth({ title, month, ...other }) {
     }
 
     const spacingDaysToRender = {
-      mandag: 0,
-      tirsdag: 1,
-      onsdag: 2,
-      torsdag: 3,
-      fredag: 4,
-      lørdag: 5,
-      søndag: 6
+      MONDAY: 0,
+      TUESDAY: 1,
+      WEDNESDAY: 2,
+      THURSDAY: 3,
+      FRIDAY: 4,
+      SATURDAY: 5,
+      SUNDAY: 6
     };
 
-    return [...Array(spacingDaysToRender[days[0].name] ?? 0)].map((key, index) => (
+    return [...Array(spacingDaysToRender[days[0].name?.toUpperCase()] ?? 0)].map((key, index) => (
       <CalendarDay key={`calendar-day-spacing-${index}`} />
     ));
   };

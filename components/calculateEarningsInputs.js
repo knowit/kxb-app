@@ -1,39 +1,24 @@
 import * as React from "react";
-import BouncyInput from "./bouncyInput";
+import { useSalary } from "../utils/salaryProvider";
+import TextField from "./textField";
 
-export const calculateEarningsInputsDefaultOptions = {
-  workHoursPerDay: 7.5,
-  hourlyRate: 1300,
-  commission: 0.48,
-  tax: 0.39,
-  nonCommissionedHours: 0
-};
-
-export default function CalculateEarningsInputs({
-  options = calculateEarningsInputsDefaultOptions,
-  onChange = () => {}
-}) {
-  const [workHoursPerDay, setWorkHoursPerDay] = React.useState(options.workHoursPerDay);
-  const [hourlyRate, setHourlyRate] = React.useState(options.hourlyRate);
-  const [commission, setCommission] = React.useState(options.commission);
-  const [tax, setTax] = React.useState(options.tax);
-  const [nonCommissionedHours, setNonCommissionedHours] = React.useState(
-    options.nonCommissionedHours
-  );
-
-  React.useEffect(() => {
-    onChange({
-      workHoursPerDay,
-      hourlyRate,
-      commission,
-      tax,
-      nonCommissionedHours
-    });
-  }, [workHoursPerDay, hourlyRate, commission, tax, nonCommissionedHours]);
+export default function CalculateEarningsInputs() {
+  const {
+    workHoursPerDay,
+    hourlyRate,
+    commission,
+    tax,
+    nonCommissionedHours,
+    setWorkHoursPerDay,
+    setHourlyRate,
+    setCommission,
+    setTax,
+    setNonCommissionedHors
+  } = useSalary();
 
   return (
     <div className="flex flex-col">
-      <BouncyInput
+      <TextField
         id="work-hours-per-day"
         label="Work hours per day"
         initialValue={workHoursPerDay}
@@ -41,7 +26,7 @@ export default function CalculateEarningsInputs({
         type="number"
         onChange={inputValue => setWorkHoursPerDay(inputValue)}
       />
-      <BouncyInput
+      <TextField
         id="hourly-rate"
         label="Hourly rate"
         initialValue={hourlyRate}
@@ -49,7 +34,7 @@ export default function CalculateEarningsInputs({
         type="number"
         onChange={inputValue => setHourlyRate(inputValue)}
       />
-      <BouncyInput
+      <TextField
         id="commission"
         label="Commission"
         initialValue={commission}
@@ -58,7 +43,7 @@ export default function CalculateEarningsInputs({
         onChange={inputValue => setCommission(inputValue)}
         step={0.01}
       />
-      <BouncyInput
+      <TextField
         id="tax"
         label="Tax"
         initialValue={tax}
@@ -67,13 +52,13 @@ export default function CalculateEarningsInputs({
         onChange={inputValue => setTax(inputValue)}
         step={0.01}
       />
-      <BouncyInput
+      <TextField
         id="non-commissioned-hours"
         label="Non-commissioned hours"
         initialValue={nonCommissionedHours}
         placeholder="Non-commissioned hours"
         type="number"
-        onChange={inputValue => setNonCommissionedHours(inputValue)}
+        onChange={inputValue => setNonCommissionedHors(inputValue)}
       />
     </div>
   );

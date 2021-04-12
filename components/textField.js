@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export default function BouncyInput({ id, initialValue, onChange, label, ...other }) {
+export default function TextField({ id, initialValue, onChange, label, ...other }) {
   const [value, setValue] = React.useState(initialValue);
 
   return (
