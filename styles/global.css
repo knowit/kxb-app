@@ -12,11 +12,6 @@
     U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
-}
-
 html {
   min-width: 360px;
   scroll-behavior: smooth;
@@ -26,19 +21,4 @@ html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.sticky-nav {
-  position: sticky;
-  z-index: 10;
-  top: 0;
-  backdrop-filter: saturate(180%) blur(20px);
-  transition: background-color 0.1 ease-in-out;
-}
-
-@supports not (backdrop-filter: none) {
-  .sticky-nav {
-    backdrop-filter: none;
-    @apply bg-opacity-100;
-  }
 }
