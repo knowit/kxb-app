@@ -24,8 +24,8 @@ export const getEarningsForMonth = (
   const workHours = getWorkHours(workHoursPerDay, workDays.length, nonCommissionedHours);
   const gross = getGrossIncome(workHours, hourlyRate, commission);
   return {
-    monthName: month.month,
-    payDay: month.payDay.formattedLongDate,
+    monthName: month?.month,
+    payDay: month?.payDay?.formattedLongDate,
     workDays,
     workHours,
     gross: formatCurrency(gross),

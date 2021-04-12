@@ -55,12 +55,12 @@ function CalendarProvider({
   );
 
   const { data: lastYear } = useSWR(
-    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data.year - 1}/months`,
+    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data?.year - 1}/months`,
     fetcher
   );
 
   const { data: nextYear } = useSWR(
-    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data.year + 1}/months`,
+    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data?.year + 1}/months`,
     fetcher
   );
 
@@ -148,10 +148,6 @@ function CalendarProvider({
       date
     };
   }, [data, state, dispatch]);
-
-  if (!data) {
-    return <div>Loading...</div>;
-  }
 
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }
