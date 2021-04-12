@@ -1,5 +1,5 @@
 {
-  "name": "with-emotion-11",
+  "name": "show-me-the-money",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,18 +12,22 @@
   "author": "Tommy Lunde Barvåg",
   "license": "MIT",
   "dependencies": {
-    "@emotion/cache": "11.1.3",
-    "@emotion/css": "11.1.3",
-    "@emotion/react": "11.1.5",
-    "@emotion/server": "11.0.0",
-    "@emotion/styled": "11.1.5",
-    "date-fns": "^2.19.0",
-    "next": "^10.0.8",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "styled-system": "^5.1.5"
+    "autoprefixer": "^10.2.5",
+    "clsx": "^1.1.1",
+    "date-fns": "^2.20.2",
+    "framer-motion": "^4.1.3",
+    "next": "^10.1.3",
+    "next-themes": "^0.0.14",
+    "postcss": "^8.2.10",
+    "postcss-nested": "^5.0.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-use": "^17.2.3",
+    "swr": "^0.5.5",
+    "tailwindcss": "^2.1.1"
   },
   "devDependencies": {
+    "@tailwindcss/jit": "^0.1.18",
     "prettier": "^2.2.1"
   }
 }
