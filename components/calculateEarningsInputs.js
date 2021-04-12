@@ -30,7 +30,7 @@ export default function CalculateEarningsInputs() {
         id="hourly-rate"
         label="Hourly rate"
         initialValue={hourlyRate}
-        placeholder="TimHourly rateesats"
+        placeholder="Hourly rate"
         type="number"
         onChange={inputValue => setHourlyRate(inputValue)}
       />
