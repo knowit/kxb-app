@@ -39,7 +39,7 @@ SalaryContext.displayName = "SalaryContext";
 
 function SalaryProvider({ children }) {
   const [state, dispatch] = React.useReducer(salaryReducer, initialState);
-  const { year, monthDetail, date } = useCalendar();
+  const { monthDetail } = useCalendar();
 
   const workDays = React.useMemo(() => getWorkDays(monthDetail), [monthDetail]);
 
