@@ -7,7 +7,7 @@ import { SalaryProvider } from "../utils/salaryProvider";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider attribute="class">
+    <ThemeProvider attribute="class" defaultTheme="dark">
       <CalendarProvider
         initialData={pageProps?.data}
         year={pageProps?.year}
