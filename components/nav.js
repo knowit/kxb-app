@@ -1,11 +1,17 @@
+import { motion } from "framer-motion";
+import { signIn, signOut, useSession } from "next-auth/client";
 import { useTheme } from "next-themes";
 import * as React from "react";
 import { useSalary } from "../utils/salaryProvider";
+import Button from "./button";
 import Link from "./link";
+import { UserAvatar } from "./user";
 
 export default function Nav() {
   const [mounted, setMounted] = React.useState(false);
+  const [showUserMenu, setShowUserMenu] = React.useState(false);
   const { theme, setTheme } = useTheme();
+  const [session, loading] = useSession();
 
   // After mounting, we have access to the theme
   React.useEffect(() => setMounted(true), []);
@@ -95,6 +101,36 @@ export default function Nav() {
             <div className="h-6 w-6"></div>
           )}
         </button>
+      </div>
+      <div className="flex items-center ml-6">
+        <div className="w-12 h-12 relative">
+          <button className="cursor-pointer" onClick={() => setShowUserMenu(prev => !prev)}>
+            <UserAvatar />
+          </button>
+          <motion.div
+            className="absolute dark:bg-gray-900 right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 min-w-[200px]"
+            initial={showUserMenu ? "open" : "collapsed"}
+            animate={showUserMenu ? "open" : "collapsed"}
+            variants={{
+              open: {
+                opacity: 1,
+                height: "auto"
+              },
+              collapsed: { opacity: 0, height: 0 }
+            }}
+            transition={{
+              ease: "easeOut"
+            }}
+          >
+            <div className="flex flex-col p-6">
+              <Link className="mb-4" href="/profile">
+                Profile
+              </Link>
+              {!session && <Button onClick={() => signIn()}>Login</Button>}
+              {session && <Button onClick={() => signOut()}>Logout</Button>}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </nav>
   );
