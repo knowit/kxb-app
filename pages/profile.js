@@ -1,7 +1,9 @@
+import { getSession } from "next-auth/client";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import Button from "../components/button";
 import Heading from "../components/heading";
+import AuthenticatedLayout from "../components/layouts/authenticatedLayout";
 import Text from "../components/text";
 import TextField from "../components/textField";
 import { useUser } from "../components/user";
@@ -25,7 +27,7 @@ export default function Profile() {
   };
 
   return (
-    <>
+    <AuthenticatedLayout>
       <Heading variant="pageHeading">Hi {user?.name}</Heading>
       <Text>To edit your settings, use the form below.</Text>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,6 +62,25 @@ export default function Profile() {
         />
         <Button type="submit">Update</Button>
       </form>
-    </>
+    </AuthenticatedLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      props: {
+        session
+      }
+    };
+  }
+
+  context.res.writeHead(301, {
+    Location: "/login"
+  });
+  context.res.end();
+
+  return { props: {} };
 }
