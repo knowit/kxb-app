@@ -1,21 +1,31 @@
+import { getSession } from "next-auth/client";
 import * as React from "react";
+import AuthenticatedLayout from "../components/layouts/authenticatedLayout";
 import YearlyEarnings from "../components/yearlyEarnings";
-import { getHomePageProps } from "../logic/staticPageLogic";
-import CalendarService from "../services/CalendarService";
 
-export default function HomePage(props) {
-  return <YearlyEarnings year={props?.data} />;
+export default function HomePage() {
+  return (
+    <AuthenticatedLayout>
+      <YearlyEarnings />
+    </AuthenticatedLayout>
+  );
 }
 
-export async function getStaticProps() {
-  const year = new Date().getFullYear();
-  const data = await CalendarService.getCalendarMonthsForYear(year);
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
 
-  return {
-    revalidate: 3600,
-    props: await getHomePageProps({
-      data,
-      year
-    })
-  };
+  if (session) {
+    return {
+      props: {
+        session
+      }
+    };
+  }
+
+  context.res.writeHead(301, {
+    Location: "/login"
+  });
+  context.res.end();
+
+  return { props: {} };
 }

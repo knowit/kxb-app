@@ -1,90 +1,78 @@
 import * as React from "react";
+import { useUser } from "../components/user";
+import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
 import { getEarningsForMonth } from "../logic/earningsLogic";
 import { useCalendar } from "./calendarProvider";
 
 const initialState = {
-  workHoursPerDay: 7.5,
-  hourlyRate: 1300,
-  commission: 0.48,
-  tax: 0.414,
+  hourlyRate: DEFAULT_USER_SALARY.hourlyRate,
+  commission: DEFAULT_USER_SALARY.commission,
+  tax: DEFAULT_USER_SALARY.tax,
   nonCommissionedHours: 0
 };
-
-function salaryReducer(state = initialState, action) {
-  switch (action.type) {
-    case "SET_WORK_HOURS_PER_DAY": {
-      return { ...state, workHoursPerDay: action.workHoursPerDay };
-    }
-    case "SET_HOURLY_RATE": {
-      return { ...state, hourlyRate: action.hourlyRate };
-    }
-    case "SET_COMMISSION": {
-      return { ...state, commission: action.commission };
-    }
-    case "SET_TAX": {
-      return { ...state, tax: action.tax };
-    }
-    case "SET_NON_COMMISSIONED_HOURS": {
-      return { ...state, nonCommissionedHours: action.nonCommissionedHours };
-    }
-    default: {
-      throw new Error(`Unhandled action type: ${action.type}`);
-    }
-  }
-}
 
 const SalaryContext = React.createContext();
 SalaryContext.displayName = "SalaryContext";
 
 function SalaryProvider({ children }) {
-  const [state, dispatch] = React.useReducer(salaryReducer, initialState);
+  const { user } = useUser();
+
+  const userSalaryDetails = React.useMemo(
+    () => ({
+      hourlyRate: user?.hourlyRate ?? DEFAULT_USER_SALARY.hourlyRate,
+      commission: user?.commission ?? DEFAULT_USER_SALARY.commission,
+      tax: user?.tax ?? DEFAULT_USER_SALARY.tax
+    }),
+    [user]
+  );
+
+  const [nonCommissionedHours, setNonCommissionedHours] = React.useState(0);
   const { monthDetail, currentMonthDetail, lastMonthDetail, nextMonthDetail } = useCalendar();
 
-  const value = React.useMemo(
-    () => ({
-      ...state,
-      setWorkHoursPerDay: value =>
-        dispatch({ type: "SET_WORK_HOURS_PER_DAY", workHoursPerDay: value }),
-      setHourlyRate: value => dispatch({ type: "SET_HOURLY_RATE", hourlyRate: value }),
-      setCommission: value => dispatch({ type: "SET_COMMISSION", commission: value }),
-      setTax: value => dispatch({ type: "SET_TAX", tax: value }),
-      setNonCommissionedHors: value =>
-        dispatch({ type: "SET_NON_COMMISSIONED_HOURS", nonCommissionedHours: value }),
-      monthStatistics: getEarningsForMonth(
-        monthDetail,
-        state.workHoursPerDay,
-        state.hourlyRate,
-        state.commission,
-        state.tax,
-        state.nonCommissionedHours
-      ),
-      currentMonthStatistics: getEarningsForMonth(
-        currentMonthDetail,
-        state.workHoursPerDay,
-        state.hourlyRate,
-        state.commission,
-        state.tax,
-        state.nonCommissionedHours
-      ),
-      lastMonthStatistics: getEarningsForMonth(
-        lastMonthDetail,
-        state.workHoursPerDay,
-        state.hourlyRate,
-        state.commission,
-        state.tax,
-        state.nonCommissionedHours
-      ),
-      nextMonthStatistics: getEarningsForMonth(
-        nextMonthDetail,
-        state.workHoursPerDay,
-        state.hourlyRate,
-        state.commission,
-        state.tax,
-        state.nonCommissionedHours
-      )
-    }),
-    [state, monthDetail]
-  );
+  const value = React.useMemo(() => {
+    const { hourlyRate, commission, tax } = userSalaryDetails;
+
+    const monthStatistics = getEarningsForMonth(
+      monthDetail,
+      hourlyRate,
+      commission,
+      tax,
+      nonCommissionedHours
+    );
+
+    const currentMonthStatistics = getEarningsForMonth(
+      currentMonthDetail,
+      hourlyRate,
+      commission,
+      tax,
+      nonCommissionedHours
+    );
+
+    const lastMonthStatistics = getEarningsForMonth(
+      lastMonthDetail,
+      hourlyRate,
+      commission,
+      tax,
+      nonCommissionedHours
+    );
+    const nextMonthStatistics = getEarningsForMonth(
+      nextMonthDetail,
+      hourlyRate,
+      commission,
+      tax,
+      nonCommissionedHours
+    );
+
+    return {
+      nonCommissionedHours,
+      setNonCommissionedHours,
+      monthStatistics,
+      currentMonthStatistics,
+      lastMonthStatistics,
+      nextMonthStatistics,
+      nextPayDayStatistics: new Date().getDate() > 20 ? currentMonthStatistics : lastMonthStatistics
+    };
+  }, [user, nonCommissionedHours, monthDetail, userSalaryDetails]);
 
   return <SalaryContext.Provider value={value}>{children}</SalaryContext.Provider>;
 }
