@@ -8,7 +8,7 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  const { id, body } = req.query;
+  const { id } = req.query;
 
   const user = await redisUser.getById(id);
 
@@ -16,12 +16,13 @@ export default async (req, res) => {
     return res.status(404).end();
   }
 
+  // TODO: Create convert to DTO
   if (req.method === "GET") {
     return res.status(200).json(user);
   }
 
-  if (req.method === "PUT" && body) {
-    await redisUser.update(user.id, { ...body });
+  if (req.method === "PUT" && req.body) {
+    await redisUser.update(user.id, { ...req.body });
     return res.status(200).end();
   }
 

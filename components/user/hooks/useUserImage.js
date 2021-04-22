@@ -14,9 +14,8 @@ export default function useUserImage(size = "240x240") {
   const [session] = useSession();
 
   const { data } = useSWR(
-    () =>
-      session.accessToken ? `https://graph.microsoft.com/v1.0/me/photos/${size}/$value` : null,
-    url => fetchWithToken(url, session.accessToken)
+    () => [`https://graph.microsoft.com/v1.0/me/photos/${size}/$value`, session.accessToken],
+    fetchWithToken
   );
 
   React.useEffect(() => {

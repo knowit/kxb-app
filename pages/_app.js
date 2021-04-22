@@ -2,6 +2,7 @@ import { Provider as NextAuthProvider } from "next-auth/client";
 import { ThemeProvider } from "next-themes";
 import * as React from "react";
 import Layout from "../components/layouts/layout";
+import { UserProvider } from "../components/user/providers/userProvider";
 import "../styles/global.css";
 import { CalendarProvider } from "../utils/calendarProvider";
 import { SalaryProvider } from "../utils/salaryProvider";
@@ -16,17 +17,19 @@ function MyApp({ Component, pageProps }) {
         }}
         session={pageProps.session}
       >
-        <CalendarProvider
-          initialData={pageProps?.data}
-          year={pageProps?.year}
-          month={pageProps?.month}
-        >
-          <SalaryProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </SalaryProvider>
-        </CalendarProvider>
+        <UserProvider>
+          <CalendarProvider
+            initialData={pageProps?.data}
+            year={pageProps?.year}
+            month={pageProps?.month}
+          >
+            <SalaryProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </SalaryProvider>
+          </CalendarProvider>
+        </UserProvider>
       </NextAuthProvider>
     </ThemeProvider>
   );
