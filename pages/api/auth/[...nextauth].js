@@ -5,7 +5,7 @@ import redisUser from "../../../lib/redisUser";
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;
 const AZURE_AD_SECRET = process.env.NEXTAUTH_AZURE_AD_SECRET;
-const AZURE_AD_SCOPE = "offline_access openid";
+const AZURE_AD_SCOPE = "offline_access openid User.Read";
 
 async function refreshAccessToken(token) {
   try {
