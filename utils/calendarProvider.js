@@ -145,9 +145,10 @@ function CalendarProvider({
       decrementYear,
       incrementMonth,
       decrementMonth,
-      date
+      date,
+      isLoadingCalendar: !data
     };
-  }, [data, state, dispatch]);
+  }, [data, lastYear, nextYear, state, dispatch]);
 
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }
