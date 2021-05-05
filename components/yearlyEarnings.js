@@ -11,7 +11,7 @@ export default function YearlyEarnings() {
         <UserProfile />
         <CalculateEarningsInputs />
       </div>
-      <div className="flex-grow max-w-lg ml-4">
+      <div className="flex-grow max-w-lg lg:ml-4">
         <Calendar />
         <SalaryStatistics />
       </div>
