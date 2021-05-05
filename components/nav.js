@@ -1,24 +1,17 @@
-import { motion } from "framer-motion";
-import { signOut } from "next-auth/client";
 import { useTheme } from "next-themes";
 import * as React from "react";
-import { useSalary } from "../utils/salaryProvider";
-import Button from "./button";
 import Link from "./link";
-import { UserAvatar } from "./user";
+import { UserNavDetails } from "./user";
 
-export default function Nav() {
+export default function Nav({ userNavDetails = true }) {
   const [mounted, setMounted] = React.useState(false);
-  const [showUserMenu, setShowUserMenu] = React.useState(false);
   const { theme, setTheme } = useTheme();
 
   // After mounting, we have access to the theme
   React.useEffect(() => setMounted(true), []);
 
-  const { nextPayDayStatistics } = useSalary();
-
   return (
-    <nav className="flex p-6 w-full max-w-7xl justify-center items-center my-0 mx-auto">
+    <nav className="flex p-6 w-full max-w-7xl justify-center items-center my-0 min-h-[100px] mx-auto">
       <div className="flex overflow-x-scroll flex-grow">
         <Link href="/">
           <svg
@@ -37,44 +30,10 @@ export default function Nav() {
           </svg>
         </Link>
       </div>
-      <div className="flex items-center ml-6 items-end">
-        <div className="ml-6">
-          <div className="text-xs text-gray-500 dark:text-gray-400">Next paycheck</div>
-          <div className="text-xs">{nextPayDayStatistics.payDay}</div>
-          <div className="text-sm font-bold text-green-500 dark:text-green-400">
-            {nextPayDayStatistics.net}
-          </div>
-        </div>
-      </div>
       <div className="flex items-center ml-6">
-        <div className="w-12 h-12 relative">
-          <button className="cursor-pointer" onClick={() => setShowUserMenu(prev => !prev)}>
-            <UserAvatar />
-          </button>
-          <motion.div
-            className="absolute dark:bg-gray-900 right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 min-w-[200px]"
-            initial={showUserMenu ? "open" : "collapsed"}
-            animate={showUserMenu ? "open" : "collapsed"}
-            variants={{
-              open: {
-                opacity: 1,
-                height: "auto"
-              },
-              collapsed: { opacity: 0, height: 0 }
-            }}
-            transition={{
-              ease: "easeOut"
-            }}
-          >
-            <div className="flex flex-col p-6">
-              <Link className="mb-4" href="/profile">
-                Profile
-              </Link>
-              <Button onClick={() => signOut()}>Logout</Button>
-            </div>
-          </motion.div>
-        </div>
+        <Link href="/salary-calculator">Salary calculator</Link>
       </div>
+      {userNavDetails && <UserNavDetails />}
       <div className="flex items-center ml-6">
         <button
           type="button"

@@ -6,11 +6,10 @@ import { useSalary } from "../utils/salaryProvider";
 import CalendarDay from "./calendarDay";
 import Container from "./container";
 import Heading from "./heading";
-import Text from "./text";
 
-export default function Calendar({ ...other }) {
+export default function Calendar({ salaryStatistics, ...other }) {
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
-  const { monthStatistics } = useSalary();
+  const { monthStatistics, salaryIsLoading } = useSalary();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
@@ -80,7 +79,38 @@ export default function Calendar({ ...other }) {
           </svg>
         </div>
       </div>
-      <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-72 dark:bg-gray-900">
+      <div className="flex justify-center items-center">
+        <div className="flex items-center mx-4">
+          <div className="h-4 w-4 rounded-full bg-white"></div>
+          <div className="text-xs ml-2">Off work</div>
+        </div>
+        <div className="flex items-center mx-4">
+          <div className="h-4 w-4 rounded-full bg-green-500 dark:bg-green-400"></div>
+          <div className="text-xs ml-2">Work</div>
+        </div>
+      </div>
+      <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-80 dark:bg-gray-900 my-4 mx-auto">
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          mon.
+        </div>
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          tue.
+        </div>
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          wed.
+        </div>
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          thu.
+        </div>
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          fri.
+        </div>
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          sat.
+        </div>
+        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+          sun.
+        </div>
         {renderSpacingDays(monthDetail?.days)}
         {monthDetail?.days?.map((day, i) => (
           <CalendarDay key={`calendar-day-${i}`} day={day} />
@@ -116,15 +146,6 @@ export default function Calendar({ ...other }) {
           </div>
         </motion.div>
       </div>
-      <Text className="mt-6">
-        Work hours in {monthDetail?.month}: {monthStatistics.workHours} hours
-      </Text>
-      <Text>
-        Gross salary {monthDetail?.month}: {monthStatistics.gross}
-      </Text>
-      <Text>
-        Net salary {monthDetail?.month}: {monthStatistics.net}
-      </Text>
     </Container>
   );
 }

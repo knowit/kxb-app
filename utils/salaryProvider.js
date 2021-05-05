@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useUser } from "../components/user";
 import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
-import { getEarningsForMonth } from "../logic/earningsLogic";
 import { useCalendar } from "./calendarProvider";
+import { getUserEarningsDetails, getUserSalaryDetails } from "./userUtils";
 
 const initialState = {
   hourlyRate: DEFAULT_USER_SALARY.hourlyRate,
@@ -15,64 +15,43 @@ const SalaryContext = React.createContext();
 SalaryContext.displayName = "SalaryContext";
 
 function SalaryProvider({ children }) {
-  const { user } = useUser();
-
-  const userSalaryDetails = React.useMemo(
-    () => ({
-      hourlyRate: user?.hourlyRate ?? DEFAULT_USER_SALARY.hourlyRate,
-      commission: user?.commission ?? DEFAULT_USER_SALARY.commission,
-      tax: user?.tax ?? DEFAULT_USER_SALARY.tax
-    }),
-    [user]
-  );
+  const { user, isLoadingUser } = useUser();
 
   const [nonCommissionedHours, setNonCommissionedHours] = React.useState(0);
-  const { monthDetail, currentMonthDetail, lastMonthDetail, nextMonthDetail } = useCalendar();
 
-  const value = React.useMemo(() => {
-    const { hourlyRate, commission, tax } = userSalaryDetails;
+  const {
+    year,
+    nextYear,
+    monthDetail,
+    currentMonthDetail,
+    lastMonthDetail,
+    nextMonthDetail,
+    isLoadingCalendar
+  } = useCalendar();
 
-    const monthStatistics = getEarningsForMonth(
+  const userSalaryDetails = React.useMemo(() => getUserSalaryDetails(user), [user]);
+
+  const userEarningsDetails = React.useMemo(() =>
+    getUserEarningsDetails(
+      userSalaryDetails,
+      year,
+      nextYear,
       monthDetail,
-      hourlyRate,
-      commission,
-      tax,
-      nonCommissionedHours
-    );
-
-    const currentMonthStatistics = getEarningsForMonth(
       currentMonthDetail,
-      hourlyRate,
-      commission,
-      tax,
-      nonCommissionedHours
-    );
-
-    const lastMonthStatistics = getEarningsForMonth(
       lastMonthDetail,
-      hourlyRate,
-      commission,
-      tax,
-      nonCommissionedHours
-    );
-    const nextMonthStatistics = getEarningsForMonth(
       nextMonthDetail,
-      hourlyRate,
-      commission,
-      tax,
       nonCommissionedHours
-    );
+    )
+  );
 
-    return {
-      nonCommissionedHours,
+  const value = React.useMemo(
+    () => ({
+      ...userEarningsDetails,
       setNonCommissionedHours,
-      monthStatistics,
-      currentMonthStatistics,
-      lastMonthStatistics,
-      nextMonthStatistics,
-      nextPayDayStatistics: new Date().getDate() > 20 ? currentMonthStatistics : lastMonthStatistics
-    };
-  }, [user, nonCommissionedHours, monthDetail, userSalaryDetails]);
+      isLoadingSalary: !userEarningsDetails || isLoadingUser || isLoadingCalendar
+    }),
+    [userEarningsDetails, isLoadingUser, isLoadingCalendar]
+  );
 
   return <SalaryContext.Provider value={value}>{children}</SalaryContext.Provider>;
 }
