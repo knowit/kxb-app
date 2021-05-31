@@ -30,7 +30,7 @@ export default function Nav({ userNavDetails = true }) {
           </svg>
         </Link>
       </div>
-      <div className="flex items-center ml-6">
+      <div className="hidden md:flex items-center ml-6">
         <Link href="/salary-calculator">Salary calculator</Link>
       </div>
       {userNavDetails && <UserNavDetails />}

@@ -12,24 +12,24 @@
   "author": "Tommy Lunde Barvåg",
   "license": "MIT",
   "dependencies": {
-    "autoprefixer": "^10.2.5",
+    "autoprefixer": "^10.2.6",
     "clsx": "^1.1.1",
-    "date-fns": "^2.21.2",
-    "framer-motion": "^4.1.11",
-    "ioredis": "^4.27.2",
-    "next": "^10.2.0",
-    "next-auth": "^3.19.8",
+    "date-fns": "^2.22.1",
+    "framer-motion": "^4.1.17",
+    "ioredis": "^4.27.3",
+    "next": "^10.2.3",
+    "next-auth": "^3.24.0",
     "next-themes": "^0.0.14",
-    "postcss": "^8.2.13",
+    "postcss": "^8.3.0",
     "postcss-nested": "^5.0.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.4.0",
+    "react-hook-form": "^7.7.1",
     "react-use": "^17.2.4",
     "swr": "^0.5.6",
     "tailwindcss": "^2.1.2"
   },
   "devDependencies": {
-    "prettier": "^2.2.1"
+    "prettier": "^2.3.0"
   }
 }
