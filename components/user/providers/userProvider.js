@@ -35,7 +35,7 @@ function UserProvider({ children, session }) {
       },
       isLoadingUser: !data
     }),
-    [data]
+    [data, session]
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
