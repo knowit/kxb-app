@@ -41,14 +41,21 @@ async function mutateUserWithRoles(user, token) {
 
     return {
       ...user,
+      // To determine the admin role the user needs to have access
+      // to the specialist and admin groups. Could revalidate this to
+      // only requiring access to admin group in the future.
       isAdmin: isSpecialist && accessToAdminGroup(groups),
       isSpecialist
     };
   } catch (error) {
     console.error(error);
 
+    // If group lookup somehow crashes then try to use
+    // old values for user roles or default to false
     return {
-      ...user
+      ...user,
+      isAdmin: user?.isAdmin ?? false,
+      isSpecialist: user?.isSpecialist ?? false
     };
   }
 }
