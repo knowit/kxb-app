@@ -6,7 +6,7 @@ import { UserProfile } from "./user";
 
 export default function YearlyEarnings() {
   return (
-    <div className="flex flex-col lg:flex-row justify-evenly items-center w-full">
+    <div className="flex flex-col lg:flex-row justify-evenly items-center w-full mb-12">
       <div className="order-last md:order-first mb-6">
         <UserProfile />
         <CalculateEarningsInputs />

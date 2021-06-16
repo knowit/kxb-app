@@ -1,5 +1,6 @@
 import { getSession } from "next-auth/client";
 import redisUser from "../../../lib/redisUser";
+import { getSessionUserId, sessionUserIsAdmin } from "../../../utils/sessionUtils";
 
 export default async (req, res) => {
   const session = await getSession({ req });
@@ -9,6 +10,16 @@ export default async (req, res) => {
   }
 
   const { id } = req.query;
+
+  if (id === null || id === undefined) {
+    return res.status(400).end();
+  }
+
+  const sessionUserId = getSessionUserId(session);
+
+  if (!sessionUserIsAdmin(session) && id?.toLowerCase() !== sessionUserId?.toLowerCase()) {
+    return res.status(403).end();
+  }
 
   const user = await redisUser.getById(id);
 

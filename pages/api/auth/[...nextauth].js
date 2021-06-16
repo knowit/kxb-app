@@ -1,11 +1,57 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import redisUser from "../../../lib/redisUser";
+import { fetchWithToken } from "../../../utils/fetcher";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;
 const AZURE_AD_SECRET = process.env.NEXTAUTH_AZURE_AD_SECRET;
 const AZURE_AD_SCOPE = "offline_access openid User.Read";
+
+const AZURE_AD_ADMIN_GROUP_ID = process.env.AZURE_AD_ADMIN_GROUP_ID;
+const AZURE_AD_SPECIALIST_GROUP_ID = process.env.AZURE_AD_SPECIALIST_GROUP_ID;
+
+const accessToGroupId = (groups = [], groupId) => {
+  if (groups === null || groups === undefined) {
+    return false;
+  }
+
+  if (Array.isArray(groups) && !groups.length > 0) {
+    return false;
+  }
+
+  if (groupId === null || groupId === undefined) {
+    return false;
+  }
+
+  return groups.some(group => group?.id?.toLowerCase() === groupId.toLowerCase());
+};
+
+const accessToAdminGroup = groups => accessToGroupId(groups, AZURE_AD_ADMIN_GROUP_ID);
+const accessToSpecialistGroup = groups => accessToGroupId(groups, AZURE_AD_SPECIALIST_GROUP_ID);
+
+async function mutateUserWithRoles(user, token) {
+  try {
+    const { value: groups } = await fetchWithToken(
+      "https://graph.microsoft.com/v1.0/me/memberOf?$select=displayName,id",
+      token
+    );
+
+    const isSpecialist = accessToSpecialistGroup(groups);
+
+    return {
+      ...user,
+      isAdmin: isSpecialist && accessToAdminGroup(groups),
+      isSpecialist
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      ...user
+    };
+  }
+}
 
 async function refreshAccessToken(token) {
   try {
@@ -33,8 +79,11 @@ async function refreshAccessToken(token) {
       throw refreshedTokens;
     }
 
+    const mutatedUser = await mutateUserWithRoles(user, refreshedTokens.access_token);
+
     await redisUser.update(user.id, {
-      refreshToken: refreshedTokens.refresh_token ?? user.refreshToken
+      ...mutatedUser,
+      refreshToken: refreshedTokens.refresh_token ?? mutatedUser.refreshToken
     });
 
     return {
@@ -43,7 +92,7 @@ async function refreshAccessToken(token) {
       accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return {
       ...token,
@@ -65,12 +114,19 @@ export default NextAuth({
     async jwt(token, user, account, profile, isNewUser) {
       // Initial sign in
       if (account && user) {
-        await redisUser.upsert(user.id, { ...user, refreshToken: account.refreshToken });
+        const mutatedUser = await mutateUserWithRoles(user, account.accessToken);
+
+        await redisUser.upsert(mutatedUser.id, {
+          ...mutatedUser,
+          refreshToken: account.refreshToken
+        });
 
         return {
           ...token,
           accessToken: account.accessToken,
-          accessTokenExpires: Date.now() + account?.expires_in * 1000
+          accessTokenExpires: Date.now() + account?.expires_in * 1000,
+          isAdmin: mutatedUser.isAdmin,
+          isSpecialist: mutatedUser.isSpecialist
         };
       }
 
@@ -87,7 +143,9 @@ export default NextAuth({
         ...session,
         user: {
           ...session.user,
-          id: token.sub
+          id: token.sub,
+          isAdmin: token.isAdmin,
+          isSpecialist: token.isSpecialist
         },
         accessToken: token.accessToken,
         accessTokenExpires: token.accessTokenExpires

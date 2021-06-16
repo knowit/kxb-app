@@ -13,7 +13,7 @@ export default function YearStatistic({
   ...other
 }) {
   return isLoading ? (
-    <div>
+    <div className="mb-12">
       <HeadingSkeleton />
       <StatisticGroup>
         <StatisticSkeleton />
@@ -23,7 +23,7 @@ export default function YearStatistic({
       </StatisticGroup>
     </div>
   ) : (
-    <div>
+    <div className="mb-12">
       <Heading>{title}</Heading>
       <StatisticGroup {...other}>
         <Statistic title="Work days" value={yearStatistic.workDays} />

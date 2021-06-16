@@ -1,6 +1,9 @@
 import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "../logic/earningsLogic";
 
+export const userIsAdmin = user => user?.isAdmin ?? false;
+export const userIsSpecialist = user => user?.isSpecialist ?? false;
+
 export const getUserSalaryDetails = user => ({
   hourlyRate: user?.hourlyRate ?? DEFAULT_USER_SALARY.hourlyRate,
   commission: user?.commission ?? DEFAULT_USER_SALARY.commission,
