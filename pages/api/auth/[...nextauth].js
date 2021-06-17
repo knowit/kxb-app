@@ -96,13 +96,17 @@ async function refreshAccessToken(token) {
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      isAdmin: mutatedUser.isAdmin,
+      isSpecialist: mutatedUser.isSpecialist
     };
   } catch (error) {
     console.error(error);
 
     return {
       ...token,
+      isAdmin: token?.isAdmin ?? false,
+      isSpecialist: token?.isAdmin ?? false,
       error: "RefreshAccessTokenError"
     };
   }
@@ -135,6 +139,12 @@ export default NextAuth({
           isAdmin: mutatedUser.isAdmin,
           isSpecialist: mutatedUser.isSpecialist
         };
+      }
+
+      // If specialist mark is false or not set yet then we should
+      // refresh access token to check if user should have access
+      if (token && !(token.isSpecialist ?? false)) {
+        return refreshAccessToken(token);
       }
 
       // Return previous token if the access token has not expired yet
