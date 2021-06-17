@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/client";
 import * as React from "react";
 import useSWR from "swr";
-import { fetchWithToken } from "../../../utils/fetcher";
+import { fetchBlobWithToken } from "../../../utils/fetcher";
 
 // The supported sizes of HD photos on Microsoft 365 are as follows:
 // 48x48, 64x64, 96x96, 120x120, 240x240, 360x360, 432x432, 504x504, and 648x648.
@@ -15,7 +15,7 @@ export default function useUserImage(size = "240x240") {
 
   const { data } = useSWR(
     () => [`https://graph.microsoft.com/v1.0/me/photos/${size}/$value`, session.accessToken],
-    fetchWithToken
+    fetchBlobWithToken
   );
 
   React.useEffect(() => {

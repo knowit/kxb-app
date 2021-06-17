@@ -1,17 +1,17 @@
-import { getSession } from "next-auth/client";
 import * as React from "react";
 import Heading from "../components/heading";
 import AuthenticatedLayout from "../components/layouts/authenticatedLayout";
 import YearlyEarnings from "../components/yearlyEarnings";
 import YearStatistic from "../components/yearStatistic";
+import { getResultForAuthenticatedPage } from "../utils/pageUtils";
 import { useSalary } from "../utils/salaryProvider";
 
-export default function Home() {
+export default function Home({ session }) {
   const { yearSalaryStatistics, nextYearSalaryStatistics, isLoadingSalary } = useSalary();
 
   return (
     <>
-      <Heading variant="pageHeading">Overview</Heading>
+      <Heading variant="pageHeading" className="mb-24">{`Hi ${session?.user?.name}`}</Heading>
       <YearlyEarnings />
       <YearStatistic
         title={`${yearSalaryStatistics?.year} overview`}
@@ -28,22 +28,7 @@ export default function Home() {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (session) {
-    return {
-      props: {
-        session
-      }
-    };
-  }
-
-  return {
-    redirect: {
-      destination: "/login",
-      permanent: false
-    }
-  };
+  return getResultForAuthenticatedPage(context);
 }
 
 Home.layoutProps = {

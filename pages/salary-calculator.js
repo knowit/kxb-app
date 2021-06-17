@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/client";
 import * as React from "react";
 import Calendar from "../components/calendar";
 import Heading from "../components/heading";
@@ -10,6 +9,7 @@ import YearStatistic from "../components/yearStatistic";
 import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "../logic/earningsLogic";
 import { useCalendar } from "../utils/calendarProvider";
+import { getResultForAuthenticatedPage } from "../utils/pageUtils";
 
 export default function SalaryCalculator() {
   const { year, nextYear, monthDetail, isLoadingCalendar } = useCalendar();
@@ -99,22 +99,7 @@ export default function SalaryCalculator() {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (session) {
-    return {
-      props: {
-        session
-      }
-    };
-  }
-
-  return {
-    redirect: {
-      destination: "/login",
-      permanent: false
-    }
-  };
+  return getResultForAuthenticatedPage(context);
 }
 
 SalaryCalculator.layoutProps = {
