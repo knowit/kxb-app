@@ -12,7 +12,7 @@ export default function Nav({ userNavDetails = true }) {
 
   return (
     <nav className="flex p-6 w-full max-w-7xl justify-center items-center my-0 min-h-[100px] mx-auto">
-      <div className="flex overflow-x-scroll flex-grow">
+      <div className="flex flex-grow">
         <Link href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
