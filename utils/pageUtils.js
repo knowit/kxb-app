@@ -14,6 +14,17 @@ export const getResultForAuthenticatedPage = async context => {
     };
   }
 
+  if (
+    session &&
+    !(process.env.SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE?.toLowerCase() === "true" ?? false)
+  ) {
+    return {
+      props: {
+        session
+      }
+    };
+  }
+
   // We have a session user but the session user is not
   // a specialist. Redirect to access denied
   if (session) {
