@@ -2,7 +2,7 @@ import { getSession } from "next-auth/client";
 import redisUser from "../../../lib/redisUser";
 import { getSessionUserId, sessionUserIsAdmin } from "../../../utils/sessionUtils";
 
-export default async (req, res) => {
+export default async function User(req, res) {
   const session = await getSession({ req });
 
   if (!session) {
@@ -43,4 +43,4 @@ export default async (req, res) => {
   }
 
   return res.send("Method not allowed.");
-};
+}

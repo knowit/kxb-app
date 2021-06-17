@@ -13,7 +13,7 @@ export default function UserProfile() {
     setValue("hourlyRate", user?.hourlyRate);
     setValue("commission", user?.commission);
     setValue("tax", user?.tax);
-  }, [user]);
+  }, [user, setValue]);
 
   React.useEffect(() => {
     const newHourlyRate = +(hourlyRate ?? user?.hourlyRate ?? 0);
@@ -39,7 +39,7 @@ export default function UserProfile() {
     }
 
     persistUser();
-  }, [user, hourlyRate, commission, tax]);
+  }, [user, hourlyRate, commission, tax, update]);
 
   return (
     <form>

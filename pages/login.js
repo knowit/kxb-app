@@ -1,4 +1,5 @@
 import { getProviders, getSession } from "next-auth/client";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import * as React from "react";
 import LoginButtons from "../components/auth/LoginButtons";
@@ -14,7 +15,7 @@ export default function Login({ session }) {
       setIsLoading(true);
       router.push("/");
     }
-  }, [session]);
+  }, [session, router]);
 
   return isLoading ? (
     <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-white dark:bg-black text-gray-900 dark:text-gray-100 opacity-75 ">
@@ -76,10 +77,11 @@ export default function Login({ session }) {
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img
+        <Image
           className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-75"
           src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"
-          alt=""
+          alt="Login"
+          layout="fill"
         />
       </div>
     </div>

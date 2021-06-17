@@ -38,7 +38,7 @@ export default function SalaryCalculator() {
       <Heading variant="pageHeading">Salary Calculator</Heading>
       <Text>We provide you with a simple salary model.</Text>
       <Text>
-        You get paid by commission or guaranteed salary. Knowit covers both employer's national
+        You get paid by commission or guaranteed salary. Knowit covers both employer&#39;s national
         insurance contributions (14.10%) and holyday payment (12%). This means you can calculate
         your next payment by the following formulae{" "}
         <strong>Work hours in month x hourly rate x commission = your salary</strong>
@@ -81,8 +81,8 @@ export default function SalaryCalculator() {
       <Heading>Yearly overview</Heading>
       <Text>
         Holyday payment is paid in June. For this month you get holiday payment and commissioned
-        pay. It's usually a good practice to set aside some money for the month after your vacation
-        as the holyday pay is usually paid before the actual vacation.
+        pay. It&#39;s usually a good practice to set aside some money for the month after your
+        vacation as the holyday pay is usually paid before the actual vacation.
       </Text>
       <YearStatistic
         title={`${year?.year} overview`}
