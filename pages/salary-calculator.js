@@ -1,15 +1,15 @@
+import Calendar from "@/components/calendar";
+import Heading from "@/components/heading";
+import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
+import SalaryStatistics from "@/components/salaryStatistics";
+import Text from "@/components/text";
+import TextField from "@/components/textField";
+import YearStatistic from "@/components/yearStatistic";
+import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
+import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
+import { useCalendar } from "@/utils/calendarProvider";
+import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
 import * as React from "react";
-import Calendar from "../components/calendar";
-import Heading from "../components/heading";
-import AuthenticatedLayout from "../components/layouts/authenticatedLayout";
-import SalaryStatistics from "../components/salaryStatistics";
-import Text from "../components/text";
-import TextField from "../components/textField";
-import YearStatistic from "../components/yearStatistic";
-import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
-import { getEarningsForMonth, getEarningsForYear } from "../logic/earningsLogic";
-import { useCalendar } from "../utils/calendarProvider";
-import { getResultForAuthenticatedPage } from "../utils/pageUtils";
 
 export default function SalaryCalculator() {
   const { year, nextYear, monthDetail, isLoadingCalendar } = useCalendar();

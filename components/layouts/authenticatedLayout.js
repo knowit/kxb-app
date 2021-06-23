@@ -1,10 +1,10 @@
+import Container from "@/components/container";
+import Nav from "@/components/nav";
+import { UserProvider } from "@/components/user/providers/userProvider";
+import { CalendarProvider } from "@/utils/calendarProvider";
+import { SalaryProvider } from "@/utils/salaryProvider";
 import { Provider as NextAuthProvider } from "next-auth/client";
 import * as React from "react";
-import { CalendarProvider } from "../../utils/calendarProvider";
-import { SalaryProvider } from "../../utils/salaryProvider";
-import Container from "../container";
-import Nav from "../nav";
-import { UserProvider } from "../user/providers/userProvider";
 
 export default function AuthenticatedLayout({ children, pageProps, layoutProps, ...other }) {
   return (

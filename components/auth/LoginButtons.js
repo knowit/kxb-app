@@ -1,7 +1,7 @@
+import useAuthProviders from "@/components/auth/hooks/useAuthProviders";
+import Button from "@/components/button";
 import { signIn } from "next-auth/client";
 import * as React from "react";
-import Button from "../button";
-import useAuthProviders from "./hooks/useAuthProviders";
 
 export default function LoginButtons({ onClick, ...other }) {
   const authProviders = useAuthProviders();

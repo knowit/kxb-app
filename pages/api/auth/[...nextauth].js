@@ -1,7 +1,7 @@
+import redisUser from "@/lib/redisUser";
+import { fetchWithToken } from "@/utils/fetcher";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
-import redisUser from "../../../lib/redisUser";
-import { fetchWithToken } from "../../../utils/fetcher";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;

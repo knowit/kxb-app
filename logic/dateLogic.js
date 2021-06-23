@@ -1,6 +1,6 @@
-import { format } from "date-fns";
 // import { nb } from "date-fns/locale";
-import { MONTH_NAMES, MONTH_VALUES } from "../constants/dateConstants";
+import { MONTH_NAMES, MONTH_VALUES } from "@/constants/dateConstants";
+import { format } from "date-fns";
 
 const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);
 

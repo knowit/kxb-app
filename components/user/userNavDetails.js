@@ -1,11 +1,11 @@
+import Button from "@/components/button";
+import Link from "@/components/link";
+import UserAvatar from "@/components/user/userAvatar";
+import { useSalary } from "@/utils/salaryProvider";
 import { motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/client";
 import * as React from "react";
 import { useClickAway } from "react-use";
-import { useSalary } from "../../utils/salaryProvider";
-import Button from "../button";
-import Link from "../link";
-import UserAvatar from "./userAvatar";
 
 export default function UserNavDetails() {
   const userMenuRef = React.useRef(null);

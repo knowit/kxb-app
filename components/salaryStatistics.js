@@ -1,8 +1,8 @@
+import Statistic from "@/components/statistic";
+import StatisticGroup from "@/components/statisticGroup";
+import { useCalendar } from "@/utils/calendarProvider";
+import { useSalary } from "@/utils/salaryProvider";
 import * as React from "react";
-import { useCalendar } from "../utils/calendarProvider";
-import { useSalary } from "../utils/salaryProvider";
-import Statistic from "./statistic";
-import StatisticGroup from "./statisticGroup";
 
 export default function SalaryStatistics({ salaryStatistics, ...other }) {
   const { monthDetail, isLoadingCalendar } = useCalendar();

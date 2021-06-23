@@ -1,4 +1,4 @@
-import { debounce } from "./commonUtils";
+import { debounce } from "@/utils/commonUtils";
 
 export async function fetcher(...args) {
   const res = await fetch(...args);

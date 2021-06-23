@@ -1,10 +1,10 @@
+import LoginButtons from "@/components/auth/LoginButtons";
+import Heading from "@/components/heading";
+import Text from "@/components/text";
 import { getProviders, getSession } from "next-auth/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import * as React from "react";
-import LoginButtons from "../components/auth/LoginButtons";
-import Heading from "../components/heading";
-import Text from "../components/text";
 
 export default function Login({ session }) {
   const router = useRouter();

@@ -1,8 +1,8 @@
+import { useUser } from "@/components/user";
+import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
+import { useCalendar } from "@/utils/calendarProvider";
+import { getUserEarningsDetails, getUserSalaryDetails } from "@/utils/userUtils";
 import * as React from "react";
-import { useUser } from "../components/user";
-import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
-import { useCalendar } from "./calendarProvider";
-import { getUserEarningsDetails, getUserSalaryDetails } from "./userUtils";
 
 const initialState = {
   hourlyRate: DEFAULT_USER_SALARY.hourlyRate,
@@ -31,8 +31,19 @@ function SalaryProvider({ children }) {
 
   const userSalaryDetails = React.useMemo(() => getUserSalaryDetails(user), [user]);
 
-  const userEarningsDetails = React.useMemo(() =>
-    getUserEarningsDetails(
+  const userEarningsDetails = React.useMemo(
+    () =>
+      getUserEarningsDetails(
+        userSalaryDetails,
+        year,
+        nextYear,
+        monthDetail,
+        currentMonthDetail,
+        lastMonthDetail,
+        nextMonthDetail,
+        nonCommissionedHours
+      ),
+    [
       userSalaryDetails,
       year,
       nextYear,
@@ -41,7 +52,7 @@ function SalaryProvider({ children }) {
       lastMonthDetail,
       nextMonthDetail,
       nonCommissionedHours
-    )
+    ]
   );
 
   const value = React.useMemo(

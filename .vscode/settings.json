@@ -3,5 +3,7 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
-  "editor.wordWrapColumn": 100
+  "editor.wordWrapColumn": 100,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "non-relative"
 }
