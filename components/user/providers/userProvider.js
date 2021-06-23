@@ -1,6 +1,6 @@
+import { debounceFetch, fetcher } from "@/utils/fetcher";
 import * as React from "react";
 import useSWR, { mutate } from "swr";
-import { debounceFetch, fetcher } from "../../../utils/fetcher";
 
 const UserContext = React.createContext();
 UserContext.displayName = "UserContext";

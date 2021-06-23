@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 /* next does not yet support blog usage in next image component */
 /* active PR: https://github.com/vercel/next.js/pull/23622 */
+import { useUserImage } from "@/components/user/hooks";
 import * as React from "react";
-import { useUserImage } from "./hooks";
 
 export default function UserAvatar() {
   const userImage = useUserImage();

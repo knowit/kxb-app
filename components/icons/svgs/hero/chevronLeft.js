@@ -1,7 +1,7 @@
-import React, { forwardRef } from "react";
-import BaseHeroIcon from "./baseHeroIcon";
+import BaseHeroIcon from "@/components/icons/svgs/hero/baseHeroIcon";
+import React from "react";
 
-const ChevronLeft = forwardRef(
+const ChevronLeft = React.forwardRef(
   (
     { className, color = "currentColor", size = "base", baseComponent = BaseHeroIcon, ...rest },
     ref

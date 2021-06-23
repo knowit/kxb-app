@@ -1,16 +1,14 @@
+import CalendarDay from "@/components/calendarDay";
+import Container from "@/components/container";
+import Heading from "@/components/heading";
+import { ChevronLeft, ChevronRight } from "@/components/icons";
+import { useCalendar } from "@/utils/calendarProvider";
 import { motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
-import { useCalendar } from "../utils/calendarProvider";
-import { useSalary } from "../utils/salaryProvider";
-import CalendarDay from "./calendarDay";
-import Container from "./container";
-import Heading from "./heading";
-import { ChevronLeft, ChevronRight } from "./icons";
 
 export default function Calendar({ salaryStatistics, ...other }) {
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
-  const { monthStatistics, salaryIsLoading } = useSalary();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 

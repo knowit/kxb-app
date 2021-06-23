@@ -1,6 +1,6 @@
+import redisUser from "@/lib/redisUser";
+import { sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { getSession } from "next-auth/client";
-import redisUser from "../../../lib/redisUser";
-import { sessionUserIsAdmin } from "../../../utils/sessionUtils";
 
 export default async function Users(req, res) {
   const session = await getSession({ req });

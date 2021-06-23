@@ -1,8 +1,8 @@
+import { Logo, Moon, Sun } from "@/components/icons";
+import Link from "@/components/link";
+import { UserNavDetails, useUser } from "@/components/user";
 import { useTheme } from "next-themes";
 import * as React from "react";
-import { Logo, Moon, Sun } from "./icons";
-import Link from "./link";
-import { UserNavDetails, useUser } from "./user";
 
 export default function Nav({ userNavDetails = true, ...other }) {
   const [mounted, setMounted] = React.useState(false);

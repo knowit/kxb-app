@@ -1,6 +1,6 @@
+import { isWorkDay } from "@/logic/calendarLogic";
 import clsx from "clsx";
 import * as React from "react";
-import { isWorkDay } from "../logic/calendarLogic";
 
 export default function CalendarDay({ day, ...other }) {
   const dayIsWorkDay = React.useMemo(() => isWorkDay(day), [day]);

@@ -1,8 +1,8 @@
+import { getIconSizeClassnames } from "@/components/icons/svgs/hero/utils/iconSize";
 import clsx from "clsx";
-import React, { forwardRef } from "react";
-import { getIconSizeClassnames } from "./utils/iconSize";
+import React from "react";
 
-const BaseHeroIcon = forwardRef(
+const BaseHeroIcon = React.forwardRef(
   ({ children, className, color = "currentColor", size = "base", ...rest }, ref) => {
     const iconSizeClassnames = React.useMemo(() => getIconSizeClassnames(size), [size]);
 

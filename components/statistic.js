@@ -1,5 +1,5 @@
+import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
 import * as React from "react";
-import StatisticSkeleton from "./skeleton/statisticSkeleton";
 
 export default function Statistic({ title, value, isLoading = false }) {
   return isLoading ? (

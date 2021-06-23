@@ -1,5 +1,5 @@
-import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "./dateLogic";
-import { removeDuplicates } from "./objectLogic";
+import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "@/logic/dateLogic";
+import { removeDuplicates } from "@/logic/objectLogic";
 
 export const getHomePageProps = async (props = {}) => {
   return {

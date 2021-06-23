@@ -1,3 +1,3 @@
-import { useUser } from "../providers/userProvider";
+import { useUser } from "@/components/user/providers/userProvider";
 
 export default useUser;

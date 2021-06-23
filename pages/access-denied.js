@@ -1,9 +1,9 @@
+import Heading from "@/components/heading";
+import { LockClosed } from "@/components/icons";
+import Text from "@/components/text";
+import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
 import { getSession } from "next-auth/client";
 import * as React from "react";
-import Heading from "../components/heading";
-import { LockClosed } from "../components/icons";
-import Text from "../components/text";
-import { sessionUserIsSpecialist } from "../utils/sessionUtils";
 
 export default function AccessDenied({ session }) {
   return (

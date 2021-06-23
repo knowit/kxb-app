@@ -1,7 +1,7 @@
+import TextField from "@/components/textField";
+import { useUser } from "@/components/user/hooks";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import TextField from "../textField";
-import { useUser } from "./hooks";
 
 export default function UserProfile() {
   const { user, update } = useUser();

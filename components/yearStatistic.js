@@ -1,9 +1,9 @@
+import Heading from "@/components/heading";
+import HeadingSkeleton from "@/components/skeleton/headingSkeleton";
+import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
+import Statistic from "@/components/statistic";
+import StatisticGroup from "@/components/statisticGroup";
 import * as React from "react";
-import Heading from "./heading";
-import HeadingSkeleton from "./skeleton/headingSkeleton";
-import StatisticSkeleton from "./skeleton/statisticSkeleton";
-import Statistic from "./statistic";
-import StatisticGroup from "./statisticGroup";
 
 export default function YearStatistic({
   title,
