@@ -38,7 +38,7 @@ export default function SalaryCalculator() {
       <Heading variant="pageHeading">Salary Calculator</Heading>
       <Text>We provide you with a simple salary model.</Text>
       <Text className="text-center lg:text-left">
-        You get paid by commission or guaranteed salary. Knowit covers both employer's national
+        You get paid by commission or guaranteed salary. Knowit covers both employer&apos;s national
         insurance contributions (14.10%) and holyday payment (12%). This means you can calculate
         your next payment by the following formulae{" "}
         <span className="text-black bg-green-500 dark:bg-green-400">

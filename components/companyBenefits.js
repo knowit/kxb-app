@@ -30,9 +30,9 @@ export default function CompanyBenefits() {
         </Heading>
         <Heading className="text-center lg:text-left">Company Benefits</Heading>
         <Text className="text-center lg:text-left">
-          You get paid by commission or guaranteed salary. Knowit covers both employer's national
-          insurance contributions (14.10%) and holyday payment (12%). This means you can calculate
-          your next payment by the following formulae{" "}
+          You get paid by commission or guaranteed salary. Knowit covers both employer&apos;s
+          national insurance contributions (14.10%) and holyday payment (12%). This means you can
+          calculate your next payment by the following formulae{" "}
           <span className="text-black bg-green-500 dark:bg-green-400">
             Work hours in month x hourly rate x commission = your salary.
           </span>
