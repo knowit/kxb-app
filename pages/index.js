@@ -1,3 +1,4 @@
+import CompanyBenefits from "@/components/companyBenefits";
 import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
 import YearlyEarnings from "@/components/yearlyEarnings";
@@ -13,6 +14,7 @@ export default function Home({ session }) {
     <>
       <Heading variant="pageHeading" className="mb-24">{`Hi ${session?.user?.name}`}</Heading>
       <YearlyEarnings />
+      <CompanyBenefits />
       <YearStatistic
         title={`${yearSalaryStatistics?.year} overview`}
         yearStatistic={yearSalaryStatistics}
