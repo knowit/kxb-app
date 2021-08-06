@@ -1,9 +1,11 @@
+import Link from "@/components/link";
 import clsx from "clsx";
 import * as React from "react";
 
-export default function Button({ children, className, variant = "primary", ...other }) {
+export default function LinkButton({ children, href, className, variant = "primary", ...other }) {
   return (
-    <button
+    <Link
+      href={href ?? "/"}
       className={clsx(
         "inline-block px-6 py-2 text-xs font-medium leading-6 text-center  uppercase transition  rounded shadow ripple hover:shadow-lg  focus:outline-none",
         {
@@ -11,7 +13,7 @@ export default function Button({ children, className, variant = "primary", ...ot
             variant === "primary"
         },
         {
-          "text-white bg-blue-500 dark:bg-blue-400 hover:bg-blue-600 dark:hover:bg-blue-700":
+          "text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700":
             variant === "secondary"
         },
         {
@@ -23,6 +25,6 @@ export default function Button({ children, className, variant = "primary", ...ot
       {...other}
     >
       {children}
-    </button>
+    </Link>
   );
 }

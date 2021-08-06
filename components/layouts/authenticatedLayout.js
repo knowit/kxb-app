@@ -1,5 +1,4 @@
-import Container from "@/components/container";
-import Nav from "@/components/nav";
+import PageLayout from "@/components/layouts/pageLayout";
 import { UserProvider } from "@/components/user/providers/userProvider";
 import { CalendarProvider } from "@/utils/calendarProvider";
 import { SalaryProvider } from "@/utils/salaryProvider";
@@ -12,10 +11,7 @@ export default function AuthenticatedLayout({ children, pageProps, layoutProps, 
       <UserProvider session={pageProps.session}>
         <CalendarProvider>
           <SalaryProvider>
-            <Nav {...layoutProps} />
-            <Container as="main" className="w-full max-w-5xl my-0 mx-auto pt-16 px-8">
-              {children}
-            </Container>
+            <PageLayout layoutProps={layoutProps}>{children}</PageLayout>
           </SalaryProvider>
         </CalendarProvider>
       </UserProvider>

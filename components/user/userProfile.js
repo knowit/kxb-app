@@ -55,7 +55,7 @@ export default function UserProfile() {
       <TextField
         id="commission"
         label="Commission"
-        placeholder="0.45"
+        placeholder="0.40"
         type="number"
         step="0.01"
         {...register("commission", {
@@ -65,7 +65,7 @@ export default function UserProfile() {
       <TextField
         id="tax"
         label="Tax"
-        placeholder="0.41"
+        placeholder="0.36"
         type="number"
         step="0.01"
         {...register("tax", {

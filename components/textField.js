@@ -1,17 +1,44 @@
+import clsx from "clsx";
+import { motion } from "framer-motion";
 import * as React from "react";
+import Text from "./text";
 
-const TextField = React.forwardRef(function TextField({ id, label, ...other }, ref) {
+const TextField = React.forwardRef(function TextField(
+  { id, label, error, helperText = "Required", type = "text", ...other },
+  ref
+) {
   return (
-    <div className="flex flex-col">
-      <label className="block text-sm text-gray-900 dark:text-gray-100" htmlFor={id}>
-        {label}
-      </label>
+    <div
+      className={clsx("flex flex-col mb-6", {
+        hidden: type === "hidden"
+      })}
+    >
+      <label className="block text-sm text-gray-900 dark:text-gray-100">{label}</label>
       <input
-        className="px-4 py-2 mt-1 my-6 focus:ring-blue-500 border focus:border-blue-500 block w-full border-gray-900 dark:border-gray-800 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-        id={id}
+        className="px-4 py-2 mt-1 mb-2 focus:ring-blue-500 border focus:border-blue-500 block w-full border-gray-900 dark:border-gray-800 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+        type={type}
         ref={ref}
         {...other}
       />
+      <motion.div
+        initial={error ? "open" : "collapsed"}
+        animate={error ? "open" : "collapsed"}
+        inherit={false}
+        variants={{
+          open: {
+            opacity: 1,
+            height: "auto"
+          },
+          collapsed: { opacity: 0, height: 0 }
+        }}
+        transition={{
+          ease: "easeOut"
+        }}
+      >
+        <Text className="text-sm !text-red-600 dark:!text-red-700 mb-0">
+          {error ? helperText : <>&nbsp;</>}
+        </Text>
+      </motion.div>
     </div>
   );
 });

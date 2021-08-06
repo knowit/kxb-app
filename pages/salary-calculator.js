@@ -1,10 +1,7 @@
-import Calendar from "@/components/calendar";
 import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
-import SalaryStatistics from "@/components/salaryStatistics";
+import SalaryOverview from "@/components/salaryOverview";
 import Text from "@/components/text";
-import TextField from "@/components/textField";
-import YearStatistic from "@/components/yearStatistic";
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
 import { useCalendar } from "@/utils/calendarProvider";
@@ -45,57 +42,7 @@ export default function SalaryCalculator() {
           Work hours in month x hourly rate x commission = your salary.
         </span>
       </Text>
-      <Heading>Monthly salary example</Heading>
-      <div className="flex flex-col lg:flex-row justify-evenly items-center w-full">
-        <div>
-          <TextField
-            id="hourlyRate"
-            label="Hourly rate"
-            placeholder={DEFAULT_USER_SALARY.hourlyRate}
-            value={hourlyRate}
-            onChange={e => setHourlyRate(e.target.value)}
-            type="number"
-          />
-          <TextField
-            id="commission"
-            label="Commission"
-            placeholder={DEFAULT_USER_SALARY.commission}
-            value={commission}
-            onChange={e => setCommission(e.target.value)}
-            type="number"
-            step="0.01"
-          />
-          <TextField
-            id="tax"
-            label="Tax"
-            placeholder={DEFAULT_USER_SALARY.tax}
-            value={tax}
-            onChange={e => setTax(e.target.value)}
-            type="number"
-            step="0.01"
-          />
-        </div>
-        <div className="flex-grow max-w-lg ml-4">
-          <Calendar />
-          <SalaryStatistics salaryStatistics={salaryStatistics} />
-        </div>
-      </div>
-      <Heading>Yearly overview</Heading>
-      <Text>
-        Holyday payment is paid in June. For this month you get holiday payment and commissioned
-        pay. It&#39;s usually a good practice to set aside some money for the month after your
-        vacation as the holyday pay is usually paid before the actual vacation.
-      </Text>
-      <YearStatistic
-        title={`${year?.year} overview`}
-        yearStatistic={yearSalaryStatistics}
-        isLoading={isLoadingCalendar}
-      />
-      <YearStatistic
-        title={`${nextYear?.year} overview`}
-        yearStatistic={nextYearSalaryStatistics}
-        isLoading={isLoadingCalendar}
-      />
+      <SalaryOverview />
     </>
   );
 }

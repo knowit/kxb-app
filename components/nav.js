@@ -4,10 +4,24 @@ import { UserNavDetails, useUser } from "@/components/user";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
+function UserNavLinks() {
+  const { user } = useUser();
+
+  return user.isAdmin ? (
+    <>
+      <div className="hidden md:flex items-center ml-6">
+        <Link href="/job-offer">Job offer</Link>
+      </div>
+      <div className="hidden md:flex items-center ml-6">
+        <Link href="/salary-calculator">Salary calculator</Link>
+      </div>
+    </>
+  ) : null;
+}
+
 export default function Nav({ userNavDetails = true, ...other }) {
   const [mounted, setMounted] = React.useState(false);
   const { theme, setTheme } = useTheme();
-  const { user } = useUser();
 
   // After mounting, we have access to the theme
   React.useEffect(() => setMounted(true), []);
@@ -19,11 +33,7 @@ export default function Nav({ userNavDetails = true, ...other }) {
           <Logo />
         </Link>
       </div>
-      {user.isAdmin && (
-        <div className="hidden md:flex items-center ml-6">
-          <Link href="/salary-calculator">Salary calculator</Link>
-        </div>
-      )}
+      {userNavDetails && <UserNavLinks />}
       {userNavDetails && <UserNavDetails />}
       <div className="flex items-center ml-6">
         <button
