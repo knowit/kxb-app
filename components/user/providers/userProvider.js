@@ -1,12 +1,15 @@
+import { debounceFetch, fetcher } from "@/utils/fetcher";
 import * as React from "react";
 import useSWR, { mutate } from "swr";
-import { debounceFetch, fetcher } from "../../../utils/fetcher";
 
 const UserContext = React.createContext();
 UserContext.displayName = "UserContext";
 
-function UserProvider({ children, session }) {
-  const { data } = useSWR(() => `/api/user/${session.user.id}`, fetcher);
+function UserProvider({ children, session = {} }) {
+  const { data } = useSWR(() => `/api/user/${session.user.id}`, fetcher, {
+    initialData: session,
+    revalidateOnMount: true
+  });
 
   const value = React.useMemo(
     () => ({

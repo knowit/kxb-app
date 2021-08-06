@@ -1,6 +1,6 @@
+import TextField from "@/components/textField";
+import { useSalary } from "@/utils/salaryProvider";
 import * as React from "react";
-import { useSalary } from "../utils/salaryProvider";
-import TextField from "./textField";
 
 export default function CalculateEarningsInputs() {
   const { setNonCommissionedHours } = useSalary();

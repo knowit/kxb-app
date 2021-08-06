@@ -1,5 +1,5 @@
-import { formatCurrency } from "../utils/currencyFormat";
-import { getWorkDays } from "./calendarLogic";
+import { getWorkDays } from "@/logic/calendarLogic";
+import { formatCurrency } from "@/utils/currencyFormat";
 
 const WORK_HOURS_PER_DAY = 7.5;
 const WORK_VACATION_DAYS = 25;

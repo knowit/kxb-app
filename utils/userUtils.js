@@ -1,5 +1,5 @@
-import DEFAULT_USER_SALARY from "../constants/defaultUserSalary";
-import { getEarningsForMonth, getEarningsForYear } from "../logic/earningsLogic";
+import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
+import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
 
 export const userIsAdmin = user => user?.isAdmin ?? false;
 export const userIsSpecialist = user => user?.isSpecialist ?? false;

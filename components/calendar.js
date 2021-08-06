@@ -1,15 +1,14 @@
+import CalendarDay from "@/components/calendarDay";
+import Container from "@/components/container";
+import Heading from "@/components/heading";
+import { ChevronLeft, ChevronRight } from "@/components/icons";
+import { useCalendar } from "@/utils/calendarProvider";
 import { motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
-import { useCalendar } from "../utils/calendarProvider";
-import { useSalary } from "../utils/salaryProvider";
-import CalendarDay from "./calendarDay";
-import Container from "./container";
-import Heading from "./heading";
 
 export default function Calendar({ salaryStatistics, ...other }) {
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
-  const { monthStatistics, salaryIsLoading } = useSalary();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
@@ -43,20 +42,7 @@ export default function Calendar({ salaryStatistics, ...other }) {
             decrementMonth();
           }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ChevronLeft />
         </div>
         <Heading className="!mb-0" as="h2" onClick={toggleYearPicker}>
           {`${monthDetail?.month} ${yearName}`}
@@ -68,15 +54,7 @@ export default function Calendar({ salaryStatistics, ...other }) {
             incrementMonth();
           }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          <ChevronRight />
         </div>
       </div>
       <div className="flex justify-center items-center">

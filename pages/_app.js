@@ -1,6 +1,6 @@
+import "@/styles/global.css";
 import { ThemeProvider } from "next-themes";
 import * as React from "react";
-import "../styles/global.css";
 
 function MyApp({ Component, pageProps }) {
   const Layout = Component.layoutProps?.Layout || React.Fragment;

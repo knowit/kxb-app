@@ -1,5 +1,5 @@
+import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
 import { getSession } from "next-auth/client";
-import { sessionUserIsSpecialist } from "./sessionUtils";
 
 export const getResultForAuthenticatedPage = async context => {
   const session = await getSession(context);

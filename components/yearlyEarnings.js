@@ -1,8 +1,8 @@
+import CalculateEarningsInputs from "@/components/calculateEarningsInputs";
+import Calendar from "@/components/calendar";
+import SalaryStatistics from "@/components/salaryStatistics";
+import { UserProfile } from "@/components/user";
 import * as React from "react";
-import CalculateEarningsInputs from "./calculateEarningsInputs";
-import Calendar from "./calendar";
-import SalaryStatistics from "./salaryStatistics";
-import { UserProfile } from "./user";
 
 export default function YearlyEarnings() {
   return (
