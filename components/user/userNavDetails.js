@@ -26,8 +26,8 @@ export default function UserNavDetails() {
 
   return (
     <>
-      <div className="flex items-center ml-6 items-end">
-        <div className="ml-6">
+      <div className="flex items-center ml-4 md:ml-6 items-end">
+        <div>
           <div className="text-xs text-gray-500 dark:text-gray-400">Next paycheck</div>
           <div className="text-xs">{nextPayDayStatistics.payDay}</div>
           <div className="text-sm font-bold text-green-500 dark:text-green-400">
@@ -35,7 +35,7 @@ export default function UserNavDetails() {
           </div>
         </div>
       </div>
-      <div className="flex items-center ml-6">
+      <div className="flex items-center ml-4 md:ml-6">
         <div ref={userMenuRef} className="w-12 h-12 relative">
           <button className="cursor-pointer" onClick={() => setShowUserMenu(prev => !prev)}>
             <UserAvatar />

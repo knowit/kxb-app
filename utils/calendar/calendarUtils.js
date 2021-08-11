@@ -3,7 +3,8 @@ import {
   getFormattedDate,
   getFormattedDay,
   getFormattedLongDate,
-  getFormattedMonth
+  getFormattedMonth,
+  getFormattedShortDate
 } from "@/utils/dateUtils";
 import {
   addDays,
@@ -167,6 +168,7 @@ const isHoliday = date => {
 const createHoliday = (name, date) => ({
   name,
   date,
+  formattedShortDate: getFormattedShortDate(date),
   formattedLongDate: getFormattedLongDate(date)
 });
 
@@ -175,6 +177,7 @@ export const createDate = (date, locale) => ({
   day: getDate(date),
   name: getFormattedDay(date, locale),
   weekNumber: getWeek(date),
+  formattedShortDate: getFormattedShortDate(date, locale),
   formattedLongDate: getFormattedLongDate(date, locale),
   isHoliday: isHoliday(date)
 });

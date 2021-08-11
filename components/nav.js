@@ -20,12 +20,12 @@ export default function Nav({ userNavDetails = true, ...other }) {
         </Link>
       </div>
       {user.isAdmin && (
-        <div className="hidden md:flex items-center ml-6">
+        <div className="hidden md:flex items-center ml-4 md:ml-6">
           <Link href="/salary-calculator">Salary calculator</Link>
         </div>
       )}
       {userNavDetails && <UserNavDetails />}
-      <div className="flex items-center ml-6">
+      <div className="flex items-center ml-4 md:ml-6">
         <button
           type="button"
           aria-label="Toggle color mode"

@@ -6,6 +6,9 @@ import { getLocale } from "./calendar/calendarUtils";
 export const getFormattedDate = (date, locale) =>
   format(date, "dd-MM-yyyy", { locale: getLocale(locale) });
 
+export const getFormattedShortDate = (date, locale) =>
+  format(date, "EE d. MMM yyyy", { locale: getLocale(locale) });
+
 export const getFormattedLongDate = (date, locale) =>
   format(date, "EEEE d. MMMM yyyy", { locale: getLocale(locale) });
 
