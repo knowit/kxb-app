@@ -1,8 +1,7 @@
 import { getPayDay } from "@/logic/calendarLogic";
 import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "@/logic/dateLogic";
-import { fetcher } from "@/utils/fetcher";
+import { getCalendarYear } from "@/utils/calendar/calendarUtils";
 import * as React from "react";
-import useSWR from "swr";
 
 const CalendarContext = React.createContext();
 CalendarContext.displayName = "CalendarContext";
@@ -46,23 +45,9 @@ function CalendarProvider({
 }) {
   const [state, dispatch] = React.useReducer(calendarReducer, { year, month });
 
-  const { data } = useSWR(
-    `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${state.year}/months`,
-    fetcher,
-    {
-      initialData: initialData
-    }
-  );
-
-  const { data: lastYear } = useSWR(
-    () => `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data.year - 1}/months`,
-    fetcher
-  );
-
-  const { data: nextYear } = useSWR(
-    () => `${process.env.NEXT_PUBLIC_CALENDAR_API_BASE_URL}api/calendar/${+data.year + 1}/months`,
-    fetcher
-  );
+  const data = React.useMemo(() => getCalendarYear(state.year), [state.year]);
+  const lastYear = React.useMemo(() => getCalendarYear(+data.year - 1), [data.year]);
+  const nextYear = React.useMemo(() => getCalendarYear(+data.year + 1), [data.year]);
 
   const setYear = year => dispatch({ type: "SET_YEAR", year: year });
   const incrementYear = () => dispatch({ type: "SET_YEAR", year: state.year + 1 });
