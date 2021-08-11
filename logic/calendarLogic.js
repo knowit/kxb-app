@@ -14,6 +14,7 @@ export const getPayDay = month => {
 
   const workDays = getWorkDays(month);
   const regularPayDay = workDays.find(workDay => workDay.day === PAY_DAY);
+
   return regularPayDay
     ? regularPayDay
     : workDays
