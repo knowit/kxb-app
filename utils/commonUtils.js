@@ -23,3 +23,5 @@ export const memoize = func => {
     return key in cache ? cache[key] : (cache[key] = func(...args));
   };
 };
+
+export const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);

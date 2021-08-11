@@ -1,4 +1,10 @@
-import { getFormattedMonth } from "@/logic/dateLogic";
+import { isString, memoize } from "@/utils/commonUtils";
+import {
+  getFormattedDate,
+  getFormattedDay,
+  getFormattedLongDate,
+  getFormattedMonth
+} from "@/utils/dateUtils";
 import {
   addDays,
   eachDayOfInterval,
@@ -17,8 +23,6 @@ import {
   subDays
 } from "date-fns";
 import { enUS, nb } from "date-fns/locale";
-import { isString, memoize } from "../commonUtils";
-import { getFormattedDate, getFormattedDay, getFormattedLongDate } from "../dateFnsUtils";
 
 export const getLocale = locale => {
   if (!isString(locale)) {

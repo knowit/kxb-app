@@ -1,6 +1,6 @@
 import { getPayDay } from "@/logic/calendarLogic";
-import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "@/logic/dateLogic";
 import { getCalendarYear } from "@/utils/calendar/calendarUtils";
+import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "@/utils/dateUtils";
 import * as React from "react";
 
 const CalendarContext = React.createContext();
