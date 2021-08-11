@@ -38,7 +38,7 @@ export default function CompanyBenefits() {
           </span>
         </Text>
       </div>
-      <div className="grid grid-cols-2 gap-4 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         <Benefit iconProps={{ className: "text-green-500 dark:text-green-400" }}>
           Full pay on paternity leave
         </Benefit>
