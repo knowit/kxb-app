@@ -1,15 +1,19 @@
-// import { nb } from "date-fns/locale";
 import { MONTH_NAMES, MONTH_VALUES } from "@/constants/dateConstants";
+import { range } from "@/utils/commonUtils";
 import { format } from "date-fns";
+import { getLocale } from "./calendar/calendarUtils";
 
-const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);
+export const getFormattedDate = (date, locale) =>
+  format(date, "dd-MM-yyyy", { locale: getLocale(locale) });
 
-export const getFormattedDate = (date, dateFormat, options = {}) =>
-  format(date, dateFormat, options);
+export const getFormattedLongDate = (date, locale) =>
+  format(date, "EEEE d. MMMM yyyy", { locale: getLocale(locale) });
 
-export const getFormattedLongDate = date => getFormattedDate(date, "EEEE d. MMMM yyyy");
+export const getFormattedDay = (date, locale) =>
+  format(date, "EEEE", { locale: getLocale(locale) });
 
-export const getFormattedMonth = date => getFormattedDate(date, "LLLL");
+export const getFormattedMonth = (date, locale) =>
+  format(date, "MMMM", { locale: getLocale(locale) });
 
 export const getMonthFromName = monthName => {
   switch (monthName?.toUpperCase()) {
