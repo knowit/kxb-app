@@ -9,7 +9,7 @@ const Logo = React.forwardRef(({ color = "currentColor", size = 24, ...rest }, r
       height={72}
       fill={color}
       viewBox="0 0 233 72"
-      className="w-32 h-auto text-gray-900 dark:text-gray-100"
+      className="w-24 md:w-32 h-auto text-gray-900 dark:text-gray-100"
       {...rest}
     >
       <g id="Elementer">

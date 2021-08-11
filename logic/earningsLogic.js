@@ -25,9 +25,10 @@ export const getEarningsForMonth = (month, hourlyRate, commission, tax, nonCommi
   const workHours = getWorkHours(workDays.length, nonCommissionedHours);
   const gross = getGrossIncome(workHours, hourlyRate, commission);
   const net = getNetIncome(gross, tax);
+
   return {
     monthName: month?.month,
-    payDay: month?.payDay?.formattedLongDate,
+    payDay: month?.payDay?.formattedShortDate,
     workDays,
     workHours,
     gross,
