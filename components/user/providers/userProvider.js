@@ -1,19 +1,23 @@
 import { debounceFetch, fetcher } from "@/utils/fetcher";
+import { useSession } from "next-auth/client";
 import * as React from "react";
 import useSWR, { mutate } from "swr";
 
 const UserContext = React.createContext();
 UserContext.displayName = "UserContext";
 
-function UserProvider({ children, session = {} }) {
+function UserProvider({ children, user }) {
+  const [session] = useSession();
+
   const { data } = useSWR(() => `/api/user/${session.user.id}`, fetcher, {
-    initialData: session,
+    initialData: user,
     revalidateOnMount: true
   });
 
   const value = React.useMemo(
     () => ({
       user: data,
+      session: session,
       update: async user => {
         mutate(
           `/api/user/${session.user.id}`,

@@ -1,9 +1,10 @@
 import Button from "@/components/button";
 import Link from "@/components/link";
+import { useUser } from "@/components/user/hooks";
 import UserAvatar from "@/components/user/userAvatar";
 import { useSalary } from "@/utils/salaryProvider";
 import { motion } from "framer-motion";
-import { signOut, useSession } from "next-auth/client";
+import { signOut } from "next-auth/client";
 import * as React from "react";
 import { useClickAway } from "react-use";
 
@@ -16,7 +17,7 @@ export default function UserNavDetails() {
     }
   });
 
-  const [session] = useSession();
+  const { user, session } = useUser();
   const [showUserMenu, setShowUserMenu] = React.useState(false);
   const { nextPayDayStatistics } = useSalary();
 
@@ -56,7 +57,11 @@ export default function UserNavDetails() {
             }}
           >
             <div className="flex flex-col p-6">
-              <Link className="mb-4" href="/profile" onClick={() => setShowUserMenu(false)}>
+              <Link
+                className="mb-4"
+                href={`/user/${user?.id}/profile`}
+                onClick={() => setShowUserMenu(false)}
+              >
                 Profile
               </Link>
               <Button onClick={() => signOut()}>Logout</Button>

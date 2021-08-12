@@ -13,7 +13,7 @@ export default function Login({ session }) {
   React.useEffect(() => {
     if (session) {
       setIsLoading(true);
-      router.push("/");
+      router.push(`/user/${session.user.id}`);
     }
   }, [session, router]);
 

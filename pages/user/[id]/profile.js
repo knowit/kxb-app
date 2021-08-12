@@ -2,7 +2,7 @@ import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
 import Text from "@/components/text";
 import { UserProfile, useUser } from "@/components/user";
-import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
+import redisUser from "@/lib/redisUser";
 import * as React from "react";
 
 export default function Profile() {
@@ -17,8 +17,23 @@ export default function Profile() {
   );
 }
 
-export async function getServerSideProps(context) {
-  return getResultForAuthenticatedPage(context);
+export async function getStaticPaths() {
+  const users = await redisUser.get();
+
+  return {
+    paths: users.map(user => ({ params: { id: user.id } })),
+    fallback: false
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const user = await redisUser.getById(params.id);
+
+  return {
+    props: {
+      user
+    }
+  };
 }
 
 Profile.layoutProps = {

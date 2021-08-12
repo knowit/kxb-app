@@ -8,7 +8,6 @@ import YearStatistic from "@/components/yearStatistic";
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
 import { useCalendar } from "@/utils/calendarProvider";
-import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
 import * as React from "react";
 
 export default function SalaryCalculator() {
@@ -98,10 +97,6 @@ export default function SalaryCalculator() {
       />
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  return getResultForAuthenticatedPage(context);
 }
 
 SalaryCalculator.layoutProps = {
