@@ -16,22 +16,22 @@
     "clsx": "^1.1.1",
     "date-fns": "^2.23.0",
     "framer-motion": "^4.1.17",
-    "ioredis": "^4.27.8",
-    "next": "^11.1.0",
+    "ioredis": "^4.27.9",
+    "next": "^11.1.1",
     "next-auth": "^3.29.0",
     "next-themes": "^0.0.15",
     "postcss": "^8.3.6",
     "postcss-nested": "^5.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.14.0",
+    "react-hook-form": "^7.14.1",
     "react-use": "^17.2.4",
     "swr": "^1.0.0",
-    "tailwindcss": "^2.2.8"
+    "tailwindcss": "^2.2.9"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "eslint-config-next": "^11.1.0",
+    "eslint-config-next": "^11.1.1",
     "prettier": "^2.3.2"
   }
 }
