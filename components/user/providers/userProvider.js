@@ -7,7 +7,7 @@ UserContext.displayName = "UserContext";
 
 function UserProvider({ children, session = {} }) {
   const { data } = useSWR(() => `/api/user/${session.user.id}`, fetcher, {
-    initialData: session,
+    fallbackData: session,
     revalidateOnMount: true
   });
 

@@ -37,12 +37,7 @@ function calendarReducer(state = initialState, action) {
   }
 }
 
-function CalendarProvider({
-  children,
-  initialData = initialState.initialData,
-  year = initialState.year,
-  month = initialState.month
-}) {
+function CalendarProvider({ children, year = initialState.year, month = initialState.month }) {
   const [state, dispatch] = React.useReducer(calendarReducer, { year, month });
 
   const data = React.useMemo(() => getCalendarYear(state.year), [state.year]);
@@ -50,11 +45,19 @@ function CalendarProvider({
   const nextYear = React.useMemo(() => getCalendarYear(+data.year + 1), [data.year]);
 
   const setYear = year => dispatch({ type: "SET_YEAR", year: year });
-  const incrementYear = () => dispatch({ type: "SET_YEAR", year: state.year + 1 });
-  const decrementYear = () => dispatch({ type: "SET_YEAR", year: state.year - 1 });
+
+  const incrementYear = React.useCallback(
+    () => dispatch({ type: "SET_YEAR", year: state.year + 1 }),
+    [state.year]
+  );
+  const decrementYear = React.useCallback(
+    () => dispatch({ type: "SET_YEAR", year: state.year - 1 }),
+    [state.year]
+  );
 
   const setMonth = month => dispatch({ type: "SET_MONTH", month: month });
-  const incrementMonth = () => {
+
+  const incrementMonth = React.useCallback(() => {
     const newMonth = state.month + 1;
     const shouldIncrementYear = newMonth > 11;
 
@@ -63,9 +66,9 @@ function CalendarProvider({
     }
 
     dispatch({ type: "SET_MONTH", month: shouldIncrementYear ? 0 : newMonth });
-  };
+  }, [incrementYear, state.month]);
 
-  const decrementMonth = () => {
+  const decrementMonth = React.useCallback(() => {
     const newMonth = state.month - 1;
     const shouldDecrementYear = newMonth < 0;
 
@@ -74,7 +77,7 @@ function CalendarProvider({
     }
 
     dispatch({ type: "SET_MONTH", month: shouldDecrementYear ? 11 : newMonth });
-  };
+  }, [decrementYear, state.month]);
 
   React.useEffect(() => {
     setYear(year);
@@ -133,7 +136,16 @@ function CalendarProvider({
       date,
       isLoadingCalendar: !data
     };
-  }, [data, lastYear, nextYear, state, dispatch]);
+  }, [
+    data,
+    lastYear,
+    nextYear,
+    state,
+    incrementYear,
+    decrementYear,
+    incrementMonth,
+    decrementMonth
+  ]);
 
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }
