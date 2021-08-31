@@ -1,3 +1,4 @@
+import { isWorkDay } from "@/logic/calendarLogic";
 import { isString, memoize } from "@/utils/commonUtils";
 import {
   getFormattedDate,
@@ -172,15 +173,23 @@ const createHoliday = (name, date) => ({
   formattedLongDate: getFormattedLongDate(date)
 });
 
-export const createDate = (date, locale) => ({
-  date,
-  day: getDate(date),
-  name: getFormattedDay(date, locale),
-  weekNumber: getWeek(date),
-  formattedShortDate: getFormattedShortDate(date, locale),
-  formattedLongDate: getFormattedLongDate(date, locale),
-  isHoliday: isHoliday(date)
-});
+export const createDate = (date, locale) => {
+  const modifiedDate = {
+    date,
+    day: getDate(date),
+    name: getFormattedDay(date, locale),
+    weekNumber: getWeek(date),
+    formattedDate: getFormattedDate(date, locale),
+    formattedShortDate: getFormattedShortDate(date, locale),
+    formattedLongDate: getFormattedLongDate(date, locale),
+    isHoliday: isHoliday(date)
+  };
+
+  return {
+    ...modifiedDate,
+    isWorkDay: isWorkDay(modifiedDate)
+  };
+};
 
 export const getCalendarYear = year => {
   const date = getFirstDayOfYear(year);

@@ -2,12 +2,16 @@ import CalendarDay from "@/components/calendarDay";
 import Container from "@/components/container";
 import Heading from "@/components/heading";
 import { ChevronLeft, ChevronRight } from "@/components/icons";
+import { useUser } from "@/components/user";
+import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { useCalendar } from "@/utils/calendarProvider";
-import { motion } from "framer-motion";
+import { omit } from "@/utils/commonUtils";
+import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
 
 export default function Calendar({ salaryStatistics, ...other }) {
+  const { user, update } = useUser();
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
@@ -33,7 +37,7 @@ export default function Calendar({ salaryStatistics, ...other }) {
   };
 
   return (
-    <Container className="w-full" {...other}>
+    <Container className="w-full select-none" {...other}>
       <div className="flex justify-between items-center mb-3">
         <div
           className="cursor-pointer"
@@ -58,13 +62,17 @@ export default function Calendar({ salaryStatistics, ...other }) {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div className="flex items-center mx-4">
+        <div className="flex items-center mx-2 sm:mx-4">
           <div className="h-4 w-4 rounded-full bg-white"></div>
           <div className="text-xs ml-2">Off work</div>
         </div>
-        <div className="flex items-center mx-4">
+        <div className="flex items-center mx-2 sm:mx-4">
           <div className="h-4 w-4 rounded-full bg-green-500 dark:bg-green-400"></div>
           <div className="text-xs ml-2">Work</div>
+        </div>
+        <div className="flex items-center mx-2 sm:mx-4">
+          <div className="h-4 w-4 rounded-full bg-red-500 dark:bg-red-400"></div>
+          <div className="text-xs ml-2">Non commissioned</div>
         </div>
       </div>
       <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-80 dark:bg-gray-900 my-4 mx-auto">
@@ -91,7 +99,32 @@ export default function Calendar({ salaryStatistics, ...other }) {
         </div>
         {renderSpacingDays(monthDetail?.days)}
         {monthDetail?.days?.map((day, i) => (
-          <CalendarDay key={`calendar-day-${i}`} day={day} />
+          <CalendarDay
+            key={`calendar-day-${i}`}
+            text={day.day}
+            isWorkDay={day.isWorkDay}
+            isNonCommissionedToggled={
+              user?.workDayDetails?.[day.formattedDate]?.nonCommissionedHours > 0
+            }
+            onClick={() => {
+              if (day.isWorkDay) {
+                console.log(day.formattedDate);
+                update(
+                  user?.workDayDetails?.[day.formattedDate]
+                    ? { workDayDetails: omit(user.workDayDetails, [day.formattedDate]) }
+                    : {
+                        workDayDetails: {
+                          ...(user.workDayDetails ?? {}),
+                          [day.formattedDate]: {
+                            nonCommissionedHours: EARNING_CONSTANTS.WORK_HOURS_PER_DAY,
+                            extraHours: 0
+                          }
+                        }
+                      }
+                );
+              }
+            }}
+          />
         ))}
         <motion.div
           className="absolute top-0 left-0 right-0 bottom-0 dark:bg-gray-900 rounded-lg"
@@ -102,25 +135,32 @@ export default function Calendar({ salaryStatistics, ...other }) {
               opacity: 1,
               height: "auto"
             },
-            collapsed: { opacity: 0, height: 0 }
+            collapsed: {
+              opacity: 0,
+              height: 0
+            }
           }}
           transition={{
             ease: "easeOut"
           }}
         >
           <div className="grid grid-cols-3 p-2 items-center h-full">
-            {years.map(year => (
-              <div
-                key={year}
-                onClick={() => {
-                  setYear(year);
-                  toggleYearPicker();
-                }}
-                className="cursor-pointer p-2 text-xl text-center"
-              >
-                {year}
-              </div>
-            ))}
+            <AnimatePresence exitBeforeEnter>
+              {showYearPicker &&
+                years.map(year => (
+                  <motion.div
+                    key={year}
+                    onClick={() => {
+                      setYear(year);
+                      toggleYearPicker();
+                    }}
+                    exit={{ opacity: 0 }}
+                    className="cursor-pointer p-2 text-xl text-center"
+                  >
+                    {year}
+                  </motion.div>
+                ))}
+            </AnimatePresence>
           </div>
         </motion.div>
       </div>

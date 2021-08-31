@@ -1,18 +1,21 @@
-import { isWorkDay } from "@/logic/calendarLogic";
 import clsx from "clsx";
 import * as React from "react";
 
-export default function CalendarDay({ day, ...other }) {
-  const dayIsWorkDay = React.useMemo(() => isWorkDay(day), [day]);
-
+export default function CalendarDay({
+  text,
+  isWorkDay = false,
+  isNonCommissionedToggled = false,
+  ...other
+}) {
   return (
     <div
-      className={clsx("flex justify-center items-center p-2", {
-        "text-green-500 dark:text-green-400 font-bold": dayIsWorkDay
+      className={clsx("flex justify-center items-center p-2 cursor-pointer", {
+        "text-green-500 dark:text-green-400 font-bold": isWorkDay,
+        "text-red-500 dark:text-red-400 font-bold": isNonCommissionedToggled
       })}
       {...other}
     >
-      {day?.day}
+      {text}
     </div>
   );
 }

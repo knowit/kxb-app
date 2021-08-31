@@ -13,7 +13,7 @@ export default function AuthenticatedLayout({ children, pageProps, layoutProps, 
         <CalendarProvider>
           <SalaryProvider>
             <Nav {...layoutProps} />
-            <Container as="main" className="w-full max-w-5xl my-0 mx-auto pt-16 px-8">
+            <Container as="main" className="w-full max-w-5xl my-0 mx-auto pt-16 px-6 sm:px-8">
               {children}
             </Container>
           </SalaryProvider>

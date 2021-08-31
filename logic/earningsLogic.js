@@ -1,16 +1,13 @@
+import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { getWorkDays } from "@/logic/calendarLogic";
 import { formatCurrency } from "@/utils/currencyFormat";
 
-const WORK_HOURS_PER_DAY = 7.5;
-const WORK_VACATION_DAYS = 25;
-const WORK_HOLIDAY_PAY = 0.12;
-
 const getHolidayPay = gross => {
-  return gross * WORK_HOLIDAY_PAY;
+  return gross * EARNING_CONSTANTS.WORK_HOLIDAY_PAY;
 };
 
 export const getWorkHours = (workDays = 0, nonCommissionedHours) =>
-  WORK_HOURS_PER_DAY * workDays - nonCommissionedHours;
+  EARNING_CONSTANTS.WORK_HOURS_PER_DAY * workDays - nonCommissionedHours;
 
 // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
 export const getGrossIncome = (workHours = 0, hourlyRate, commission) =>
@@ -20,9 +17,20 @@ export const getGrossIncome = (workHours = 0, hourlyRate, commission) =>
 export const getNetIncome = (grossIncome, tax) =>
   +(Math.round((grossIncome - grossIncome * tax + Number.EPSILON) * 100) / 100).toFixed(2);
 
-export const getEarningsForMonth = (month, hourlyRate, commission, tax, nonCommissionedHours) => {
+const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
+  return (
+    month.days.reduce(
+      (sum, day) => (sum += workDayDetails?.[day.formattedDate]?.nonCommissionedHours ?? 0),
+      0
+    ) ?? 0
+  );
+};
+
+export const getEarningsForMonth = (month, hourlyRate, commission, tax, workDayDetails) => {
   const workDays = getWorkDays(month);
-  const workHours = getWorkHours(workDays.length, nonCommissionedHours);
+  const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
+  console.log(nonCommissionedHoursForMonth);
+  const workHours = getWorkHours(workDays.length, nonCommissionedHoursForMonth);
   const gross = getGrossIncome(workHours, hourlyRate, commission);
   const net = getNetIncome(gross, tax);
 
@@ -38,14 +46,14 @@ export const getEarningsForMonth = (month, hourlyRate, commission, tax, nonCommi
   };
 };
 
-export const getEarningsForYear = (year, hourlyRate, commission, tax, nonCommissionedHours) => {
+export const getEarningsForYear = (year, hourlyRate, commission, tax, workDayDetails) => {
   const { workDays } = (year?.months ?? []).reduce((result, month) => {
     const earningsForMonth = getEarningsForMonth(
       month,
       hourlyRate,
       commission,
       tax,
-      nonCommissionedHours
+      workDayDetails
     );
 
     return {
@@ -55,8 +63,10 @@ export const getEarningsForYear = (year, hourlyRate, commission, tax, nonCommiss
   }, {});
 
   const workDaysWithoutVacation =
-    workDays > WORK_VACATION_DAYS ? workDays - WORK_VACATION_DAYS : workDays;
-  const workHoursWithoutVacation = getWorkHours(workDaysWithoutVacation, nonCommissionedHours);
+    workDays > EARNING_CONSTANTS.WORK_VACATION_DAYS
+      ? workDays - EARNING_CONSTANTS.WORK_VACATION_DAYS
+      : workDays;
+  const workHoursWithoutVacation = getWorkHours(workDaysWithoutVacation, workDayDetails);
 
   const gross = getGrossIncome(workHoursWithoutVacation, hourlyRate, commission);
   const grossWithHolidayPay = gross + getHolidayPay(gross);

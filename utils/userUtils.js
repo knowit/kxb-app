@@ -18,7 +18,7 @@ export const getUserEarningsDetails = (
   currentMonthDetail,
   lastMonthDetail,
   nextMonthDetail,
-  nonCommissionedHours = 0
+  workDayDetails = {}
 ) => {
   const { hourlyRate, commission, tax } = userSalaryDetails;
 
@@ -27,7 +27,7 @@ export const getUserEarningsDetails = (
     hourlyRate,
     commission,
     tax,
-    nonCommissionedHours
+    workDayDetails
   );
 
   const currentMonthStatistics = getEarningsForMonth(
@@ -35,7 +35,7 @@ export const getUserEarningsDetails = (
     hourlyRate,
     commission,
     tax,
-    nonCommissionedHours
+    workDayDetails
   );
 
   const lastMonthStatistics = getEarningsForMonth(
@@ -43,18 +43,18 @@ export const getUserEarningsDetails = (
     hourlyRate,
     commission,
     tax,
-    nonCommissionedHours
+    workDayDetails
   );
   const nextMonthStatistics = getEarningsForMonth(
     nextMonthDetail,
     hourlyRate,
     commission,
     tax,
-    nonCommissionedHours
+    workDayDetails
   );
 
   return {
-    nonCommissionedHours,
+    workDayDetails,
     monthStatistics,
     currentMonthStatistics,
     lastMonthStatistics,

@@ -1,23 +1,13 @@
 import { useUser } from "@/components/user";
-import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { useCalendar } from "@/utils/calendarProvider";
 import { getUserEarningsDetails, getUserSalaryDetails } from "@/utils/userUtils";
 import * as React from "react";
-
-const initialState = {
-  hourlyRate: DEFAULT_USER_SALARY.hourlyRate,
-  commission: DEFAULT_USER_SALARY.commission,
-  tax: DEFAULT_USER_SALARY.tax,
-  nonCommissionedHours: 0
-};
 
 const SalaryContext = React.createContext();
 SalaryContext.displayName = "SalaryContext";
 
 function SalaryProvider({ children }) {
   const { user, isLoadingUser } = useUser();
-
-  const [nonCommissionedHours, setNonCommissionedHours] = React.useState(0);
 
   const {
     year,
@@ -41,7 +31,7 @@ function SalaryProvider({ children }) {
         currentMonthDetail,
         lastMonthDetail,
         nextMonthDetail,
-        nonCommissionedHours
+        user.workDayDetails
       ),
     [
       userSalaryDetails,
@@ -51,14 +41,13 @@ function SalaryProvider({ children }) {
       currentMonthDetail,
       lastMonthDetail,
       nextMonthDetail,
-      nonCommissionedHours
+      user.workDayDetails
     ]
   );
 
   const value = React.useMemo(
     () => ({
       ...userEarningsDetails,
-      setNonCommissionedHours,
       isLoadingSalary: !userEarningsDetails || isLoadingUser || isLoadingCalendar
     }),
     [userEarningsDetails, isLoadingUser, isLoadingCalendar]

@@ -25,3 +25,7 @@ export const memoize = func => {
 };
 
 export const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);
+export const omit = (obj, keys) =>
+  Object.keys(obj)
+    .filter(k => !keys.includes(k))
+    .reduce((res, k) => Object.assign(res, { [k]: obj[k] }), {});
