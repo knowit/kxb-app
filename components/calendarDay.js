@@ -3,6 +3,7 @@ import { UserWorkDayDetails } from "@/components/user";
 import clsx from "clsx";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
+import { useClickAway } from "react-use";
 
 const CalendarDayDate = ({
   children,
@@ -63,8 +64,12 @@ const ExpandedCalendarDay = ({
   onCollapse = () => {},
   ...other
 }) => {
+  const ref = React.useRef(null);
+
+  useClickAway(ref, () => onCollapse());
+
   return (
-    <div>
+    <div ref={ref}>
       <motion.div
         className="bg-white dark:bg-gray-900 flex flex-col justify-center items-center rounded-lg absolute top-0 left-0 right-0 bottom-0 my-6 lg:my-8 z-20 max-w-[18rem] lg:max-w-xs mx-auto"
         layoutId="expandable-card"
