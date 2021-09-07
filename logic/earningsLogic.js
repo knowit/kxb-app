@@ -6,8 +6,12 @@ const getHolidayPay = gross => {
   return gross * EARNING_CONSTANTS.WORK_HOLIDAY_PAY;
 };
 
-export const getWorkHours = (workDays = 0, nonCommissionedHours) =>
-  EARNING_CONSTANTS.WORK_HOURS_PER_DAY * workDays - nonCommissionedHours;
+export const getWorkHours = (workDays = 0, nonCommissionedHours = 0, extraHours = 0) => {
+  const regularWorkHours = EARNING_CONSTANTS.WORK_HOURS_PER_DAY * workDays;
+  const regularWorkHoursWithExtraHours = regularWorkHours + Math.max(0, +extraHours);
+
+  return regularWorkHoursWithExtraHours - Math.max(0, +nonCommissionedHours);
+};
 
 // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
 export const getGrossIncome = (workHours = 0, hourlyRate, commission) =>
@@ -26,10 +30,21 @@ const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
   );
 };
 
+const getExtraHoursForMonth = (month, workDayDetails) => {
+  return (
+    month.days.reduce(
+      (sum, day) => (sum += workDayDetails?.[day.formattedDate]?.extraHours ?? 0),
+      0
+    ) ?? 0
+  );
+};
+
 export const getEarningsForMonth = (month, hourlyRate, commission, tax, workDayDetails) => {
   const workDays = getWorkDays(month);
   const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
-  const workHours = getWorkHours(workDays.length, nonCommissionedHoursForMonth);
+  const extraHours = getExtraHoursForMonth(month, workDayDetails);
+
+  const workHours = getWorkHours(workDays.length, nonCommissionedHoursForMonth, extraHours);
   const gross = getGrossIncome(workHours, hourlyRate, commission);
   const net = getNetIncome(gross, tax);
 

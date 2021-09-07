@@ -13,7 +13,7 @@ const BaseHeroIcon = React.forwardRef(
         viewBox="0 0 24 24"
         fill="none"
         stroke={color}
-        className={clsx(iconSizeClassnames, className, "text-gray-900 dark:text-gray-100")}
+        className={clsx(iconSizeClassnames, "text-gray-900 dark:text-gray-100", className)}
         {...rest}
       >
         {children}

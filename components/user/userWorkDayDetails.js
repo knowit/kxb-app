@@ -24,6 +24,16 @@ export default function UserWorkDayDetails({ day }) {
     setValue("extraHours", user.workDayDetails?.[day.formattedDate]?.extraHours ?? 0);
   }, [user.workDayDetails, day.formattedDate, setValue]);
 
+  // React.useEffect(() => {
+  //   if (+nonCommissionedHours > 0) {
+  //     setValue("extraHours", 0);
+  //   }
+
+  //   if (+extraHours > 0) {
+  //     setValue("nonCommissionedHours", 0);
+  //   }
+  // }, [nonCommissionedHours, extraHours, setValue]);
+
   React.useEffect(() => {
     async function persistUser() {
       if (
@@ -38,8 +48,8 @@ export default function UserWorkDayDetails({ day }) {
           workDayDetails: {
             ...(user?.workDayDetails ?? {}),
             [day.formattedDate]: {
-              nonCommissionedHours: +nonCommissionedHours,
-              extraHours: +extraHours
+              nonCommissionedHours: Math.max(0, +nonCommissionedHours),
+              extraHours: Math.max(0, +extraHours)
             }
           }
         });
@@ -63,13 +73,16 @@ export default function UserWorkDayDetails({ day }) {
               placeholder="0"
               type="number"
               step="0.5"
+              min="0"
+              disabled={+extraHours > 0}
               {...register("nonCommissionedHours", {
                 required: true
               })}
             />
             <Button
-              className="min-w-[75px]"
+              className="min-w-[75px] disabled:opacity-50 disabled:cursor-not-allowed"
               variant={isNonCommissionedToggled ? "red" : "primary"}
+              disabled={+extraHours > 0}
               onClick={() =>
                 setValue("nonCommissionedHours", isNonCommissionedToggled ? "0" : "7.5")
               }
@@ -89,6 +102,8 @@ export default function UserWorkDayDetails({ day }) {
           placeholder="0"
           type="number"
           step="0.5"
+          min="0"
+          disabled={+nonCommissionedHours > 0}
           {...register("extraHours", {
             required: true
           })}

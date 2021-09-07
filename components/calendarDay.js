@@ -1,4 +1,4 @@
-import { Cross } from "@/components/icons/svgs/hero";
+import { Cross, DoubleChevronUp } from "@/components/icons/svgs/hero";
 import { UserWorkDayDetails } from "@/components/user";
 import clsx from "clsx";
 import { AnimateSharedLayout, motion } from "framer-motion";
@@ -10,6 +10,7 @@ const CalendarDayDate = ({
   className,
   isWorkDay,
   isNonCommissionedToggled,
+  isExtraHoursToggled,
   ...other
 }) => {
   const Component = as ?? motion.div;
@@ -27,6 +28,9 @@ const CalendarDayDate = ({
       {...other}
     >
       {children}
+      {isExtraHoursToggled ? (
+        <DoubleChevronUp className="!text-green-500 !dark:text-green-400" size="sm" />
+      ) : null}
     </Component>
   );
 };
@@ -120,6 +124,11 @@ export default function CalendarDay({
     [workDayDetails.nonCommissionedHours]
   );
 
+  const isExtraHoursToggled = React.useMemo(
+    () => workDayDetails?.extraHours > 0,
+    [workDayDetails.extraHours]
+  );
+
   return (
     <AnimateSharedLayout>
       {isExpanded ? (
@@ -128,6 +137,7 @@ export default function CalendarDay({
           isWorkDay={isWorkDay}
           isNonCommissionedToggled={isNonCommissionedToggled}
           workDayDetails={workDayDetails}
+          isExtraHoursToggled={isExtraHoursToggled}
           onCollapse={collapseDate}
           {...other}
         />
@@ -136,6 +146,7 @@ export default function CalendarDay({
           day={day}
           isWorkDay={isWorkDay}
           isNonCommissionedToggled={isNonCommissionedToggled}
+          isExtraHoursToggled={isExtraHoursToggled}
           onExpand={expandDate}
           {...other}
         />
