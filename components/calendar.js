@@ -3,9 +3,8 @@ import Container from "@/components/container";
 import Heading from "@/components/heading";
 import { ChevronLeft, ChevronRight } from "@/components/icons";
 import { useUser } from "@/components/user";
-import EARNING_CONSTANTS from "@/constants/earningConstants";
+import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { useCalendar } from "@/utils/calendarProvider";
-import { omit } from "@/utils/commonUtils";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
@@ -13,6 +12,8 @@ import { useToggle } from "react-use";
 export default function Calendar({ salaryStatistics, ...other }) {
   const { user, update } = useUser();
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
+
+  const [toggledDay, setToggledDay] = React.useState(null);
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
@@ -37,7 +38,7 @@ export default function Calendar({ salaryStatistics, ...other }) {
   };
 
   return (
-    <Container className="w-full select-none" {...other}>
+    <Container className="relative w-full select-none" {...other}>
       <div className="flex justify-between items-center mb-3">
         <div
           className="cursor-pointer"
@@ -76,6 +77,13 @@ export default function Calendar({ salaryStatistics, ...other }) {
         </div>
       </div>
       <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-80 dark:bg-gray-900 my-4 mx-auto">
+        {toggledDay ? (
+          <motion.div
+            className="absolute inset-0 bg-gray-700 bg-opacity-75 transition-opacity z-10 rounded-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          ></motion.div>
+        ) : null}
         <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
           mon.
         </div>
@@ -97,33 +105,19 @@ export default function Calendar({ salaryStatistics, ...other }) {
         <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
           sun.
         </div>
+
         {renderSpacingDays(monthDetail?.days)}
         {monthDetail?.days?.map((day, i) => (
           <CalendarDay
             key={`calendar-day-${i}`}
-            text={day.day}
+            day={day}
             isWorkDay={day.isWorkDay}
-            isNonCommissionedToggled={
-              user?.workDayDetails?.[day.formattedDate]?.nonCommissionedHours > 0
+            toggled={
+              toggledDay && toggledDay.date && toggledDay.date.getTime() === day.date.getTime()
             }
-            onClick={() => {
-              if (day.isWorkDay) {
-                console.log(day.formattedDate);
-                update(
-                  user?.workDayDetails?.[day.formattedDate]
-                    ? { workDayDetails: omit(user.workDayDetails, [day.formattedDate]) }
-                    : {
-                        workDayDetails: {
-                          ...(user.workDayDetails ?? {}),
-                          [day.formattedDate]: {
-                            nonCommissionedHours: EARNING_CONSTANTS.WORK_HOURS_PER_DAY,
-                            extraHours: 0
-                          }
-                        }
-                      }
-                );
-              }
-            }}
+            workDayDetails={getUserWorkDayDetails(user.workDayDetails, day.formattedDate)}
+            onExpand={() => setToggledDay(day)}
+            onCollapse={() => setToggledDay(null)}
           />
         ))}
         <motion.div

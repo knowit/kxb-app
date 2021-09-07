@@ -29,7 +29,6 @@ const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
 export const getEarningsForMonth = (month, hourlyRate, commission, tax, workDayDetails) => {
   const workDays = getWorkDays(month);
   const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
-  console.log(nonCommissionedHoursForMonth);
   const workHours = getWorkHours(workDays.length, nonCommissionedHoursForMonth);
   const gross = getGrossIncome(workHours, hourlyRate, commission);
   const net = getNetIncome(gross, tax);
