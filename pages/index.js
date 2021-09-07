@@ -12,7 +12,10 @@ export default function Home({ session }) {
 
   return (
     <>
-      <Heading variant="pageHeading" className="mb-24">{`Hi ${session?.user?.name}`}</Heading>
+      <Heading
+        variant="pageHeading"
+        className="mb-16 lg:mb-24"
+      >{`Hi ${session?.user?.name}`}</Heading>
       <YearlyEarnings />
       <CompanyBenefits />
       <YearStatistic

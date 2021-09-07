@@ -62,7 +62,7 @@ const ExpandedCalendarDay = ({
   return (
     <div>
       <motion.div
-        className="bg-white dark:bg-gray-900 flex flex-col justify-center items-center absolute top-0 left-0 right-0 bottom-0 m-6 lg:m-8 z-20"
+        className="bg-white dark:bg-gray-900 flex flex-col justify-center items-center rounded-lg absolute top-0 left-0 right-0 bottom-0 my-6 lg:my-8 z-20 max-w-[18rem] lg:max-w-xs mx-auto"
         layoutId="expandable-card"
         {...other}
       >
@@ -77,7 +77,7 @@ const ExpandedCalendarDay = ({
         </motion.button>
         <div className="flex flex-col w-full h-full items-start p-4">
           <CalendarDayDate
-            className="text-lg md:text-2xl"
+            className="text-xl md:text-2xl"
             isWorkDay={isWorkDay}
             isNonCommissionedToggled={isNonCommissionedToggled}
           >

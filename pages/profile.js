@@ -10,7 +10,9 @@ export default function Profile() {
 
   return (
     <>
-      <Heading variant="pageHeading">Hi {user?.name}</Heading>
+      <Heading variant="pageHeading" className="mb-16 lg:mb-24">
+        Hi {user?.name}
+      </Heading>
       <Text>To edit your settings, use the form below.</Text>
       <UserProfile />
     </>

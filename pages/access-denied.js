@@ -13,7 +13,7 @@ export default function AccessDenied({ session }) {
           <LockClosed size="8xl" />
         </div>
         <Heading
-          className="text-center"
+          className="text-center mb-16 lg:mb-24"
           variant="pageHeading"
         >{`Hi ${session?.user?.name}`}</Heading>
         <Text className="text-center">
