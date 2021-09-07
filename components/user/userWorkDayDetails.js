@@ -24,16 +24,6 @@ export default function UserWorkDayDetails({ day }) {
     setValue("extraHours", user.workDayDetails?.[day.formattedDate]?.extraHours ?? 0);
   }, [user.workDayDetails, day.formattedDate, setValue]);
 
-  // React.useEffect(() => {
-  //   if (+nonCommissionedHours > 0) {
-  //     setValue("extraHours", 0);
-  //   }
-
-  //   if (+extraHours > 0) {
-  //     setValue("nonCommissionedHours", 0);
-  //   }
-  // }, [nonCommissionedHours, extraHours, setValue]);
-
   React.useEffect(() => {
     async function persistUser() {
       if (
