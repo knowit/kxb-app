@@ -2,6 +2,7 @@ import Button from "@/components/button";
 import TextField from "@/components/textField";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
+import { omit } from "@/utils/commonUtils";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 
@@ -34,14 +35,20 @@ export default function UserWorkDayDetails({ day }) {
         (user.workDayDetails?.[day.formattedDate]?.nonCommissionedHours !== nonCommissionedHours ||
           user.workDayDetails?.[day.formattedDate]?.extraHours !== extraHours)
       ) {
+        const minZeroFixedExtraHours = Math.max(0, +extraHours);
+        const minZeroFixedNonCommissionedHours = Math.max(0, +nonCommissionedHours);
+
         update({
-          workDayDetails: {
-            ...(user?.workDayDetails ?? {}),
-            [day.formattedDate]: {
-              nonCommissionedHours: Math.max(0, +nonCommissionedHours),
-              extraHours: Math.max(0, +extraHours)
-            }
-          }
+          workDayDetails:
+            minZeroFixedExtraHours === 0 && minZeroFixedNonCommissionedHours === 0
+              ? omit({ ...(user?.workDayDetails ?? {}) }, [day.formattedDate])
+              : {
+                  ...(user?.workDayDetails ?? {}),
+                  [day.formattedDate]: {
+                    nonCommissionedHours: Math.max(0, +nonCommissionedHours),
+                    extraHours: Math.max(0, +extraHours)
+                  }
+                }
         });
       }
     }
