@@ -9,7 +9,7 @@ import * as React from "react";
 export default function AuthenticatedLayout({ children, pageProps, layoutProps, ...other }) {
   return (
     <NextAuthProvider session={pageProps.session}>
-      <UserProvider session={pageProps.session}>
+      <UserProvider session={pageProps.session} user={pageProps.user}>
         <CalendarProvider>
           <SalaryProvider>
             <Nav {...layoutProps} />

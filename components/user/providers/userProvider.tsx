@@ -2,29 +2,29 @@ import { debounceFetch, fetcher } from "@/utils/fetcher";
 import * as React from "react";
 import useSWR, { mutate } from "swr";
 
-const UserContext = React.createContext();
+const UserContext = React.createContext({});
 UserContext.displayName = "UserContext";
 
-function UserProvider({ children, session = {} }) {
-  const { data } = useSWR(() => `/api/user/${session.user.id}`, fetcher, {
-    fallbackData: session,
+function UserProvider({ children, session = {}, user }) {
+  const { data } = useSWR(() => `/api/user/${user.id}`, fetcher, {
+    fallbackData: user,
     revalidateOnMount: true
   });
 
   const value = React.useMemo(
     () => ({
       user: data,
-      update: async user => {
+      update: async updatedUser => {
         mutate(
-          `/api/user/${session.user.id}`,
+          `/api/user/${user.id}`,
           {
             ...data,
-            ...user
+            ...updatedUser
           },
           false
         );
 
-        debounceFetch(`/api/user/${session.user.id}`, {
+        debounceFetch(`/api/user/${user.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -32,13 +32,13 @@ function UserProvider({ children, session = {} }) {
           },
           body: JSON.stringify({
             ...data,
-            ...user
+            ...updatedUser
           })
         });
       },
       isLoadingUser: !data
     }),
-    [data, session]
+    [data, user]
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1,4 +1,4 @@
-import redisUser from "@/lib/redisUser";
+import prisma from "@/lib/prisma";
 import { fetchWithToken } from "@/utils/fetcher";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
@@ -30,7 +30,7 @@ const accessToGroupId = (groups = [], groupId) => {
 const accessToAdminGroup = groups => accessToGroupId(groups, AZURE_AD_ADMIN_GROUP_ID);
 const accessToSpecialistGroup = groups => accessToGroupId(groups, AZURE_AD_SPECIALIST_GROUP_ID);
 
-async function mutateUserWithRoles(user, token) {
+async function getUserRoles(token) {
   try {
     const { value: groups } = await fetchWithToken(
       "https://graph.microsoft.com/v1.0/me/memberOf?$select=displayName,id",
@@ -40,7 +40,6 @@ async function mutateUserWithRoles(user, token) {
     const isSpecialist = accessToSpecialistGroup(groups);
 
     return {
-      ...user,
       // To determine the admin role the user needs to have access
       // to the specialist and admin groups. Could revalidate this to
       // only requiring access to admin group in the future.
@@ -50,12 +49,10 @@ async function mutateUserWithRoles(user, token) {
   } catch (error) {
     console.error(error);
 
-    // If group lookup somehow crashes then try to use
-    // old values for user roles or default to false
+    // If group lookup somehow crashes then return false
     return {
-      ...user,
-      isAdmin: user?.isAdmin ?? false,
-      isSpecialist: user?.isSpecialist ?? false
+      isAdmin: false,
+      isSpecialist: false
     };
   }
 }
@@ -64,7 +61,11 @@ async function refreshAccessToken(token) {
   try {
     const url = `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/oauth2/v2.0/token`;
 
-    const user = await redisUser.getById(token.sub);
+    const user = await prisma.user.findUnique({
+      where: {
+        activeDirectoryId: token.sub
+      }
+    });
 
     const response = await fetch(url, {
       headers: {
@@ -86,19 +87,25 @@ async function refreshAccessToken(token) {
       throw refreshedTokens;
     }
 
-    const mutatedUser = await mutateUserWithRoles(user, refreshedTokens.access_token);
+    const { isAdmin, isSpecialist } = await getUserRoles(refreshedTokens.access_token);
 
-    await redisUser.update(user.id, {
-      ...mutatedUser,
-      refreshToken: refreshedTokens.refresh_token ?? mutatedUser.refreshToken
+    await prisma.user.update({
+      data: {
+        refreshToken: refreshedTokens.refresh_token,
+        isAdmin: isAdmin ?? false,
+        isSpecialist: isSpecialist ?? false
+      },
+      where: {
+        id: user.id
+      }
     });
 
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
       accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      isAdmin: mutatedUser.isAdmin,
-      isSpecialist: mutatedUser.isSpecialist
+      isAdmin: isAdmin,
+      isSpecialist: isSpecialist
     };
   } catch (error) {
     console.error(error);
@@ -125,19 +132,25 @@ export default NextAuth({
     async jwt(token, user, account, profile, isNewUser) {
       // Initial sign in
       if (account && user) {
-        const mutatedUser = await mutateUserWithRoles(user, account.accessToken);
+        const { isAdmin, isSpecialist } = await getUserRoles(user, account.accessToken);
 
-        await redisUser.upsert(mutatedUser.id, {
-          ...mutatedUser,
-          refreshToken: account.refreshToken
+        await prisma.user.update({
+          data: {
+            refreshToken: account.refreshToken,
+            isAdmin: isAdmin,
+            isSpecialist: isSpecialist
+          },
+          where: {
+            activeDirectoryId: token.sub
+          }
         });
 
         return {
           ...token,
           accessToken: account.accessToken,
           accessTokenExpires: Date.now() + account?.expires_in * 1000,
-          isAdmin: mutatedUser.isAdmin,
-          isSpecialist: mutatedUser.isSpecialist
+          isAdmin: isAdmin,
+          isSpecialist: isSpecialist
         };
       }
 

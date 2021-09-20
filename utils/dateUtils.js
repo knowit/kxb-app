@@ -18,6 +18,9 @@ export const getFormattedDay = (date, locale) =>
 export const getFormattedMonth = (date, locale) =>
   format(date, "MMMM", { locale: getLocale(locale) });
 
+export const getFormattedMicrosoftSqlDate = (date, locale) =>
+  format(date, "yyyy-MM-dd hh-mm-ss", { locale: getLocale(locale) });
+
 export const getMonthFromName = monthName => {
   switch (monthName?.toUpperCase()) {
     case MONTH_NAMES.JANUARY:

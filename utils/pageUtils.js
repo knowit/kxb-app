@@ -1,26 +1,35 @@
+import prisma from "@/lib/prisma";
 import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
 import { getSession } from "next-auth/client";
 
 export const getResultForAuthenticatedPage = async context => {
-  const session = await getSession(context);
+  let session = await getSession(context);
 
-  // Session user is specialist and is granted access
-  // to the app
-  if (sessionUserIsSpecialist(session)) {
-    return {
-      props: {
-        session
-      }
-    };
-  }
-
+  // Session user is specialist and is granted access to the app
+  // or
+  // session is valid and specialist only mode is disabled
   if (
-    session &&
-    !(process.env.SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE?.toLowerCase() === "true" ?? false)
+    sessionUserIsSpecialist(session) ||
+    (session &&
+      !(process.env.SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE?.toLowerCase() === "true" ?? false))
   ) {
+    const { created, updated, refreshToken, ...user } = await prisma.user.findUnique({
+      where: {
+        email: session.user.email
+      },
+      include: {
+        workDayDetails: true
+      }
+    });
+
     return {
       props: {
-        session
+        session,
+        user: {
+          ...user,
+          commission: +user.commission,
+          tax: +user.tax
+        }
       }
     };
   }
