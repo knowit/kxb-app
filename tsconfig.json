@@ -21,6 +21,7 @@
       "@/lib/*": ["lib/*"],
       "@/logic/*": ["logic/*"],
       "@/styles/*": ["styles/*"],
+      "@/types/*": ["types/*"],
       "@/utils/*": ["utils/*"]
     },
   },

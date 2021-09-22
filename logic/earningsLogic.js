@@ -24,7 +24,10 @@ export const getNetIncome = (grossIncome, tax) =>
 const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
   return (
     month.days.reduce(
-      (sum, day) => (sum += workDayDetails?.[day.formattedDate]?.nonCommissionedHours ?? 0),
+      (sum, day) =>
+        (sum +=
+          workDayDetails?.find(workDayDetail => workDayDetail.date === day.formattedDate)
+            ?.nonCommissionedHours ?? 0),
       0
     ) ?? 0
   );
@@ -33,7 +36,10 @@ const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
 const getExtraHoursForMonth = (month, workDayDetails) => {
   return (
     month.days.reduce(
-      (sum, day) => (sum += workDayDetails?.[day.formattedDate]?.extraHours ?? 0),
+      (sum, day) =>
+        (sum +=
+          workDayDetails?.find(workDayDetail => workDayDetail.date === day.formattedDate)
+            ?.extraHours ?? 0),
       0
     ) ?? 0
   );

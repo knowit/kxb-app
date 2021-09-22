@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prismaUser from "@/lib/prismaUser";
 import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
 import { getSession } from "next-auth/client";
 
@@ -13,23 +13,14 @@ export const getResultForAuthenticatedPage = async context => {
     (session &&
       !(process.env.SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE?.toLowerCase() === "true" ?? false))
   ) {
-    const { created, updated, refreshToken, ...user } = await prisma.user.findUnique({
-      where: {
-        email: session.user.email
-      },
-      include: {
-        workDayDetails: true
-      }
-    });
+    const { created, updated, refreshToken, ...user } = await prismaUser.getByEmail(
+      session.user.email
+    );
 
     return {
       props: {
         session,
-        user: {
-          ...user,
-          commission: +user.commission,
-          tax: +user.tax
-        }
+        user
       }
     };
   }

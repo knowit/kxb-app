@@ -1,5 +1,6 @@
 import { Cross, DoubleChevronUp } from "@/components/icons/svgs/hero";
-import { UserWorkDayDetails } from "@/components/user";
+import { UserWorkDayDetails, useUser } from "@/components/user";
+import { getUserWorkDayDetails } from "@/logic/userLogic";
 import clsx from "clsx";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
@@ -104,14 +105,12 @@ const ExpandedCalendarDay = ({
 export default function CalendarDay({
   day,
   isWorkDay = false,
-  workDayDetails = {
-    nonCommissionedHours: 0,
-    extraHours: 0
-  },
   onExpand = () => {},
   onCollapse = () => {},
   ...other
 }) {
+  const { user } = useUser();
+
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const collapseDate = () => {
@@ -123,6 +122,11 @@ export default function CalendarDay({
     setIsExpanded(true);
     onExpand();
   };
+
+  const workDayDetails = React.useMemo(
+    () => getUserWorkDayDetails(user, day?.formattedDate),
+    [user, day?.formattedDate]
+  );
 
   const isNonCommissionedToggled = React.useMemo(
     () => workDayDetails?.nonCommissionedHours > 0,

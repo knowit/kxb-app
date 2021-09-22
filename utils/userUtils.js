@@ -18,7 +18,7 @@ export const getUserEarningsDetails = (
   currentMonthDetail,
   lastMonthDetail,
   nextMonthDetail,
-  workDayDetails = {}
+  workDayDetails = []
 ) => {
   const { hourlyRate, commission, tax } = userSalaryDetails;
 
@@ -62,9 +62,15 @@ export const getUserEarningsDetails = (
     nextPayDayStatistics: new Date().getDate() > 20 ? currentMonthStatistics : lastMonthStatistics,
     // TODO: To be able to calculate yearly salary and include non commissioned hours
     // we need to change the logic to store non commissioned hours per month
-    yearSalaryStatistics: getEarningsForYear(year, hourlyRate, commission, tax, 0),
+    yearSalaryStatistics: getEarningsForYear(year, hourlyRate, commission, tax, workDayDetails),
     // TODO: To be able to calculate yearly salary and include non commissioned hours
     // we need to change the logic to store non commissioned hours per month
-    nextYearSalaryStatistics: getEarningsForYear(nextYear, hourlyRate, commission, tax, 0)
+    nextYearSalaryStatistics: getEarningsForYear(
+      nextYear,
+      hourlyRate,
+      commission,
+      tax,
+      workDayDetails
+    )
   };
 };

@@ -1,8 +1,10 @@
-export const getUserWorkDayDetails = (userWorkDayDetails, formattedDate) => {
+export const getUserWorkDayDetails = (user, formattedDate) => {
   return (
-    userWorkDayDetails?.[formattedDate] ?? {
+    (user?.workDayDetails ?? []).find(workDayDetail => workDayDetail.date === formattedDate) ?? {
+      date: formattedDate,
       nonCommissionedHours: 0,
-      extraHours: 0
+      extraHours: 0,
+      userId: user.id
     }
   );
 };

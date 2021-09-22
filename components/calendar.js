@@ -3,14 +3,13 @@ import Container from "@/components/container";
 import Heading from "@/components/heading";
 import { ChevronLeft, ChevronRight } from "@/components/icons";
 import { useUser } from "@/components/user";
-import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
 
 export default function Calendar({ salaryStatistics, ...other }) {
-  const { user, update } = useUser();
+  const { user } = useUser();
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
 
   const [toggledDay, setToggledDay] = React.useState(null);
@@ -105,8 +104,8 @@ export default function Calendar({ salaryStatistics, ...other }) {
         <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
           sun.
         </div>
-
         {renderSpacingDays(monthDetail?.days)}
+        {<div className="hidden">{JSON.stringify(user.workDayDetails)}</div>}
         {monthDetail?.days?.map((day, i) => (
           <CalendarDay
             key={`calendar-day-${i}`}
@@ -115,7 +114,6 @@ export default function Calendar({ salaryStatistics, ...other }) {
             toggled={
               toggledDay && toggledDay.date && toggledDay.date.getTime() === day.date.getTime()
             }
-            workDayDetails={getUserWorkDayDetails(user.workDayDetails, day.formattedDate)}
             onExpand={() => setToggledDay(day)}
             onCollapse={() => setToggledDay(null)}
           />

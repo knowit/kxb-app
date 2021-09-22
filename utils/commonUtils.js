@@ -29,3 +29,6 @@ export const omit = (obj, keys) =>
   Object.keys(obj)
     .filter(k => !keys.includes(k))
     .reduce((res, k) => Object.assign(res, { [k]: obj[k] }), {});
+
+export const getIntersection = (a = [], ...arr) =>
+  [...new Set(a ?? [])].filter(v => arr.every(b => b.includes(v)));

@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prismaUser from "@/lib/prismaUser";
 import { sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
@@ -15,9 +15,7 @@ export default async function Users(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === "GET") {
-    const entries = await prisma.user.findMany({});
-
-    return res.status(200).json(entries);
+    return res.status(200).json(await prismaUser.get());
   }
 
   return res.send("Method not allowed.");

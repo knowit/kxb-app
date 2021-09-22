@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import prismaUser from "@/lib/prismaUser";
 import { fetchWithToken } from "@/utils/fetcher";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
@@ -61,11 +62,7 @@ async function refreshAccessToken(token) {
   try {
     const url = `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/oauth2/v2.0/token`;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        activeDirectoryId: token.sub
-      }
-    });
+    const user = await prismaUser.getByActiveDirectoryId(token.sub);
 
     const response = await fetch(url, {
       headers: {
@@ -132,10 +129,18 @@ export default NextAuth({
     async jwt(token, user, account, profile, isNewUser) {
       // Initial sign in
       if (account && user) {
+        const { id, ...prismaUser } = user;
         const { isAdmin, isSpecialist } = await getUserRoles(user, account.accessToken);
 
-        await prisma.user.update({
-          data: {
+        await prisma.user.upsert({
+          create: {
+            ...prismaUser,
+            activeDirectoryId: id,
+            refreshToken: account.refreshToken,
+            isAdmin: isAdmin,
+            isSpecialist: isSpecialist
+          },
+          update: {
             refreshToken: account.refreshToken,
             isAdmin: isAdmin,
             isSpecialist: isSpecialist

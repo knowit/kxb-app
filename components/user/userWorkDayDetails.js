@@ -2,9 +2,33 @@ import Button from "@/components/button";
 import TextField from "@/components/textField";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
-import { omit } from "@/utils/commonUtils";
 import * as React from "react";
 import { useForm } from "react-hook-form";
+
+function upsertWorkDayDetail(workDayDetails = [], workDayDetail) {
+  if (!workDayDetail) {
+    return workDayDetails;
+  }
+
+  const i = workDayDetails.findIndex(item => item.date === workDayDetail.date);
+
+  if (i === -1) {
+    workDayDetails.push(workDayDetail);
+    return workDayDetails;
+  }
+
+  return workDayDetails.map(item => {
+    if (item.date === workDayDetail.date) {
+      return {
+        ...item,
+        nonCommissionedHours: workDayDetail.nonCommissionedHours,
+        extraHours: workDayDetail.extraHours
+      };
+    }
+
+    return { ...item };
+  });
+}
 
 export default function UserWorkDayDetails({ day }) {
   const { user, update } = useUser();
@@ -17,44 +41,52 @@ export default function UserWorkDayDetails({ day }) {
     [nonCommissionedHours]
   );
 
-  React.useEffect(() => {
-    setValue(
-      "nonCommissionedHours",
-      user.workDayDetails?.[day.formattedDate]?.nonCommissionedHours ?? 0
+  const { userNonCommissionedHours, userExtraHours } = React.useMemo(() => {
+    const workDayDetail = user.workDayDetails?.find(
+      workDayDetail => workDayDetail.date === day.formattedDate
     );
-    setValue("extraHours", user.workDayDetails?.[day.formattedDate]?.extraHours ?? 0);
-  }, [user.workDayDetails, day.formattedDate, setValue]);
+
+    return {
+      userNonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0),
+      userExtraHours: +(workDayDetail?.extraHours ?? 0)
+    };
+  }, [user.workDayDetails, day.formattedDate]);
+
+  React.useEffect(() => {
+    setValue("nonCommissionedHours", userNonCommissionedHours);
+    setValue("extraHours", userExtraHours);
+  }, [userNonCommissionedHours, userExtraHours, day.formattedDate, setValue]);
 
   React.useEffect(() => {
     async function persistUser() {
       if (
-        nonCommissionedHours !== null &&
-        extraHours !== null &&
-        nonCommissionedHours !== undefined &&
         extraHours !== undefined &&
-        (user.workDayDetails?.[day.formattedDate]?.nonCommissionedHours !== nonCommissionedHours ||
-          user.workDayDetails?.[day.formattedDate]?.extraHours !== extraHours)
+        nonCommissionedHours !== undefined &&
+        (nonCommissionedHours !== userNonCommissionedHours || extraHours !== userExtraHours)
       ) {
-        const minZeroFixedExtraHours = Math.max(0, +extraHours);
-        const minZeroFixedNonCommissionedHours = Math.max(0, +nonCommissionedHours);
+        const minZeroFixedExtraHours = Math.max(0, +(extraHours ?? 0));
+        const minZeroFixedNonCommissionedHours = Math.max(0, +(nonCommissionedHours ?? 0));
 
-        update({
-          workDayDetails:
-            minZeroFixedExtraHours === 0 && minZeroFixedNonCommissionedHours === 0
-              ? omit({ ...(user?.workDayDetails ?? {}) }, [day.formattedDate])
-              : {
-                  ...(user?.workDayDetails ?? {}),
-                  [day.formattedDate]: {
-                    nonCommissionedHours: Math.max(0, +nonCommissionedHours),
-                    extraHours: Math.max(0, +extraHours)
-                  }
-                }
+        await update({
+          workDayDetails: upsertWorkDayDetail(user?.workDayDetails ?? [], {
+            date: day.formattedDate,
+            extraHours: minZeroFixedExtraHours,
+            nonCommissionedHours: minZeroFixedNonCommissionedHours
+          })
         });
       }
     }
 
     persistUser();
-  }, [user.workDayDetails, nonCommissionedHours, extraHours, day.formattedDate, update]);
+  }, [
+    user,
+    userNonCommissionedHours,
+    userExtraHours,
+    nonCommissionedHours,
+    extraHours,
+    day.formattedDate,
+    update
+  ]);
 
   return (
     <form>
