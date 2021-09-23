@@ -1,7 +1,8 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
-import { PrismaUser, User, UserWorkDayDetail } from "../types";
+import { PrismaUser, User, UserWorkDayDetail } from "@/types/index";
 import prisma from "./prisma";
 
+// Convert decimals to number
 const createPrismaUser = (user: PrismaUser): User => {
   return {
     ...user,
@@ -98,12 +99,22 @@ const deleteById = async (id: number): Promise<void> => {
   });
 };
 
+const update = async (...parameters: Parameters<typeof prisma.user.update>): Promise<void> => {
+  await prisma.user.update(...parameters);
+};
+
+const upsert = async (...parameters: Parameters<typeof prisma.user.upsert>): Promise<void> => {
+  await prisma.user.upsert(...parameters);
+};
+
 const prismaUser = {
   get,
   getByActiveDirectoryId,
   getByEmail,
   getById,
-  deleteById
+  deleteById,
+  update,
+  upsert
 };
 
 export default prismaUser;

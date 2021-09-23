@@ -1,4 +1,3 @@
-import prisma from "@/lib/prisma";
 import prismaUser from "@/lib/prismaUser";
 import { getSessionUserId, sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -52,7 +51,7 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
       a => !workDaysToUpdate.some(b => a.date === b.date)
     );
 
-    await prisma.user.update({
+    await prismaUser.update({
       data: {
         commission,
         hourlyRate,

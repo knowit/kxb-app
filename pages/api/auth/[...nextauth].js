@@ -1,4 +1,3 @@
-import prisma from "@/lib/prisma";
 import prismaUser from "@/lib/prismaUser";
 import { fetchWithToken } from "@/utils/fetcher";
 import NextAuth from "next-auth";
@@ -86,7 +85,7 @@ async function refreshAccessToken(token) {
 
     const { isAdmin, isSpecialist } = await getUserRoles(refreshedTokens.access_token);
 
-    await prisma.user.update({
+    await prismaUser.update({
       data: {
         refreshToken: refreshedTokens.refresh_token,
         isAdmin: isAdmin ?? false,
@@ -132,7 +131,7 @@ export default NextAuth({
         const { id, ...prismaUser } = user;
         const { isAdmin, isSpecialist } = await getUserRoles(user, account.accessToken);
 
-        await prisma.user.upsert({
+        await prismaUser.upsert({
           create: {
             ...prismaUser,
             activeDirectoryId: id,

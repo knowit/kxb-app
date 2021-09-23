@@ -86,7 +86,7 @@ export const getEarningsForYear = (year, hourlyRate, commission, tax, workDayDet
     workDays > EARNING_CONSTANTS.WORK_VACATION_DAYS
       ? workDays - EARNING_CONSTANTS.WORK_VACATION_DAYS
       : workDays;
-  const workHoursWithoutVacation = getWorkHours(workDaysWithoutVacation, workDayDetails);
+  const workHoursWithoutVacation = getWorkHours(workDaysWithoutVacation, 0, 0);
 
   const gross = getGrossIncome(workHoursWithoutVacation, hourlyRate, commission);
   const grossWithHolidayPay = gross + getHolidayPay(gross);
