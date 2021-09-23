@@ -1,8 +1,12 @@
 import prismaUser from "@/lib/prismaUser";
 import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
+import { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/client";
+import { ParsedUrlQuery } from "querystring";
 
-export const getResultForAuthenticatedPage = async context => {
+export const getResultForAuthenticatedPage = async (
+  context: GetServerSidePropsContext<ParsedUrlQuery>
+) => {
   let session = await getSession(context);
 
   // Session user is specialist and is granted access to the app
