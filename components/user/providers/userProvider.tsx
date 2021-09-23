@@ -1,12 +1,18 @@
-import { User } from "@/types/";
+import { User } from "@/types";
 import { debounceFetch, fetcher } from "@/utils/fetcher";
 import * as React from "react";
 import useSWR, { useSWRConfig } from "swr";
 
-const UserContext = React.createContext({});
+interface UserContextProps {
+  user: User;
+  update: (updatedUser: Partial<User>) => Promise<void>;
+  isLoadingUser: boolean;
+}
+
+const UserContext = React.createContext<UserContextProps>(null);
 
 function UserProvider({ children, session = {}, user }) {
-  const { data } = useSWR(() => `/api/user/${user.id}`, fetcher, {
+  const { data } = useSWR<User>(() => `/api/user/${user.id}`, fetcher, {
     fallbackData: user,
     revalidateOnMount: true
   });
@@ -14,7 +20,7 @@ function UserProvider({ children, session = {}, user }) {
   const { mutate } = useSWRConfig();
 
   const update = React.useCallback(
-    async (updatedUser: User) => {
+    async (updatedUser: Partial<User>) => {
       const mutatedUser = await mutate(
         `/api/user/${data.id}`,
         (user: User) => ({

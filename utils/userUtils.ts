@@ -1,25 +1,30 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
+import {
+  CalendarMonth,
+  CalendarYear,
+  User,
+  UserEarningsDetails,
+  UserSalaryDetails,
+  UserWorkDayDetail
+} from "@/types";
 
-export const userIsAdmin = user => user?.isAdmin ?? false;
-export const userIsSpecialist = user => user?.isSpecialist ?? false;
-
-export const getUserSalaryDetails = user => ({
+export const getUserSalaryDetails = (user: User): UserSalaryDetails => ({
   hourlyRate: user?.hourlyRate ?? DEFAULT_USER_SALARY.hourlyRate,
   commission: user?.commission ?? DEFAULT_USER_SALARY.commission,
   tax: user?.tax ?? DEFAULT_USER_SALARY.tax
 });
 
 export const getUserEarningsDetails = (
-  userSalaryDetails,
-  year,
-  nextYear,
-  monthDetail,
-  currentMonthDetail,
-  lastMonthDetail,
-  nextMonthDetail,
-  workDayDetails = []
-) => {
+  userSalaryDetails: UserSalaryDetails,
+  year: CalendarYear,
+  nextYear: CalendarYear,
+  monthDetail: CalendarMonth,
+  currentMonthDetail: CalendarMonth,
+  lastMonthDetail: CalendarMonth,
+  nextMonthDetail: CalendarMonth,
+  workDayDetails: UserWorkDayDetail[] = []
+): UserEarningsDetails => {
   const { hourlyRate, commission, tax } = userSalaryDetails;
 
   const monthStatistics = getEarningsForMonth(

@@ -1,7 +1,14 @@
 import clsx from "clsx";
 import * as React from "react";
 
-function getComponentForHeading(as) {
+interface Props {
+  children: React.ReactNode;
+  as?: string;
+  variant?: string;
+  className?: string;
+}
+
+function getComponentForHeading(as: string): React.ElementType {
   switch (as) {
     case "pageHeading":
       return "h1";
@@ -18,11 +25,11 @@ function getComponentForHeading(as) {
     case "h6":
       return "h6";
     default:
-      return as;
+      return "h2";
   }
 }
 
-function getVariantForHeading(variant) {
+function getVariantForHeading(variant: string) {
   switch (variant) {
     case "pageHeading":
       return "pageHeading";
@@ -43,7 +50,7 @@ function getVariantForHeading(variant) {
   }
 }
 
-export default function Heading({ children, as = "h2", variant, className, ...other }) {
+const Heading: React.FC<Props> = ({ children, as = "h2", variant = "h2", className, ...other }) => {
   const Component = getComponentForHeading(as);
   const headerVariant = getVariantForHeading(variant ?? as);
 
@@ -65,4 +72,6 @@ export default function Heading({ children, as = "h2", variant, className, ...ot
       {children}
     </Component>
   );
-}
+};
+
+export default Heading;

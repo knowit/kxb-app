@@ -1,13 +1,16 @@
-const PAY_DAY = 20;
+import { CalendarDay, CalendarMonth } from "@/types";
 
-export const isWorkDay = day =>
+const PAY_DAY: number = 20;
+
+export const isWorkDay = (day: CalendarDay): boolean =>
   (!day?.isHoliday ?? false) &&
   day?.name?.toUpperCase() !== "SATURDAY" &&
   day?.name?.toUpperCase() !== "SUNDAY";
 
-export const getWorkDays = month => month?.days?.filter(day => isWorkDay(day)) ?? [];
+export const getWorkDays = (month: CalendarMonth): CalendarDay[] =>
+  month?.days?.filter(day => isWorkDay(day)) ?? [];
 
-export const getPayDay = month => {
+export const getPayDay = (month: CalendarMonth): CalendarDay => {
   if ((month?.days?.length ?? 0) === 0) {
     return null;
   }

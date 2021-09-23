@@ -1,12 +1,24 @@
 import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { getWorkDays } from "@/logic/calendarLogic";
+import {
+  CalendarDay,
+  CalendarMonth,
+  CalendarMonthEarnings,
+  CalendarYear,
+  CalendarYearEarnings,
+  UserWorkDayDetail
+} from "@/types";
 import { formatCurrency } from "@/utils/currencyFormat";
 
-const getHolidayPay = gross => {
+const getHolidayPay = (gross: number): number => {
   return gross * EARNING_CONSTANTS.WORK_HOLIDAY_PAY;
 };
 
-export const getWorkHours = (workDays = 0, nonCommissionedHours = 0, extraHours = 0) => {
+export const getWorkHours = (
+  workDays: number = 0,
+  nonCommissionedHours: number = 0,
+  extraHours: number = 0
+): number => {
   const regularWorkHours = EARNING_CONSTANTS.WORK_HOURS_PER_DAY * workDays;
   const regularWorkHoursWithExtraHours = regularWorkHours + Math.max(0, +extraHours);
 
@@ -14,17 +26,24 @@ export const getWorkHours = (workDays = 0, nonCommissionedHours = 0, extraHours 
 };
 
 // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-export const getGrossIncome = (workHours = 0, hourlyRate, commission) =>
+export const getGrossIncome = (
+  workHours: number = 0,
+  hourlyRate: number,
+  commission: number
+): number =>
   +(Math.round((workHours * hourlyRate * commission + Number.EPSILON) * 100) / 100).toFixed(2);
 
 // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-export const getNetIncome = (grossIncome, tax) =>
+export const getNetIncome = (grossIncome: number, tax: number): number =>
   +(Math.round((grossIncome - grossIncome * tax + Number.EPSILON) * 100) / 100).toFixed(2);
 
-const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
+const getNonCommissionedHoursForMonth = (
+  month: CalendarMonth,
+  workDayDetails: UserWorkDayDetail[]
+) => {
   return (
     month.days.reduce(
-      (sum, day) =>
+      (sum: number, day: CalendarDay) =>
         (sum +=
           workDayDetails?.find(workDayDetail => workDayDetail.date === day.formattedDate)
             ?.nonCommissionedHours ?? 0),
@@ -33,10 +52,10 @@ const getNonCommissionedHoursForMonth = (month, workDayDetails) => {
   );
 };
 
-const getExtraHoursForMonth = (month, workDayDetails) => {
+const getExtraHoursForMonth = (month: CalendarMonth, workDayDetails: UserWorkDayDetail[]) => {
   return (
     month.days.reduce(
-      (sum, day) =>
+      (sum: number, day: CalendarDay) =>
         (sum +=
           workDayDetails?.find(workDayDetail => workDayDetail.date === day.formattedDate)
             ?.extraHours ?? 0),
@@ -45,7 +64,13 @@ const getExtraHoursForMonth = (month, workDayDetails) => {
   );
 };
 
-export const getEarningsForMonth = (month, hourlyRate, commission, tax, workDayDetails) => {
+export const getEarningsForMonth = (
+  month: CalendarMonth,
+  hourlyRate: number,
+  commission: number,
+  tax: number,
+  workDayDetails: UserWorkDayDetail[]
+): CalendarMonthEarnings => {
   const workDays = getWorkDays(month);
   const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
   const extraHours = getExtraHoursForMonth(month, workDayDetails);
@@ -66,21 +91,33 @@ export const getEarningsForMonth = (month, hourlyRate, commission, tax, workDayD
   };
 };
 
-export const getEarningsForYear = (year, hourlyRate, commission, tax, workDayDetails) => {
-  const { workDays } = (year?.months ?? []).reduce((result, month) => {
-    const earningsForMonth = getEarningsForMonth(
-      month,
-      hourlyRate,
-      commission,
-      tax,
-      workDayDetails
-    );
+export const getEarningsForYear = (
+  year: CalendarYear,
+  hourlyRate: number,
+  commission: number,
+  tax: number,
+  workDayDetails: UserWorkDayDetail[]
+): CalendarYearEarnings => {
+  const { workDays } = (year?.months ?? []).reduce(
+    (result, month) => {
+      const earningsForMonth = getEarningsForMonth(
+        month,
+        hourlyRate,
+        commission,
+        tax,
+        workDayDetails
+      );
 
-    return {
-      workDays: (result?.workDays ?? 0) + earningsForMonth.workDays.length,
-      workHours: (result?.workHours ?? 0) + earningsForMonth.workHours
-    };
-  }, {});
+      return {
+        workDays: (result?.workDays ?? 0) + earningsForMonth.workDays.length,
+        workHours: (result?.workHours ?? 0) + earningsForMonth.workHours
+      };
+    },
+    {
+      workDays: 0,
+      workHours: 0
+    }
+  );
 
   const workDaysWithoutVacation =
     workDays > EARNING_CONSTANTS.WORK_VACATION_DAYS

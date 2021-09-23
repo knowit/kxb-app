@@ -1,5 +1,5 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
-import { PrismaUser, User, UserWorkDayDetail } from "@/types/index";
+import { PrismaUser, User, UserWorkDayDetail } from "@/types";
 import prisma from "./prisma";
 
 // Convert decimals to number

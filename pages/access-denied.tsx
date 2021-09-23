@@ -1,16 +1,16 @@
 import Heading from "@/components/heading";
-import { LockClosed } from "@/components/icons";
 import Text from "@/components/text";
 import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
 import { getSession } from "next-auth/client";
 import * as React from "react";
+import { HiLockClosed } from "react-icons/hi";
 
 export default function AccessDenied({ session }) {
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-white dark:bg-black text-gray-900 dark:text-gray-100 opacity-75 ">
       <div className="flex flex-col items-center justify-center w-full h-screen max-w-3xl my-0 mx-auto">
         <div className="mb-8">
-          <LockClosed size="8xl" />
+          <HiLockClosed className="w-24 h-24" />
         </div>
         <Heading
           className="text-center mb-16 lg:mb-24"

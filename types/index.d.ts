@@ -1,4 +1,7 @@
+/// <reference types="node" />
+
 import { Prisma } from ".prisma/client";
+import { Session, TokenSet } from "next-auth";
 
 export type UserWorkDayDetail = {
   id: number;
@@ -24,6 +27,44 @@ export type User = {
   workDayDetails: UserWorkDayDetail[];
 };
 
+export interface UserSalaryDetails {
+  hourlyRate: number;
+  commission: number;
+  tax: number;
+}
+
+export interface CalendarMonthEarnings {
+  monthName: string;
+  payDay: string;
+  workDays: WorkDay[];
+  workHours: number;
+  gross: number;
+  net: number;
+  grossFormatted: string;
+  netFormatted: string;
+}
+
+export type CalendarYearEarnings = {
+  year: number;
+  workDays: number;
+  workHours: number;
+  gross: number;
+  net: number;
+  grossFormatted: string;
+  netFormatted: string;
+};
+
+export interface UserEarningsDetails {
+  workDayDetails: UserWorkDayDetail[];
+  monthStatistics: CalendarMonthEarnings;
+  currentMonthStatistics: CalendarMonthEarnings;
+  lastMonthStatistics: CalendarMonthEarnings;
+  nextMonthStatistics: CalendarMonthEarnings;
+  nextPayDayStatistics: CalendarMonthEarnings;
+  yearSalaryStatistics: CalendarYearEarnings;
+  nextYearSalaryStatistics: CalendarYearEarnings;
+}
+
 export type PrismaUserUserWorkDayDetail = {
   id: number;
   date: string;
@@ -47,3 +88,43 @@ export type PrismaUser = {
   isSpecialist: boolean;
   workDayDetails: PrismaUserUserWorkDayDetail[];
 };
+
+export type CalendarYear = {
+  year: number;
+  isLeapYear: boolean;
+  months: CalendarMonth[];
+};
+
+export type CalendarMonth = {
+  month: string;
+  days: CalendarDay[];
+  payDay?: CalendarDay;
+};
+export type CalendarDay = {
+  date: Date;
+  day: number;
+  name: string;
+  weekNumber: number;
+  formattedDate: string;
+  formattedShortDate: string;
+  formattedLongDate: string;
+  isHoliday: boolean;
+  isWorkDay: boolean;
+};
+
+export interface NextAuthSessionUser {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  id?: string | null;
+  isAdmin?: boolean;
+  isSpecialist?: boolean;
+}
+
+export interface NextAuthSession extends Session {
+  user?: NextAuthSessionUser;
+}
+
+export interface NextAuthToken extends TokenSet {
+  sub: string;
+}

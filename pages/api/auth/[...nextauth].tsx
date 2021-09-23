@@ -1,6 +1,7 @@
 import prismaUser from "@/lib/prismaUser";
 import { fetchWithToken } from "@/utils/fetcher";
-import NextAuth from "next-auth";
+import NextAuth, { Account, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import Providers from "next-auth/providers";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
@@ -16,7 +17,7 @@ const accessToGroupId = (groups = [], groupId) => {
     return false;
   }
 
-  if (Array.isArray(groups) && !groups.length > 0) {
+  if (Array.isArray(groups) && !(groups.length > 0)) {
     return false;
   }
 
@@ -30,7 +31,7 @@ const accessToGroupId = (groups = [], groupId) => {
 const accessToAdminGroup = groups => accessToGroupId(groups, AZURE_AD_ADMIN_GROUP_ID);
 const accessToSpecialistGroup = groups => accessToGroupId(groups, AZURE_AD_SPECIALIST_GROUP_ID);
 
-async function getUserRoles(token) {
+async function getUserRoles(token: string) {
   try {
     const { value: groups } = await fetchWithToken(
       "https://graph.microsoft.com/v1.0/me/memberOf?$select=displayName,id",
@@ -57,7 +58,7 @@ async function getUserRoles(token) {
   }
 }
 
-async function refreshAccessToken(token) {
+async function refreshAccessToken(token: JWT) {
   try {
     const url = `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/oauth2/v2.0/token`;
 
@@ -115,6 +116,37 @@ async function refreshAccessToken(token) {
   }
 }
 
+async function initialSignIn(account: Account, user: User, token: JWT) {
+  const { isAdmin, isSpecialist } = await getUserRoles(account.accessToken);
+
+  await prismaUser.upsert({
+    create: {
+      name: user.name,
+      email: user.email,
+      activeDirectoryId: token.sub,
+      refreshToken: account.refreshToken,
+      isAdmin: isAdmin,
+      isSpecialist: isSpecialist
+    },
+    update: {
+      refreshToken: account.refreshToken,
+      isAdmin: isAdmin,
+      isSpecialist: isSpecialist
+    },
+    where: {
+      activeDirectoryId: token.sub
+    }
+  });
+
+  return {
+    ...token,
+    accessToken: account.accessToken,
+    accessTokenExpires: Date.now() + account?.expires_in * 1000,
+    isAdmin: isAdmin,
+    isSpecialist: isSpecialist
+  };
+}
+
 export default NextAuth({
   providers: [
     Providers.AzureADB2C({
@@ -128,34 +160,7 @@ export default NextAuth({
     async jwt(token, user, account, profile, isNewUser) {
       // Initial sign in
       if (account && user) {
-        const { id, ...prismaUser } = user;
-        const { isAdmin, isSpecialist } = await getUserRoles(user, account.accessToken);
-
-        await prismaUser.upsert({
-          create: {
-            ...prismaUser,
-            activeDirectoryId: id,
-            refreshToken: account.refreshToken,
-            isAdmin: isAdmin,
-            isSpecialist: isSpecialist
-          },
-          update: {
-            refreshToken: account.refreshToken,
-            isAdmin: isAdmin,
-            isSpecialist: isSpecialist
-          },
-          where: {
-            activeDirectoryId: token.sub
-          }
-        });
-
-        return {
-          ...token,
-          accessToken: account.accessToken,
-          accessTokenExpires: Date.now() + account?.expires_in * 1000,
-          isAdmin: isAdmin,
-          isSpecialist: isSpecialist
-        };
+        return initialSignIn(account, user, token);
       }
 
       // If specialist mark is false or not set yet then we should

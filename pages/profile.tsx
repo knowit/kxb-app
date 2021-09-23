@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
 import Text from "@/components/text";
 import { UserProfile, useUser } from "@/components/user";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
+import { GetServerSideProps } from "next";
 import * as React from "react";
 
 export default function Profile() {
@@ -19,9 +20,9 @@ export default function Profile() {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async context => {
   return getResultForAuthenticatedPage(context);
-}
+};
 
 Profile.layoutProps = {
   meta: {

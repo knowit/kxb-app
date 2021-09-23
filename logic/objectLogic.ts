@@ -1,5 +1,5 @@
-export const removeDuplicates = (values = []) => {
-  const cached = {};
+export const removeDuplicates = (values: [] = []) => {
+  let cached: { [key: string]: number } = {};
 
   values.forEach(value => {
     if (cached[value]) return;

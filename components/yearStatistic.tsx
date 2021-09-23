@@ -3,15 +3,23 @@ import HeadingSkeleton from "@/components/skeleton/headingSkeleton";
 import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
+import { CalendarYearEarnings } from "@/types";
 import * as React from "react";
 
-export default function YearStatistic({
+interface Props {
+  title: string;
+  yearStatistic: CalendarYearEarnings;
+  isLoading?: boolean;
+  showNinetyPercentBillableHours?: boolean;
+}
+
+const YearStatistic: React.FC<Props> = ({
   title,
   yearStatistic,
   isLoading = false,
   showNinetyPercentBillableHours = false,
   ...other
-}) {
+}) => {
   return isLoading ? (
     <div className="mb-12">
       <HeadingSkeleton />
@@ -36,4 +44,6 @@ export default function YearStatistic({
       </StatisticGroup>
     </div>
   );
-}
+};
+
+export default YearStatistic;

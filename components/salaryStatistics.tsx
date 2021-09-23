@@ -1,10 +1,15 @@
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
+import { CalendarMonthEarnings } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { useSalary } from "@/utils/salaryProvider";
 import * as React from "react";
 
-export default function SalaryStatistics({ salaryStatistics, ...other }) {
+interface Props {
+  salaryStatistics?: CalendarMonthEarnings;
+}
+
+const SalaryStatistics: React.FC<Props> = ({ salaryStatistics, ...other }) => {
   const { monthDetail, isLoadingCalendar } = useCalendar();
   const { monthStatistics, isLoadingSalary } = useSalary();
 
@@ -37,4 +42,6 @@ export default function SalaryStatistics({ salaryStatistics, ...other }) {
       />
     </StatisticGroup>
   );
-}
+};
+
+export default SalaryStatistics;

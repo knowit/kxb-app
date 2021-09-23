@@ -1,21 +1,21 @@
 import CompanyBenefits from "@/components/companyBenefits";
 import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
+import { useUser } from "@/components/user";
 import YearlyEarnings from "@/components/yearlyEarnings";
 import YearStatistic from "@/components/yearStatistic";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
 import { useSalary } from "@/utils/salaryProvider";
+import { GetServerSideProps } from "next";
 import * as React from "react";
 
-export default function Home({ session }) {
+export default function Home() {
+  const { user } = useUser();
   const { yearSalaryStatistics, nextYearSalaryStatistics, isLoadingSalary } = useSalary();
 
   return (
     <>
-      <Heading
-        variant="pageHeading"
-        className="mb-16 lg:mb-24"
-      >{`Hi ${session?.user?.name}`}</Heading>
+      <Heading variant="pageHeading" className="mb-16 lg:mb-24">{`Hi ${user?.name}`}</Heading>
       <YearlyEarnings />
       <CompanyBenefits />
       <YearStatistic
@@ -32,9 +32,9 @@ export default function Home({ session }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async context => {
   return getResultForAuthenticatedPage(context);
-}
+};
 
 Home.layoutProps = {
   meta: {

@@ -21,10 +21,10 @@
       "@/lib/*": ["lib/*"],
       "@/logic/*": ["logic/*"],
       "@/styles/*": ["styles/*"],
-      "@/types/*": ["types/*"],
+      "@/types": ["types/index"],
       "@/utils/*": ["utils/*"]
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "logic/earningsLogic.s"],
   "exclude": ["node_modules"]
 }

@@ -9,6 +9,7 @@ import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
 import { useCalendar } from "@/utils/calendarProvider";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
+import { GetServerSideProps } from "next";
 import * as React from "react";
 
 export default function SalaryCalculator() {
@@ -19,17 +20,17 @@ export default function SalaryCalculator() {
   const [tax, setTax] = React.useState(DEFAULT_USER_SALARY.tax);
 
   const salaryStatistics = React.useMemo(
-    () => getEarningsForMonth(monthDetail, hourlyRate, commission, tax, 0),
+    () => getEarningsForMonth(monthDetail, hourlyRate, commission, tax, []),
     [monthDetail, hourlyRate, commission, tax]
   );
 
   const yearSalaryStatistics = React.useMemo(
-    () => getEarningsForYear(year, hourlyRate, commission, tax, 0),
+    () => getEarningsForYear(year, hourlyRate, commission, tax, []),
     [year, hourlyRate, commission, tax]
   );
 
   const nextYearSalaryStatistics = React.useMemo(
-    () => getEarningsForYear(nextYear, hourlyRate, commission, tax, 0),
+    () => getEarningsForYear(nextYear, hourlyRate, commission, tax, []),
     [nextYear, hourlyRate, commission, tax]
   );
 
@@ -51,7 +52,7 @@ export default function SalaryCalculator() {
           <TextField
             id="hourlyRate"
             label="Hourly rate"
-            placeholder={DEFAULT_USER_SALARY.hourlyRate}
+            placeholder={DEFAULT_USER_SALARY.hourlyRate.toString()}
             value={hourlyRate}
             onChange={e => setHourlyRate(e.target.value)}
             type="number"
@@ -59,7 +60,7 @@ export default function SalaryCalculator() {
           <TextField
             id="commission"
             label="Commission"
-            placeholder={DEFAULT_USER_SALARY.commission}
+            placeholder={DEFAULT_USER_SALARY.commission.toString()}
             value={commission}
             onChange={e => setCommission(e.target.value)}
             type="number"
@@ -68,7 +69,7 @@ export default function SalaryCalculator() {
           <TextField
             id="tax"
             label="Tax"
-            placeholder={DEFAULT_USER_SALARY.tax}
+            placeholder={DEFAULT_USER_SALARY.tax.toString()}
             value={tax}
             onChange={e => setTax(e.target.value)}
             type="number"
@@ -100,9 +101,9 @@ export default function SalaryCalculator() {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async context => {
   return getResultForAuthenticatedPage(context);
-}
+};
 
 SalaryCalculator.layoutProps = {
   meta: {

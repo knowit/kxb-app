@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useToggle } from "react-use";
 
-export default function Calendar({ salaryStatistics, ...other }) {
+export default function Calendar({ ...other }) {
   const { user } = useUser();
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
 

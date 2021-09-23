@@ -1,6 +1,7 @@
 import LoginButtons from "@/components/auth/LoginButtons";
 import Heading from "@/components/heading";
 import Text from "@/components/text";
+import { GetServerSideProps } from "next";
 import { getProviders, getSession } from "next-auth/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -88,7 +89,7 @@ export default function Login({ session }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async context => {
   const session = await getSession(context);
 
   return {
@@ -97,4 +98,4 @@ export async function getServerSideProps(context) {
       loginProviders: await getProviders()
     }
   };
-}
+};

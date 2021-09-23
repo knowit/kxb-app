@@ -2,7 +2,13 @@ import Card from "@/components/card";
 import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
 import * as React from "react";
 
-export default function Statistic({ title, value, isLoading = false }) {
+interface Props {
+  title: string;
+  value: string | number;
+  isLoading?: boolean;
+}
+
+const Statistic: React.FC<Props> = ({ title, value, isLoading = false }) => {
   return isLoading ? (
     <StatisticSkeleton />
   ) : (
@@ -15,4 +21,6 @@ export default function Statistic({ title, value, isLoading = false }) {
       </div>
     </Card>
   );
-}
+};
+
+export default Statistic;
