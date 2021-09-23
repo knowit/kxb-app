@@ -1,6 +1,7 @@
 import { User } from "@/types";
-import { debounceFetch, fetcher } from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 import * as React from "react";
+import { useDebounce } from "react-use";
 import useSWR, { useSWRConfig } from "swr";
 
 interface UserContextProps {
@@ -19,6 +20,21 @@ function UserProvider({ children, session = {}, user }) {
 
   const { mutate } = useSWRConfig();
 
+  useDebounce(
+    async () => {
+      await fetch(`/api/user/${data.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+    },
+    2000,
+    [data]
+  );
+
   const update = React.useCallback(
     async (updatedUser: Partial<User>) => {
       const mutatedUser = await mutate(
@@ -29,15 +45,6 @@ function UserProvider({ children, session = {}, user }) {
         }),
         false
       );
-
-      debounceFetch(`/api/user/${data.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify(mutatedUser)
-      });
     },
     [mutate, data]
   );

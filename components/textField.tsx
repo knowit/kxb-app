@@ -1,16 +1,17 @@
 import clsx from "clsx";
 import * as React from "react";
 
-interface Props {
+interface Props extends React.HtmlHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
   labelProps?: any;
   disabled?: boolean;
   placeholder?: string;
   value?: string | number;
-  onChange: (...params: any) => void;
+  onChange?: (...params: any) => void;
   type?: string;
   step?: string;
+  min?: string;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, Props>(

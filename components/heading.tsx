@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import * as React from "react";
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   as?: string;
   variant?: string;

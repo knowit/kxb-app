@@ -1,4 +1,4 @@
-import LoginButtons from "@/components/auth/LoginButtons";
+import { LoginButtons } from "@/components/auth";
 import Heading from "@/components/heading";
 import Text from "@/components/text";
 import { GetServerSideProps } from "next";

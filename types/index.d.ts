@@ -100,6 +100,7 @@ export type CalendarMonth = {
   days: CalendarDay[];
   payDay?: CalendarDay;
 };
+
 export type CalendarDay = {
   date: Date;
   day: number;
@@ -109,7 +110,14 @@ export type CalendarDay = {
   formattedShortDate: string;
   formattedLongDate: string;
   isHoliday: boolean;
-  isWorkDay: boolean;
+  isWorkDay?: boolean;
+};
+
+export type Holiday = {
+  name: string;
+  date: Date;
+  formattedShortDate: string;
+  formattedLongDate: string;
 };
 
 export interface NextAuthSessionUser {
