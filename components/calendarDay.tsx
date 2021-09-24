@@ -17,6 +17,7 @@ type CalendarDayDateProps = WithChildren<{
   layoutId?: string;
   as?: React.ElementType;
   className?: string;
+  isExpanded?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }> &
   BaseDay;
@@ -46,6 +47,7 @@ const CalendarDayDate = ({
   isWorkDay,
   isNonCommissionedToggled,
   isExtraHoursToggled,
+  isExpanded = false,
   ...other
 }: CalendarDayDateProps) => {
   const Component = as ?? motion.div;
@@ -53,19 +55,34 @@ const CalendarDayDate = ({
   return (
     <Component
       className={clsx(
-        "flex justify-center items-center p-2 cursor-pointer transition-colors duration-300",
+        "group flex justify-center items-center",
         {
-          "text-green-500 dark:text-green-400 font-bold": isWorkDay,
-          "text-red-500 dark:text-red-400 font-bold": isNonCommissionedToggled
+          "cursor-pointer": !isExpanded
         },
         className
       )}
       {...other}
     >
-      {children}
-      {isExtraHoursToggled ? (
-        <HiChevronDoubleUp className="!text-green-500 !dark:text-green-400 h-4 w-4" />
-      ) : null}
+      <div
+        className={clsx(
+          "flex justify-center items-center font-bold transition-colors duration-300",
+          {
+            "w-10 h-10 border border-transparent rounded-full group-hover:border-white":
+              !isExpanded,
+            "text-green-500 dark:text-green-400 ": isWorkDay,
+            "text-red-500 dark:text-red-400": isNonCommissionedToggled,
+            "group-hover:border-green-500 dark:group-hover:border-green-400":
+              !isExpanded && isWorkDay,
+            "group-hover:border-red-500 dark:group-hover:border-red-400":
+              !isExpanded && isNonCommissionedToggled
+          }
+        )}
+      >
+        {children}
+        {isExtraHoursToggled ? (
+          <HiChevronDoubleUp className="!text-green-500 !dark:text-green-400 h-4 w-4" />
+        ) : null}
+      </div>
     </Component>
   );
 };
@@ -123,6 +140,7 @@ const ExpandedCalendarDay = ({
             className="text-xl md:text-2xl"
             isWorkDay={isWorkDay}
             isNonCommissionedToggled={isNonCommissionedToggled}
+            isExpanded
           >
             {day?.formattedShortDate}
           </CalendarDayDate>
