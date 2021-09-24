@@ -117,7 +117,7 @@ export default function UserWorkDayDetails({ day }) {
               })}
             />
             <Button
-              className="min-w-[75px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="min-w-[75px] disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               variant={isNonCommissionedToggled ? "red" : "primary"}
               disabled={+extraHours > 0}
               onClick={() =>

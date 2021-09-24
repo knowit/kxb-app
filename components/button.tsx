@@ -12,7 +12,7 @@ const Button = ({ children, className, variant = "primary", ...other }: ButtonPr
     <button
       type="button"
       className={clsx(
-        "inline-block px-6 py-2 text-xs font-medium leading-6 text-center  uppercase transition  rounded shadow ripple hover:shadow-lg  focus:outline-none duration-300",
+        "inline-block px-6 py-2 font-medium leading-6 text-center  uppercase transition  rounded shadow ripple hover:shadow-lg  focus:outline-none duration-300",
         {
           "text-black bg-green-500 dark:bg-green-400 hover:bg-green-600 dark:hover:bg-green-700":
             variant === "primary",
