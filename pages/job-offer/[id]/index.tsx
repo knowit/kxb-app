@@ -3,7 +3,7 @@ import Heading from "@/components/heading";
 import PageLayout from "@/components/layouts/pageLayout";
 import SalaryOverview from "@/components/salaryOverview";
 import Text from "@/components/text";
-import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
+import prisma from "@/lib/prisma";
 import { GetServerSideProps } from "next";
 import * as React from "react";
 import useSWR from "swr";
@@ -24,13 +24,19 @@ export default function ViewJobOffer({ id, initialJobOffer }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const authenticatedPageProps = await getResultForAuthenticatedPage(context);
+  const { created, updated, ...jobOffer } = await prisma.jobOffer.findUnique({
+    where: {
+      id: +context.params.id
+    }
+  });
 
   return {
     props: {
-      ...authenticatedPageProps.props,
       id: context.params.id,
-      initialJobOffer: {}
+      initialJobOffer: {
+        ...jobOffer,
+        commission: +jobOffer.commission
+      }
     }
   };
 };

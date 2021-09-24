@@ -1,7 +1,6 @@
 import CalendarDay from "@/components/calendarDay";
 import Container from "@/components/container";
 import Heading from "@/components/heading";
-import { useUser } from "@/components/user";
 import { CalendarDay as CalendarDayType } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,8 +8,11 @@ import * as React from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { useToggle } from "react-use";
 
-const Calendar = ({ ...other }) => {
-  const { user } = useUser();
+type CalendarProps = {
+  disableUserWorkDayDetails?: boolean;
+};
+
+const Calendar = ({ disableUserWorkDayDetails = false, ...other }: CalendarProps) => {
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
 
   const [toggledDay, setToggledDay] = React.useState<CalendarDayType>();
@@ -111,6 +113,7 @@ const Calendar = ({ ...other }) => {
             key={`calendar-day-${i}`}
             day={day}
             isWorkDay={day.isWorkDay}
+            disableUserWorkDayDetails={disableUserWorkDayDetails}
             onExpand={() => setToggledDay(day)}
             onCollapse={() => setToggledDay(undefined)}
           />

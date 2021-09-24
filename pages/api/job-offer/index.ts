@@ -1,3 +1,4 @@
+import prisma from "@/lib/prisma";
 import { sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
@@ -14,24 +15,7 @@ export default async function JobOffers(req: NextApiRequest, res: NextApiRespons
   }
 
   if (req.method === "GET") {
-    return res.status(200).json([
-      {
-        firstName: "Tommy",
-        lastName: "Barvåg",
-        email: "tommy@barvaag.com",
-        phone: "97777907",
-        hourlyRate: "1200",
-        commission: 0.4
-      },
-      {
-        firstName: "Tommy",
-        lastName: "Barvåg",
-        email: "tommy@barvaag.com",
-        phone: "97777907",
-        hourlyRate: "1200",
-        commission: 0.4
-      }
-    ]);
+    return res.status(200).json(await prisma.jobOffer.findMany({}));
   }
 
   if (req.method === "POST") {
@@ -40,7 +24,16 @@ export default async function JobOffers(req: NextApiRequest, res: NextApiRespons
     } = req;
 
     if (firstName && lastName && email && phone && hourlyRate && commission) {
-      // Insert
+      await prisma.jobOffer.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          hourlyRate: +hourlyRate,
+          commission: +commission
+        }
+      });
 
       return res.status(202).end();
     }

@@ -68,7 +68,7 @@ export default function SalaryOverview(props) {
           />
         </div>
         <div className="flex-grow max-w-lg ml-4">
-          <Calendar />
+          <Calendar disableUserWorkDayDetails />
           <SalaryStatistics salaryStatistics={salaryStatistics} />
         </div>
       </div>

@@ -35,3 +35,16 @@ model UserWorkDayDetail {
   user                 User    @relation(fields: [userId], references: [id])
   userId               Int
 }
+
+model JobOffer {
+  id         Int      @id @default(autoincrement())
+  created    DateTime @default(now())
+  updated    DateTime @default(now())
+  sent       Boolean  @default(false)
+  firstName  String
+  lastName   String
+  email      String   @unique
+  phone      String
+  hourlyRate Int      @default(1200)
+  commission Decimal  @default(0.40) @db.Decimal(5, 2)
+}

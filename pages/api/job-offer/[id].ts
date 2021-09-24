@@ -1,3 +1,4 @@
+import prisma from "@/lib/prisma";
 import { sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
@@ -19,14 +20,11 @@ export default async function JobOffer(req: NextApiRequest, res: NextApiResponse
     return res.status(403).end();
   }
 
-  const jobOffer = {
-    firstName: "Tommy",
-    lastName: "Barvåg",
-    email: "tommy@barvaag.com",
-    phone: "97777907",
-    hourlyRate: "1200",
-    commission: 0.4
-  };
+  const jobOffer = await prisma.jobOffer.findUnique({
+    where: {
+      id: +id
+    }
+  });
 
   if (jobOffer === null || jobOffer === undefined) {
     return res.status(404).end();
@@ -42,13 +40,29 @@ export default async function JobOffer(req: NextApiRequest, res: NextApiResponse
       body: { firstName, lastName, email, phone, hourlyRate, commission }
     } = req;
 
-    // Update offer
+    await prisma.jobOffer.update({
+      data: {
+        firstName,
+        lastName,
+        email,
+        phone,
+        hourlyRate: +hourlyRate,
+        commission: +commission
+      },
+      where: {
+        id: +id
+      }
+    });
 
     return res.status(200).end();
   }
 
   if (req.method === "DELETE") {
-    // Delete
+    await prisma.jobOffer.delete({
+      where: {
+        id: +id
+      }
+    });
 
     return res.status(204).json({});
   }

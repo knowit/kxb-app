@@ -24,7 +24,7 @@ type CalendarDayDateProps = WithChildren<{
 
 type RegularCalendarDayProps = {
   day: CalendarDayType;
-  onExpand: () => void;
+  onExpand?: () => void;
 } & BaseDay;
 
 type ExpandedCalendarDayProps = {
@@ -36,6 +36,7 @@ type ExpandedCalendarDayProps = {
 type CalendarDayProps = {
   day: CalendarDayType;
   isWorkDay?: boolean;
+  disableUserWorkDayDetails?: boolean;
   onExpand?: () => void;
   onCollapse?: () => void;
 };
@@ -153,9 +154,10 @@ const ExpandedCalendarDay = ({
   );
 };
 
-const CalendarDay = ({
+const UserWorkDayDetailsCalendarDay = ({
   day,
   isWorkDay = false,
+  disableUserWorkDayDetails = false,
   onExpand = () => {},
   onCollapse = () => {},
   ...other
@@ -212,6 +214,29 @@ const CalendarDay = ({
         />
       )}
     </AnimateSharedLayout>
+  );
+};
+
+const CalendarDay = ({
+  day,
+  isWorkDay = false,
+  disableUserWorkDayDetails = false,
+  onExpand = () => {},
+  onCollapse = () => {},
+  ...other
+}: CalendarDayProps) => {
+  if (disableUserWorkDayDetails) {
+    return <RegularCalendarDay day={day} isWorkDay={isWorkDay} {...other} />;
+  }
+
+  return (
+    <UserWorkDayDetailsCalendarDay
+      day={day}
+      isWorkDay={isWorkDay}
+      onExpand={onExpand}
+      onCollapse={onCollapse}
+      {...other}
+    />
   );
 };
 
