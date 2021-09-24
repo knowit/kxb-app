@@ -86,7 +86,8 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
           //     lte: 0
           //   }
           // }
-        }
+        },
+        updated: new Date()
       },
       where: {
         id: +id

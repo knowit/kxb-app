@@ -90,7 +90,8 @@ async function refreshAccessToken(token: JWT) {
       data: {
         refreshToken: refreshedTokens.refresh_token,
         isAdmin: isAdmin ?? false,
-        isSpecialist: isSpecialist ?? false
+        isSpecialist: isSpecialist ?? false,
+        updated: new Date()
       },
       where: {
         id: user.id

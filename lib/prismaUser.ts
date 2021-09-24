@@ -19,14 +19,15 @@ const createPrismaUser = (user: PrismaUser): User => {
   };
 };
 
-const get = async (
-  options = {
+const get = async (): Promise<User[]> => {
+  const entries = await prisma.user.findMany({
+    orderBy: {
+      updated: "desc"
+    },
     include: {
       workDayDetails: true
     }
-  }
-): Promise<User[]> => {
-  const entries = await prisma.user.findMany(options);
+  });
 
   return entries.map(entry => createPrismaUser(entry));
 };
