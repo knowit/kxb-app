@@ -48,6 +48,7 @@ const UserProfile: React.FC = () => {
         label="Hourly rate"
         placeholder="1150"
         type="number"
+        defaultValue={user.hourlyRate}
         {...register("hourlyRate", {
           required: true
         })}
@@ -58,6 +59,7 @@ const UserProfile: React.FC = () => {
         placeholder="0.45"
         type="number"
         step="0.01"
+        defaultValue={user.commission}
         {...register("commission", {
           required: true
         })}
@@ -68,6 +70,7 @@ const UserProfile: React.FC = () => {
         placeholder="0.41"
         type="number"
         step="0.01"
+        defaultValue={user.tax}
         {...register("tax", {
           required: true
         })}
