@@ -14,14 +14,16 @@ function upsertWorkDayDetail(
     return workDayDetails;
   }
 
+  const newWorkDayDetails = [...workDayDetails];
+
   const i = workDayDetails.findIndex(item => item.date === workDayDetail.date);
 
   if (i === -1) {
-    workDayDetails.push(workDayDetail);
-    return workDayDetails;
+    newWorkDayDetails.push(workDayDetail);
+    return newWorkDayDetails;
   }
 
-  return workDayDetails.map(item => {
+  return newWorkDayDetails.map(item => {
     if (item.date === workDayDetail.date) {
       return {
         ...item,
