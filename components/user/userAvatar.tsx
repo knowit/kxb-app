@@ -4,7 +4,7 @@
 import { useUserImage } from "@/components/user/hooks";
 import * as React from "react";
 
-const UserAvatar: React.FC = () => {
+const UserAvatar = () => {
   const userImage = useUserImage();
 
   return (

@@ -3,6 +3,8 @@
 import { Prisma } from ".prisma/client";
 import { Session, TokenSet } from "next-auth";
 
+export type WithChildren<T = {}> = T & { children?: React.ReactNode };
+
 export type UserWorkDayDetail = {
   id: number;
   date: string;
@@ -27,13 +29,13 @@ export type User = {
   workDayDetails: UserWorkDayDetail[];
 };
 
-export interface UserSalaryDetails {
+export type UserSalaryDetails = {
   hourlyRate: number;
   commission: number;
   tax: number;
-}
+};
 
-export interface CalendarMonthEarnings {
+export type CalendarMonthEarnings = {
   monthName: string;
   payDay: string;
   workDays: WorkDay[];
@@ -42,7 +44,7 @@ export interface CalendarMonthEarnings {
   net: number;
   grossFormatted: string;
   netFormatted: string;
-}
+};
 
 export type CalendarYearEarnings = {
   year: number;
@@ -54,7 +56,7 @@ export type CalendarYearEarnings = {
   netFormatted: string;
 };
 
-export interface UserEarningsDetails {
+export type UserEarningsDetails = {
   workDayDetails: UserWorkDayDetail[];
   monthStatistics: CalendarMonthEarnings;
   currentMonthStatistics: CalendarMonthEarnings;
@@ -63,7 +65,7 @@ export interface UserEarningsDetails {
   nextPayDayStatistics: CalendarMonthEarnings;
   yearSalaryStatistics: CalendarYearEarnings;
   nextYearSalaryStatistics: CalendarYearEarnings;
-}
+};
 
 export type PrismaUserUserWorkDayDetail = {
   id: number;
@@ -120,19 +122,19 @@ export type Holiday = {
   formattedLongDate: string;
 };
 
-export interface NextAuthSessionUser {
+export type NextAuthSessionUser = {
   name?: string | null;
   email?: string | null;
   image?: string | null;
   id?: string | null;
   isAdmin?: boolean;
   isSpecialist?: boolean;
-}
+};
 
-export interface NextAuthSession extends Session {
+export type NextAuthSession = {
   user?: NextAuthSessionUser;
-}
+} & Session;
 
-export interface NextAuthToken extends TokenSet {
+export type NextAuthToken = {
   sub: string;
-}
+} & TokenSet;

@@ -4,9 +4,9 @@ import { useCalendar } from "@/utils/calendarProvider";
 import { getUserEarningsDetails, getUserSalaryDetails } from "@/utils/userUtils";
 import * as React from "react";
 
-interface SalaryContextProps extends UserEarningsDetails {
+type SalaryContextProps = {
   isLoadingSalary: boolean;
-}
+} & UserEarningsDetails;
 
 const SalaryContext = React.createContext<SalaryContextProps>(null);
 SalaryContext.displayName = "SalaryContext";

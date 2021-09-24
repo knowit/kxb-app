@@ -2,26 +2,27 @@ import CalendarDay from "@/components/calendarDay";
 import Container from "@/components/container";
 import Heading from "@/components/heading";
 import { useUser } from "@/components/user";
+import { CalendarDay as CalendarDayType } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { useToggle } from "react-use";
 
-const Calendar: React.FC = ({ ...other }) => {
+const Calendar = ({ ...other }) => {
   const { user } = useUser();
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
 
-  const [toggledDay, setToggledDay] = React.useState(null);
+  const [toggledDay, setToggledDay] = React.useState<CalendarDayType>();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
-  const renderSpacingDays = days => {
+  const renderSpacingDays = (days: CalendarDayType[]): JSX.Element[] | null => {
     if (days === null || days === undefined || days?.length <= 0) {
       return null;
     }
 
-    const spacingDaysToRender = {
+    const spacingDaysToRender: Record<string, number> = {
       MONDAY: 0,
       TUESDAY: 1,
       WEDNESDAY: 2,
@@ -32,7 +33,7 @@ const Calendar: React.FC = ({ ...other }) => {
     };
 
     return [...Array(spacingDaysToRender[days[0].name?.toUpperCase()] ?? 0)].map((key, index) => (
-      <CalendarDay key={`calendar-day-spacing-${index}`} />
+      <div key={`calendar-day-spacing-${index}`} />
     ));
   };
 
@@ -105,14 +106,13 @@ const Calendar: React.FC = ({ ...other }) => {
           sun.
         </div>
         {renderSpacingDays(monthDetail?.days)}
-        {<div className="hidden">{JSON.stringify(user.workDayDetails)}</div>}
         {monthDetail?.days?.map((day, i) => (
           <CalendarDay
             key={`calendar-day-${i}`}
             day={day}
             isWorkDay={day.isWorkDay}
             onExpand={() => setToggledDay(day)}
-            onCollapse={() => setToggledDay(null)}
+            onCollapse={() => setToggledDay(undefined)}
           />
         ))}
         <motion.div

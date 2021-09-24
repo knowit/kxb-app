@@ -4,7 +4,7 @@ import { getCalendarYear } from "@/utils/calendar/calendarUtils";
 import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "@/utils/dateUtils";
 import * as React from "react";
 
-interface CalendarContextProps {
+type CalendarContextProps = {
   isLoadingCalendar: boolean;
   year: CalendarYear;
   lastYear: CalendarYear;
@@ -22,7 +22,7 @@ interface CalendarContextProps {
   incrementMonth: () => void;
   decrementMonth: () => void;
   date: Date;
-}
+};
 
 const CalendarContext = React.createContext<CalendarContextProps>(null);
 CalendarContext.displayName = "CalendarContext";

@@ -1,19 +1,16 @@
 import Card from "@/components/card";
 import Heading from "@/components/heading";
 import Text from "@/components/text";
+import { WithChildren } from "@/types";
 import * as React from "react";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 
-interface BenefitProps {
+type BenefitProps = WithChildren<{
   icon?: React.ElementType;
   iconProps?: {};
-}
+}>;
 
-const Benefit: React.FC<BenefitProps> = ({
-  children,
-  icon = HiOutlineCheckCircle,
-  iconProps = {}
-}) => {
+const Benefit = ({ children, icon = HiOutlineCheckCircle, iconProps = {} }: BenefitProps) => {
   const Icon = icon;
   return (
     <Card>
@@ -27,7 +24,7 @@ const Benefit: React.FC<BenefitProps> = ({
   );
 };
 
-const CompanyBenefits: React.FC = () => {
+const CompanyBenefits = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-4 mb-12">
       <div className="max-w-full lg:max-w-[320px]">

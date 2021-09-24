@@ -1,12 +1,12 @@
+import { WithChildren } from "@/types";
 import clsx from "clsx";
 import * as React from "react";
 
-interface Props {
-  children: React.ReactNode;
+type TextProps = WithChildren<{
   className?: string;
-}
+}>;
 
-const Text: React.FC<Props> = ({ children, className }) => {
+const Text = ({ children, className }: TextProps) => {
   return (
     <p className={clsx("leading-5 text-gray-700 dark:text-gray-300 mb-4", className)}>{children}</p>
   );

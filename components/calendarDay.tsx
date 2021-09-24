@@ -1,47 +1,45 @@
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
-import { CalendarDay as CalendarDayType, UserWorkDayDetail } from "@/types";
+import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
 import clsx from "clsx";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
 import { useClickAway } from "react-use";
 
-interface CalendarDayDateProps {
+type BaseDay = {
+  isWorkDay?: boolean;
+  isNonCommissionedToggled?: boolean;
+  isExtraHoursToggled?: boolean;
+};
+
+type CalendarDayDateProps = WithChildren<{
   layoutId?: string;
   as?: React.ElementType;
   className?: string;
-  isWorkDay?: boolean;
-  isNonCommissionedToggled?: boolean;
-  isExtraHoursToggled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+}> &
+  BaseDay;
 
-interface RegularCalendarDayProps {
+type RegularCalendarDayProps = {
   day: CalendarDayType;
-  isWorkDay?: boolean;
-  isNonCommissionedToggled?: boolean;
-  isExtraHoursToggled?: boolean;
   onExpand: () => void;
-}
+} & BaseDay;
 
-interface ExpandedCalendarDayProps {
+type ExpandedCalendarDayProps = {
   day: CalendarDayType;
-  isWorkDay?: boolean;
-  isNonCommissionedToggled?: boolean;
-  isExtraHoursToggled?: boolean;
   workDayDetails: UserWorkDayDetail;
   onCollapse: () => void;
-}
+} & BaseDay;
 
-interface CalendarDayProps extends React.Attributes {
-  day?: CalendarDayType;
+type CalendarDayProps = {
+  day: CalendarDayType;
   isWorkDay?: boolean;
   onExpand?: () => void;
   onCollapse?: () => void;
-}
+};
 
-const CalendarDayDate: React.FC<CalendarDayDateProps> = ({
+const CalendarDayDate = ({
   children,
   as = motion.div,
   className,
@@ -49,7 +47,7 @@ const CalendarDayDate: React.FC<CalendarDayDateProps> = ({
   isNonCommissionedToggled,
   isExtraHoursToggled,
   ...other
-}) => {
+}: CalendarDayDateProps) => {
   const Component = as ?? motion.div;
 
   return (
@@ -72,13 +70,13 @@ const CalendarDayDate: React.FC<CalendarDayDateProps> = ({
   );
 };
 
-const RegularCalendarDay: React.FC<RegularCalendarDayProps> = ({
+const RegularCalendarDay = ({
   day,
   isWorkDay = false,
   isNonCommissionedToggled = false,
   onExpand = () => {},
   ...other
-}) => {
+}: RegularCalendarDayProps) => {
   return (
     <CalendarDayDate
       layoutId="expandable-card"
@@ -92,14 +90,14 @@ const RegularCalendarDay: React.FC<RegularCalendarDayProps> = ({
   );
 };
 
-const ExpandedCalendarDay: React.FC<ExpandedCalendarDayProps> = ({
+const ExpandedCalendarDay = ({
   day,
   isWorkDay = false,
   isNonCommissionedToggled = false,
   workDayDetails,
   onCollapse = () => {},
   ...other
-}) => {
+}: ExpandedCalendarDayProps) => {
   const ref = React.useRef(null);
 
   useClickAway(ref, () => onCollapse());
@@ -137,13 +135,13 @@ const ExpandedCalendarDay: React.FC<ExpandedCalendarDayProps> = ({
   );
 };
 
-const CalendarDay: React.FC<CalendarDayProps> = ({
+const CalendarDay = ({
   day,
   isWorkDay = false,
   onExpand = () => {},
   onCollapse = () => {},
   ...other
-}) => {
+}: CalendarDayProps) => {
   const { user } = useUser();
 
   const [isExpanded, setIsExpanded] = React.useState(false);

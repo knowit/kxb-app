@@ -7,7 +7,7 @@ import { signOut, useSession } from "next-auth/client";
 import * as React from "react";
 import { useClickAway } from "react-use";
 
-const UserNavDetails: React.FC = () => {
+const UserNavDetails = () => {
   const userMenuRef = React.useRef(null);
 
   useClickAway(userMenuRef, () => {

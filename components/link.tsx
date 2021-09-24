@@ -1,16 +1,18 @@
+import { WithChildren } from "@/types";
 import clsx from "clsx";
-import NextLink, { LinkProps } from "next/link";
+import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 
-interface Props extends LinkProps {
+type LinkProps = WithChildren<{
   href: string;
   as?: string;
   className?: string;
   onClick?: React.MouseEventHandler;
-}
+}> &
+  NextLinkProps;
 
-const Link: React.FC<Props> = ({ children, href, as, className, ...other }) => {
+const Link = ({ children, href, as, className, ...other }: LinkProps) => {
   const router = useRouter();
   const path = router.asPath ?? router.pathname;
   const linkPath = as ?? href;

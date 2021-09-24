@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import * as React from "react";
 
-interface Props extends React.HtmlHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = {
   className?: string;
   variant?: string;
   disabled?: boolean;
-}
+} & React.HtmlHTMLAttributes<HTMLButtonElement>;
 
-const Button: React.FC<Props> = ({ children, className, variant = "primary", ...other }) => {
+const Button = ({ children, className, variant = "primary", ...other }: ButtonProps) => {
   return (
     <button
       type="button"

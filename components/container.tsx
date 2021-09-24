@@ -1,12 +1,12 @@
+import { WithChildren } from "@/types";
 import * as React from "react";
 
-interface Props {
+type ContainerProps = WithChildren<{
   as?: React.ElementType;
-  children?: React.ReactNode;
   className?: string;
-}
+}>;
 
-const Container: React.FC<Props> = ({ children, as = "div", ...other }) => {
+const Container = ({ children, as = "div", ...other }: ContainerProps) => {
   const Component = as;
   return <Component {...other}>{children}</Component>;
 };

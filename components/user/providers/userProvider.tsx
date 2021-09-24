@@ -4,11 +4,11 @@ import * as React from "react";
 import { useDebounce } from "react-use";
 import useSWR, { useSWRConfig } from "swr";
 
-interface UserContextProps {
+type UserContextProps = {
   user: User;
   update: (updatedUser: Partial<User>) => Promise<void>;
   isLoadingUser: boolean;
-}
+};
 
 const UserContext = React.createContext<UserContextProps>(null);
 

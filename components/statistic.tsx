@@ -2,13 +2,13 @@ import Card from "@/components/card";
 import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
 import * as React from "react";
 
-interface Props {
+type StatisticProps = {
   title: string;
   value: string | number;
   isLoading?: boolean;
-}
+};
 
-const Statistic: React.FC<Props> = ({ title, value, isLoading = false }) => {
+const Statistic = ({ title, value, isLoading = false }: StatisticProps) => {
   return isLoading ? (
     <StatisticSkeleton />
   ) : (

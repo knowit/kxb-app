@@ -3,7 +3,9 @@ import Button from "@/components/button";
 import { signIn } from "next-auth/client";
 import * as React from "react";
 
-const LoginButtons: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({ onClick, ...other }) => {
+type LoginButtonsProps = {} & React.HTMLAttributes<HTMLButtonElement>;
+
+const LoginButtons = ({ onClick, ...other }: LoginButtonsProps) => {
   const authProviders = useAuthProviders();
   const providers = React.useMemo(() => Object.keys(authProviders ?? {}), [authProviders]);
 
@@ -20,6 +22,7 @@ const LoginButtons: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({ onCli
           signIn();
         }
       }}
+      {...other}
     >
       Login
     </Button>

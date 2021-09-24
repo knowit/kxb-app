@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const StatisticSkeleton: React.FC = ({ ...other }) => {
+const StatisticSkeleton = ({ ...other }) => {
   return (
     <div className="w-full" {...other}>
       <div className="w-full">

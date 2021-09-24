@@ -5,11 +5,11 @@ import { useCalendar } from "@/utils/calendarProvider";
 import { useSalary } from "@/utils/salaryProvider";
 import * as React from "react";
 
-interface Props {
+type SalaryStatisticsProps = {
   salaryStatistics?: CalendarMonthEarnings;
-}
+};
 
-const SalaryStatistics: React.FC<Props> = ({ salaryStatistics, ...other }) => {
+const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps) => {
   const { monthDetail, isLoadingCalendar } = useCalendar();
   const { monthStatistics, isLoadingSalary } = useSalary();
 

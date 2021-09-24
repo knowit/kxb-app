@@ -14,7 +14,7 @@ export default function useUserImage(size = "240x240") {
   const [session] = useSession();
 
   const { data } = useSWR(
-    () => [`https://graph.microsoft.com/v1.0/me/photos/${size}/$value`, session.accessToken],
+    () => [`https://graph.microsoft.com/v1.0/me/photos/${size}/$value`, session?.accessToken],
     fetchBlobWithToken
   );
 

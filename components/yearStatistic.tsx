@@ -6,20 +6,20 @@ import StatisticGroup from "@/components/statisticGroup";
 import { CalendarYearEarnings } from "@/types";
 import * as React from "react";
 
-interface Props {
+type YearStatisticProps = {
   title: string;
   yearStatistic: CalendarYearEarnings;
   isLoading?: boolean;
   showNinetyPercentBillableHours?: boolean;
-}
+};
 
-const YearStatistic: React.FC<Props> = ({
+const YearStatistic = ({
   title,
   yearStatistic,
   isLoading = false,
   showNinetyPercentBillableHours = false,
   ...other
-}) => {
+}: YearStatisticProps) => {
   return isLoading ? (
     <div className="mb-12">
       <HeadingSkeleton />

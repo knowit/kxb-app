@@ -1,12 +1,13 @@
+import { WithChildren } from "@/types";
 import clsx from "clsx";
 import * as React from "react";
 
-interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
-  children: React.ReactNode;
+type HeadingProps = WithChildren<{
   as?: string;
   variant?: string;
   className?: string;
-}
+}> &
+  React.HTMLAttributes<HTMLHeadingElement>;
 
 function getComponentForHeading(as: string): React.ElementType {
   switch (as) {
@@ -50,7 +51,7 @@ function getVariantForHeading(variant: string) {
   }
 }
 
-const Heading: React.FC<Props> = ({ children, as = "h2", variant = "h2", className, ...other }) => {
+const Heading = ({ children, as = "h2", variant = "h2", className, ...other }: HeadingProps) => {
   const Component = getComponentForHeading(as);
   const headerVariant = getVariantForHeading(variant ?? as);
 

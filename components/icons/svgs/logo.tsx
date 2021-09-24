@@ -1,10 +1,10 @@
 import * as React from "react";
 
-interface Props extends React.HTMLAttributes<HTMLOrSVGElement> {
+type LogoProps = {
   size?: number;
-}
+} & React.HTMLAttributes<HTMLOrSVGElement>;
 
-const Logo: React.FC<Props> = ({ color = "currentColor", size = 24, ...rest }) => {
+const Logo = ({ color = "currentColor", size = 24, ...rest }: LogoProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -3,7 +3,7 @@ import { useUser } from "@/components/user/hooks";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 
-const UserProfile: React.FC = () => {
+const UserProfile = () => {
   const { user, update } = useUser();
   const { register, setValue, watch } = useForm();
 
