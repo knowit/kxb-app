@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                Int                 @id @default(autoincrement())
+  email             String              @unique
+  name              String?
+  activeDirectoryId String              @unique
+  refreshToken      String?             @db.NVarChar(2000)
+  hourlyRate        Int                 @default(1000)
+  commission        Decimal             @default(0.40) @db.Decimal(5, 2)
+  tax               Decimal             @default(0.35) @db.Decimal(5, 2)
+  created           DateTime            @default(now())
+  updated           DateTime            @default(now())
+  isAdmin           Boolean             @default(false)
+  isSpecialist      Boolean             @default(false)
+  workDayDetails    UserWorkDayDetail[]
+}
+
+model UserWorkDayDetail {
+  id                   Int     @id @default(autoincrement())
+  date                 String
+  nonCommissionedHours Decimal @default(0) @db.Decimal(5, 2)
+  extraHours           Decimal @default(0) @db.Decimal(5, 2)
+  user                 User    @relation(fields: [userId], references: [id])
+  userId               Int
+}
