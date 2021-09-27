@@ -25,7 +25,7 @@ export default function JobOffer({ initialJobOffers }) {
             <div>{jobOffer.email}</div>
             <div>{jobOffer.phone}</div>
             <LinkButton href={`/job-offer/${jobOffer.id}/edit`}>Edit</LinkButton>
-            <LinkButton variant="secondary" href={`/job-offer/${jobOffer.id}`}>
+            <LinkButton variant="secondary" href={`/job-offer/${jobOffer.uuid}`}>
               View
             </LinkButton>
           </div>

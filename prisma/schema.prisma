@@ -47,4 +47,5 @@ model JobOffer {
   phone      String
   hourlyRate Int      @default(1200)
   commission Decimal  @default(0.40) @db.Decimal(5, 2)
+  uuid       String   @unique @default(dbgenerated("NEWID()")) @db.UniqueIdentifier
 }

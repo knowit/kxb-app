@@ -26,7 +26,7 @@ export default function ViewJobOffer({ id, initialJobOffer }) {
 export const getServerSideProps: GetServerSideProps = async context => {
   const { created, updated, ...jobOffer } = await prisma.jobOffer.findUnique({
     where: {
-      id: +context.params.id
+      uuid: context.params.id.toString()
     }
   });
 
