@@ -12,31 +12,31 @@
   "author": "Tommy Lunde Barvåg",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^3.2.1",
+    "@prisma/client": "^3.3.0",
     "autoprefixer": "^10.3.7",
     "clsx": "^1.1.1",
     "date-fns": "^2.25.0",
-    "framer-motion": "^4.1.17",
-    "next": "^11.1.2",
+    "framer-motion": "^5.0.0",
+    "next": "^12.0.1",
     "next-auth": "^3.29.0",
     "next-themes": "^0.0.15",
-    "postcss": "^8.3.9",
+    "postcss": "^8.3.11",
     "postcss-nested": "^5.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.17.2",
+    "react-hook-form": "^7.18.0",
     "react-icons": "^4.3.1",
     "react-use": "^17.3.1",
     "swr": "^1.0.1",
-    "tailwindcss": "^2.2.16"
+    "tailwindcss": "^2.2.17"
   },
   "devDependencies": {
-    "@types/node": "^16.10.4",
-    "@types/react": "^17.0.29",
-    "eslint": "7.32.0",
-    "eslint-config-next": "^11.1.2",
+    "@types/node": "^16.11.6",
+    "@types/react": "^17.0.33",
+    "eslint": "<8.0.0",
+    "eslint-config-next": "^12.0.1",
     "prettier": "^2.4.1",
-    "prisma": "3.2.1",
+    "prisma": "3.3.0",
     "typescript": "^4.4.4"
   }
 }
