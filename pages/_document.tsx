@@ -19,7 +19,7 @@ export default class MyDocument extends Document {
           <link rel="manifest" href="/site.webmanifest" />
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
           <meta name="msapplication-TileColor" content="#da532c" />
-          <meta name="theme-color" content="#ffffff"></meta>
+          <meta name="theme-color" content="#000000"></meta>
           <meta charSet="utf-8" />
         </Head>
         <body className="bg-white dark:bg-black text-gray-900 dark:text-gray-100">
