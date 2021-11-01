@@ -1,5 +1,5 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
-import { PrismaUser, User, UserWorkDayDetail } from "@/types";
+import { PrismaUser, User } from "@/types";
 import prisma from "./prisma";
 
 // Convert decimals to number
@@ -8,14 +8,11 @@ const createPrismaUser = (user: PrismaUser): User => {
     ...user,
     tax: +(user.tax ?? DEFAULT_USER_SALARY.tax),
     commission: +(user.commission ?? DEFAULT_USER_SALARY.commission),
-    workDayDetails: (user?.workDayDetails ?? []).map(
-      workDayDetail =>
-        <UserWorkDayDetail>{
-          ...workDayDetail,
-          extraHours: +(workDayDetail?.extraHours ?? 0),
-          nonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0)
-        }
-    )
+    workDayDetails: (user?.workDayDetails ?? []).map(workDayDetail => ({
+      ...workDayDetail,
+      extraHours: +(workDayDetail?.extraHours ?? 0),
+      nonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0)
+    }))
   };
 };
 
