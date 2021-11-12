@@ -6,4 +6,4 @@ const userIsSpecialist = (user: NextAuthSessionUser): boolean => user?.isSpecial
 export const sessionUserIsAdmin = (session: NextAuthSession) => userIsAdmin(session?.user);
 export const sessionUserIsSpecialist = (session: NextAuthSession) =>
   userIsSpecialist(session?.user);
-export const getSessionUserId = (session: NextAuthSession) => session?.user?.id;
+export const getSessionUserActiveDirectoryId = (session: NextAuthSession) => session?.user?.id;

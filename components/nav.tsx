@@ -4,6 +4,8 @@ import { UserNavDetails, useUser } from "@/components/user";
 import { useTheme } from "next-themes";
 import * as React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
+import { FeedbackDialog } from "./feedback";
+import { LinkButton } from "./ui";
 
 export default function Nav({ userNavDetails = true, ...other }) {
   const [mounted, setMounted] = React.useState(false);
@@ -20,11 +22,15 @@ export default function Nav({ userNavDetails = true, ...other }) {
           <Logo />
         </Link>
       </div>
-      {user.isAdmin && (
-        <div className="hidden md:flex items-center ml-4 md:ml-6">
-          <Link href="/salary-calculator">Salary calculator</Link>
-        </div>
-      )}
+      <div className="hidden md:flex md:gap-1 items-center ml-4 md:ml-6">
+        <FeedbackDialog />
+        {user.isAdmin ? (
+          <LinkButton variant="black" href="/salary-calculator">
+            Salary calculator
+          </LinkButton>
+        ) : null}
+      </div>
+
       {userNavDetails && <UserNavDetails />}
       <div className="flex items-center ml-4 md:ml-6">
         <button
