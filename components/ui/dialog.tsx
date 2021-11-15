@@ -51,7 +51,7 @@ const StyledContent = styled(DialogPrimitive.Content, panelStyles, {
   minWidth: 200,
   maxWidth: "95vw",
   maxHeight: "85vh",
-  padding: "$6",
+  padding: "$5",
   marginTop: "-5vh",
   willChange: "transform",
   border: "1px sold white",
@@ -68,8 +68,8 @@ const StyledContent = styled(DialogPrimitive.Content, panelStyles, {
 
 const StyledCloseButton = styled(DialogPrimitive.Close, {
   position: "absolute",
-  top: "$3",
-  right: "$3"
+  top: "$5",
+  right: "$5"
 });
 
 type DialogContentPrimitiveProps = React.ComponentProps<typeof DialogPrimitive.Content>;

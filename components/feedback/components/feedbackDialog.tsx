@@ -10,14 +10,7 @@ const FeedbackDialog = () => {
       <DialogTrigger asChild>
         <Button variant="black">Feedback</Button>
       </DialogTrigger>
-      <DialogContent
-        css={{
-          "@bp2": {
-            minWidth: "$mdContainer"
-          },
-          maxWidth: "$mdContainer"
-        }}
-      >
+      <DialogContent>
         <Heading size="3" mb="4">
           Feedback
         </Heading>

@@ -17,10 +17,10 @@ export const TextFieldLabel = styled(LabelPrimitive.Root, {
   lineHeight: "150%",
   overflow: "hidden",
   "&:hover > input:not(:focus):placeholder-shown": {
-    borderColor: "$gray"
+    borderColor: "$grayLightest"
   },
   "&:hover > textarea:not(:focus):placeholder-shown": {
-    borderColor: "$gray"
+    borderColor: "$grayLightest"
   }
 });
 
@@ -28,7 +28,7 @@ export const TextFieldInput = styled("input", {
   boxSizing: "border-box",
   margin: "0 0 $1",
   border: "solid 1px",
-  borderColor: "$white",
+  borderColor: "$grayLightest",
   borderTopColor: "transparent",
   borderRadius: "4px",
   padding: "8px 16px",
@@ -40,19 +40,19 @@ export const TextFieldInput = styled("input", {
   fontFamily: "inherit",
   fontSize: "inherit",
   lineHeight: "inherit",
-  caretColor: "$gray",
+  caretColor: "$grayLightest",
   transition: "border 0.2s, box-shadow 0.2s",
 
   "&:hover": {
-    borderColor: "$gray",
+    borderColor: "$white",
     borderTopColor: "transparent"
   },
 
   "&:hover + span:before": {
-    borderTopColor: "$gray"
+    borderTopColor: "$white"
   },
   "&:hover + span:after": {
-    borderTopColor: "$gray"
+    borderTopColor: "$white"
   },
 
   "&:not(:focus):placeholder-shown": {
@@ -70,48 +70,52 @@ export const TextFieldInput = styled("input", {
     borderTopColor: "transparent"
   },
   "&:focus": {
-    borderColor: "$gray",
+    borderColor: "$white",
     borderTopColor: "transparent",
-    boxShadow: "inset 1px 0 $gray, inset -1px 0 $gray, inset 0 -1px $gray",
+    boxShadow: "inset 1px 0 $white, inset -1px 0 $white, inset 0 -1px $white",
     outline: "none"
   },
-  "&:focus + span": {
-    color: "$gray"
-  },
+
   "&:focus + span::before": {
-    borderTopColor: "$gray !important",
-    boxShadow: "inset 0 1px $gray"
+    borderTopColor: "$white !important",
+    boxShadow: "inset 0 1px $white"
   },
   "&:focus + span::after": {
-    borderTopColor: "$gray !important",
-    boxShadow: "inset 0 1px $gray"
+    borderTopColor: "$white !important",
+    boxShadow: "inset 0 1px $white"
   },
   "&:disabled": {
-    borderColor: "$gray !important",
+    borderColor: "$grayLightest !important",
     borderTopColor: "transparent !important",
-    color: "$gray",
+    color: "$grayLightest",
     pointerEvents: "none"
   },
   "&:disabled + span": {
-    borderColor: "$gray !important",
+    borderColor: "$grayLightest !important",
     borderTopColor: "transparent !important",
-    color: "$gray",
+    color: "$grayLightest",
     pointerEvents: "none"
   },
   "&:disabled + span::before": {
-    borderTopColor: "$gray !important"
+    borderTopColor: "$grayLightest !important"
   },
   "&:disabled + span::after": {
-    borderTopColor: "$gray !important"
+    borderTopColor: "$grayLightest !important"
   },
   "&:placeholder-shown + span": {
-    color: "$gray"
+    color: "$grayLightest"
+  },
+  "&:hover + span": {
+    color: "$white"
+  },
+  "&:focus + span": {
+    color: "$white"
   },
   "&:disabled:placeholder-shown": {
-    borderTopColor: "$gray !important"
+    borderTopColor: "$grayLightest !important"
   },
   "&:disabled:placeholder-shown + span": {
-    borderTopColor: "$gray !important"
+    borderTopColor: "$grayLightest !important"
   },
   "&:disabled:placeholder-shown + span::before": {
     borderTopColor: "transparent !important"
@@ -129,7 +133,7 @@ export const TextFieldSpan = styled("span", {
   borderColor: "$white",
   width: "100%",
   maxHeight: "100%",
-  color: "$white",
+  color: "$grayLightest",
   fontSize: "75%",
   lineHeight: "15px",
   cursor: "text",
@@ -140,7 +144,7 @@ export const TextFieldSpan = styled("span", {
     boxSizing: "border-box",
     marginTop: "6px",
     borderTop: "solid 1px",
-    borderTopColor: "$white",
+    borderTopColor: "$grayLightest",
     minWidth: "10px",
     height: "8px",
     pointerEvents: "none",
@@ -157,7 +161,7 @@ export const TextFieldSpan = styled("span", {
     boxSizing: "border-box",
     marginTop: "6px",
     borderTop: "solid 1px",
-    borderTopColor: "$white",
+    borderTopColor: "$grayLightest",
     minWidth: "10px",
     height: "8px",
     pointerEvents: "none",

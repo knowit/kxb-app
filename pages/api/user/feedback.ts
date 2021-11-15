@@ -46,6 +46,7 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
 
   if (req.method === "POST") {
     const message: string = req.body.message;
+    const reaction: number = +req.body.reaction;
 
     if (message === null || message === undefined) {
       return res.status(400).end();
@@ -54,7 +55,7 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
     await prisma.userFeedback.create({
       data: {
         feedback: message,
-        reaction: 1,
+        reaction: reaction,
         userId
       }
     });

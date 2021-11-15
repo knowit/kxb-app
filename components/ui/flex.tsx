@@ -19,7 +19,7 @@ const Flex = styled("div", {
         flexDirection: "column-reverse"
       }
     },
-    align: {
+    alignItems: {
       start: {
         alignItems: "flex-start"
       },
@@ -36,7 +36,7 @@ const Flex = styled("div", {
         alignItems: "baseline"
       }
     },
-    justify: {
+    justifyContent: {
       start: {
         justifyContent: "flex-start"
       },
@@ -104,8 +104,8 @@ const Flex = styled("div", {
   },
   defaultVariants: {
     direction: "row",
-    align: "stretch",
-    justify: "start",
+    alignItems: "stretch",
+    justifyContent: "start",
     wrap: "noWrap"
   }
 });

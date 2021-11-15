@@ -17,10 +17,12 @@ import Form from "./form";
 import Grid from "./grid";
 import Heading from "./heading";
 import IconButton from "./iconButton";
+import Label from "./label";
 import LinkButton from "./linkButton";
 import Overlay from "./overlay";
 import Panel from "./panel";
 import Paragraph from "./paragraph";
+import RadioGroup, { RadioGroupIndicator, RadioGroupRadio } from "./radioGroup";
 import Svg from "./svg";
 import Text from "./text";
 import TextArea from "./textArea";
@@ -44,10 +46,14 @@ export {
   Grid,
   Heading,
   IconButton,
+  Label,
   LinkButton,
   Overlay,
   Panel,
   Paragraph,
+  RadioGroup,
+  RadioGroupIndicator,
+  RadioGroupRadio,
   Svg,
   Text,
   TextArea,
