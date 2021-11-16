@@ -76,7 +76,7 @@ const Calendar = ({ ...other }) => {
           <div className="text-xs ml-2">Non commissioned</div>
         </div>
       </div>
-      <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-80 dark:bg-gray-900 my-4 mx-auto">
+      <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-80 border border-gray-200 dark:bg-gray-900 dark:border-gray-800 my-4 mx-auto">
         {toggledDay ? (
           <motion.div
             className="absolute inset-0 bg-gray-700 bg-opacity-75 transition-opacity z-10 rounded-lg"
@@ -84,25 +84,25 @@ const Calendar = ({ ...other }) => {
             animate={{ opacity: 1 }}
           ></motion.div>
         ) : null}
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           mon.
         </div>
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           tue.
         </div>
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           wed.
         </div>
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           thu.
         </div>
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           fri.
         </div>
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           sat.
         </div>
-        <div className="flex justify-center items-center p-2 text-gray-800 dark:text-gray-400 text-xs">
+        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
           sun.
         </div>
         {renderSpacingDays(monthDetail?.days)}
