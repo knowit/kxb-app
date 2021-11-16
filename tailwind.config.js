@@ -1,6 +1,10 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
 module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true
+  },
   mode: "jit",
   purge: ["./pages/**/*.js", "./components/**/*.js", "./pages/**/*.tsx", "./components/**/*.tsx"],
   darkMode: "class",
