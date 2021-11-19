@@ -28,6 +28,8 @@ export const buttonProps = {
   height: "$5",
   px: "$2",
   fontSize: "$3",
+  transition: "all 0.2s ease-in-out",
+
   //   fontVariantNumeric: "tabular-nums",
 
   "&:disabled": {

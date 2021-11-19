@@ -21,6 +21,9 @@ const EmojiButton = styled("button", {
   "&:hover": {
     transform: "scale(1.12)"
   },
+  "&:focus": {
+    transform: "scale(1.12)"
+  },
   variants: {
     selected: {
       true: {
@@ -70,8 +73,8 @@ const FeedbackEmojiSelector = ({ onSelected = () => {} }: FeedbackEmojiSelectorP
     <Flex
       gap="3"
       css={{
-        resize: "none",
-        lineHeight: 1.5
+        lineHeight: 1.5,
+        height: "34px"
       }}
     >
       {Object.entries(twemojis).map(([emoji, { src, alt, value }]) => (

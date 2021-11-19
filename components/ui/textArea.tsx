@@ -1,11 +1,12 @@
-import { motion } from "framer-motion";
 import * as React from "react";
 import { styled } from "stitches.config";
-import Box from "./box";
-import Flex from "./flex";
-import { HelperText, TextFieldInput, TextFieldLabel, TextFieldSpan } from "./textField";
+import ExpandingHelperText from "./expandingHelperText";
+import FieldContainer from "./fieldContainer";
+import Label from "./label";
+import { defaultInputStyles } from "./textField";
 
-const TextAreaRoot = styled(TextFieldInput, {
+const TextAreaRoot = styled("textarea", {
+  ...defaultInputStyles,
   variants: {
     variant: {
       vertical: {
@@ -42,47 +43,18 @@ const TextArea = React.forwardRef<React.ElementRef<"textarea">, TextFieldProps>(
   const { id = " ", label = "Label", error, helperText, rows = 4, ...other } = props;
 
   return (
-    <Flex
-      direction="column"
-      css={{
-        mb: "$4",
-        width: "100%"
-      }}
-    >
-      <Box
+    <FieldContainer>
+      <TextAreaRoot as="textarea" id={id} placeholder=" " ref={ref} rows={rows} {...other} />
+      <Label
+        htmlFor={id}
         css={{
-          position: "relative"
+          mb: "$1"
         }}
       >
-        <TextFieldLabel htmlFor={id}>
-          <TextAreaRoot as="textarea" id={id} placeholder=" " ref={ref} rows={rows} {...other} />
-          <TextFieldSpan>{label}</TextFieldSpan>
-        </TextFieldLabel>
-      </Box>
-      <HelperText
-        as={motion.div}
-        initial={error ? "open" : "collapsed"}
-        animate={error ? "open" : "collapsed"}
-        inherit={false}
-        variants={{
-          open: {
-            opacity: 1,
-            height: "auto"
-          },
-          collapsed: { opacity: 0, height: 0 }
-        }}
-        transition={{
-          ease: "easeOut"
-        }}
-        css={{
-          fontSize: "$2",
-          margin: 0,
-          color: "$red"
-        }}
-      >
-        {error ? helperText : <div>&nbsp;</div>}
-      </HelperText>
-    </Flex>
+        {label}
+      </Label>
+      <ExpandingHelperText expanded={error} text={helperText} />
+    </FieldContainer>
   );
 });
 

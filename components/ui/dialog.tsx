@@ -72,6 +72,19 @@ const StyledCloseButton = styled(DialogPrimitive.Close, {
   right: "$5"
 });
 
+const StyledDialogTitle = styled(DialogPrimitive.Title, {
+  fontSize: "$5",
+  marginBottom: "$3",
+  "@bp1": {
+    fontSize: "$6"
+  }
+});
+
+const StyledDialogDescription = styled(DialogPrimitive.Description, {
+  fontSize: "$3",
+  marginBottom: "$3"
+});
+
 type DialogContentPrimitiveProps = React.ComponentProps<typeof DialogPrimitive.Content>;
 type DialogContentProps = DialogContentPrimitiveProps & { css?: CSS };
 
@@ -93,5 +106,5 @@ DialogContent.displayName = "DialogContent";
 
 export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogClose = DialogPrimitive.Close;
-export const DialogTitle = DialogPrimitive.Title;
-export const DialogDescription = DialogPrimitive.Description;
+export const DialogTitle = StyledDialogTitle;
+export const DialogDescription = StyledDialogDescription;

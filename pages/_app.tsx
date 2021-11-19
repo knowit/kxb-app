@@ -11,13 +11,13 @@ function MyApp({ Component, pageProps }) {
     : {};
 
   return (
-    <IdProvider>
-      <ThemeProvider attribute="class" defaultTheme="dark">
+    <ThemeProvider attribute="class" defaultTheme="dark">
+      <IdProvider>
         <Layout {...layoutProps}>
           <Component {...pageProps} />
         </Layout>
-      </ThemeProvider>
-    </IdProvider>
+      </IdProvider>
+    </ThemeProvider>
   );
 }
 

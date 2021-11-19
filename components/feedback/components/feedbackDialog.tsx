@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTrigger, Heading } from "@/components/ui";
+import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui";
 import * as React from "react";
 import FeedbackForm from "./feedbackForm";
 
@@ -10,10 +10,9 @@ const FeedbackDialog = () => {
       <DialogTrigger asChild>
         <Button variant="black">Feedback</Button>
       </DialogTrigger>
+
       <DialogContent>
-        <Heading size="3" mb="4">
-          Feedback
-        </Heading>
+        <DialogTitle>Feedback</DialogTitle>
         <FeedbackForm />
       </DialogContent>
     </Dialog>

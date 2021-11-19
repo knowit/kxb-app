@@ -10,6 +10,8 @@ import {
   DialogTitle,
   DialogTrigger
 } from "./dialog";
+import ExpandingHelperText from "./expandingHelperText";
+import FieldContainer from "./fieldContainer";
 import Fieldset from "./fieldset";
 import Flex from "./flex";
 import FlexItem from "./flexItem";
@@ -39,6 +41,8 @@ export {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
+  ExpandingHelperText,
+  FieldContainer,
   Fieldset,
   Flex,
   FlexItem,
