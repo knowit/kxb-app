@@ -11,6 +11,7 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         white: "hsl(360, 100%, 100%)",
         black: "hsl(0, 0%, 0%)",
         main: "$black",
+        secondary: "$white",
         link: "$green",
         text: "$white",
         gray: "hsl(0, 0%, 20%)",
@@ -33,7 +34,7 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         // loContrast: '$slate1',
         loContrast: "white",
         canvas: "hsl(0 0% 93%)",
-        panel: "$black",
+        panel: "$main",
         transparentPanel: "hsl(0 0% 0% / 97%)",
         shadowLight: "hsl(206 22% 7% / 35%)",
         shadowDark: "hsl(206 22% 7% / 20%)",
@@ -84,7 +85,8 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         mdContainer: "570px",
         lgContainer: "1200px",
         cartItemImageContainer: "80px",
-        scrollBar: "10px"
+        scrollBar: "10px",
+        calendarContainer: "512px"
       },
       fontSizes: {
         tiny: "10px",

@@ -33,7 +33,7 @@ export const defaultInputStyles = css({
   }
 });
 
-export const TextFieldInput = styled("input", {
+const TextFieldInput = styled("input", {
   ...defaultInputStyles
 });
 
@@ -52,6 +52,7 @@ type TextFieldProps = {
   required?: boolean;
   error?: boolean;
   errorText?: string;
+  step?: string;
 };
 
 const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(function TextField(
@@ -65,12 +66,20 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
     helperText,
     placeholder,
     type = "text",
+    step,
     ...other
   } = props;
 
   return (
     <FieldContainer hidden={type === "hidden"}>
-      <TextFieldInput id={id} type={type} ref={ref} {...other} />
+      <TextFieldInput
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        step={step}
+        ref={ref}
+        {...other}
+      />
       <Label
         htmlFor={id}
         css={{

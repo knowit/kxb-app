@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import * as React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import { FeedbackDialog } from "./feedback";
-import { LinkButton } from "./ui";
+import { IconButton, LinkButton, Svg } from "./ui";
 
 export default function Nav({ userNavDetails = true, ...other }) {
   const [mounted, setMounted] = React.useState(false);
@@ -33,21 +33,21 @@ export default function Nav({ userNavDetails = true, ...other }) {
 
       {userNavDetails && <UserNavDetails />}
       <div className="flex items-center ml-4 md:ml-6">
-        <button
+        <IconButton
           type="button"
           aria-label="Toggle color mode"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
           {mounted ? (
             theme === "light" ? (
-              <HiOutlineMoon className="h-6 w-6" />
+              <Svg as={HiOutlineMoon} variant="black"></Svg>
             ) : (
-              <HiOutlineSun className="h-6 w-6" />
+              <Svg as={HiOutlineSun} variant="white"></Svg>
             )
           ) : (
             <div className="h-6 w-6"></div>
           )}
-        </button>
+        </IconButton>
       </div>
     </nav>
   );

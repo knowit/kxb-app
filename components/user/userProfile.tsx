@@ -1,7 +1,7 @@
-import TextField from "@/components/textField";
 import { useUser } from "@/components/user/hooks";
 import * as React from "react";
 import { useForm } from "react-hook-form";
+import { Form, TextField } from "../ui";
 
 const UserProfile = () => {
   const { user, update } = useUser();
@@ -42,13 +42,12 @@ const UserProfile = () => {
   }, [user, hourlyRate, commission, tax, update]);
 
   return (
-    <form>
+    <Form>
       <TextField
         id="hourlyRate"
         label="Hourly rate"
         placeholder="1150"
         type="number"
-        defaultValue={user.hourlyRate}
         {...register("hourlyRate", {
           required: true
         })}
@@ -59,7 +58,6 @@ const UserProfile = () => {
         placeholder="0.45"
         type="number"
         step="0.01"
-        defaultValue={user.commission}
         {...register("commission", {
           required: true
         })}
@@ -70,12 +68,11 @@ const UserProfile = () => {
         placeholder="0.41"
         type="number"
         step="0.01"
-        defaultValue={user.tax}
         {...register("tax", {
           required: true
         })}
       />
-    </form>
+    </Form>
   );
 };
 

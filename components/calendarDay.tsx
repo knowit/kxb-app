@@ -1,11 +1,12 @@
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
-import clsx from "clsx";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
 import { useClickAway } from "react-use";
+import { styled } from "stitches.config";
+import { Box, Svg } from "./ui";
 
 type BaseDay = {
   isWorkDay?: boolean;
@@ -40,6 +41,38 @@ type CalendarDayProps = {
   onCollapse?: () => void;
 };
 
+const DayText = styled("div", {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontWeight: "bold",
+  variants: {
+    expanded: {
+      true: {
+        height: "auto",
+        width: "auto"
+      }
+    },
+    workDay: {
+      true: {
+        color: "$green"
+      }
+    },
+    nonCommissioned: {
+      true: {
+        color: "$red"
+      }
+    }
+  },
+  compoundVariants: [
+    {
+      expanded: false,
+      workDay: true,
+      css: {}
+    }
+  ]
+});
+
 const CalendarDayDate = ({
   children,
   as = motion.div,
@@ -53,37 +86,38 @@ const CalendarDayDate = ({
   const Component = as ?? motion.div;
 
   return (
-    <Component
-      className={clsx(
-        "group flex justify-center items-center",
-        {
-          "cursor-pointer": !isExpanded
-        },
-        className
-      )}
+    <Box
+      as={as}
+      css={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: isExpanded ? "default" : "pointer"
+      }}
       {...other}
     >
-      <div
-        className={clsx(
-          "flex justify-center items-center font-bold transition-colors duration-300",
-          {
-            "w-10 h-10 border border-transparent rounded-full group-hover:border-white":
-              !isExpanded,
-            "text-green-500 dark:text-green-400 ": isWorkDay,
-            "text-red-500 dark:text-red-400": isNonCommissionedToggled,
-            "group-hover:border-green-500 dark:group-hover:border-green-400":
-              !isExpanded && isWorkDay,
-            "group-hover:border-red-500 dark:group-hover:border-red-400":
-              !isExpanded && isNonCommissionedToggled
-          }
-        )}
+      <DayText
+        // className={clsx(
+        //   "flex justify-center items-center font-bold transition-colors duration-300",
+        //   {
+        //     "w-10 h-10 border border-transparent rounded-full group-hover:border-white":
+        //       !isExpanded,
+        //     "text-green-500 dark:text-green-400 ": isWorkDay,
+        //     "text-red-500 dark:text-red-400": isNonCommissionedToggled,
+        //     "group-hover:border-green-500 dark:group-hover:border-green-400":
+        //       !isExpanded && isWorkDay,
+        //     "group-hover:border-red-500 dark:group-hover:border-red-400":
+        //       !isExpanded && isNonCommissionedToggled
+        //   }
+        // )}
+        workDay={isWorkDay}
+        nonCommissioned={isNonCommissionedToggled}
+        expanded={isExpanded}
       >
         {children}
-        {isExtraHoursToggled ? (
-          <HiChevronDoubleUp className="!text-green-500 !dark:text-green-400 h-4 w-4" />
-        ) : null}
-      </div>
-    </Component>
+        {isExtraHoursToggled ? <Svg as={HiChevronDoubleUp} variant="green" size="2" /> : null}
+      </DayText>
+    </Box>
   );
 };
 

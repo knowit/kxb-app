@@ -1,6 +1,6 @@
 import CompanyBenefits from "@/components/companyBenefits";
-import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
+import { Heading } from "@/components/ui";
 import { useUser } from "@/components/user";
 import YearlyEarnings from "@/components/yearlyEarnings";
 import YearStatistic from "@/components/yearStatistic";
@@ -15,7 +15,15 @@ export default function Home() {
 
   return (
     <>
-      <Heading variant="pageHeading" className="mb-16 lg:mb-24">{`Hi ${user?.name}`}</Heading>
+      <Heading
+        size="5"
+        css={{
+          marginBottom: "$6",
+          "@bp1": {
+            marginBottom: "$12"
+          }
+        }}
+      >{`Hi ${user?.name}`}</Heading>
       <YearlyEarnings />
       <CompanyBenefits />
       <YearStatistic

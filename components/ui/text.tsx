@@ -19,6 +19,12 @@ const Text = styled("span", {
       grayLight: {
         color: "$grayLight"
       },
+      grayLighter: {
+        color: "$grayLighter"
+      },
+      grayLightest: {
+        color: "$grayLightest"
+      },
       green: {
         color: "$green"
       },

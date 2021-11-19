@@ -24,8 +24,8 @@ const Paragraph = React.forwardRef<React.ElementRef<typeof DEFAULT_TAG>, Paragra
 
     // This is the mapping of Paragraph Variants to Text css
     const textCss: Record<ParagraphSizeVariants, CSS> = {
-      1: { lineHeight: "126%", "@bp2": { lineHeight: "150%" } },
-      2: { lineHeight: "150%", "@bp2": { lineHeight: "132%" } }
+      1: { lineHeight: "125%", "@bp2": { lineHeight: "135%" } },
+      2: { lineHeight: "135%", "@bp2": { lineHeight: "145%" } }
     };
     return (
       <Text

@@ -2,7 +2,7 @@ import { styled } from "stitches.config";
 
 const Card = styled("div", {
   appearance: "none",
-  border: "1px solid $colors$white",
+  border: "1px solid $colors$grayLight",
   boxSizing: "border-box",
   font: "inherit",
   lineHeight: "1",
@@ -10,7 +10,7 @@ const Card = styled("div", {
   outline: "none",
   padding: 0,
   WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
-  backgroundColor: "$white",
+  backgroundColor: "$grayDark",
   display: "block",
   textDecoration: "none",
   color: "inherit",
@@ -21,7 +21,7 @@ const Card = styled("div", {
   variants: {
     padding: {
       small: {
-        padding: "$2"
+        padding: "$3"
       },
       medium: {
         padding: "$4"
