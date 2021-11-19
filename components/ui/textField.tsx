@@ -1,5 +1,5 @@
 import * as React from "react";
-import { css, styled } from "stitches.config";
+import { CSS, css, styled, VariantProps } from "stitches.config";
 import Box from "./box";
 import ExpandingHelperText from "./expandingHelperText";
 import FieldContainer from "./fieldContainer";
@@ -15,7 +15,7 @@ export const defaultInputStyles = css({
   transition: "box-shadow 0.2s ease-in-out",
   backgroundColor: "$black",
   [`+ ${Label}`]: {
-    color: "$grayLightest",
+    color: "$textDark",
     transition: "color 0.2s ease-in-out",
     order: -1
   },
@@ -37,6 +37,10 @@ const TextFieldInput = styled("input", {
   ...defaultInputStyles
 });
 
+type LabelSizeVariants = Pick<VariantProps<typeof Label>, "size">;
+
+type TextFieldLabelSizeVariants = "tiny" | "1" | "2" | "3" | "4";
+
 type TextFieldProps = {
   label: string;
   helperText?: string;
@@ -45,7 +49,7 @@ type TextFieldProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  value?: string;
+  value?: string | number;
   type?: string;
   name?: string;
   id?: string;
@@ -53,6 +57,10 @@ type TextFieldProps = {
   error?: boolean;
   errorText?: string;
   step?: string;
+  min?: string;
+  css?: CSS;
+  fieldContainerCss?: CSS;
+  labelSize?: TextFieldLabelSizeVariants;
 };
 
 const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(function TextField(
@@ -67,21 +75,26 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
     placeholder,
     type = "text",
     step,
+    min,
+    fieldContainerCss,
+    labelSize,
     ...other
   } = props;
 
   return (
-    <FieldContainer hidden={type === "hidden"}>
+    <FieldContainer hidden={type === "hidden"} css={fieldContainerCss}>
       <TextFieldInput
         id={id}
         type={type}
         placeholder={placeholder}
         step={step}
+        min={min}
         ref={ref}
         {...other}
       />
       <Label
         htmlFor={id}
+        size={labelSize}
         css={{
           mb: "$1"
         }}

@@ -1,18 +1,31 @@
 import { WithChildren } from "@/types";
-import clsx from "clsx";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
+import { CSS, styled } from "stitches.config";
+
+const LinkRoot = styled("a", {
+  color: "$text",
+
+  variants: {
+    active: {
+      true: {
+        color: "$green"
+      }
+    }
+  }
+});
 
 type LinkProps = WithChildren<{
   href: string;
   as?: string;
-  className?: string;
   onClick?: React.MouseEventHandler;
+  isExternal?: boolean;
+  css?: CSS;
 }> &
   NextLinkProps;
 
-const Link = ({ children, href, as, className, ...other }: LinkProps) => {
+const Link = ({ children, href, as, isExternal = false, ...other }: LinkProps) => {
   const router = useRouter();
   const path = router.asPath ?? router.pathname;
   const linkPath = as ?? href;
@@ -34,20 +47,19 @@ const Link = ({ children, href, as, className, ...other }: LinkProps) => {
     [path, linkPath]
   );
 
+  if (isExternal) {
+    return (
+      <LinkRoot href={href} {...other}>
+        {children}
+      </LinkRoot>
+    );
+  }
+
   return (
     <NextLink {...linkProps}>
-      <a
-        className={clsx(
-          {
-            "text-gray-900 dark:text-gray-100": !active,
-            "text-green-800 dark:text-green-400": active
-          },
-          className
-        )}
-        {...other}
-      >
+      <LinkRoot active={active} {...other}>
         {children}
-      </a>
+      </LinkRoot>
     </NextLink>
   );
 };

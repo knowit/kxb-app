@@ -1,9 +1,10 @@
 import { WithChildren } from "@/types";
 import * as React from "react";
-import { styled } from "stitches.config";
+import { CSS, styled } from "stitches.config";
 
 type FieldContainerProps = WithChildren<{
   hidden?: boolean;
+  css?: CSS;
 }>;
 
 const FieldContainerRoot = styled("div", {
@@ -20,8 +21,12 @@ const FieldContainerRoot = styled("div", {
   }
 });
 
-const FieldContainer = ({ children, hidden = false }: FieldContainerProps) => {
-  return <FieldContainerRoot hidden={hidden}>{children}</FieldContainerRoot>;
+const FieldContainer = ({ children, hidden = false, ...other }: FieldContainerProps) => {
+  return (
+    <FieldContainerRoot hidden={hidden} {...other}>
+      {children}
+    </FieldContainerRoot>
+  );
 };
 
 export default FieldContainer;

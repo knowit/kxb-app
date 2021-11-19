@@ -24,7 +24,7 @@ class MyDocument extends Document {
           <meta charSet="utf-8" />
           <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssText() }} />
         </Head>
-        <body className="bg-white dark:bg-black text-gray-900 dark:text-gray-100">
+        <body>
           <Main />
           <NextScript />
         </body>

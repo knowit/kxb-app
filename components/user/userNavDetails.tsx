@@ -1,11 +1,9 @@
-import Button from "@/components/button";
-import Link from "@/components/link";
 import UserAvatar from "@/components/user/userAvatar";
 import { useSalary } from "@/utils/salaryProvider";
-import { motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/client";
 import * as React from "react";
 import { useClickAway } from "react-use";
+import { Box, Button, Card, Flex, IconButton, Link, Text } from "../ui";
 
 const UserNavDetails = () => {
   const userMenuRef = React.useRef(null);
@@ -26,44 +24,67 @@ const UserNavDetails = () => {
 
   return (
     <>
-      <div className="flex ml-4 md:ml-6 items-end">
-        <div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">Next paycheck</div>
-          <div className="text-xs">{nextPayDayStatistics.payDay}</div>
-          <div className="text-sm font-bold text-green-500 dark:text-green-400">
+      <Flex
+        alignItems="end"
+        css={{
+          ml: "$3",
+          "@bp1": {
+            ml: "$5"
+          }
+        }}
+      >
+        <Box>
+          <Text size="1" color="textDark">
+            Next paycheck
+          </Text>
+          <Text size="1">{nextPayDayStatistics.payDay}</Text>
+          <Text size="2" fontWeight="bold" color="green">
             {nextPayDayStatistics.netFormatted}
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center ml-4 md:ml-6">
-        <div ref={userMenuRef} className="w-12 h-12 relative">
-          <button className="cursor-pointer" onClick={() => setShowUserMenu(prev => !prev)}>
+          </Text>
+        </Box>
+      </Flex>
+      <Flex
+        alignItems="center"
+        css={{
+          ml: "$3",
+          "@bp1": {
+            ml: "$5"
+          }
+        }}
+      >
+        <Box
+          ref={userMenuRef}
+          css={{
+            position: "relative"
+          }}
+        >
+          <IconButton size="3" variant="ghost" onClick={() => setShowUserMenu(prev => !prev)}>
             <UserAvatar />
-          </button>
-          <motion.div
-            className="absolute dark:bg-gray-900 right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 min-w-[200px]"
-            initial={showUserMenu ? "open" : "collapsed"}
-            animate={showUserMenu ? "open" : "collapsed"}
-            variants={{
-              open: {
-                opacity: 1,
-                height: "auto"
-              },
-              collapsed: { opacity: 0, height: 0 }
-            }}
-            transition={{
-              ease: "easeOut"
+          </IconButton>
+          <Card
+            css={{
+              display: showUserMenu ? "block" : "none",
+              position: "absolute",
+              right: 0,
+              backgroundColor: "$main",
+              borderRadius: "$4",
+              mt: "$2"
             }}
           >
-            <div className="flex flex-col p-6">
-              <Link className="mb-4" href="/profile" onClick={() => setShowUserMenu(false)}>
-                Profile
-              </Link>
-              <Button onClick={() => signOut()}>Logout</Button>
-            </div>
-          </motion.div>
-        </div>
-      </div>
+            <Link href="/profile" onClick={() => setShowUserMenu(false)}>
+              Profile
+            </Link>
+            <Button
+              onClick={() => signOut()}
+              css={{
+                mt: "$3"
+              }}
+            >
+              Logout
+            </Button>
+          </Card>
+        </Box>
+      </Flex>
     </>
   );
 };

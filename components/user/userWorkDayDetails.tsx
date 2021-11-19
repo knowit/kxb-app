@@ -1,10 +1,9 @@
-import Button from "@/components/button";
-import TextField from "@/components/textField";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { UserWorkDayDetail } from "@/types";
 import * as React from "react";
 import { useForm } from "react-hook-form";
+import { Button, Flex, Form, TextField } from "../ui";
 
 function upsertWorkDayDetail(
   workDayDetails: UserWorkDayDetail[] = [],
@@ -97,16 +96,19 @@ export default function UserWorkDayDetails({ day }) {
   ]);
 
   return (
-    <form>
-      <div className="flex flex-col">
+    <Form>
+      <Flex direction="column">
         {day.isWorkDay ? (
-          <div className="flex gap-4 items-center">
+          <Flex
+            gap="3"
+            alignItems="center"
+            css={{
+              mb: "$4"
+            }}
+          >
             <TextField
               id="nonCommissionedHours"
               label="Non commissioned hours"
-              labelProps={{
-                className: "text-xs"
-              }}
               placeholder="0"
               type="number"
               step="0.5"
@@ -115,37 +117,47 @@ export default function UserWorkDayDetails({ day }) {
               {...register("nonCommissionedHours", {
                 required: true
               })}
+              labelSize="1"
+              css={{
+                maxWidth: "110px"
+              }}
+              fieldContainerCss={{
+                marginBottom: "0"
+              }}
             />
             <Button
-              className="min-w-[75px] disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-              variant={isNonCommissionedToggled ? "red" : "primary"}
+              type="button"
+              variant={isNonCommissionedToggled ? "red" : "green"}
               disabled={+extraHours > 0}
               onClick={() =>
                 setValue("nonCommissionedHours", isNonCommissionedToggled ? "0" : "7.5")
               }
+              css={{
+                maxWidth: "60px",
+                fontSize: "$2",
+                alignSelf: "end"
+              }}
             >
               {isNonCommissionedToggled
                 ? `-${nonCommissionedHours}`
                 : `+${EARNING_CONSTANTS.WORK_HOURS_PER_DAY}`}
             </Button>
-          </div>
+          </Flex>
         ) : null}
         <TextField
           id="extraHours"
           label="Extra hours"
-          labelProps={{
-            className: "text-xs"
-          }}
           placeholder="0"
           type="number"
           step="0.5"
           min="0"
           disabled={+nonCommissionedHours > 0}
+          labelSize="1"
           {...register("extraHours", {
             required: true
           })}
         />
-      </div>
-    </form>
+      </Flex>
+    </Form>
   );
 }

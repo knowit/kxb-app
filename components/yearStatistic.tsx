@@ -1,5 +1,3 @@
-import HeadingSkeleton from "@/components/skeleton/headingSkeleton";
-import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
 import { CalendarYearEarnings } from "@/types";
@@ -20,21 +18,7 @@ const YearStatistic = ({
   showNinetyPercentBillableHours = false,
   ...other
 }: YearStatisticProps) => {
-  return isLoading ? (
-    <Box
-      css={{
-        marginBottom: "$12"
-      }}
-    >
-      <HeadingSkeleton />
-      <StatisticGroup>
-        <StatisticSkeleton />
-        <StatisticSkeleton />
-        <StatisticSkeleton />
-        <StatisticSkeleton />
-      </StatisticGroup>
-    </Box>
-  ) : (
+  return (
     <Box
       css={{
         marginBottom: "$12"
@@ -42,13 +26,18 @@ const YearStatistic = ({
     >
       <Heading size="3">{title}</Heading>
       <StatisticGroup {...other}>
-        <Statistic title="Work days" value={yearStatistic.workDays} />
-        <Statistic title="Work hours" value={yearStatistic.workHours} />
+        <Statistic title="Work days" value={yearStatistic.workDays} isLoading={isLoading} />
+        <Statistic title="Work hours" value={yearStatistic.workHours} isLoading={isLoading} />
         <Statistic
           title="Gross salary - 100% billable hours"
           value={yearStatistic.grossFormatted}
+          isLoading={isLoading}
         />
-        <Statistic title="Net salary - 100% billable hours" value={yearStatistic.netFormatted} />
+        <Statistic
+          title="Net salary - 100% billable hours"
+          value={yearStatistic.netFormatted}
+          isLoading={isLoading}
+        />
       </StatisticGroup>
     </Box>
   );

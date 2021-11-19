@@ -1,13 +1,12 @@
 import { Logo } from "@/components/icons";
-import Link from "@/components/link";
 import { UserNavDetails, useUser } from "@/components/user";
 import { useTheme } from "next-themes";
 import * as React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import { FeedbackDialog } from "./feedback";
-import { IconButton, LinkButton, Svg } from "./ui";
+import { Box, Flex, IconButton, Link, LinkButton, Nav, Svg } from "./ui";
 
-export default function Nav({ userNavDetails = true, ...other }) {
+export default function Header({ userNavDetails = true, ...other }) {
   const [mounted, setMounted] = React.useState(false);
   const { theme, setTheme } = useTheme();
   const { user } = useUser();
@@ -16,23 +15,47 @@ export default function Nav({ userNavDetails = true, ...other }) {
   React.useEffect(() => setMounted(true), []);
 
   return (
-    <nav className="flex p-6 w-full max-w-7xl justify-center items-center my-0 min-h-[100px] mx-auto">
-      <div className="flex flex-grow">
+    <Nav>
+      <Box
+        css={{
+          flexGrow: 1
+        }}
+      >
         <Link href="/">
           <Logo />
         </Link>
-      </div>
-      <div className="hidden md:flex md:gap-1 items-center ml-4 md:ml-6">
+      </Box>
+      <Flex
+        alignItems="center"
+        gap={{
+          "@initial": "0",
+          "@bp1": "1"
+        }}
+        css={{
+          display: "none",
+          "@bp2": {
+            display: "flex",
+            ml: "$5"
+          }
+        }}
+      >
         <FeedbackDialog />
         {user.isAdmin ? (
           <LinkButton variant="black" href="/salary-calculator">
             Salary calculator
           </LinkButton>
         ) : null}
-      </div>
+      </Flex>
 
       {userNavDetails && <UserNavDetails />}
-      <div className="flex items-center ml-4 md:ml-6">
+      <Box
+        css={{
+          ml: "$3",
+          "@bp1": {
+            ml: "$5"
+          }
+        }}
+      >
         <IconButton
           type="button"
           aria-label="Toggle color mode"
@@ -45,10 +68,15 @@ export default function Nav({ userNavDetails = true, ...other }) {
               <Svg as={HiOutlineSun} variant="white"></Svg>
             )
           ) : (
-            <div className="h-6 w-6"></div>
+            <Box
+              css={{
+                height: "$4",
+                width: "$4"
+              }}
+            ></Box>
           )}
         </IconButton>
-      </div>
-    </nav>
+      </Box>
+    </Nav>
   );
 }

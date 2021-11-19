@@ -2,7 +2,7 @@ import { styled } from "stitches.config";
 
 const Text = styled("span", {
   // Reset
-  lineHeight: "1",
+  lineHeight: "125%",
   margin: "0",
   fontWeight: 400,
   //   fontVariantNumeric: "tabular-nums",
@@ -10,6 +10,12 @@ const Text = styled("span", {
 
   variants: {
     color: {
+      text: {
+        color: "$text"
+      },
+      textDark: {
+        color: "$textDark"
+      },
       black: {
         color: "$black"
       },
@@ -161,7 +167,7 @@ const Text = styled("span", {
   },
   defaultVariants: {
     size: "3",
-    color: "white"
+    color: "text"
   }
 });
 

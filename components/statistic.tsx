@@ -1,6 +1,5 @@
-import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
 import * as React from "react";
-import { Box, Card, Heading, Text } from "./ui";
+import { Box, Card, Heading, Skeleton, Text } from "./ui";
 
 type StatisticProps = {
   title: string;
@@ -9,36 +8,42 @@ type StatisticProps = {
 };
 
 const Statistic = ({ title, value, isLoading = false }: StatisticProps) => {
-  return isLoading ? (
-    <StatisticSkeleton />
-  ) : (
-    <Card>
-      <Box
-        css={{
-          display: "block",
-          "@bp1": {
-            display: "flex",
-            alignItems: "flex-start"
-          }
-        }}
-      >
+  return (
+    <Skeleton loading={isLoading}>
+      <Card>
         <Box
           css={{
-            textAlign: "center",
+            display: "block",
             "@bp1": {
-              textAlign: "left"
+              display: "flex",
+              alignItems: "flex-start"
             }
           }}
         >
-          <Text size="1" color="green">
-            {title}
-          </Text>
-          <Heading size="2" noMargin>
-            {value}
-          </Heading>
+          <Box
+            css={{
+              textAlign: "center",
+              "@bp1": {
+                textAlign: "left"
+              }
+            }}
+          >
+            <Text
+              size="1"
+              color="textDark"
+              css={{
+                mb: "$1"
+              }}
+            >
+              {title}
+            </Text>
+            <Heading size="2" noMargin>
+              {value}
+            </Heading>
+          </Box>
         </Box>
-      </Box>
-    </Card>
+      </Card>
+    </Skeleton>
   );
 };
 

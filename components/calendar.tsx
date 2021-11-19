@@ -156,7 +156,8 @@ const Calendar = ({ ...other }) => {
               bottom: "0",
               backgroundColor: "$overlay",
               transition: "opacity 0.2s ease-in-out",
-              zIndex: "10"
+              zIndex: "10",
+              borderRadius: "$4"
             }}
           ></Overlay>
         ) : null}

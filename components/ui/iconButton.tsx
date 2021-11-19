@@ -1,4 +1,6 @@
 import { styled } from "stitches.config";
+import Svg from "./svg";
+import Text from "./text";
 
 const IconButton = styled("button", {
   // Reset
@@ -48,6 +50,126 @@ const IconButton = styled("button", {
 
   variants: {
     variant: {
+      green: {
+        backgroundColor: "$green",
+        border: "2px solid $colors$green",
+        color: "$black",
+        [`${Text}`]: {
+          color: "$black"
+        },
+        [`${Svg}`]: {
+          color: "$black"
+        },
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "$greenDark",
+            border: "2px solid $colors$greenDark"
+          }
+        },
+        "&:active": {
+          backgroundColor: "$green",
+          border: "2px solid $colors$greenDark"
+        },
+        "&:focus": {
+          backgroundColor: "$green",
+          border: "2px solid $colors$greenDark"
+        },
+        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+          {
+            backgroundColor: "$grayLight",
+            boxShadow: "inset 0 0 0 1px $grayLight"
+          }
+      },
+      red: {
+        backgroundColor: "$red",
+        border: "2px solid $colors$red",
+        color: "$black",
+        [`${Text}`]: {
+          color: "$black"
+        },
+        [`${Svg}`]: {
+          color: "$black"
+        },
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "$redDark",
+            border: "2px solid $colors$redDark"
+          }
+        },
+        "&:active": {
+          backgroundColor: "$red",
+          border: "2px solid $colors$redDark"
+        },
+        "&:focus": {
+          backgroundColor: "$red",
+          border: "2px solid $colors$redDark"
+        },
+        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+          {
+            backgroundColor: "$grayLight",
+            boxShadow: "inset 0 0 0 1px $grayLight"
+          }
+      },
+      white: {
+        backgroundColor: "$white",
+        border: "2px solid $colors$white",
+        color: "$black",
+        [`${Text}`]: {
+          color: "$black"
+        },
+        [`${Svg}`]: {
+          color: "$black"
+        },
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "$white",
+            border: "2px solid $colors$gray"
+          }
+        },
+        "&:active": {
+          backgroundColor: "$white",
+          border: "2px solid $colors$grayDark"
+        },
+        "&:focus": {
+          backgroundColor: "$white",
+          border: "2px solid $colors$grayDark"
+        },
+        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+          {
+            backgroundColor: "$grayLight",
+            boxShadow: "inset 0 0 0 1px $grayLight"
+          }
+      },
+      black: {
+        backgroundColor: "$black",
+        border: "2px solid $colors$black",
+        color: "$white",
+        [`${Text}`]: {
+          color: "$white"
+        },
+        [`${Svg}`]: {
+          color: "$white"
+        },
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "$black",
+            border: "2px solid $colors$grayDark"
+          }
+        },
+        "&:active": {
+          backgroundColor: "$black",
+          border: "2px solid $colors$white"
+        },
+        "&:focus": {
+          backgroundColor: "$black",
+          border: "2px solid $colors$white"
+        },
+        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+          {
+            backgroundColor: "$grayLight",
+            boxShadow: "inset 0 0 0 1px $grayLight"
+          }
+      },
       ghost: {
         backgroundColor: "transparent"
       }
