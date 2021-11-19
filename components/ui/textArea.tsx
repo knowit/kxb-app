@@ -40,7 +40,7 @@ const TextArea = React.forwardRef<React.ElementRef<"textarea">, TextFieldProps>(
   props,
   ref
 ) {
-  const { id = " ", label = "Label", error, helperText, rows = 4, ...other } = props;
+  const { id = " ", label = "Label", error = false, helperText, rows = 4, ...other } = props;
 
   return (
     <FieldContainer>

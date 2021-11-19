@@ -70,7 +70,7 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
   const {
     id = " ",
     label = "Label",
-    error,
+    error = false,
     helperText,
     placeholder,
     type = "text",

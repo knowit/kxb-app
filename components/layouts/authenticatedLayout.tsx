@@ -1,12 +1,23 @@
 import Header from "@/components/header";
 import { UserProvider } from "@/components/user/providers/userProvider";
+import { WithChildren } from "@/types";
 import { CalendarProvider } from "@/utils/calendarProvider";
 import { SalaryProvider } from "@/utils/salaryProvider";
 import { Provider as NextAuthProvider } from "next-auth/client";
 import * as React from "react";
 import { Box } from "../ui";
 
-export default function AuthenticatedLayout({ children, pageProps, layoutProps, ...other }) {
+type LayoutProps = WithChildren<{
+  pageProps?: Record<string, any>;
+  layoutProps?: Record<string, any>;
+}>;
+
+export default function AuthenticatedLayout({
+  children,
+  pageProps,
+  layoutProps,
+  ...other
+}: LayoutProps) {
   return (
     <NextAuthProvider session={pageProps.session}>
       <UserProvider session={pageProps.session} user={pageProps.user}>

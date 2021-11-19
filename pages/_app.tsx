@@ -24,7 +24,14 @@ const globalStyles = globalCss({
   }
 });
 
-function MyApp({ Component, pageProps }) {
+type MyAppProps = {
+  Component: React.ComponentType & {
+    layoutProps?: any;
+  };
+  pageProps?: Record<string, any>;
+};
+
+function MyApp({ Component, pageProps }: MyAppProps) {
   globalStyles();
   const Layout = Component.layoutProps?.Layout || React.Fragment;
 
