@@ -52,7 +52,7 @@ const CalendarDayHeading = ({ children }: WithChildren<{}>) => {
         py: "$2"
       }}
     >
-      <Text size="1" color="grayLightest">
+      <Text size="1" color="textDark">
         {children}
       </Text>
     </Flex>
