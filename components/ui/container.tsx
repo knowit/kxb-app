@@ -4,6 +4,7 @@ const Container = styled("div", {
   // Reset
   boxSizing: "border-box",
   flexShrink: 0,
+  width: "100%",
 
   variants: {
     size: {

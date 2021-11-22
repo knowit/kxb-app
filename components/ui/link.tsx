@@ -2,10 +2,15 @@ import { WithChildren } from "@/types";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { CSS, styled } from "stitches.config";
+import { CSS, styled, VariantProps } from "stitches.config";
 
 const LinkRoot = styled("a", {
-  color: "$text",
+  textDecoration: "none",
+  transition: "color 0.2s ease-in-out",
+  color: "$textDark",
+  "&:hover": {
+    color: "$white"
+  },
 
   variants: {
     active: {
@@ -16,13 +21,14 @@ const LinkRoot = styled("a", {
   }
 });
 
-type LinkProps = WithChildren<{
-  href: string;
-  as?: string;
-  onClick?: React.MouseEventHandler;
-  isExternal?: boolean;
-  css?: CSS;
-}> &
+type LinkProps = VariantProps<typeof LinkRoot> &
+  WithChildren<{
+    href: string;
+    as?: string;
+    onClick?: React.MouseEventHandler;
+    isExternal?: boolean;
+    css?: CSS;
+  }> &
   NextLinkProps;
 
 const Link = ({ children, href, as, isExternal = false, ...other }: LinkProps) => {
@@ -49,7 +55,7 @@ const Link = ({ children, href, as, isExternal = false, ...other }: LinkProps) =
 
   if (isExternal) {
     return (
-      <LinkRoot href={href} {...other}>
+      <LinkRoot href={href} target="_blank" rel="noreferrer" {...other}>
         {children}
       </LinkRoot>
     );
