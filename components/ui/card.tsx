@@ -10,7 +10,7 @@ const Card = styled("div", {
   outline: "none",
   padding: 0,
   WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
-  backgroundColor: "$grayDark",
+  backgroundColor: "$main",
   display: "block",
   textDecoration: "none",
   color: "inherit",

@@ -10,12 +10,17 @@ const globalStyles = globalCss({
     borderStyle: "solid",
     borderColor: "currentColor"
   },
+  html: {
+    overflowX: "hidden"
+  },
   body: {
     backgroundColor: "$main",
     color: "$text",
     fontFamily: "$default",
     minWidth: "360px",
-    scrollBehavior: "smooth"
+    scrollBehavior: "smooth",
+    margin: 0,
+    padding: 0
   },
   "#__next": {
     display: "flex",

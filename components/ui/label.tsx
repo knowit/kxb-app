@@ -22,10 +22,24 @@ const Label = styled(LabelPrimitive.Root, {
       4: {
         fontSize: "$4"
       }
+    },
+    textTransform: {
+      uppercase: {
+        textTransform: "uppercase"
+      },
+      lowercase: {
+        textTransform: "lowercase"
+      },
+      capitalize: {
+        textTransform: "capitalize"
+      },
+      none: {
+        textTransform: "none"
+      }
     }
   },
   defaultVariants: {
-    size: "2"
+    size: "1"
   }
 });
 

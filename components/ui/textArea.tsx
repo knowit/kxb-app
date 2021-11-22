@@ -47,8 +47,9 @@ const TextArea = React.forwardRef<React.ElementRef<"textarea">, TextFieldProps>(
       <TextAreaRoot as="textarea" id={id} placeholder=" " ref={ref} rows={rows} {...other} />
       <Label
         htmlFor={id}
+        textTransform="uppercase"
         css={{
-          mb: "$1"
+          mb: "$2"
         }}
       >
         {label}

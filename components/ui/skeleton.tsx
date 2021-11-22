@@ -9,7 +9,7 @@ export const skeletonStyles = css({
   variants: {
     loading: {
       true: {
-        backgroundColor: "$grayDark",
+        backgroundColor: "$gray",
         position: "relative",
         overflow: "hidden",
         "&::after": {
@@ -18,7 +18,7 @@ export const skeletonStyles = css({
           animationDirection: "alternate",
           animationIterationCount: "infinite",
           animationTimingFunction: "ease-in-out",
-          backgroundColor: "$gray",
+          backgroundColor: "$grayLight",
           borderRadius: "inherit",
           bottom: 0,
           content: '""',

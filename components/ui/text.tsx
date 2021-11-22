@@ -93,6 +93,20 @@ const Text = styled("span", {
         textAlign: "justify"
       }
     },
+    textTransform: {
+      uppercase: {
+        textTransform: "uppercase"
+      },
+      lowercase: {
+        textTransform: "lowercase"
+      },
+      capitalize: {
+        textTransform: "capitalize"
+      },
+      none: {
+        textTransform: "none"
+      }
+    },
     fontWeight: {
       lighter: {
         fontWeight: "lighter"

@@ -5,7 +5,7 @@ import { CalendarProvider } from "@/utils/calendarProvider";
 import { SalaryProvider } from "@/utils/salaryProvider";
 import { Provider as NextAuthProvider } from "next-auth/client";
 import * as React from "react";
-import { Box } from "../ui";
+import { Container } from "../ui";
 
 type LayoutProps = WithChildren<{
   pageProps?: Record<string, any>;
@@ -24,23 +24,25 @@ export default function AuthenticatedLayout({
         <CalendarProvider>
           <SalaryProvider>
             <Header {...layoutProps} />
-            <Box
-              as="main"
-              css={{
-                width: "100%",
-                maxWidth: "$lgContainer",
-                my: 0,
-                mx: "auto",
-                pt: "$4",
-                px: "$3",
-                "@bp1": {
-                  pt: "$8",
-                  px: "$4"
-                }
-              }}
-            >
-              {children}
-            </Box>
+            <Container as="main" backgroundColor="grayDark">
+              <Container
+                center
+                css={{
+                  width: "100%",
+                  maxWidth: "$lgContainer",
+                  my: 0,
+                  mx: "auto",
+                  pt: "$4",
+                  px: "$3",
+                  "@bp1": {
+                    pt: "$8",
+                    px: "$4"
+                  }
+                }}
+              >
+                {children}
+              </Container>
+            </Container>
           </SalaryProvider>
         </CalendarProvider>
       </UserProvider>

@@ -279,6 +279,29 @@ export const buttonProps = {
           border: "2px solid $colors$red"
         }
       }
+    },
+    {
+      ghost: true,
+      variant: "black",
+      css: {
+        backgroundColor: "transparent",
+        border: "2px solid transparent",
+        color: "$white",
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "transparent",
+            border: "2px solid $colors$grayLightest"
+          }
+        },
+        "&:active": {
+          backgroundColor: "transparent",
+          border: "2px solid $colors$gray"
+        },
+        "&:focus": {
+          backgroundColor: "transparent",
+          border: "2px solid $colors$gray"
+        }
+      }
     }
   ],
   defaultVariants: {

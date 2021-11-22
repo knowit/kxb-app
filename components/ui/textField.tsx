@@ -95,8 +95,9 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
       <Label
         htmlFor={id}
         size={labelSize}
+        textTransform="uppercase"
         css={{
-          mb: "$1"
+          mb: "$2"
         }}
       >
         {label}

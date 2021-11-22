@@ -31,13 +31,14 @@ const Statistic = ({ title, value, isLoading = false }: StatisticProps) => {
             <Text
               size="1"
               color="textDark"
+              textTransform="uppercase"
               css={{
                 mb: "$1"
               }}
             >
               {title}
             </Text>
-            <Heading size="2" noMargin>
+            <Heading size="1" noMargin>
               {value}
             </Heading>
           </Box>

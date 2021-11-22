@@ -111,7 +111,7 @@ const Calendar = ({ ...other }) => {
         >
           <Svg as={HiChevronLeft} color="white" />
         </IconButton>
-        <Button size="3" variant="black" onClick={toggleYearPicker}>
+        <Button size="2" variant="black" ghost onClick={toggleYearPicker}>
           {`${monthDetail?.month} ${yearName}`}
         </Button>
         <IconButton
@@ -201,7 +201,7 @@ const Calendar = ({ ...other }) => {
             left: "0",
             right: "0",
             bottom: "0",
-            backgroundColor: "$grayDark"
+            backgroundColor: "$main"
           }}
         >
           <Grid

@@ -17,7 +17,33 @@ const Container = styled("div", {
         maxWidth: "$lgContainer"
       },
       4: {
+        maxWidth: "$xlContainer"
+      },
+      full: {
         maxWidth: "none"
+      }
+    },
+    backgroundColor: {
+      main: {
+        backgroundColor: "$main"
+      },
+      secondary: {
+        backgroundColor: "$secondary"
+      },
+      grayDark: {
+        backgroundColor: "$grayDark"
+      },
+      gray: {
+        backgroundColor: "$gray"
+      },
+      grayLight: {
+        backgroundColor: "$grayLight"
+      },
+      grayLighter: {
+        backgroundColor: "$grayLighter"
+      },
+      grayLightest: {
+        backgroundColor: "$grayLightest"
       }
     },
     center: {
@@ -27,7 +53,7 @@ const Container = styled("div", {
     }
   },
   defaultVariants: {
-    size: "4"
+    size: "full"
   }
 });
 

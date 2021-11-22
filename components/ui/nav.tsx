@@ -1,15 +1,17 @@
 import { styled } from "stitches.config";
 
 const Nav = styled("nav", {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
   padding: "$4",
   width: "100%",
   minHeight: "100px",
-  maxWidth: "$xlContainer",
-  my: 0,
-  mx: "auto"
+
+  variants: {
+    variant: {
+      header: {
+        boxShadow: "inset 0 -1px $colors$gray"
+      }
+    }
+  }
 });
 
 export default Nav;
