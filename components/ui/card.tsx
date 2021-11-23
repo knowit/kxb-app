@@ -2,7 +2,7 @@ import { styled } from "stitches.config";
 
 const Card = styled("div", {
   appearance: "none",
-  boxShadow: "0 0 0 1px $colors$gray",
+  boxShadow: "$card",
   boxSizing: "border-box",
   font: "inherit",
   lineHeight: "1",

@@ -1,7 +1,7 @@
 import { IdProvider } from "@radix-ui/react-id";
 import { ThemeProvider } from "next-themes";
 import * as React from "react";
-import { globalCss } from "stitches.config";
+import { globalCss, lightTheme } from "stitches.config";
 
 const globalStyles = globalCss({
   "*, ::before, ::after": {
@@ -45,7 +45,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     : {};
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark">
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark-theme"
+      value={{
+        dark: "dark-theme",
+        light: lightTheme.className
+      }}
+    >
       <IdProvider>
         <Layout {...layoutProps}>
           <Component {...pageProps} />

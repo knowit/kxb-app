@@ -3,7 +3,7 @@ import { styled } from "stitches.config";
 
 const Label = styled(LabelPrimitive.Root, {
   fontWeight: 400,
-  color: "white",
+  color: "$textDark",
   userSelect: "none",
   variants: {
     size: {

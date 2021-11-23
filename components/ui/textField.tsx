@@ -9,26 +9,26 @@ export const HelperText = styled(Box, {});
 
 export const defaultInputStyles = css({
   all: "unset",
-  boxShadow: "0 0 0 2px $colors$grayLightest",
+  boxShadow: "$input",
   borderRadius: "2px",
   padding: "$2 $3",
   transition: "box-shadow 0.2s ease-in-out",
-  backgroundColor: "$black",
+  backgroundColor: "$main",
   [`+ ${Label}`]: {
     color: "$textDark",
     transition: "color 0.2s ease-in-out",
     order: -1
   },
   "&:hover": {
-    boxShadow: "0 0 0 2px $colors$white",
+    boxShadow: "$inputHover",
     [`+ ${Label}`]: {
-      color: "$white"
+      color: "$text"
     }
   },
   "&:focus": {
-    boxShadow: "0 0 0 2px $colors$white",
+    boxShadow: "$inputFocus",
     [`+ ${Label}`]: {
-      color: "$white"
+      color: "$text"
     }
   }
 });

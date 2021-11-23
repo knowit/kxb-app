@@ -28,6 +28,8 @@ const CalendarDayColorDescription = ({ children, color }: CalendarDayColorDescri
           height: "$3",
           width: "$3",
           borderRadius: "$round",
+          borderWidth: "1px",
+          borderColor: color,
           backgroundColor: color
         }}
       ></Box>
@@ -104,27 +106,29 @@ const Calendar = ({ ...other }) => {
         }}
       >
         <IconButton
+          variant="text"
           onClick={() => {
             toggleYearPicker(false);
             decrementMonth();
           }}
         >
-          <Svg as={HiChevronLeft} color="white" />
+          <Svg as={HiChevronLeft} />
         </IconButton>
-        <Button size="2" variant="black" ghost onClick={toggleYearPicker}>
+        <Button size="2" variant="text" ghost onClick={toggleYearPicker}>
           {`${monthDetail?.month} ${yearName}`}
         </Button>
         <IconButton
+          variant="text"
           onClick={() => {
             toggleYearPicker(false);
             incrementMonth();
           }}
         >
-          <Svg as={HiChevronRight} color="white" />
+          <Svg as={HiChevronRight} />
         </IconButton>
       </Flex>
       <Flex justifyContent="center" alignItems="center">
-        <CalendarDayColorDescription color="$white">Off work</CalendarDayColorDescription>
+        <CalendarDayColorDescription color="$secondary">Off work</CalendarDayColorDescription>
         <CalendarDayColorDescription color="$green">Work</CalendarDayColorDescription>
         <CalendarDayColorDescription color="$red">Non commissioned</CalendarDayColorDescription>
       </Flex>

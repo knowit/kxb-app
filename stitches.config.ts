@@ -10,6 +10,7 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
       colors: {
         white: "hsl(360, 100%, 100%)",
         black: "hsl(0, 0%, 0%)",
+        background: "hsl(0, 0%, 7%)",
         main: "$black",
         mainDark: "hsl(0, 0%, 0%)",
         secondary: "$white",
@@ -123,6 +124,13 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         3: "300",
         4: "400",
         max: "999"
+      },
+      shadows: {
+        card: "0 0 0 1px $colors$gray",
+        input: "0 0 0 2px $colors$gray",
+        inputHover: "0 0 0 2px $colors$secondary",
+        inputActive: "0 0 0 2px $colors$secondary",
+        inputFocus: "0 0 0 2px $colors$secondary"
       }
     },
     media: {
@@ -250,3 +258,25 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
       })
     }
   });
+
+export const lightTheme = createTheme("light-theme", {
+  colors: {
+    main: "$white",
+    secondary: "$black",
+    secondaryDark: "hsl(0, 0%, 33%)",
+    background: "hsl(45, 12%, 94%)",
+    gray: "hsl(0, 0%, 40%)",
+    grayDark: "hsl(45, 12%, 94%)",
+    grayLight: "hsl(0, 0%, 52%)",
+    grayLighter: "hsl(0, 0%, 62%)",
+    grayLightest: "hsl(0, 0%, 74%)",
+    overlay: "rgba(0, 0, 0, 0.35)"
+  },
+  shadows: {
+    card: "0 2px 4px hsla(0, 0%, 0%, 0.1)",
+    input: "0 0 0 1px $colors$grayLightest",
+    inputHover: "0 0 0 1px $colors$secondary",
+    inputActive: "0 0 0 1px $colors$secondary",
+    inputFocus: "0 0 0 1px $colors$secondary"
+  }
+});

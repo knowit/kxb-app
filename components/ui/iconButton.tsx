@@ -170,8 +170,53 @@ const IconButton = styled("button", {
             boxShadow: "inset 0 0 0 1px $grayLight"
           }
       },
+      text: {
+        backgroundColor: "transparent",
+        border: "2px solid transparent",
+        color: "$text",
+        [`${Text}`]: {
+          color: "$text"
+        },
+        [`${Svg}`]: {
+          color: "$text"
+        },
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "transparent",
+            border: "2px solid $colors$textDark"
+          }
+        },
+        "&:active": {
+          backgroundColor: "transparent",
+          border: "2px solid $colors$text"
+        },
+        "&:focus": {
+          backgroundColor: "transparent",
+          border: "2px solid $colors$text"
+        },
+        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+          {
+            backgroundColor: "$grayLight",
+            boxShadow: "inset 0 0 0 1px $grayLight"
+          }
+      },
       ghost: {
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        border: "none",
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "transparent",
+            border: "none"
+          }
+        },
+        "&:active": {
+          backgroundColor: "transparent",
+          border: "none"
+        },
+        "&:focus": {
+          backgroundColor: "transparent",
+          border: "none"
+        }
       }
     },
     size: {

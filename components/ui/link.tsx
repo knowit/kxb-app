@@ -9,7 +9,7 @@ const LinkRoot = styled("a", {
   transition: "color 0.2s ease-in-out",
   color: "$textDark",
   "&:hover": {
-    color: "$white"
+    color: "$text"
   },
 
   variants: {

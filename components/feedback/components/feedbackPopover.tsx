@@ -6,7 +6,7 @@ const FeedbackPopover = ({}) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="black">Feedback</Button>
+        <Button variant="text">Feedback</Button>
       </PopoverTrigger>
       <PopoverContent
         align="start"

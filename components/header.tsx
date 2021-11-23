@@ -50,7 +50,7 @@ export default function Header({ userNavDetails = true, ...other }) {
         >
           <FeedbackPopover />
           {user.isAdmin ? (
-            <LinkButton variant="black" href="/salary-calculator">
+            <LinkButton variant="text" href="/salary-calculator">
               Salary calculator
             </LinkButton>
           ) : null}

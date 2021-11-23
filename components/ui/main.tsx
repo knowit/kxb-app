@@ -4,7 +4,7 @@ const Main = styled("main", {
   // Reset
   boxSizing: "border-box",
   flexShrink: 0,
-  backgroundColor: "$grayDark"
+  backgroundColor: "$background"
 });
 
 export default Main;
