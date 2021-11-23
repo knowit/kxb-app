@@ -9,19 +9,19 @@ export default function YearlyEarnings() {
     <Flex
       css={{
         width: "100%",
-        marginBottom: "$12",
+        marginBottom: "$6",
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "center",
         "@bp1": {
-          flexDirection: "row"
+          flexDirection: "row",
+          marginBottom: "$12"
         }
       }}
     >
       <FlexItem
         css={{
           order: "1",
-          marginBottom: "$6",
           "@bp1": {
             order: "-1"
           }

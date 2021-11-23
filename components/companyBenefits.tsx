@@ -41,8 +41,9 @@ const CompanyBenefits = () => {
       gap="3"
       css={{
         flexDirection: "column",
-        marginBottom: "$12",
+        marginBottom: "$6",
         "@bp1": {
+          marginBottom: "$12",
           flexDirection: "row"
         }
       }}

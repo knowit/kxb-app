@@ -21,7 +21,10 @@ const YearStatistic = ({
   return (
     <Box
       css={{
-        marginBottom: "$12"
+        marginBottom: "$6",
+        "@bp1": {
+          marginBottom: "$12"
+        }
       }}
     >
       <Heading size="3">{title}</Heading>
