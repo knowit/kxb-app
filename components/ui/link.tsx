@@ -13,6 +13,12 @@ const LinkRoot = styled("a", {
   },
 
   variants: {
+    variant: {
+      full: {
+        display: "block",
+        width: "100%"
+      }
+    },
     active: {
       true: {
         color: "$green"

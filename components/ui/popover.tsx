@@ -20,6 +20,11 @@ const slideLeftAndFade = keyframes({
   "0%": { opacity: 0, transform: "translateX(20px)" },
   "100%": { opacity: 1, transform: "translateX(0)" }
 });
+
+const StyledArrow = styled(PopoverPrimitive.Arrow, {
+  fill: "$gray"
+});
+
 const StyledContent = styled(PopoverPrimitive.Content, {
   borderRadius: 4,
   padding: "$5",
@@ -38,12 +43,11 @@ const StyledContent = styled(PopoverPrimitive.Content, {
     }
   },
   "&:focus": {
-    boxShadow: "0 0 0 1px $colors$grayLightest"
+    boxShadow: "0 0 0 1px $colors$grayLightest",
+    [`${StyledArrow}`]: {
+      fill: "$grayLightest"
+    }
   }
-});
-
-const StyledArrow = styled(PopoverPrimitive.Arrow, {
-  fill: "$mainDark"
 });
 
 const StyledClose = styled(PopoverPrimitive.Close, {

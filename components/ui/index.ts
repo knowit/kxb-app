@@ -32,6 +32,7 @@ import Panel from "./panel";
 import Paragraph from "./paragraph";
 import Popover, { PopoverArrow, PopoverClose, PopoverContent, PopoverTrigger } from "./popover";
 import RadioGroup, { RadioGroupIndicator, RadioGroupRadio } from "./radioGroup";
+import Separator from "./separator";
 import Skeleton from "./skeleton";
 import Svg from "./svg";
 import Text from "./text";
@@ -79,6 +80,7 @@ export {
   Skeleton,
   RadioGroupIndicator,
   RadioGroupRadio,
+  Separator,
   Svg,
   Text,
   TextArea,

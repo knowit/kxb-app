@@ -1,15 +1,6 @@
-import {
-  Button,
-  IconButton,
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-  Svg
-} from "@/components/ui";
+import { Button, Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@/components/ui";
 import * as React from "react";
-import { IoClose } from "react-icons/io5";
-import { FeedbackForm } from ".";
+import FeedbackForm from "./feedbackForm";
 
 const FeedbackPopover = ({}) => {
   return (
@@ -25,11 +16,7 @@ const FeedbackPopover = ({}) => {
         }}
       >
         <FeedbackForm compact />
-        <PopoverClose aria-label="Close">
-          <IconButton variant="ghost">
-            <Svg color="white" as={IoClose} />
-          </IconButton>
-        </PopoverClose>
+        <PopoverArrow offset={55} />
       </PopoverContent>
     </Popover>
   );

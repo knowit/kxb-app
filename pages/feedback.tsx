@@ -1,16 +1,11 @@
 import { FeedbackForm } from "@/components/feedback";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
 import { Flex, Heading, Paragraph } from "@/components/ui";
-import { useUser } from "@/components/user";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
-import { useSalary } from "@/utils/salaryProvider";
 import { GetServerSideProps } from "next";
 import * as React from "react";
 
-export default function Home() {
-  const { user } = useUser();
-  const { yearSalaryStatistics, nextYearSalaryStatistics, isLoadingSalary } = useSalary();
-
+export default function Feedback() {
   return (
     <>
       <Heading
@@ -44,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   return getResultForAuthenticatedPage(context);
 };
 
-Home.layoutProps = {
+Feedback.layoutProps = {
   meta: {
     title: "Feedback"
   },
