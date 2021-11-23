@@ -1,76 +1,128 @@
-import Card from "@/components/card";
-import Heading from "@/components/heading";
-import Text from "@/components/text";
+import { Box, Card, Flex, FlexItem, Grid, Heading, Paragraph, Svg } from "@/components/ui";
 import { WithChildren } from "@/types";
 import * as React from "react";
 import { HiOutlineCheckCircle } from "react-icons/hi";
+import { VariantProps } from "stitches.config";
 
 type BenefitProps = WithChildren<{
   icon?: React.ElementType;
-  iconProps?: {};
+  iconProps?: VariantProps<typeof Svg>;
 }>;
 
-const Benefit = ({ children, icon = HiOutlineCheckCircle, iconProps = {} }: BenefitProps) => {
+const Benefit = ({
+  children,
+  icon = HiOutlineCheckCircle,
+  iconProps = {
+    variant: "green"
+  }
+}: BenefitProps) => {
   const Icon = icon;
   return (
     <Card>
-      <div className="flex gap-3 min-h-[48px]">
-        <div>
-          <Icon {...iconProps} />
-        </div>
-        <div>{children}</div>
-      </div>
+      <Flex
+        alignItems="center"
+        gap="3"
+        css={{
+          minHeight: "50px"
+        }}
+      >
+        <Box>
+          <Svg as={Icon} {...iconProps} />
+        </Box>
+        <Box>{children}</Box>
+      </Flex>
     </Card>
   );
 };
 
 const CompanyBenefits = () => {
   return (
-    <div className="flex flex-col lg:flex-row gap-4 mb-12">
-      <div className="max-w-full lg:max-w-[320px]">
+    <Flex
+      gap="3"
+      css={{
+        flexDirection: "column",
+        marginBottom: "$6",
+        "@bp1": {
+          marginBottom: "$12",
+          flexDirection: "row"
+        }
+      }}
+    >
+      <FlexItem
+        css={{
+          maxWidth: "100%",
+          "@bp1": {
+            maxWidth: "320px"
+          }
+        }}
+      >
         <Heading
-          as="h6"
-          className="text-center lg:text-left !mb-0 text-green-500 dark:text-green-400"
+          size="3"
+          color="green"
+          noMargin
+          css={{
+            textAlign: "center",
+            "@bp1": {
+              textAlign: "left"
+            }
+          }}
         >
           Knowit Experience Bergen
         </Heading>
-        <Heading className="text-center lg:text-left">Company Benefits</Heading>
-        <Text className="text-center lg:text-left">
+        <Heading
+          size="3"
+          css={{
+            textAlign: "center",
+            "@bp1": {
+              textAlign: "left"
+            }
+          }}
+        >
+          Company Benefits
+        </Heading>
+        <Paragraph
+          size="1"
+          css={{
+            textAlign: "center",
+            "@bp1": {
+              textAlign: "left"
+            }
+          }}
+        >
           You get paid by commission or guaranteed salary. Knowit covers both employer&apos;s
           national insurance contributions (14.10%) and holyday payment (12%). This means you can
           calculate your next payment by the following formulae{" "}
-          <span className="text-black bg-green-500 dark:bg-green-400">
+          <Paragraph
+            as="span"
+            color="green"
+            css={{
+              display: "inline"
+            }}
+          >
             Work hours in month x hourly rate x commission = your salary.
-          </span>
-        </Text>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Full pay on paternity leave
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Pension 5,5% of salary from 1G to 12G
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Health insurance for all employees
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          New training facilities + scheduled training programmes
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Free phone with free calls, free SMS and 15 GB data every month
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Your choice of computer equipment, PC or Mac, mouse and keyboard
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Subsidized good canteen
-        </Benefit>
-        <Benefit iconProps={{ className: "text-green-500 dark:text-green-400 h-6 w-6" }}>
-          Generous social budget that guarantees lots of fun
-        </Benefit>
-      </div>
-    </div>
+          </Paragraph>
+        </Paragraph>
+      </FlexItem>
+      <Grid
+        gap="3"
+        css={{
+          width: "100%",
+          gridTemplateColumns: "repeat(1, 1fr)",
+          "@bp1": {
+            gridTemplateColumns: "repeat(2, 1fr)"
+          }
+        }}
+      >
+        <Benefit>Full pay on paternity leave</Benefit>
+        <Benefit>Pension 5,5% of salary from 1G to 12G</Benefit>
+        <Benefit>Health insurance for all employees</Benefit>
+        <Benefit>New training facilities + scheduled training programmes</Benefit>
+        <Benefit>Free phone with free calls, free SMS and 15 GB data every month</Benefit>
+        <Benefit>Your choice of computer equipment, PC or Mac, mouse and keyboard</Benefit>
+        <Benefit>Subsidized good canteen</Benefit>
+        <Benefit>Generous social budget that guarantees lots of fun</Benefit>
+      </Grid>
+    </Flex>
   );
 };
 

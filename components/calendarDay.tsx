@@ -1,11 +1,12 @@
+import { Box, Card, IconButton, Svg } from "@/components/ui";
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
-import clsx from "clsx";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
 import { useClickAway } from "react-use";
+import { CSS, styled } from "stitches.config";
 
 type BaseDay = {
   isWorkDay?: boolean;
@@ -19,6 +20,7 @@ type CalendarDayDateProps = WithChildren<{
   className?: string;
   isExpanded?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  css?: CSS;
 }> &
   BaseDay;
 
@@ -40,6 +42,64 @@ type CalendarDayProps = {
   onCollapse?: () => void;
 };
 
+const DayText = styled("div", {
+  display: "flex",
+
+  fontWeight: "bold",
+  borderWidth: "2px",
+  borderStyle: "solid",
+  borderColor: "transparent",
+  borderRadius: "$round",
+  transition: "border-color 0.2s ease-in-out",
+  variants: {
+    expanded: {
+      true: {
+        height: "auto",
+        width: "auto",
+        mb: "$2",
+        border: "none",
+        fontSize: "$4"
+      },
+      false: {
+        height: "$6",
+        width: "$6",
+        justifyContent: "center",
+        alignItems: "center"
+      }
+    },
+    workDay: {
+      true: {
+        color: "$green"
+      }
+    },
+    nonCommissioned: {
+      true: {
+        color: "$red"
+      }
+    }
+  },
+  compoundVariants: [
+    {
+      expanded: false,
+      workDay: true,
+      css: {
+        "&:hover": {
+          borderColor: "$green"
+        }
+      }
+    },
+    {
+      expanded: false,
+      nonCommissioned: true,
+      css: {
+        "&:hover": {
+          borderColor: "$red"
+        }
+      }
+    }
+  ]
+});
+
 const CalendarDayDate = ({
   children,
   as = motion.div,
@@ -52,38 +112,24 @@ const CalendarDayDate = ({
 }: CalendarDayDateProps) => {
   const Component = as ?? motion.div;
 
+  const boxCss: CSS = isExpanded
+    ? {
+        display: "block"
+      }
+    : {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer"
+      };
+
   return (
-    <Component
-      className={clsx(
-        "group flex justify-center items-center",
-        {
-          "cursor-pointer": !isExpanded
-        },
-        className
-      )}
-      {...other}
-    >
-      <div
-        className={clsx(
-          "flex justify-center items-center font-bold transition-colors duration-300",
-          {
-            "w-10 h-10 border border-transparent rounded-full group-hover:border-white":
-              !isExpanded,
-            "text-green-500 dark:text-green-400 ": isWorkDay,
-            "text-red-500 dark:text-red-400": isNonCommissionedToggled,
-            "group-hover:border-green-500 dark:group-hover:border-green-400":
-              !isExpanded && isWorkDay,
-            "group-hover:border-red-500 dark:group-hover:border-red-400":
-              !isExpanded && isNonCommissionedToggled
-          }
-        )}
-      >
+    <Box as={as} css={boxCss} {...other}>
+      <DayText workDay={isWorkDay} nonCommissioned={isNonCommissionedToggled} expanded={isExpanded}>
         {children}
-        {isExtraHoursToggled ? (
-          <HiChevronDoubleUp className="!text-green-500 !dark:text-green-400 h-4 w-4" />
-        ) : null}
-      </div>
-    </Component>
+        {isExtraHoursToggled ? <Svg as={HiChevronDoubleUp} variant="green" size="2" /> : null}
+      </DayText>
+    </Box>
   );
 };
 
@@ -121,34 +167,49 @@ const ExpandedCalendarDay = ({
 
   return (
     <div ref={ref}>
-      <motion.div
-        className="bg-white dark:bg-gray-900 flex flex-col justify-center items-center rounded-lg absolute top-0 left-0 right-0 bottom-0 my-6 lg:my-8 z-20 max-w-[18rem] lg:max-w-xs mx-auto"
+      <Box
+        as={motion.div}
         layoutId="expandable-card"
+        css={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 20,
+          maxWidth: "270px",
+          mx: "auto",
+          my: "$4"
+        }}
         {...other}
       >
-        <motion.button
-          className="bg-green-500 dark:bg-green-400 text-black flex justify-center items-center -right-3.5 rounded-full content-center text-center absolute w-8 h-8 cursor-pointer"
+        <IconButton
+          as={motion.button}
+          variant="green"
           transition={{ delay: 0.3 }}
           initial={{ opacity: 0, top: "-4rem" }}
           animate={{ opacity: 1, top: "-0.875rem" }}
           onClick={() => onCollapse()}
+          css={{
+            position: "absolute",
+            right: "-$3",
+            borderRadius: "$round",
+            zIndex: 1
+          }}
         >
-          <HiOutlineX className="text-black" />
-        </motion.button>
-        <div className="flex flex-col w-full h-full items-start p-4">
+          <Svg as={HiOutlineX} size="2" />
+        </IconButton>
+        <Card padding="medium">
           <CalendarDayDate
-            className="text-xl md:text-2xl"
             isWorkDay={isWorkDay}
             isNonCommissionedToggled={isNonCommissionedToggled}
             isExpanded
           >
             {day?.formattedShortDate}
           </CalendarDayDate>
-          <div className="p-2">
-            <UserWorkDayDetails day={day} />
-          </div>
-        </div>
-      </motion.div>
+          <UserWorkDayDetails day={day} />
+        </Card>
+      </Box>
     </div>
   );
 };

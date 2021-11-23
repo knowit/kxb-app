@@ -1,9 +1,7 @@
 import Calendar from "@/components/calendar";
-import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
 import SalaryStatistics from "@/components/salaryStatistics";
-import Text from "@/components/text";
-import TextField from "@/components/textField";
+import { Box, Flex, Heading, Paragraph, Text, TextField } from "@/components/ui";
 import YearStatistic from "@/components/yearStatistic";
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
@@ -36,25 +34,40 @@ export default function SalaryCalculator() {
 
   return (
     <>
-      <Heading variant="pageHeading">Salary Calculator</Heading>
-      <Text>We provide you with a simple salary model.</Text>
-      <Text className="text-center lg:text-left">
+      <Heading size="5">Salary Calculator</Heading>
+      <Paragraph>We provide you with a simple salary model.</Paragraph>
+      <Paragraph>
         You get paid by commission or guaranteed salary. Knowit covers both employer&apos;s national
         insurance contributions (14.10%) and holyday payment (12%). This means you can calculate
         your next payment by the following formulae{" "}
-        <span className="text-black bg-green-500 dark:bg-green-400">
-          Work hours in month x hourly rate x commission = your salary.
-        </span>
-      </Text>
+        <Text
+          color="green"
+          css={{
+            display: "inline"
+          }}
+        >
+          work hours in month x hourly rate x commission = your salary.
+        </Text>
+      </Paragraph>
       <Heading>Monthly salary example</Heading>
-      <div className="flex flex-col lg:flex-row justify-evenly items-center w-full">
-        <div>
+      <Flex
+        direction={{
+          "@initial": "column",
+          "@bp1": "row"
+        }}
+        justifyContent="even"
+        alignItems="center"
+        css={{
+          width: "100%"
+        }}
+      >
+        <Box>
           <TextField
             id="hourlyRate"
             label="Hourly rate"
             placeholder={DEFAULT_USER_SALARY.hourlyRate.toString()}
             value={hourlyRate}
-            onChange={e => setHourlyRate(e.target.value)}
+            onChange={e => setHourlyRate(+e.target.value)}
             type="number"
           />
           <TextField
@@ -62,7 +75,7 @@ export default function SalaryCalculator() {
             label="Commission"
             placeholder={DEFAULT_USER_SALARY.commission.toString()}
             value={commission}
-            onChange={e => setCommission(e.target.value)}
+            onChange={e => setCommission(+e.target.value)}
             type="number"
             step="0.01"
           />
@@ -71,22 +84,28 @@ export default function SalaryCalculator() {
             label="Tax"
             placeholder={DEFAULT_USER_SALARY.tax.toString()}
             value={tax}
-            onChange={e => setTax(e.target.value)}
+            onChange={e => setTax(+e.target.value)}
             type="number"
             step="0.01"
           />
-        </div>
-        <div className="flex-grow max-w-lg ml-4">
+        </Box>
+        <Box
+          css={{
+            flexGrow: 1,
+            maxWidth: "$calendarContainer",
+            ml: "$3"
+          }}
+        >
           <Calendar />
           <SalaryStatistics salaryStatistics={salaryStatistics} />
-        </div>
-      </div>
+        </Box>
+      </Flex>
       <Heading>Yearly overview</Heading>
-      <Text>
+      <Paragraph>
         Holyday payment is paid in June. For this month you get holiday payment and commissioned
         pay. It&#39;s usually a good practice to set aside some money for the month after your
         vacation as the holyday pay is usually paid before the actual vacation.
-      </Text>
+      </Paragraph>
       <YearStatistic
         title={`${year?.year} overview`}
         yearStatistic={yearSalaryStatistics}

@@ -1,5 +1,4 @@
-import Card from "@/components/card";
-import StatisticSkeleton from "@/components/skeleton/statisticSkeleton";
+import { Box, Card, Heading, Skeleton, Text } from "@/components/ui";
 import * as React from "react";
 
 type StatisticProps = {
@@ -9,19 +8,43 @@ type StatisticProps = {
 };
 
 const Statistic = ({ title, value, isLoading = false }: StatisticProps) => {
-  return isLoading ? (
-    <StatisticSkeleton />
-  ) : (
-    <Card>
-      <div className="sm:flex sm:items-start">
-        <div className="text-center sm:mt-0 sm:ml-2 sm:text-left">
-          <h3 className="text-xs md:text-sm leading-6 font-medium text-black dark:text-gray-400">
-            {title}
-          </h3>
-          <p className="text-md md:text-2xl font-bold text-black dark:text-white">{value}</p>
-        </div>
-      </div>
-    </Card>
+  return (
+    <Skeleton loading={isLoading}>
+      <Card>
+        <Box
+          css={{
+            display: "block",
+            "@bp1": {
+              display: "flex",
+              alignItems: "flex-start"
+            }
+          }}
+        >
+          <Box
+            css={{
+              textAlign: "center",
+              "@bp1": {
+                textAlign: "left"
+              }
+            }}
+          >
+            <Text
+              size="1"
+              color="textDark"
+              textTransform="uppercase"
+              css={{
+                mb: "$1"
+              }}
+            >
+              {title}
+            </Text>
+            <Heading size="1" noMargin>
+              {value}
+            </Heading>
+          </Box>
+        </Box>
+      </Card>
+    </Skeleton>
   );
 };
 

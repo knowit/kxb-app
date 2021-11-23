@@ -129,6 +129,7 @@ export type NextAuthSessionUser = {
   id?: string | null;
   isAdmin?: boolean;
   isSpecialist?: boolean;
+  activeDirectoryId?: string;
 };
 
 export type NextAuthSession = {

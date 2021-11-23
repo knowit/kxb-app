@@ -1,10 +1,24 @@
+import { Grid } from "@/components/ui";
 import { WithChildren } from "@/types";
 import * as React from "react";
 
 type StatisticGroupProps = WithChildren<{}>;
 
 const StatisticGroup = ({ children }: StatisticGroupProps) => {
-  return <div className="grid grid-cols-2 gap-4 mb-4">{children}</div>;
+  return (
+    <Grid
+      gridTemplateColumns={{
+        "@initial": 1,
+        "@bp1": 2
+      }}
+      gap="3"
+      css={{
+        marginBottom: "$4"
+      }}
+    >
+      {children}
+    </Grid>
+  );
 };
 
 export default StatisticGroup;

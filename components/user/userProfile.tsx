@@ -1,4 +1,4 @@
-import TextField from "@/components/textField";
+import { Box, Form, Heading, TextField } from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -42,40 +42,40 @@ const UserProfile = () => {
   }, [user, hourlyRate, commission, tax, update]);
 
   return (
-    <form>
-      <TextField
-        id="hourlyRate"
-        label="Hourly rate"
-        placeholder="1150"
-        type="number"
-        defaultValue={user.hourlyRate}
-        {...register("hourlyRate", {
-          required: true
-        })}
-      />
-      <TextField
-        id="commission"
-        label="Commission"
-        placeholder="0.45"
-        type="number"
-        step="0.01"
-        defaultValue={user.commission}
-        {...register("commission", {
-          required: true
-        })}
-      />
-      <TextField
-        id="tax"
-        label="Tax"
-        placeholder="0.41"
-        type="number"
-        step="0.01"
-        defaultValue={user.tax}
-        {...register("tax", {
-          required: true
-        })}
-      />
-    </form>
+    <Box>
+      <Heading>Your salary settings</Heading>
+      <Form>
+        <TextField
+          id="hourlyRate"
+          label="Hourly rate"
+          placeholder="1150"
+          type="number"
+          {...register("hourlyRate", {
+            required: true
+          })}
+        />
+        <TextField
+          id="commission"
+          label="Commission"
+          placeholder="0.45"
+          type="number"
+          step="0.01"
+          {...register("commission", {
+            required: true
+          })}
+        />
+        <TextField
+          id="tax"
+          label="Tax"
+          placeholder="0.41"
+          type="number"
+          step="0.01"
+          {...register("tax", {
+            required: true
+          })}
+        />
+      </Form>
+    </Box>
   );
 };
 
