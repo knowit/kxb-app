@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Link, Paragraph, Svg } from "@/components/ui";
 import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
+import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import * as React from "react";
 import { HiLockClosed } from "react-icons/hi";
@@ -60,7 +61,7 @@ export default function AccessDenied({ session }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async context => {
   const session = await getSession(context);
 
   // Session user is specialist and should not see
@@ -79,4 +80,4 @@ export async function getServerSideProps(context) {
       session
     }
   };
-}
+};
