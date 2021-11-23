@@ -1,3 +1,4 @@
+import { useId } from "@radix-ui/react-id";
 import * as React from "react";
 import { styled } from "stitches.config";
 import ExpandingHelperText from "./expandingHelperText";
@@ -40,13 +41,15 @@ const TextArea = React.forwardRef<React.ElementRef<"textarea">, TextFieldProps>(
   props,
   ref
 ) {
-  const { id = " ", label = "Label", error = false, helperText, rows = 4, ...other } = props;
+  const { id, label = "Label", error = false, helperText, rows = 4, ...other } = props;
+
+  const radixId = useId();
 
   return (
     <FieldContainer>
-      <TextAreaRoot as="textarea" id={id} placeholder=" " ref={ref} rows={rows} {...other} />
+      <TextAreaRoot as="textarea" id={radixId} placeholder=" " ref={ref} rows={rows} {...other} />
       <Label
-        htmlFor={id}
+        htmlFor={radixId}
         textTransform="uppercase"
         css={{
           mb: "$2"

@@ -30,6 +30,7 @@ import Nav from "./nav";
 import Overlay from "./overlay";
 import Panel from "./panel";
 import Paragraph from "./paragraph";
+import Popover, { PopoverArrow, PopoverClose, PopoverContent, PopoverTrigger } from "./popover";
 import RadioGroup, { RadioGroupIndicator, RadioGroupRadio } from "./radioGroup";
 import Skeleton from "./skeleton";
 import Svg from "./svg";
@@ -69,6 +70,11 @@ export {
   Overlay,
   Panel,
   Paragraph,
+  Popover,
+  PopoverArrow,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
   RadioGroup,
   Skeleton,
   RadioGroupIndicator,

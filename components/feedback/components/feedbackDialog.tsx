@@ -10,7 +10,6 @@ const FeedbackDialog = () => {
       <DialogTrigger asChild>
         <Button variant="black">Feedback</Button>
       </DialogTrigger>
-
       <DialogContent>
         <DialogTitle>Feedback</DialogTitle>
         <FeedbackForm />

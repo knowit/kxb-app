@@ -1,14 +1,16 @@
 import { Button, Fieldset, Flex, Form, Svg, Text, TextArea, TextField } from "@/components/ui";
-import { useUser } from "@/components/user";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { IoCheckmark, IoChevronForward, IoSyncOutline } from "react-icons/io5";
 import FeedbackEmojiSelector from "./feedbackEmojiSelector";
 
-const FeedbackForm = () => {
+type FeedbackFormProps = {
+  compact?: boolean;
+};
+
+const FeedbackForm = ({ compact = false }: FeedbackFormProps) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const [isCompleted, setIsCompleted] = React.useState<boolean>(false);
-  const { user } = useUser();
   const {
     register,
     handleSubmit,
@@ -59,7 +61,7 @@ const FeedbackForm = () => {
           flexDirection: "column",
           gap: "$4",
           "@bp1": {
-            flexDirection: "row"
+            flexDirection: compact ? "column" : "row"
           }
         }}
       >

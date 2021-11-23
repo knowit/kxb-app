@@ -3,7 +3,7 @@ import { UserNavDetails, useUser } from "@/components/user";
 import { useTheme } from "next-themes";
 import * as React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
-import { FeedbackDialog } from "./feedback";
+import { FeedbackPopover } from "./feedback";
 import { Box, Container, Flex, IconButton, Link, LinkButton, Nav, Svg } from "./ui";
 
 export default function Header({ userNavDetails = true, ...other }) {
@@ -48,7 +48,7 @@ export default function Header({ userNavDetails = true, ...other }) {
             }
           }}
         >
-          <FeedbackDialog />
+          <FeedbackPopover />
           {user.isAdmin ? (
             <LinkButton variant="black" href="/salary-calculator">
               Salary calculator

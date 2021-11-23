@@ -1,3 +1,4 @@
+import { useId } from "@radix-ui/react-id";
 import * as React from "react";
 import { CSS, css, styled, VariantProps } from "stitches.config";
 import Box from "./box";
@@ -68,7 +69,7 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
   ref
 ) {
   const {
-    id = " ",
+    id,
     label = "Label",
     error = false,
     helperText,
@@ -81,10 +82,12 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
     ...other
   } = props;
 
+  const radixId = useId();
+
   return (
     <FieldContainer hidden={type === "hidden"} css={fieldContainerCss}>
       <TextFieldInput
-        id={id}
+        id={radixId}
         type={type}
         placeholder={placeholder}
         step={step}
@@ -93,7 +96,7 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
         {...other}
       />
       <Label
-        htmlFor={id}
+        htmlFor={radixId}
         size={labelSize}
         textTransform="uppercase"
         css={{

@@ -1,3 +1,3 @@
-import { FeedbackDialog, FeedbackForm } from "./components";
+import { FeedbackDialog, FeedbackEmojiSelector, FeedbackForm, FeedbackPopover } from "./components";
 
-export { FeedbackDialog, FeedbackForm };
+export { FeedbackDialog, FeedbackEmojiSelector, FeedbackForm, FeedbackPopover };

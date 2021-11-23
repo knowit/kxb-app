@@ -30,7 +30,8 @@ const ExpandingHelperText = ({ text, expanded, ...other }: ExpandingHelperTextPr
       css={{
         fontSize: "$2",
         margin: 0,
-        color: "$red"
+        color: "$red",
+        mt: "$2"
       }}
     >
       {expanded ? text : <div>&nbsp;</div>}
