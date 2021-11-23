@@ -1,5 +1,5 @@
+import { Box, Card, Heading, Skeleton, Text } from "@/components/ui";
 import * as React from "react";
-import { Box, Card, Heading, Skeleton, Text } from "./ui";
 
 type StatisticProps = {
   title: string;

@@ -1,3 +1,4 @@
+import { Box, Card, IconButton, Svg } from "@/components/ui";
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
@@ -6,7 +7,6 @@ import * as React from "react";
 import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
 import { useClickAway } from "react-use";
 import { CSS, styled } from "stitches.config";
-import { Box, Card, IconButton, Svg } from "./ui";
 
 type BaseDay = {
   isWorkDay?: boolean;

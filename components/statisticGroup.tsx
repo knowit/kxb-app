@@ -1,6 +1,6 @@
+import { Grid } from "@/components/ui";
 import { WithChildren } from "@/types";
 import * as React from "react";
-import { Grid } from "./ui";
 
 type StatisticGroupProps = WithChildren<{}>;
 

@@ -1,8 +1,8 @@
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
+import { Box, Heading } from "@/components/ui";
 import { CalendarYearEarnings } from "@/types";
 import * as React from "react";
-import { Box, Heading } from "./ui";
 
 type YearStatisticProps = {
   title: string;

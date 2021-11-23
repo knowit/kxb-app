@@ -1,10 +1,10 @@
 import { Logo } from "@/components/icons";
+import { Box, Container, Flex, IconButton, Link, LinkButton, Nav, Svg } from "@/components/ui";
 import { UserNavDetails, useUser } from "@/components/user";
 import { useTheme } from "next-themes";
 import * as React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import { FeedbackPopover } from "./feedback";
-import { Box, Container, Flex, IconButton, Link, LinkButton, Nav, Svg } from "./ui";
 
 export default function Header({ userNavDetails = true, ...other }) {
   const [mounted, setMounted] = React.useState(false);

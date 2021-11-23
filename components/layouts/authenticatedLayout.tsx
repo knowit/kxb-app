@@ -1,4 +1,5 @@
 import Header from "@/components/header";
+import { Box, Container, Flex, Footer, Heading, Li, Link, Main, Ul } from "@/components/ui";
 import { UserProvider } from "@/components/user/providers/userProvider";
 import { WithChildren } from "@/types";
 import { CalendarProvider } from "@/utils/calendarProvider";
@@ -7,7 +8,6 @@ import { Provider as NextAuthProvider } from "next-auth/client";
 import * as React from "react";
 import { FeedbackForm } from "../feedback";
 import { Logo } from "../icons";
-import { Box, Container, Flex, Footer, Heading, Li, Link, Main, Ul } from "../ui";
 
 type LayoutProps = WithChildren<{
   pageProps?: Record<string, any>;

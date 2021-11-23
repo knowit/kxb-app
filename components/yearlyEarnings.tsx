@@ -1,8 +1,8 @@
 import Calendar from "@/components/calendar";
 import SalaryStatistics from "@/components/salaryStatistics";
+import { Flex, FlexItem } from "@/components/ui";
 import { UserProfile } from "@/components/user";
 import * as React from "react";
-import { Flex, FlexItem } from "./ui";
 
 export default function YearlyEarnings() {
   return (

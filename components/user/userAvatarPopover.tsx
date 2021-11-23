@@ -1,7 +1,3 @@
-import { signOut } from "next-auth/client";
-import * as React from "react";
-import { styled } from "stitches.config";
-import { useUser } from ".";
 import {
   Button,
   Heading,
@@ -14,7 +10,11 @@ import {
   PopoverTrigger,
   Separator,
   Ul
-} from "../ui";
+} from "@/components/ui";
+import { signOut } from "next-auth/client";
+import * as React from "react";
+import { styled } from "stitches.config";
+import { useUser } from ".";
 import UserAvatar from "./userAvatar";
 
 const UserAvatarPopoverSection = styled("section", {

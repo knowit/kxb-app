@@ -1,8 +1,8 @@
+import { Box, Card, Flex, FlexItem, Grid, Heading, Paragraph, Svg } from "@/components/ui";
 import { WithChildren } from "@/types";
 import * as React from "react";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { VariantProps } from "stitches.config";
-import { Box, Card, Flex, FlexItem, Grid, Heading, Paragraph, Svg } from "./ui";
 
 type BenefitProps = WithChildren<{
   icon?: React.ElementType;

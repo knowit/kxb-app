@@ -1,7 +1,7 @@
+import { Box, Form, Heading, TextField } from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { Box, Form, Heading, TextField } from "../ui";
 
 const UserProfile = () => {
   const { user, update } = useUser();

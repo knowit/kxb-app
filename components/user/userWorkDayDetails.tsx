@@ -1,9 +1,9 @@
+import { Button, Flex, Form, TextField } from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { UserWorkDayDetail } from "@/types";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { Button, Flex, Form, TextField } from "../ui";
 
 function upsertWorkDayDetail(
   workDayDetails: UserWorkDayDetail[] = [],

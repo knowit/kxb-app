@@ -1,7 +1,7 @@
+import { Box, Flex, Text } from "@/components/ui";
 import { useSalary } from "@/utils/salaryProvider";
 import { useSession } from "next-auth/client";
 import * as React from "react";
-import { Box, Flex, Text } from "../ui";
 import UserAvatarPopover from "./userAvatarPopover";
 
 const UserNavDetails = () => {
