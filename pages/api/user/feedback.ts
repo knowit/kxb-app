@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
+import { getFeedbackEmailTemplate } from "@/utils/emailUtils";
 import { getSessionUserActiveDirectoryId } from "@/utils/sessionUtils";
+import sendGridMail from "@sendgrid/mail";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 
@@ -40,7 +42,11 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
     );
   }
 
-  const { id: userId } = await prisma.user.findUnique({
+  const {
+    id: userId,
+    email,
+    name
+  } = await prisma.user.findUnique({
     where: { activeDirectoryId: sessionUserActiveDirectoryId }
   });
 
@@ -59,6 +65,19 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
         userId
       }
     });
+
+    const sendGridApiKey = process.env.SEND_GRID_API_KEY;
+
+    if (sendGridApiKey) {
+      sendGridMail.setApiKey(sendGridApiKey);
+
+      await sendGridMail.send({
+        to: process.env.FEEDBACK_RECIPIENT_EMAIL,
+        from: "tommy.barvag@knowit.no",
+        subject: `kxb.app feedback from ${name}`,
+        html: getFeedbackEmailTemplate(name, message, email)
+      });
+    }
 
     return res.status(204).end();
   }

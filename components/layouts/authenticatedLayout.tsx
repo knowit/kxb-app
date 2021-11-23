@@ -97,6 +97,27 @@ export default function AuthenticatedLayout({
                           Slack
                         </Link>
                       </Li>
+                      <Li>
+                        <Link
+                          href="https://knowit.sharepoint.com/sites/about/SitePages/Home.aspx"
+                          isExternal
+                        >
+                          Shareit
+                        </Link>
+                      </Li>
+                      <Li>
+                        <Link href="https://www.knowit.se/brandbook/introduction/" isExternal>
+                          Brand book
+                        </Link>
+                      </Li>
+                      <Li>
+                        <Link
+                          href="https://knowit.sharepoint.com/sites/info-brand-communications/SitePages/Templates/Templates.aspx"
+                          isExternal
+                        >
+                          Office templates
+                        </Link>
+                      </Li>
                     </Ul>
                   </Box>
                   <Box>

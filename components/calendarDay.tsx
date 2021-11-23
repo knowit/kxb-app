@@ -179,10 +179,7 @@ const ExpandedCalendarDay = ({
           zIndex: 20,
           maxWidth: "270px",
           mx: "auto",
-          my: "$4",
-          "@bp1": {
-            my: "$6"
-          }
+          my: "$4"
         }}
         {...other}
       >
