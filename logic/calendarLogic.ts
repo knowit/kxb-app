@@ -1,6 +1,7 @@
 import { CalendarDay, CalendarMonth } from "@/types";
 
 const PAY_DAY: number = 20;
+const PAY_DAY_DECEMBER: number = 10;
 
 export const isWorkDay = (day: CalendarDay): boolean =>
   (!day?.isHoliday ?? false) &&
@@ -16,13 +17,14 @@ export const getPayDay = (month: CalendarMonth): CalendarDay => {
   }
 
   const workDays = getWorkDays(month);
-  const regularPayDay = workDays.find(workDay => workDay.day === PAY_DAY);
+  const payDay = month?.month?.toUpperCase() === "DECEMBER" ? PAY_DAY_DECEMBER : PAY_DAY;
+  const regularPayDay = workDays.find(workDay => workDay.day === payDay);
 
   return regularPayDay
     ? regularPayDay
     : workDays
-        ?.filter(workDay => workDay.day <= PAY_DAY)
+        ?.filter(workDay => workDay.day <= payDay)
         .reduce((result, current) =>
-          Math.abs(current.day - PAY_DAY) < Math.abs(result.day - PAY_DAY) ? current : result
+          Math.abs(current.day - payDay) < Math.abs(result.day - payDay) ? current : result
         );
 };

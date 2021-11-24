@@ -1,5 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import * as React from "react";
+import { getCssText } from "stitches.config";
 
 class MyDocument extends Document {
   render() {
@@ -21,8 +22,9 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#000000"></meta>
           <meta charSet="utf-8" />
+          <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssText() }} />
         </Head>
-        <body className="bg-white dark:bg-black text-gray-900 dark:text-gray-100">
+        <body>
           <Main />
           <NextScript />
         </body>

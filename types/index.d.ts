@@ -44,6 +44,7 @@ export type CalendarMonthEarnings = {
   net: number;
   grossFormatted: string;
   netFormatted: string;
+  halfTax: boolean;
 };
 
 export type CalendarYearEarnings = {
@@ -99,6 +100,7 @@ export type CalendarYear = {
 
 export type CalendarMonth = {
   month: string;
+  halfTax: boolean;
   days: CalendarDay[];
   payDay?: CalendarDay;
 };
@@ -129,6 +131,7 @@ export type NextAuthSessionUser = {
   id?: string | null;
   isAdmin?: boolean;
   isSpecialist?: boolean;
+  activeDirectoryId?: string;
 };
 
 export type NextAuthSession = {

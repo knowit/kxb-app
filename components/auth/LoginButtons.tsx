@@ -1,5 +1,5 @@
 import { useAuthProviders } from "@/components/auth";
-import Button from "@/components/button";
+import { Button } from "@/components/ui";
 import { signIn } from "next-auth/client";
 import * as React from "react";
 

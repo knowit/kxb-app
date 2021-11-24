@@ -75,9 +75,11 @@ export const getEarningsForMonth = (
   const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
   const extraHours = getExtraHoursForMonth(month, workDayDetails);
 
+  const taxConsideredHalfTax = month.halfTax ? tax / 2 : tax;
+
   const workHours = getWorkHours(workDays.length, nonCommissionedHoursForMonth, extraHours);
   const gross = getGrossIncome(workHours, hourlyRate, commission);
-  const net = getNetIncome(gross, tax);
+  const net = getNetIncome(gross, taxConsideredHalfTax);
 
   return {
     monthName: month?.month,
@@ -87,7 +89,8 @@ export const getEarningsForMonth = (
     gross,
     net,
     grossFormatted: formatCurrency(gross),
-    netFormatted: formatCurrency(getNetIncome(gross, tax))
+    netFormatted: formatCurrency(getNetIncome(gross, taxConsideredHalfTax)),
+    halfTax: month.halfTax
   };
 };
 

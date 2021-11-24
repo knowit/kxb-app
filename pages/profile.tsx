@@ -1,6 +1,5 @@
-import Heading from "@/components/heading";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
-import Text from "@/components/text";
+import { Flex, Heading, Paragraph } from "@/components/ui";
 import { UserProfile, useUser } from "@/components/user";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
 import { GetServerSideProps } from "next";
@@ -11,11 +10,11 @@ export default function Profile() {
 
   return (
     <>
-      <Heading variant="pageHeading" className="mb-16 lg:mb-24">
-        Hi {user?.name}
-      </Heading>
-      <Text>To edit your settings, use the form below.</Text>
-      <UserProfile />
+      <Heading size="5">Hi {user?.name}</Heading>
+      <Paragraph>To edit your settings, use the form below.</Paragraph>
+      <Flex>
+        <UserProfile />
+      </Flex>
     </>
   );
 }

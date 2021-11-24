@@ -1,5 +1,5 @@
 import prismaUser from "@/lib/prismaUser";
-import { getSessionUserId, sessionUserIsAdmin } from "@/utils/sessionUtils";
+import { getSessionUserActiveDirectoryId, sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 
@@ -16,11 +16,14 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).end();
   }
 
-  const sessionUserId = getSessionUserId(session);
+  const sessionUserActiveDirectoryId = getSessionUserActiveDirectoryId(session);
 
   const { created, updated, refreshToken, ...user } = await prismaUser.getById(+id);
 
-  if (!sessionUserIsAdmin(session) && user.activeDirectoryId !== sessionUserId?.toLowerCase()) {
+  if (
+    !sessionUserIsAdmin(session) &&
+    user.activeDirectoryId !== sessionUserActiveDirectoryId?.toLowerCase()
+  ) {
     return res.status(403).end();
   }
 

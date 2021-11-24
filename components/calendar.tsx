@@ -1,13 +1,65 @@
 import CalendarDay from "@/components/calendarDay";
-import Container from "@/components/container";
-import Heading from "@/components/heading";
+import { Box, Button, Card, Flex, Grid, IconButton, Overlay, Svg, Text } from "@/components/ui";
 import { useUser } from "@/components/user";
-import { CalendarDay as CalendarDayType } from "@/types";
+import { CalendarDay as CalendarDayType, WithChildren } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { useToggle } from "react-use";
+
+type CalendarDayColorDescriptionProps = WithChildren<{
+  color: string;
+}>;
+
+const CalendarDayColorDescription = ({ children, color }: CalendarDayColorDescriptionProps) => {
+  return (
+    <Flex
+      alignItems="center"
+      css={{
+        mx: "$2",
+        "@bp1": {
+          mx: "$4"
+        }
+      }}
+    >
+      <Box
+        css={{
+          height: "$3",
+          width: "$3",
+          borderRadius: "$round",
+          borderWidth: "1px",
+          borderColor: color,
+          backgroundColor: color
+        }}
+      ></Box>
+      <Text
+        size="1"
+        css={{
+          marginLeft: "$2"
+        }}
+      >
+        {children}
+      </Text>
+    </Flex>
+  );
+};
+
+const CalendarDayHeading = ({ children }: WithChildren<{}>) => {
+  return (
+    <Flex
+      justifyContent="center"
+      alignItems="center"
+      css={{
+        py: "$2"
+      }}
+    >
+      <Text size="1" color="textDark">
+        {children}
+      </Text>
+    </Flex>
+  );
+};
 
 const Calendar = ({ ...other }) => {
   const { user } = useUser();
@@ -38,73 +90,88 @@ const Calendar = ({ ...other }) => {
   };
 
   return (
-    <Container className="relative w-full select-none" {...other}>
-      <div className="flex justify-between items-center mb-3">
-        <div
-          className="cursor-pointer"
+    <Box
+      css={{
+        position: "relative",
+        width: "100%",
+        userSelect: "none"
+      }}
+      {...other}
+    >
+      <Flex
+        justifyContent="between"
+        alignItems="center"
+        css={{
+          marginBottom: "$3"
+        }}
+      >
+        <IconButton
+          variant="text"
           onClick={() => {
             toggleYearPicker(false);
             decrementMonth();
           }}
         >
-          <HiChevronLeft className="h-6 w-6" />
-        </div>
-        <Heading className="!mb-0" as="h2" onClick={toggleYearPicker}>
+          <Svg as={HiChevronLeft} />
+        </IconButton>
+        <Button size="2" variant="text" ghost onClick={toggleYearPicker}>
           {`${monthDetail?.month} ${yearName}`}
-        </Heading>
-        <div
-          className="p-2 cursor-pointer"
+        </Button>
+        <IconButton
+          variant="text"
           onClick={() => {
             toggleYearPicker(false);
             incrementMonth();
           }}
         >
-          <HiChevronRight className="h-6 w-6" />
-        </div>
-      </div>
-      <div className="flex justify-center items-center">
-        <div className="flex items-center mx-2 sm:mx-4">
-          <div className="h-4 w-4 rounded-full bg-white"></div>
-          <div className="text-xs ml-2">Off work</div>
-        </div>
-        <div className="flex items-center mx-2 sm:mx-4">
-          <div className="h-4 w-4 rounded-full bg-green-500 dark:bg-green-400"></div>
-          <div className="text-xs ml-2">Work</div>
-        </div>
-        <div className="flex items-center mx-2 sm:mx-4">
-          <div className="h-4 w-4 rounded-full bg-red-500 dark:bg-red-400"></div>
-          <div className="text-xs ml-2">Non commissioned</div>
-        </div>
-      </div>
-      <div className="relative grid grid-cols-7 gap-1 max-w-lg rounded-lg h-80 border border-gray-200 dark:bg-gray-900 dark:border-gray-800 my-4 mx-auto">
+          <Svg as={HiChevronRight} />
+        </IconButton>
+      </Flex>
+      <Flex justifyContent="center" alignItems="center">
+        <CalendarDayColorDescription color="$secondary">Off work</CalendarDayColorDescription>
+        <CalendarDayColorDescription color="$green">Work</CalendarDayColorDescription>
+        <CalendarDayColorDescription color="$red">Non commissioned</CalendarDayColorDescription>
+      </Flex>
+      <Grid
+        as={Card}
+        gridTemplateColumns="7"
+        gap="1"
+        css={{
+          display: "grid",
+          padding: "$1",
+          minHeight: "300px",
+          my: "$3",
+          mx: "auto",
+          "@bp1": {
+            padding: "$2"
+          }
+        }}
+      >
         {toggledDay ? (
-          <motion.div
-            className="absolute inset-0 bg-gray-700 bg-opacity-75 transition-opacity z-10 rounded-lg"
+          <Overlay
+            as={motion.div}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-          ></motion.div>
+            css={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              right: "0",
+              bottom: "0",
+              backgroundColor: "$overlay",
+              transition: "opacity 0.2s ease-in-out",
+              zIndex: "10",
+              borderRadius: "$4"
+            }}
+          ></Overlay>
         ) : null}
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          mon.
-        </div>
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          tue.
-        </div>
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          wed.
-        </div>
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          thu.
-        </div>
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          fri.
-        </div>
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          sat.
-        </div>
-        <div className="flex justify-center items-center p-2 text-gray-900 dark:text-gray-400 text-xs">
-          sun.
-        </div>
+        <CalendarDayHeading>mon.</CalendarDayHeading>
+        <CalendarDayHeading>tue.</CalendarDayHeading>
+        <CalendarDayHeading>wed.</CalendarDayHeading>
+        <CalendarDayHeading>thu.</CalendarDayHeading>
+        <CalendarDayHeading>fri.</CalendarDayHeading>
+        <CalendarDayHeading>sat.</CalendarDayHeading>
+        <CalendarDayHeading>sun.</CalendarDayHeading>
         {renderSpacingDays(monthDetail?.days)}
         {monthDetail?.days?.map((day, i) => (
           <CalendarDay
@@ -115,8 +182,8 @@ const Calendar = ({ ...other }) => {
             onCollapse={() => setToggledDay(undefined)}
           />
         ))}
-        <motion.div
-          className="absolute top-0 left-0 right-0 bottom-0 dark:bg-gray-900 rounded-lg"
+        <Box
+          as={motion.div}
           initial={showYearPicker ? "open" : "collapsed"}
           animate={showYearPicker ? "open" : "collapsed"}
           variants={{
@@ -132,28 +199,49 @@ const Calendar = ({ ...other }) => {
           transition={{
             ease: "easeOut"
           }}
+          css={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            backgroundColor: "$main"
+          }}
         >
-          <div className="grid grid-cols-3 p-2 items-center h-full">
+          <Grid
+            gridTemplateColumns="3"
+            alignItems="center"
+            css={{
+              height: "100%",
+              padding: "$2"
+            }}
+          >
             <AnimatePresence exitBeforeEnter>
               {showYearPicker &&
                 years.map(year => (
-                  <motion.div
+                  <Box
+                    as={motion.div}
                     key={year}
                     onClick={() => {
                       setYear(year);
                       toggleYearPicker();
                     }}
                     exit={{ opacity: 0 }}
-                    className="cursor-pointer p-2 text-xl text-center"
+                    css={{
+                      cursor: "pointer",
+                      padding: "$1",
+                      fontSize: "$4",
+                      textAlign: "center"
+                    }}
                   >
                     {year}
-                  </motion.div>
+                  </Box>
                 ))}
             </AnimatePresence>
-          </div>
-        </motion.div>
-      </div>
-    </Container>
+          </Grid>
+        </Box>
+      </Grid>
+    </Box>
   );
 };
 

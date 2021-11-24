@@ -1,20 +1,62 @@
 /* eslint-disable @next/next/no-img-element */
-/* next does not yet support blog usage in next image component */
+/* next does not yet support blob usage in next image component */
 /* active PR: https://github.com/vercel/next.js/pull/23622 */
-import { useUserImage } from "@/components/user/hooks";
+import { Skeleton } from "@/components/ui";
+import { useUser, useUserImage } from "@/components/user/hooks";
 import * as React from "react";
+import { styled } from "stitches.config";
+
+const AvatarImage = styled("img", {
+  height: "100%",
+  width: "100%"
+});
+
+const AvatarImageFallback = styled("div", {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+  width: "100%",
+  backgroundColor: "$avatarImageFallback",
+  color: "$text",
+  fontSize: "$3",
+  textTransform: "uppercase",
+  letterSpacing: "$avatarImageFallback"
+});
 
 const UserAvatar = () => {
-  const userImage = useUserImage();
+  const { user } = useUser();
+  const { userImageUrl, loading, error } = useUserImage();
+
+  const initials = React.useMemo(
+    () =>
+      user?.name
+        ?.split(" ")
+        ?.map(name => name[0])
+        ?.slice(0, 3)
+        ?.join(""),
+    [user?.name]
+  );
 
   return (
-    <div className="w-full h-full rounded-full overflow-hidden shadow-inner text-center bg-purple ">
-      <img
-        src={userImage}
-        alt="User avatar"
-        className="object-cover object-center w-full h-full visible"
-      />
-    </div>
+    <Skeleton
+      loading={loading}
+      css={{
+        width: "100%",
+        height: "100%",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "transparent",
+        borderRadius: "$round",
+        overflow: "hidden"
+      }}
+    >
+      {error ? (
+        <AvatarImageFallback>{initials}</AvatarImageFallback>
+      ) : (
+        <AvatarImage src={userImageUrl} alt="User avatar" />
+      )}
+    </Skeleton>
   );
 };
 

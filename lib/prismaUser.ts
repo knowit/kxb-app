@@ -6,8 +6,8 @@ import prisma from "./prisma";
 const createPrismaUser = (user: PrismaUser): User => {
   return {
     ...user,
-    tax: +(user.tax ?? DEFAULT_USER_SALARY.tax),
-    commission: +(user.commission ?? DEFAULT_USER_SALARY.commission),
+    tax: +(user?.tax ?? DEFAULT_USER_SALARY.tax),
+    commission: +(user?.commission ?? DEFAULT_USER_SALARY.commission),
     workDayDetails: (user?.workDayDetails ?? []).map(workDayDetail => ({
       ...workDayDetail,
       extraHours: +(workDayDetail?.extraHours ?? 0),

@@ -1,8 +1,43 @@
-import "@/styles/global.css";
+import { IdProvider } from "@radix-ui/react-id";
 import { ThemeProvider } from "next-themes";
 import * as React from "react";
+import { globalCss, lightTheme } from "stitches.config";
 
-function MyApp({ Component, pageProps }) {
+const globalStyles = globalCss({
+  "*, ::before, ::after": {
+    boxSizing: "border-box",
+    borderWidth: 0,
+    borderStyle: "solid",
+    borderColor: "currentColor"
+  },
+  html: {
+    overflowX: "hidden"
+  },
+  body: {
+    backgroundColor: "$main",
+    color: "$text",
+    fontFamily: "$default",
+    minWidth: "360px",
+    scrollBehavior: "smooth",
+    margin: 0,
+    padding: 0
+  },
+  "#__next": {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh"
+  }
+});
+
+type MyAppProps = {
+  Component: React.ComponentType & {
+    layoutProps?: any;
+  };
+  pageProps?: Record<string, any>;
+};
+
+function MyApp({ Component, pageProps }: MyAppProps) {
+  globalStyles();
   const Layout = Component.layoutProps?.Layout || React.Fragment;
 
   const layoutProps = Component.layoutProps?.Layout
@@ -10,10 +45,19 @@ function MyApp({ Component, pageProps }) {
     : {};
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark">
-      <Layout {...layoutProps}>
-        <Component {...pageProps} />
-      </Layout>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark-theme"
+      value={{
+        dark: "dark-theme",
+        light: lightTheme.className
+      }}
+    >
+      <IdProvider>
+        <Layout {...layoutProps}>
+          <Component {...pageProps} />
+        </Layout>
+      </IdProvider>
     </ThemeProvider>
   );
 }
