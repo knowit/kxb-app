@@ -135,7 +135,7 @@ export default function UserWorkDayDetails({ day }) {
               css={{
                 maxWidth: "60px",
                 fontSize: "$2",
-                alignSelf: "end",
+                alignSelf: "flex-end",
                 height: "37px",
                 marginBottom: "6px"
               }}
