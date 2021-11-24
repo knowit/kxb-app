@@ -39,6 +39,7 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         loContrast: "white",
         canvas: "hsl(0 0% 93%)",
         panel: "$main",
+        avatarImageFallback: "$gray",
         transparentPanel: "hsl(0 0% 0% / 97%)",
         shadowLight: "hsl(206 22% 7% / 35%)",
         shadowDark: "hsl(206 22% 7% / 20%)",
@@ -131,6 +132,15 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         inputHover: "0 0 0 2px $colors$secondary",
         inputActive: "0 0 0 2px $colors$secondary",
         inputFocus: "0 0 0 2px $colors$secondary"
+      },
+      letterSpacings: {
+        1: "1x",
+        2: "2px",
+        3: "3px",
+        4: "4px",
+        normal: "normal",
+        caps: "4px",
+        avatarImageFallback: "$2"
       }
     },
     media: {
@@ -270,7 +280,8 @@ export const lightTheme = createTheme("light-theme", {
     grayLight: "hsl(0, 0%, 52%)",
     grayLighter: "hsl(0, 0%, 62%)",
     grayLightest: "hsl(0, 0%, 74%)",
-    overlay: "rgba(0, 0, 0, 0.35)"
+    overlay: "rgba(0, 0, 0, 0.35)",
+    avatarImageFallback: "$grayLightest"
   },
   shadows: {
     card: "0 2px 4px hsla(0, 0%, 0%, 0.1)",

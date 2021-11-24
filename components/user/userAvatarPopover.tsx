@@ -31,7 +31,7 @@ const UserAvatarPopover = ({}) => {
   return (
     <Popover open={open} onOpenChange={state => setOpen(state)}>
       <PopoverTrigger asChild>
-        <IconButton size="3" variant="ghost">
+        <IconButton size="4" variant="ghost">
           <UserAvatar />
         </IconButton>
       </PopoverTrigger>
