@@ -65,14 +65,16 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
             data: workDaysToCreate.map(workDayDetail => ({
               date: workDayDetail.date,
               extraHours: workDayDetail.extraHours,
-              nonCommissionedHours: workDayDetail.nonCommissionedHours
+              nonCommissionedHours: workDayDetail.nonCommissionedHours,
+              sickDay: workDayDetail.sickDay
             }))
           },
           // Update records that already exists
           updateMany: workDaysToUpdate.map(workDayDetail => ({
             data: {
               extraHours: workDayDetail.extraHours,
-              nonCommissionedHours: workDayDetail.nonCommissionedHours
+              nonCommissionedHours: workDayDetail.nonCommissionedHours,
+              sickDay: workDayDetail.sickDay
             },
             where: {
               date: workDayDetail.date,

@@ -37,6 +37,7 @@ function UserProvider({ children, session = {}, user }) {
 
   const update = React.useCallback(
     async (updatedUser: Partial<User>) => {
+      console.log(updatedUser);
       await mutate(
         `/api/user/${data.id}`,
         (user: User) => ({

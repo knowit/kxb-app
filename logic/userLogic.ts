@@ -7,6 +7,7 @@ export const getUserWorkDayDetails = (user: User, formattedDate: string): UserWo
       date: formattedDate,
       nonCommissionedHours: 0,
       extraHours: 0,
+      sickDay: false,
       userId: user.id
     }
   );

@@ -1,7 +1,9 @@
 import Alert from "./alert";
+import AppearInBox from "./appearInBox";
 import Box from "./box";
 import Button from "./button";
 import Card from "./card";
+import Checkbox, { CheckboxIndicator } from "./checkbox";
 import Container from "./container";
 import {
   Dialog,
@@ -43,9 +45,12 @@ import Ul from "./ul";
 
 export {
   Alert,
+  AppearInBox,
   Box,
   Button,
   Card,
+  Checkbox,
+  CheckboxIndicator,
   Container,
   Dialog,
   DialogClose,

@@ -1,20 +1,12 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import React from "react";
 import { IoClose } from "react-icons/io5";
-import { CSS, keyframes, styled } from "stitches.config";
+import { CSS, styled } from "stitches.config";
 import IconButton from "./iconButton";
+import { fadeIn, fadeOut } from "./keyframes";
 import { overlayStyles } from "./overlay";
 import { panelStyles } from "./panel";
 import Svg from "./svg";
-
-export const fadeIn = keyframes({
-  "0%": { opacity: 0 },
-  "100%": { opacity: 1 }
-});
-
-export const fadeOut = keyframes({
-  "100%": { opacity: 0 }
-});
 
 type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root> & {
   children: React.ReactNode;

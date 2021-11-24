@@ -5,6 +5,7 @@ import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from 
 import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
+import { IoBugOutline } from "react-icons/io5";
 import { useClickAway } from "react-use";
 import { CSS, styled } from "stitches.config";
 
@@ -12,6 +13,7 @@ type BaseDay = {
   isWorkDay?: boolean;
   isNonCommissionedToggled?: boolean;
   isExtraHoursToggled?: boolean;
+  isSickDayToggled?: boolean;
 };
 
 type CalendarDayDateProps = WithChildren<{
@@ -107,6 +109,7 @@ const CalendarDayDate = ({
   isWorkDay,
   isNonCommissionedToggled,
   isExtraHoursToggled,
+  isSickDayToggled,
   isExpanded = false,
   ...other
 }: CalendarDayDateProps) => {
@@ -128,6 +131,7 @@ const CalendarDayDate = ({
       <DayText workDay={isWorkDay} nonCommissioned={isNonCommissionedToggled} expanded={isExpanded}>
         {children}
         {isExtraHoursToggled ? <Svg as={HiChevronDoubleUp} variant="green" size="2" /> : null}
+        {isSickDayToggled ? <Svg as={IoBugOutline} variant="red" size="2" /> : null}
       </DayText>
     </Box>
   );
@@ -250,6 +254,11 @@ const CalendarDay = ({
     [workDayDetails.extraHours]
   );
 
+  const isSickDayToggled = React.useMemo(
+    () => (workDayDetails?.sickDay ?? false) && isNonCommissionedToggled,
+    [workDayDetails?.sickDay, isNonCommissionedToggled]
+  );
+
   return (
     <AnimateSharedLayout>
       {isExpanded ? (
@@ -268,6 +277,7 @@ const CalendarDay = ({
           isWorkDay={isWorkDay}
           isNonCommissionedToggled={isNonCommissionedToggled}
           isExtraHoursToggled={isExtraHoursToggled}
+          isSickDayToggled={isSickDayToggled}
           onExpand={expandDate}
           {...other}
         />

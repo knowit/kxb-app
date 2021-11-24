@@ -30,6 +30,10 @@ export const defaultInputStyles = css({
     [`+ ${Label}`]: {
       color: "$text"
     }
+  },
+  "&:disabled": {
+    backgroundColor: "$grayDark",
+    cursor: "not-allowed"
   }
 });
 

@@ -1,9 +1,5 @@
-import { css, keyframes, styled } from "stitches.config";
-
-export const pulse = keyframes({
-  "0%": { opacity: 0 },
-  "100%": { opacity: 1 }
-});
+import { css, styled } from "stitches.config";
+import { pulse } from "./keyframes";
 
 export const skeletonStyles = css({
   variants: {
