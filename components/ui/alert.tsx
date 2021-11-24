@@ -1,8 +1,15 @@
 import { WithChildren } from "@/types";
 import React from "react";
-import { HiInformationCircle } from "react-icons/hi";
+import { IconType } from "react-icons";
+import {
+  IoAlertCircleOutline,
+  IoCheckmarkCircleOutline,
+  IoInformationCircleOutline,
+  IoWarningOutline
+} from "react-icons/io5";
 import { CSS, styled, VariantProps } from "stitches.config";
-import { Svg } from ".";
+import Svg from "./svg";
+import Text from "./text";
 
 const DEFAULT_TAG = "div";
 
@@ -17,22 +24,35 @@ const StyledAlert = styled(DEFAULT_TAG, {
   },
 
   display: "flex",
+  alignItems: "center",
   gap: "$3",
   borderRadius: "$2",
   backgroundColor: "$main",
   variants: {
     variant: {
       info: {
-        boxShadow: "$alertInfo"
+        boxShadow: "$alertInfo",
+        [`& ${Text}`]: {
+          color: "$text"
+        }
       },
       success: {
-        boxShadow: "$alertSuccess"
+        boxShadow: "$alertSuccess",
+        [`& ${Text}`]: {
+          color: "$green"
+        }
       },
       warning: {
-        boxShadow: "$alertWarning"
+        boxShadow: "$alertWarning",
+        [`& ${Text}`]: {
+          color: "$red"
+        }
       },
       error: {
-        boxShadow: "$alertError"
+        boxShadow: "$alertError",
+        [`& ${Text}`]: {
+          color: "$red"
+        }
       }
     },
     padding: {
@@ -72,9 +92,16 @@ const Alert = React.forwardRef<React.ElementRef<typeof DEFAULT_TAG>, AlertProps>
     error: { "@initial": "red" }
   };
 
+  const svgIcon: Record<AlertVariants, IconType> = {
+    info: IoInformationCircleOutline,
+    success: IoCheckmarkCircleOutline,
+    warning: IoWarningOutline,
+    error: IoAlertCircleOutline
+  };
+
   return (
     <StyledAlert variant={variant} {...other} ref={ref}>
-      <Svg as={HiInformationCircle} variant={svgVariant[variant]} />
+      <Svg as={svgIcon[variant]} variant={svgVariant[variant]} size="4" />
       {children}
     </StyledAlert>
   );

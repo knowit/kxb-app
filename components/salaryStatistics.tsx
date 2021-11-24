@@ -32,7 +32,7 @@ const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps)
         >
           <Text>
             Salary for {statistics.monthName} paid with{" "}
-            <Text inline color="green" textDecoration="underline">
+            <Text inline textDecoration="underline">
               half tax
             </Text>{" "}
             at {statistics.payDay}
