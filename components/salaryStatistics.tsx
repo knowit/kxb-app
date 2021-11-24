@@ -1,5 +1,6 @@
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
+import { Alert, Text } from "@/components/ui";
 import { CalendarMonthEarnings } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { useSalary } from "@/utils/salaryProvider";
@@ -18,29 +19,49 @@ const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps)
     [salaryStatistics, isLoadingCalendar, isLoadingSalary]
   );
 
+  const statistics: CalendarMonthEarnings = salaryStatistics ?? monthStatistics;
+
   return (
-    <StatisticGroup {...other}>
-      <Statistic
-        title={`Work days in ${monthDetail?.month}`}
-        value={salaryStatistics?.workDays?.length ?? monthStatistics?.workDays?.length}
-        isLoading={isLoading}
-      />
-      <Statistic
-        title={`Work hours in ${monthDetail?.month}`}
-        value={salaryStatistics?.workHours ?? monthStatistics.workHours}
-        isLoading={isLoading}
-      />
-      <Statistic
-        title={`Gross salary ${monthDetail?.month}`}
-        value={salaryStatistics?.grossFormatted ?? monthStatistics.grossFormatted}
-        isLoading={isLoading}
-      />
-      <Statistic
-        title={`Net salary ${monthDetail?.month}`}
-        value={salaryStatistics?.netFormatted ?? monthStatistics.netFormatted}
-        isLoading={isLoading}
-      />
-    </StatisticGroup>
+    <>
+      {statistics.halfTax ? (
+        <Alert
+          variant="success"
+          css={{
+            mb: "$3"
+          }}
+        >
+          <Text>
+            Salary for {statistics.monthName} paid with{" "}
+            <Text inline color="green" textDecoration="underline">
+              half tax
+            </Text>{" "}
+            at {statistics.payDay}
+          </Text>
+        </Alert>
+      ) : null}
+      <StatisticGroup {...other}>
+        <Statistic
+          title={`Work days in ${monthDetail?.month}`}
+          value={salaryStatistics?.workDays?.length ?? monthStatistics?.workDays?.length}
+          isLoading={isLoading}
+        />
+        <Statistic
+          title={`Work hours in ${monthDetail?.month}`}
+          value={salaryStatistics?.workHours ?? monthStatistics.workHours}
+          isLoading={isLoading}
+        />
+        <Statistic
+          title={`Gross salary ${monthDetail?.month}`}
+          value={salaryStatistics?.grossFormatted ?? monthStatistics.grossFormatted}
+          isLoading={isLoading}
+        />
+        <Statistic
+          title={`Net salary ${monthDetail?.month}`}
+          value={salaryStatistics?.netFormatted ?? monthStatistics.netFormatted}
+          isLoading={isLoading}
+        />
+      </StatisticGroup>
+    </>
   );
 };
 

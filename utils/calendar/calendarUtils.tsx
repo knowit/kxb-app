@@ -1,5 +1,5 @@
 import { isWorkDay } from "@/logic/calendarLogic";
-import { CalendarDay, Holiday } from "@/types";
+import { CalendarDay, CalendarMonth, Holiday } from "@/types";
 import { isString, memoize } from "@/utils/commonUtils";
 import {
   getFormattedDate,
@@ -194,9 +194,13 @@ export const getCalendarYear = (year: number) => {
   return {
     year,
     isLeapYear: yearIsLeapYear(year),
-    months: allMonthsInYear.map(monthDate => ({
-      month: getFormattedMonth(monthDate),
-      days: getAllDaysInMonth(monthDate).map(date => createDate(date))
-    }))
+    months: allMonthsInYear.map<CalendarMonth>(monthDate => {
+      const month = getFormattedMonth(monthDate);
+      return {
+        month,
+        halfTax: month?.toUpperCase() === "NOVEMBER",
+        days: getAllDaysInMonth(monthDate).map(date => createDate(date))
+      };
+    })
   };
 };

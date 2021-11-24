@@ -53,6 +53,18 @@ const Svg = styled("svg", {
       black: {
         color: "$black"
       },
+      text: {
+        color: "$text"
+      },
+      textDark: {
+        color: "$textDark"
+      },
+      secondary: {
+        color: "$secondary"
+      },
+      secondaryDark: {
+        color: "$secondaryDark"
+      },
       gray: {
         color: "$gray"
       },

@@ -131,7 +131,11 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         input: "0 0 0 2px $colors$gray",
         inputHover: "0 0 0 2px $colors$secondary",
         inputActive: "0 0 0 2px $colors$secondary",
-        inputFocus: "0 0 0 2px $colors$secondary"
+        inputFocus: "0 0 0 2px $colors$secondary",
+        alertInfo: "0 0 0 1px $colors$gray",
+        alertSuccess: "0 0 0 1px $colors$green",
+        alertWarning: "0 0 0 1px $colors$red",
+        alertError: "0 0 0 1px $colors$red"
       },
       letterSpacings: {
         1: "1x",

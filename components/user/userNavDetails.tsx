@@ -31,6 +31,11 @@ const UserNavDetails = () => {
           <Text size="2" fontWeight="bold" color="green">
             {nextPayDayStatistics.netFormatted}
           </Text>
+          {nextPayDayStatistics.halfTax ? (
+            <Text size="1" color="textDark">
+              Half tax
+            </Text>
+          ) : null}
         </Box>
       </Flex>
       <Flex

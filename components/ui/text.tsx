@@ -107,6 +107,17 @@ const Text = styled("span", {
         textTransform: "none"
       }
     },
+    textDecoration: {
+      underline: {
+        textDecoration: "underline"
+      },
+      lineThrough: {
+        textDecoration: "line-through"
+      },
+      none: {
+        textDecoration: "none"
+      }
+    },
     fontWeight: {
       lighter: {
         fontWeight: "lighter"
@@ -176,6 +187,11 @@ const Text = styled("span", {
       },
       8: {
         marginBottom: "$8"
+      }
+    },
+    inline: {
+      true: {
+        display: "inline"
       }
     }
   },

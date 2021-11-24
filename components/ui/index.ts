@@ -1,3 +1,4 @@
+import Alert from "./alert";
 import Box from "./box";
 import Button from "./button";
 import Card from "./card";
@@ -41,6 +42,7 @@ import TextField from "./textField";
 import Ul from "./ul";
 
 export {
+  Alert,
   Box,
   Button,
   Card,
