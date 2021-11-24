@@ -66,7 +66,7 @@ const UserAvatarPopover = ({}) => {
         <UserAvatarPopoverSection>
           <Button onClick={() => signOut()}>Logout</Button>
         </UserAvatarPopoverSection>
-        <PopoverArrow offset={19} />
+        <PopoverArrow offset={23} />
       </PopoverContent>
     </Popover>
   );
