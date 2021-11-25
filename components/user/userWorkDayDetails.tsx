@@ -214,6 +214,8 @@ export default function UserWorkDayDetails({ day }) {
                   </PopoverTrigger>
                   <PopoverContent
                     variant="gray"
+                    side="right"
+                    sideOffset={10}
                     css={{
                       maxWidth: "200px"
                     }}
