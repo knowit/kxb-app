@@ -19,7 +19,7 @@ export const getUserEarningsDetails = (
   userSalaryDetails: UserSalaryDetails,
   year: CalendarYear,
   nextYear: CalendarYear,
-  monthDetail: CalendarMonth,
+  activeCalendarMonthDetail: CalendarMonth,
   currentMonthDetail: CalendarMonth,
   lastMonthDetail: CalendarMonth,
   nextMonthDetail: CalendarMonth,
@@ -27,8 +27,8 @@ export const getUserEarningsDetails = (
 ): UserEarningsDetails => {
   const { hourlyRate, commission, tax } = userSalaryDetails;
 
-  const monthStatistics = getEarningsForMonth(
-    monthDetail,
+  const activeCalendarMonthStatistics = getEarningsForMonth(
+    activeCalendarMonthDetail,
     hourlyRate,
     commission,
     tax,
@@ -60,7 +60,7 @@ export const getUserEarningsDetails = (
 
   return {
     workDayDetails,
-    monthStatistics,
+    activeCalendarMonthStatistics,
     currentMonthStatistics,
     lastMonthStatistics,
     nextMonthStatistics,

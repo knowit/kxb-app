@@ -1,7 +1,7 @@
-import CalendarDay from "@/components/calendarDay";
+import { CalendarDay } from "@/components/calendar";
+import { useCalendar } from "@/components/calendar/providers/calendarProvider";
 import { Box, Button, Card, Flex, Grid, IconButton, Svg, Text } from "@/components/ui";
 import { CalendarDay as CalendarDayType, WithChildren } from "@/types";
-import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
@@ -61,7 +61,8 @@ const CalendarDayHeading = ({ children }: WithChildren<{}>) => {
 };
 
 const Calendar = ({ ...other }) => {
-  const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
+  const { yearName, activeCalendarMonthDetail, years, setYear, incrementMonth, decrementMonth } =
+    useCalendar();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
@@ -111,7 +112,7 @@ const Calendar = ({ ...other }) => {
           <Svg as={HiChevronLeft} />
         </IconButton>
         <Button size="2" variant="text" ghost onClick={toggleYearPicker}>
-          {`${monthDetail?.month} ${yearName}`}
+          {`${activeCalendarMonthDetail?.month} ${yearName}`}
         </Button>
         <IconButton
           variant="text"
@@ -135,7 +136,7 @@ const Calendar = ({ ...other }) => {
         css={{
           display: "grid",
           padding: "$1",
-          minHeight: "300px",
+          minHeight: "315px",
           my: "$3",
           mx: "auto",
           "@bp1": {
@@ -150,8 +151,8 @@ const Calendar = ({ ...other }) => {
         <CalendarDayHeading>fri.</CalendarDayHeading>
         <CalendarDayHeading>sat.</CalendarDayHeading>
         <CalendarDayHeading>sun.</CalendarDayHeading>
-        {renderSpacingDays(monthDetail?.days)}
-        {monthDetail?.days?.map((day, i) => (
+        {renderSpacingDays(activeCalendarMonthDetail?.days)}
+        {activeCalendarMonthDetail?.days?.map((day, i) => (
           <CalendarDay key={`calendar-day-${i}`} day={day} isWorkDay={day.isWorkDay} />
         ))}
         <Box

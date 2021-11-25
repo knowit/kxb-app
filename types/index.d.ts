@@ -60,7 +60,7 @@ export type CalendarYearEarnings = {
 
 export type UserEarningsDetails = {
   workDayDetails: UserWorkDayDetail[];
-  monthStatistics: CalendarMonthEarnings;
+  activeCalendarMonthStatistics: CalendarMonthEarnings;
   currentMonthStatistics: CalendarMonthEarnings;
   lastMonthStatistics: CalendarMonthEarnings;
   nextMonthStatistics: CalendarMonthEarnings;

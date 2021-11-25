@@ -1,6 +1,6 @@
+import { useCalendar } from "@/components/calendar";
 import { useUser } from "@/components/user";
 import { UserEarningsDetails } from "@/types";
-import { useCalendar } from "@/utils/calendarProvider";
 import { getUserEarningsDetails, getUserSalaryDetails } from "@/utils/userUtils";
 import * as React from "react";
 
@@ -17,7 +17,7 @@ function SalaryProvider({ children }) {
   const {
     year,
     nextYear,
-    monthDetail,
+    activeCalendarMonthDetail,
     currentMonthDetail,
     lastMonthDetail,
     nextMonthDetail,
@@ -32,7 +32,7 @@ function SalaryProvider({ children }) {
         userSalaryDetails,
         year,
         nextYear,
-        monthDetail,
+        activeCalendarMonthDetail,
         currentMonthDetail,
         lastMonthDetail,
         nextMonthDetail,
@@ -42,7 +42,7 @@ function SalaryProvider({ children }) {
       userSalaryDetails,
       year,
       nextYear,
-      monthDetail,
+      activeCalendarMonthDetail,
       currentMonthDetail,
       lastMonthDetail,
       nextMonthDetail,
