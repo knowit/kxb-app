@@ -1,11 +1,9 @@
 import CompanyBenefits from "@/components/companyBenefits";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
+import { useSalary, YearlyEarnings, YearStatistic } from "@/components/salary";
 import { Heading } from "@/components/ui";
 import { useUser } from "@/components/user";
-import YearlyEarnings from "@/components/yearlyEarnings";
-import YearStatistic from "@/components/yearStatistic";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
-import { useSalary } from "@/utils/salaryProvider";
 import { GetServerSideProps } from "next";
 import * as React from "react";
 

@@ -1,5 +1,5 @@
+import { useSalary } from "@/components/salary";
 import { Box, Flex, Text } from "@/components/ui";
-import { useSalary } from "@/utils/salaryProvider";
 import { useSession } from "next-auth/client";
 import * as React from "react";
 import UserAvatarPopover from "./userAvatarPopover";

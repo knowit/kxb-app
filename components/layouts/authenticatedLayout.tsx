@@ -1,9 +1,9 @@
 import { CalendarProvider } from "@/components/calendar";
 import Header from "@/components/header";
+import { SalaryProvider } from "@/components/salary";
 import { Box, Container, Flex, Footer, Heading, Li, Link, Main, Ul } from "@/components/ui";
 import { UserProvider } from "@/components/user/providers/userProvider";
 import { WithChildren } from "@/types";
-import { SalaryProvider } from "@/utils/salaryProvider";
 import { Provider as NextAuthProvider } from "next-auth/client";
 import * as React from "react";
 import { FeedbackForm } from "../feedback";

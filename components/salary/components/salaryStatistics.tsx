@@ -1,10 +1,10 @@
+import { useCalendar } from "@/components/calendar";
+import { useSalary } from "@/components/salary";
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
 import { Alert, AppearInBox, Text } from "@/components/ui";
 import { CalendarMonthEarnings } from "@/types";
-import { useSalary } from "@/utils/salaryProvider";
 import * as React from "react";
-import { useCalendar } from "./calendar";
 
 type SalaryStatisticsProps = {
   salaryStatistics?: CalendarMonthEarnings;
