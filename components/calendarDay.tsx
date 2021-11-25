@@ -39,8 +39,6 @@ type ExpandedCalendarDayProps = {
 type CalendarDayProps = {
   day: CalendarDayType;
   isWorkDay?: boolean;
-  onExpand?: () => void;
-  onCollapse?: () => void;
 };
 
 const DayText = styled("div", {
@@ -213,26 +211,10 @@ const ExpandedCalendarDay = ({
   );
 };
 
-const CalendarDay = ({
-  day,
-  isWorkDay = false,
-  onExpand = () => {},
-  onCollapse = () => {},
-  ...other
-}: CalendarDayProps) => {
+const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => {
   const { user } = useUser();
 
   const [isExpanded, setIsExpanded] = React.useState(false);
-
-  const collapseDate = () => {
-    setIsExpanded(false);
-    onCollapse();
-  };
-
-  const expandDate = () => {
-    setIsExpanded(true);
-    onExpand();
-  };
 
   const workDayDetails = React.useMemo(
     () => getUserWorkDayDetails(user, day?.formattedDate),
@@ -262,7 +244,7 @@ const CalendarDay = ({
             as={motion.div}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            onClick={() => collapseDate()}
+            onClick={() => setIsExpanded(false)}
             css={{
               position: "absolute",
               top: "0",
@@ -281,7 +263,7 @@ const CalendarDay = ({
             isNonCommissionedToggled={isNonCommissionedToggled}
             workDayDetails={workDayDetails}
             isExtraHoursToggled={isExtraHoursToggled}
-            onCollapse={collapseDate}
+            onCollapse={() => setIsExpanded(false)}
             {...other}
           />
         </>
@@ -292,7 +274,7 @@ const CalendarDay = ({
           isNonCommissionedToggled={isNonCommissionedToggled}
           isExtraHoursToggled={isExtraHoursToggled}
           isSickDayToggled={isSickDayToggled}
-          onExpand={expandDate}
+          onExpand={() => setIsExpanded(true)}
           {...other}
         />
       )}

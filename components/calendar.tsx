@@ -1,6 +1,5 @@
 import CalendarDay from "@/components/calendarDay";
 import { Box, Button, Card, Flex, Grid, IconButton, Svg, Text } from "@/components/ui";
-import { useUser } from "@/components/user";
 import { CalendarDay as CalendarDayType, WithChildren } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
@@ -62,10 +61,7 @@ const CalendarDayHeading = ({ children }: WithChildren<{}>) => {
 };
 
 const Calendar = ({ ...other }) => {
-  const { user } = useUser();
   const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
-
-  const [toggledDay, setToggledDay] = React.useState<CalendarDayType>();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
@@ -156,13 +152,7 @@ const Calendar = ({ ...other }) => {
         <CalendarDayHeading>sun.</CalendarDayHeading>
         {renderSpacingDays(monthDetail?.days)}
         {monthDetail?.days?.map((day, i) => (
-          <CalendarDay
-            key={`calendar-day-${i}`}
-            day={day}
-            isWorkDay={day.isWorkDay}
-            onExpand={() => setToggledDay(day)}
-            onCollapse={() => setToggledDay(undefined)}
-          />
+          <CalendarDay key={`calendar-day-${i}`} day={day} isWorkDay={day.isWorkDay} />
         ))}
         <Box
           as={motion.div}
