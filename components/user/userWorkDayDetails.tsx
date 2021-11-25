@@ -1,9 +1,19 @@
-import { Button, Flex, Form, TextField } from "@/components/ui";
+import {
+  AppearInBox,
+  Button,
+  Flex,
+  Form,
+  InfoButton,
+  Link,
+  Text,
+  TextField
+} from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { UserWorkDayDetail } from "@/types";
 import * as React from "react";
 import { useForm } from "react-hook-form";
+import { ControlledCheckbox } from "../form";
 
 function upsertWorkDayDetail(
   workDayDetails: UserWorkDayDetail[] = [],
@@ -27,7 +37,8 @@ function upsertWorkDayDetail(
       return {
         ...item,
         nonCommissionedHours: workDayDetail.nonCommissionedHours,
-        extraHours: workDayDetail.extraHours
+        extraHours: workDayDetail.extraHours,
+        sickDay: workDayDetail.sickDay
       };
     }
 
@@ -37,37 +48,43 @@ function upsertWorkDayDetail(
 
 export default function UserWorkDayDetails({ day }) {
   const { user, update } = useUser();
-  const { register, setValue, watch } = useForm();
+  const { register, setValue, watch, control } = useForm();
 
-  const { nonCommissionedHours, extraHours } = watch();
+  const { nonCommissionedHours, extraHours, sickDay } = watch();
 
-  const isNonCommissionedToggled = React.useMemo(
-    () => nonCommissionedHours > 0,
-    [nonCommissionedHours]
+  const workDayDetail = React.useMemo(
+    () => user?.workDayDetails?.find(workDayDetail => workDayDetail.date === day.formattedDate),
+    [user?.workDayDetails, day.formattedDate]
   );
 
-  const { userNonCommissionedHours, userExtraHours } = React.useMemo(() => {
-    const workDayDetail = user.workDayDetails?.find(
-      workDayDetail => workDayDetail.date === day.formattedDate
-    );
+  const isNonCommissionedToggled = React.useMemo(
+    () => (workDayDetail?.nonCommissionedHours ?? 0) > 0,
+    [workDayDetail?.nonCommissionedHours]
+  );
 
+  const { userNonCommissionedHours, userExtraHours, userSickDay } = React.useMemo(() => {
     return {
       userNonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0),
-      userExtraHours: +(workDayDetail?.extraHours ?? 0)
+      userExtraHours: +(workDayDetail?.extraHours ?? 0),
+      userSickDay: workDayDetail?.sickDay ?? false
     };
-  }, [user.workDayDetails, day.formattedDate]);
+  }, [workDayDetail]);
 
   React.useEffect(() => {
     setValue("nonCommissionedHours", userNonCommissionedHours);
     setValue("extraHours", userExtraHours);
-  }, [userNonCommissionedHours, userExtraHours, day.formattedDate, setValue]);
+    setValue("sickDay", userSickDay);
+  }, [userNonCommissionedHours, userExtraHours, userSickDay, day.formattedDate, setValue]);
 
   React.useEffect(() => {
     async function persistUser() {
       if (
         extraHours !== undefined &&
         nonCommissionedHours !== undefined &&
-        (nonCommissionedHours !== userNonCommissionedHours || extraHours !== userExtraHours)
+        sickDay !== undefined &&
+        (nonCommissionedHours !== userNonCommissionedHours ||
+          extraHours !== userExtraHours ||
+          sickDay !== userSickDay)
       ) {
         const minZeroFixedExtraHours = Math.max(0, +(extraHours ?? 0));
         const minZeroFixedNonCommissionedHours = Math.max(0, +(nonCommissionedHours ?? 0));
@@ -77,6 +94,7 @@ export default function UserWorkDayDetails({ day }) {
             id: 0,
             date: day.formattedDate,
             extraHours: minZeroFixedExtraHours,
+            sickDay: minZeroFixedNonCommissionedHours > 0 && sickDay,
             nonCommissionedHours: minZeroFixedNonCommissionedHours,
             userId: 0
           })
@@ -89,8 +107,10 @@ export default function UserWorkDayDetails({ day }) {
     user,
     userNonCommissionedHours,
     userExtraHours,
+    userSickDay,
     nonCommissionedHours,
     extraHours,
+    sickDay,
     day.formattedDate,
     update
   ]);
@@ -99,52 +119,76 @@ export default function UserWorkDayDetails({ day }) {
     <Form>
       <Flex direction="column">
         {day.isWorkDay ? (
-          <Flex
-            gap="3"
-            alignItems="center"
-            css={{
-              mb: "$4"
-            }}
-          >
-            <TextField
-              id="nonCommissionedHours"
-              label="Non commissioned hours"
-              placeholder="0"
-              type="number"
-              step="0.5"
-              min="0"
-              disabled={+extraHours > 0}
-              {...register("nonCommissionedHours", {
-                required: true
-              })}
-              labelSize="1"
+          <>
+            <Flex gap="3" alignItems="center">
+              <TextField
+                id="nonCommissionedHours"
+                label="Non commissioned hours"
+                placeholder="0"
+                type="number"
+                step="0.5"
+                min="0"
+                disabled={+extraHours > 0}
+                {...register("nonCommissionedHours")}
+                labelSize="1"
+                css={{
+                  maxWidth: "110px"
+                }}
+                fieldContainerCss={{
+                  marginBottom: "0"
+                }}
+              />
+              <Button
+                type="button"
+                variant={isNonCommissionedToggled ? "red" : "green"}
+                disabled={+extraHours > 0}
+                onClick={() =>
+                  setValue("nonCommissionedHours", isNonCommissionedToggled ? "0" : "7.5")
+                }
+                css={{
+                  maxWidth: "60px",
+                  fontSize: "$2",
+                  alignSelf: "flex-end",
+                  height: "37px",
+                  marginBottom: "6px"
+                }}
+              >
+                {isNonCommissionedToggled
+                  ? `-${nonCommissionedHours}`
+                  : `+${EARNING_CONSTANTS.WORK_HOURS_PER_DAY}`}
+              </Button>
+            </Flex>
+            <AppearInBox
+              appear={isNonCommissionedToggled}
               css={{
-                maxWidth: "110px"
-              }}
-              fieldContainerCss={{
-                marginBottom: "0"
-              }}
-            />
-            <Button
-              type="button"
-              variant={isNonCommissionedToggled ? "red" : "green"}
-              disabled={+extraHours > 0}
-              onClick={() =>
-                setValue("nonCommissionedHours", isNonCommissionedToggled ? "0" : "7.5")
-              }
-              css={{
-                maxWidth: "60px",
-                fontSize: "$2",
-                alignSelf: "flex-end",
-                height: "37px",
-                marginBottom: "6px"
+                marginBottom: "$3"
               }}
             >
-              {isNonCommissionedToggled
-                ? `-${nonCommissionedHours}`
-                : `+${EARNING_CONSTANTS.WORK_HOURS_PER_DAY}`}
-            </Button>
-          </Flex>
+              <Flex css={{ alignItems: "center", marginTop: "$2", position: "relative" }}>
+                <ControlledCheckbox
+                  control={control}
+                  name="sickDay"
+                  id="sickDay"
+                  labelText="Send as sick hours?"
+                />
+                <InfoButton popoverSide="right">
+                  <Text>
+                    Sick leave or self-reported sickness grants payment upward limited to 6G. You
+                    can read more in our{" "}
+                    <Link
+                      href="https://handbooks.simployer.com/nb-no/article/100139"
+                      color="green"
+                      textDecoration="underline"
+                      isExternal
+                    >
+                      personal handbook
+                    </Link>
+                    .
+                  </Text>
+                </InfoButton>
+              </Flex>
+            </AppearInBox>
+          </>
         ) : null}
         <TextField
           id="extraHours"
@@ -155,9 +199,10 @@ export default function UserWorkDayDetails({ day }) {
           min="0"
           disabled={+nonCommissionedHours > 0}
           labelSize="1"
-          {...register("extraHours", {
-            required: true
-          })}
+          {...register("extraHours")}
+          fieldContainerCss={{
+            marginBottom: "0"
+          }}
         />
       </Flex>
     </Form>

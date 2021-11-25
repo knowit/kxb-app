@@ -1,7 +1,9 @@
 import Alert from "./alert";
+import AppearInBox from "./appearInBox";
 import Box from "./box";
 import Button from "./button";
 import Card from "./card";
+import Checkbox, { CheckboxIndicator } from "./checkbox";
 import Container from "./container";
 import {
   Dialog,
@@ -22,6 +24,7 @@ import Grid from "./grid";
 import Heading from "./heading";
 import IconButton from "./iconButton";
 import Image from "./image";
+import InfoButton from "./infoButton";
 import Label from "./label";
 import Li from "./li";
 import Link from "./link";
@@ -43,9 +46,12 @@ import Ul from "./ul";
 
 export {
   Alert,
+  AppearInBox,
   Box,
   Button,
   Card,
+  Checkbox,
+  CheckboxIndicator,
   Container,
   Dialog,
   DialogClose,
@@ -64,6 +70,7 @@ export {
   Heading,
   IconButton,
   Image,
+  InfoButton,
   Label,
   Li,
   Link,

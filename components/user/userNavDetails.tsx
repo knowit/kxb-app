@@ -17,13 +17,20 @@ const UserNavDetails = () => {
       <Flex
         alignItems="end"
         css={{
-          ml: "$3",
+          ml: "$2",
           "@bp1": {
             ml: "$5"
           }
         }}
       >
-        <Box>
+        <Box
+          css={{
+            minWidth: "120px",
+            "@bp1": {
+              minWidth: "125px"
+            }
+          }}
+        >
           <Text size="1" color="textDark">
             Next paycheck
           </Text>

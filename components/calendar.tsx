@@ -1,5 +1,5 @@
 import CalendarDay from "@/components/calendarDay";
-import { Box, Button, Card, Flex, Grid, IconButton, Overlay, Svg, Text } from "@/components/ui";
+import { Box, Button, Card, Flex, Grid, IconButton, Svg, Text } from "@/components/ui";
 import { useUser } from "@/components/user";
 import { CalendarDay as CalendarDayType, WithChildren } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
@@ -147,24 +147,6 @@ const Calendar = ({ ...other }) => {
           }
         }}
       >
-        {toggledDay ? (
-          <Overlay
-            as={motion.div}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            css={{
-              position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              bottom: "0",
-              backgroundColor: "$overlay",
-              transition: "opacity 0.2s ease-in-out",
-              zIndex: "10",
-              borderRadius: "$4"
-            }}
-          ></Overlay>
-        ) : null}
         <CalendarDayHeading>mon.</CalendarDayHeading>
         <CalendarDayHeading>tue.</CalendarDayHeading>
         <CalendarDayHeading>wed.</CalendarDayHeading>

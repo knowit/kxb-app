@@ -1,9 +1,5 @@
-import { keyframes, styled } from "stitches.config";
-
-export const spin = keyframes({
-  from: { transform: "rotate(0deg)" },
-  to: { transform: "rotate(360deg)" }
-});
+import { styled } from "stitches.config";
+import { spin } from "./keyframes";
 
 const Svg = styled("svg", {
   variants: {

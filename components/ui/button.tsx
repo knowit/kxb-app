@@ -1,8 +1,8 @@
-import { styled } from "stitches.config";
+import { css, styled } from "stitches.config";
 import Svg from "./svg";
 import Text from "./text";
 
-export const buttonProps = {
+export const buttonStyles = css({
   // Reset
   all: "unset",
   alignItems: "center",
@@ -212,6 +212,36 @@ export const buttonProps = {
             backgroundColor: "$grayLight",
             boxShadow: "inset 0 0 0 1px $grayLight"
           }
+      },
+      textDark: {
+        backgroundColor: "transparent",
+        border: "2px solid transparent",
+        color: "$textDark",
+        [`${Text}`]: {
+          color: "$textDark"
+        },
+        [`${Svg}`]: {
+          color: "$textDark"
+        },
+        "@hover": {
+          "&:hover": {
+            backgroundColor: "transparent",
+            border: "2px solid $colors$textDark"
+          }
+        },
+        "&:active": {
+          backgroundColor: "transparent",
+          border: "2px solid $colors$text"
+        },
+        "&:focus": {
+          backgroundColor: "transparent",
+          border: "2px solid $colors$text"
+        },
+        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+          {
+            backgroundColor: "$grayLight",
+            boxShadow: "inset 0 0 0 1px $grayLight"
+          }
       }
     },
 
@@ -339,8 +369,8 @@ export const buttonProps = {
     size: "2",
     variant: "green"
   }
-};
+});
 
-const Button = styled("button", buttonProps);
+const Button = styled("button", buttonStyles);
 
 export default Button;
