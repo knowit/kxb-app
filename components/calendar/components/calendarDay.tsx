@@ -172,7 +172,6 @@ const ExpandedCalendarDay = ({
           top: 0,
           left: 0,
           right: 0,
-          bottom: 0,
           zIndex: 20,
           maxWidth: "270px",
           mx: "auto",
