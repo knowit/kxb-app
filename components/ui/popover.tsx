@@ -40,8 +40,19 @@ const StyledContent = styled(PopoverPrimitive.Content, {
   variants: {
     variant: {
       gray: {
-        backgroundColor: "$gray",
+        backgroundColor: "$grayDark",
         boxShadow: "0 0 0 1px $colors$grayLightest"
+      }
+    },
+    size: {
+      1: {
+        maxWidth: "200px"
+      },
+      2: {
+        maxWidth: "280px"
+      },
+      3: {
+        maxWidth: "360px"
       }
     }
   }

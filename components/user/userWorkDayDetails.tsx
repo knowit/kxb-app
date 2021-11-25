@@ -1,26 +1,10 @@
-import {
-  AppearInBox,
-  Button,
-  Checkbox,
-  CheckboxIndicator,
-  Flex,
-  Form,
-  IconButton,
-  Label,
-  Popover,
-  PopoverArrow,
-  PopoverContent,
-  PopoverTrigger,
-  Svg,
-  Text,
-  TextField
-} from "@/components/ui";
+import { AppearInBox, Button, Flex, Form, InfoButton, Text, TextField } from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { UserWorkDayDetail } from "@/types";
 import * as React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { IoCheckmark, IoInformationCircleOutline } from "react-icons/io5";
+import { useForm } from "react-hook-form";
+import { ControlledCheckbox } from "../form";
 
 function upsertWorkDayDetail(
   workDayDetails: UserWorkDayDetail[] = [],
@@ -59,24 +43,23 @@ export default function UserWorkDayDetails({ day }) {
 
   const { nonCommissionedHours, extraHours, sickDay } = watch();
 
+  const workDayDetail = React.useMemo(
+    () => user?.workDayDetails?.find(workDayDetail => workDayDetail.date === day.formattedDate),
+    [user?.workDayDetails, day.formattedDate]
+  );
+
   const isNonCommissionedToggled = React.useMemo(
-    () => nonCommissionedHours > 0,
-    [nonCommissionedHours]
+    () => (workDayDetail?.nonCommissionedHours ?? 0) > 0,
+    [workDayDetail?.nonCommissionedHours]
   );
 
   const { userNonCommissionedHours, userExtraHours, userSickDay } = React.useMemo(() => {
-    const workDayDetail = user.workDayDetails?.find(
-      workDayDetail => workDayDetail.date === day.formattedDate
-    );
-
     return {
       userNonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0),
       userExtraHours: +(workDayDetail?.extraHours ?? 0),
       userSickDay: workDayDetail?.sickDay ?? false
     };
-  }, [user.workDayDetails, day.formattedDate]);
-
-  console.log(userSickDay);
+  }, [workDayDetail]);
 
   React.useEffect(() => {
     setValue("nonCommissionedHours", userNonCommissionedHours);
@@ -137,9 +120,7 @@ export default function UserWorkDayDetails({ day }) {
                 step="0.5"
                 min="0"
                 disabled={+extraHours > 0}
-                {...register("nonCommissionedHours", {
-                  required: true
-                })}
+                {...register("nonCommissionedHours")}
                 labelSize="1"
                 css={{
                   maxWidth: "110px"
@@ -174,58 +155,18 @@ export default function UserWorkDayDetails({ day }) {
                 marginBottom: "$3"
               }}
             >
-              <Flex css={{ alignItems: "center" }}>
-                <Controller
-                  name="sickDay"
+              <Flex css={{ alignItems: "center", marginTop: "$2" }}>
+                <ControlledCheckbox
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="sickDay"
-                      value={field.value}
-                      checked={field.value}
-                      onCheckedChange={checked => field.onChange(checked)}
-                      ref={field.ref}
-                    >
-                      <CheckboxIndicator>
-                        <IoCheckmark />
-                      </CheckboxIndicator>
-                    </Checkbox>
-                  )}
-                ></Controller>
-                <Label
-                  textTransform="uppercase"
-                  htmlFor="sickDay"
-                  size="1"
-                  css={{ paddingLeft: "$3" }}
-                >
-                  Send as sick hours?
-                </Label>
-
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <IconButton
-                      type="button"
-                      variant="textDark"
-                      size="1"
-                      css={{ marginLeft: "$2" }}
-                    >
-                      <Svg as={IoInformationCircleOutline} variant="textDark" />
-                    </IconButton>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    variant="gray"
-                    side="right"
-                    sideOffset={10}
-                    css={{
-                      maxWidth: "200px"
-                    }}
-                  >
-                    <Text>
-                      Sick leave or self-reported sickness grants payment upward limited to 6G.
-                    </Text>
-                    <PopoverArrow variant="gray" offset={11} />
-                  </PopoverContent>
-                </Popover>
+                  name="sickDay"
+                  id="sickDay"
+                  labelText="Send as sick hours?"
+                />
+                <InfoButton popoverSide="right">
+                  <Text>
+                    Sick leave or self-reported sickness grants payment upward limited to 6G.
+                  </Text>
+                </InfoButton>
               </Flex>
             </AppearInBox>
           </>
@@ -239,9 +180,7 @@ export default function UserWorkDayDetails({ day }) {
           min="0"
           disabled={+nonCommissionedHours > 0}
           labelSize="1"
-          {...register("extraHours", {
-            required: true
-          })}
+          {...register("extraHours")}
           fieldContainerCss={{
             marginBottom: "0"
           }}

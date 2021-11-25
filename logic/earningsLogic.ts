@@ -31,9 +31,17 @@ export const getGrossIncome = (
   hourlyRate: number,
   commission: number,
   sickHours: number = 0
-): number =>
-  +(Math.round((workHours * hourlyRate * commission + Number.EPSILON) * 100) / 100).toFixed(2) +
-  Math.round(sickHours * EARNING_CONSTANTS.WORK_SICK_PAY_PER_HOUR);
+): number => {
+  const grossCommissionedWorkHours: number = +(
+    Math.round((workHours * hourlyRate * commission + Number.EPSILON) * 100) / 100
+  ).toFixed(2);
+
+  const grossSickHours: number = +(
+    Math.round((sickHours * EARNING_CONSTANTS.WORK_SICK_PAY_PER_HOUR + Number.EPSILON) * 100) / 100
+  ).toFixed(2);
+
+  return grossCommissionedWorkHours + grossSickHours;
+};
 
 // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
 export const getNetIncome = (grossIncome: number, tax: number): number =>

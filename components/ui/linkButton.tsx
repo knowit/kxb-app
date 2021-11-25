@@ -1,9 +1,9 @@
 import Link from "next/link";
 import * as React from "react";
 import { CSS, styled } from "stitches.config";
-import { buttonProps } from "./button";
+import { buttonStyles } from "./button";
 
-const StyledLinkButton = styled("a", buttonProps);
+const StyledLinkButton = styled("a", buttonStyles);
 
 type LinkButtonPrimitiveProps = React.ComponentProps<typeof StyledLinkButton>;
 type LinkButtonProps = LinkButtonPrimitiveProps & { href: string; css?: CSS };

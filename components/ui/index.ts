@@ -24,6 +24,7 @@ import Grid from "./grid";
 import Heading from "./heading";
 import IconButton from "./iconButton";
 import Image from "./image";
+import InfoButton from "./infoButton";
 import Label from "./label";
 import Li from "./li";
 import Link from "./link";
@@ -69,6 +70,7 @@ export {
   Heading,
   IconButton,
   Image,
+  InfoButton,
   Label,
   Li,
   Link,
