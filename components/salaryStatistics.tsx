@@ -1,6 +1,6 @@
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
-import { Alert, Text } from "@/components/ui";
+import { Alert, AppearInBox, Text } from "@/components/ui";
 import { CalendarMonthEarnings } from "@/types";
 import { useCalendar } from "@/utils/calendarProvider";
 import { useSalary } from "@/utils/salaryProvider";
@@ -23,7 +23,7 @@ const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps)
 
   return (
     <>
-      {statistics.halfTax ? (
+      <AppearInBox appear={statistics.halfTax}>
         <Alert
           variant="success"
           css={{
@@ -38,7 +38,7 @@ const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps)
             at {statistics.payDay}
           </Text>
         </Alert>
-      ) : null}
+      </AppearInBox>
       <StatisticGroup {...other}>
         <Statistic
           title={`Work days in ${monthDetail?.month}`}
