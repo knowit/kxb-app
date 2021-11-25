@@ -1,4 +1,13 @@
-import { AppearInBox, Button, Flex, Form, InfoButton, Text, TextField } from "@/components/ui";
+import {
+  AppearInBox,
+  Button,
+  Flex,
+  Form,
+  InfoButton,
+  Link,
+  Text,
+  TextField
+} from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { UserWorkDayDetail } from "@/types";
@@ -155,7 +164,7 @@ export default function UserWorkDayDetails({ day }) {
                 marginBottom: "$3"
               }}
             >
-              <Flex css={{ alignItems: "center", marginTop: "$2" }}>
+              <Flex css={{ alignItems: "center", marginTop: "$2", position: "relative" }}>
                 <ControlledCheckbox
                   control={control}
                   name="sickDay"
@@ -164,7 +173,17 @@ export default function UserWorkDayDetails({ day }) {
                 />
                 <InfoButton popoverSide="right">
                   <Text>
-                    Sick leave or self-reported sickness grants payment upward limited to 6G.
+                    Sick leave or self-reported sickness grants payment upward limited to 6G. You
+                    can read more in our{" "}
+                    <Link
+                      href="https://handbooks.simployer.com/nb-no/article/100139"
+                      color="green"
+                      textDecoration="underline"
+                      isExternal
+                    >
+                      personal handbook
+                    </Link>
+                    .
                   </Text>
                 </InfoButton>
               </Flex>

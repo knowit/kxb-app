@@ -1,4 +1,4 @@
-import { Box, Card, IconButton, Svg } from "@/components/ui";
+import { Box, Card, IconButton, Overlay, Svg } from "@/components/ui";
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
@@ -6,7 +6,6 @@ import { AnimateSharedLayout, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
 import { IoBugOutline } from "react-icons/io5";
-import { useClickAway } from "react-use";
 import { CSS, styled } from "stitches.config";
 
 type BaseDay = {
@@ -165,12 +164,8 @@ const ExpandedCalendarDay = ({
   onCollapse = () => {},
   ...other
 }: ExpandedCalendarDayProps) => {
-  const ref = React.useRef(null);
-
-  useClickAway(ref, () => onCollapse());
-
   return (
-    <div ref={ref}>
+    <Box>
       <Box
         as={motion.div}
         layoutId="expandable-card"
@@ -214,7 +209,7 @@ const ExpandedCalendarDay = ({
           <UserWorkDayDetails day={day} />
         </Card>
       </Box>
-    </div>
+    </Box>
   );
 };
 
@@ -262,15 +257,34 @@ const CalendarDay = ({
   return (
     <AnimateSharedLayout>
       {isExpanded ? (
-        <ExpandedCalendarDay
-          day={day}
-          isWorkDay={isWorkDay}
-          isNonCommissionedToggled={isNonCommissionedToggled}
-          workDayDetails={workDayDetails}
-          isExtraHoursToggled={isExtraHoursToggled}
-          onCollapse={collapseDate}
-          {...other}
-        />
+        <>
+          <Overlay
+            as={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => collapseDate()}
+            css={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              right: "0",
+              bottom: "0",
+              backgroundColor: "$overlay",
+              transition: "opacity 0.2s ease-in-out",
+              zIndex: "10",
+              borderRadius: "$4"
+            }}
+          />
+          <ExpandedCalendarDay
+            day={day}
+            isWorkDay={isWorkDay}
+            isNonCommissionedToggled={isNonCommissionedToggled}
+            workDayDetails={workDayDetails}
+            isExtraHoursToggled={isExtraHoursToggled}
+            onCollapse={collapseDate}
+            {...other}
+          />
+        </>
       ) : (
         <RegularCalendarDay
           day={day}
