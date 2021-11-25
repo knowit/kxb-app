@@ -184,7 +184,7 @@ const ExpandedCalendarDay = ({
       >
         <IconButton
           as={motion.button}
-          variant="green"
+          variant={isNonCommissionedToggled ? "red" : isWorkDay ? "green" : "white"}
           transition={{ delay: 0.3 }}
           initial={{ opacity: 0, top: "-4rem" }}
           animate={{ opacity: 1, top: "-0.875rem" }}
