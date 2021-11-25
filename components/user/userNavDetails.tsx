@@ -1,5 +1,5 @@
+import { useSalary } from "@/components/salary";
 import { Box, Flex, Text } from "@/components/ui";
-import { useSalary } from "@/utils/salaryProvider";
 import { useSession } from "next-auth/client";
 import * as React from "react";
 import UserAvatarPopover from "./userAvatarPopover";
@@ -17,13 +17,20 @@ const UserNavDetails = () => {
       <Flex
         alignItems="end"
         css={{
-          ml: "$3",
+          ml: "$2",
           "@bp1": {
             ml: "$5"
           }
         }}
       >
-        <Box>
+        <Box
+          css={{
+            minWidth: "120px",
+            "@bp1": {
+              minWidth: "125px"
+            }
+          }}
+        >
           <Text size="1" color="textDark">
             Next paycheck
           </Text>

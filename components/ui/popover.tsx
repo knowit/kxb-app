@@ -1,33 +1,22 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { keyframes, styled } from "stitches.config";
-
-const slideUpAndFade = keyframes({
-  "0%": { opacity: 0, transform: "translateY(20px)" },
-  "100%": { opacity: 1, transform: "translateY(0)" }
-});
-
-const slideRightAndFade = keyframes({
-  "0%": { opacity: 0, transform: "translateX(-20px)" },
-  "100%": { opacity: 1, transform: "translateX(0)" }
-});
-
-const slideDownAndFade = keyframes({
-  "0%": { opacity: 0, transform: "translateY(-20px)" },
-  "100%": { opacity: 1, transform: "translateY(0)" }
-});
-
-const slideLeftAndFade = keyframes({
-  "0%": { opacity: 0, transform: "translateX(20px)" },
-  "100%": { opacity: 1, transform: "translateX(0)" }
-});
+import { styled } from "stitches.config";
+import { slideDownAndFade, slideLeftAndFade, slideRightAndFade, slideUpAndFade } from "./keyframes";
 
 const StyledArrow = styled(PopoverPrimitive.Arrow, {
-  fill: "$gray"
+  fill: "$gray",
+
+  variants: {
+    variant: {
+      gray: {
+        fill: "$grayLightest"
+      }
+    }
+  }
 });
 
 const StyledContent = styled(PopoverPrimitive.Content, {
-  borderRadius: 4,
-  padding: "$5",
+  borderRadius: "$2",
+  padding: "$4",
   maxWidth: 360,
   backgroundColor: "$main",
   boxShadow: "0 0 0 1px $colors$gray",
@@ -46,6 +35,25 @@ const StyledContent = styled(PopoverPrimitive.Content, {
     boxShadow: "0 0 0 1px $colors$grayLightest",
     [`${StyledArrow}`]: {
       fill: "$grayLightest"
+    }
+  },
+  variants: {
+    variant: {
+      gray: {
+        backgroundColor: "$grayDark",
+        boxShadow: "0 0 0 1px $colors$grayLightest"
+      }
+    },
+    size: {
+      1: {
+        maxWidth: "200px"
+      },
+      2: {
+        maxWidth: "280px"
+      },
+      3: {
+        maxWidth: "360px"
+      }
     }
   }
 });

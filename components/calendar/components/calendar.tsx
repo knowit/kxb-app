@@ -1,8 +1,7 @@
-import CalendarDay from "@/components/calendarDay";
-import { Box, Button, Card, Flex, Grid, IconButton, Overlay, Svg, Text } from "@/components/ui";
-import { useUser } from "@/components/user";
+import { CalendarDay } from "@/components/calendar";
+import { useCalendar } from "@/components/calendar/providers/calendarProvider";
+import { Box, Button, Card, Flex, Grid, IconButton, Svg, Text } from "@/components/ui";
 import { CalendarDay as CalendarDayType, WithChildren } from "@/types";
-import { useCalendar } from "@/utils/calendarProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
@@ -62,10 +61,8 @@ const CalendarDayHeading = ({ children }: WithChildren<{}>) => {
 };
 
 const Calendar = ({ ...other }) => {
-  const { user } = useUser();
-  const { yearName, monthDetail, years, setYear, incrementMonth, decrementMonth } = useCalendar();
-
-  const [toggledDay, setToggledDay] = React.useState<CalendarDayType>();
+  const { yearName, activeCalendarMonthDetail, years, setYear, incrementMonth, decrementMonth } =
+    useCalendar();
 
   const [showYearPicker, toggleYearPicker] = useToggle(false);
 
@@ -115,7 +112,7 @@ const Calendar = ({ ...other }) => {
           <Svg as={HiChevronLeft} />
         </IconButton>
         <Button size="2" variant="text" ghost onClick={toggleYearPicker}>
-          {`${monthDetail?.month} ${yearName}`}
+          {`${activeCalendarMonthDetail?.month} ${yearName}`}
         </Button>
         <IconButton
           variant="text"
@@ -139,7 +136,7 @@ const Calendar = ({ ...other }) => {
         css={{
           display: "grid",
           padding: "$1",
-          minHeight: "300px",
+          minHeight: "315px",
           my: "$3",
           mx: "auto",
           "@bp1": {
@@ -147,24 +144,6 @@ const Calendar = ({ ...other }) => {
           }
         }}
       >
-        {toggledDay ? (
-          <Overlay
-            as={motion.div}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            css={{
-              position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              bottom: "0",
-              backgroundColor: "$overlay",
-              transition: "opacity 0.2s ease-in-out",
-              zIndex: "10",
-              borderRadius: "$4"
-            }}
-          ></Overlay>
-        ) : null}
         <CalendarDayHeading>mon.</CalendarDayHeading>
         <CalendarDayHeading>tue.</CalendarDayHeading>
         <CalendarDayHeading>wed.</CalendarDayHeading>
@@ -172,15 +151,9 @@ const Calendar = ({ ...other }) => {
         <CalendarDayHeading>fri.</CalendarDayHeading>
         <CalendarDayHeading>sat.</CalendarDayHeading>
         <CalendarDayHeading>sun.</CalendarDayHeading>
-        {renderSpacingDays(monthDetail?.days)}
-        {monthDetail?.days?.map((day, i) => (
-          <CalendarDay
-            key={`calendar-day-${i}`}
-            day={day}
-            isWorkDay={day.isWorkDay}
-            onExpand={() => setToggledDay(day)}
-            onCollapse={() => setToggledDay(undefined)}
-          />
+        {renderSpacingDays(activeCalendarMonthDetail?.days)}
+        {activeCalendarMonthDetail?.days?.map((day, i) => (
+          <CalendarDay key={`calendar-day-${i}`} day={day} isWorkDay={day.isWorkDay} />
         ))}
         <Box
           as={motion.div}

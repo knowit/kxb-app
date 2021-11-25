@@ -1,25 +1,24 @@
-import Calendar from "@/components/calendar";
+import { Calendar, useCalendar } from "@/components/calendar";
 import AuthenticatedLayout from "@/components/layouts/authenticatedLayout";
-import SalaryStatistics from "@/components/salaryStatistics";
+import { YearStatistic } from "@/components/salary";
+import SalaryStatistics from "@/components/salary/components/salaryStatistics";
 import { Box, Flex, Heading, Paragraph, Text, TextField } from "@/components/ui";
-import YearStatistic from "@/components/yearStatistic";
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earningsLogic";
-import { useCalendar } from "@/utils/calendarProvider";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
 import { GetServerSideProps } from "next";
 import * as React from "react";
 
 export default function SalaryCalculator() {
-  const { year, nextYear, monthDetail, isLoadingCalendar } = useCalendar();
+  const { year, nextYear, activeCalendarMonthDetail, isLoadingCalendar } = useCalendar();
 
   const [hourlyRate, setHourlyRate] = React.useState(DEFAULT_USER_SALARY.hourlyRate);
   const [commission, setCommission] = React.useState(DEFAULT_USER_SALARY.commission);
   const [tax, setTax] = React.useState(DEFAULT_USER_SALARY.tax);
 
   const salaryStatistics = React.useMemo(
-    () => getEarningsForMonth(monthDetail, hourlyRate, commission, tax, []),
-    [monthDetail, hourlyRate, commission, tax]
+    () => getEarningsForMonth(activeCalendarMonthDetail, hourlyRate, commission, tax, []),
+    [activeCalendarMonthDetail, hourlyRate, commission, tax]
   );
 
   const yearSalaryStatistics = React.useMemo(

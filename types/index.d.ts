@@ -9,6 +9,7 @@ export type UserWorkDayDetail = {
   id: number;
   date: string;
   extraHours: number;
+  sickDay: boolean;
   nonCommissionedHours: number;
   userId: number;
 };
@@ -59,7 +60,7 @@ export type CalendarYearEarnings = {
 
 export type UserEarningsDetails = {
   workDayDetails: UserWorkDayDetail[];
-  monthStatistics: CalendarMonthEarnings;
+  activeCalendarMonthStatistics: CalendarMonthEarnings;
   currentMonthStatistics: CalendarMonthEarnings;
   lastMonthStatistics: CalendarMonthEarnings;
   nextMonthStatistics: CalendarMonthEarnings;
@@ -73,6 +74,7 @@ export type PrismaUserUserWorkDayDetail = {
   date: string;
   extraHours: Prisma.Decimal;
   nonCommissionedHours: Prisma.Decimal;
+  sickDay: boolean;
   userId: number;
 };
 

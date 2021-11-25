@@ -19,6 +19,43 @@ const LinkRoot = styled("a", {
         width: "100%"
       }
     },
+    color: {
+      text: {
+        color: "$text"
+      },
+      textDark: {
+        color: "$textDark"
+      },
+      black: {
+        color: "$black"
+      },
+      gray: {
+        color: "$gray"
+      },
+      grayLight: {
+        color: "$grayLight"
+      },
+      grayLighter: {
+        color: "$grayLighter"
+      },
+      grayLightest: {
+        color: "$grayLightest"
+      },
+      green: {
+        color: "$green"
+      },
+      red: {
+        color: "$red"
+      },
+      white: {
+        color: "$white"
+      }
+    },
+    textDecoration: {
+      underline: {
+        textDecoration: "underline"
+      }
+    },
     active: {
       true: {
         color: "$green"

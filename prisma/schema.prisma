@@ -33,6 +33,7 @@ model UserWorkDayDetail {
   date                 String
   nonCommissionedHours Decimal @default(0) @db.Decimal(5, 2)
   extraHours           Decimal @default(0) @db.Decimal(5, 2)
+  sickDay              Boolean @default(false)
   user                 User    @relation(fields: [userId], references: [id])
   userId               Int
 }

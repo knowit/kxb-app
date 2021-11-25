@@ -1,7 +1,7 @@
 import { getPayDay } from "@/logic/calendarLogic";
 import { CalendarMonth, CalendarYear } from "@/types";
 import { getCalendarYear } from "@/utils/calendar/calendarUtils";
-import { getMonthNames, getThisYearAndTwoYearsIntoTheFuture } from "@/utils/dateUtils";
+import { getThisYearAndTwoYearsIntoTheFuture } from "@/utils/dateUtils";
 import * as React from "react";
 
 type CalendarContextProps = {
@@ -9,10 +9,11 @@ type CalendarContextProps = {
   year: CalendarYear;
   lastYear: CalendarYear;
   nextYear: CalendarYear;
+  calendarYear: CalendarYear;
   yearName: string;
   years: number[];
   month: number;
-  monthDetail: CalendarMonth;
+  activeCalendarMonthDetail: CalendarMonth;
   currentMonthDetail: CalendarMonth;
   lastMonthDetail: CalendarMonth;
   nextMonthDetail: CalendarMonth;
@@ -61,10 +62,12 @@ function calendarReducer(state = initialState, action) {
 function CalendarProvider({ children, year = initialState.year, month = initialState.month }) {
   const [state, dispatch] = React.useReducer(calendarReducer, { year, month });
 
-  const data = React.useMemo(() => getCalendarYear(state.year), [state.year]);
-  const lastYear = React.useMemo(() => getCalendarYear(+data.year - 1), [data.year]);
-  const nextYear = React.useMemo(() => getCalendarYear(+data.year + 1), [data.year]);
+  const calendarYear = React.useMemo(() => getCalendarYear(state.year), [state.year]);
 
+  const currentYear = new Date().getFullYear();
+  const data = React.useMemo(() => getCalendarYear(currentYear), [currentYear]);
+  const lastYear = React.useMemo(() => getCalendarYear(currentYear - 1), [currentYear]);
+  const nextYear = React.useMemo(() => getCalendarYear(currentYear + 1), [currentYear]);
   const setYear = (year: number) => dispatch({ type: "SET_YEAR", year: year });
 
   const incrementYear = React.useCallback(
@@ -105,16 +108,35 @@ function CalendarProvider({ children, year = initialState.year, month = initialS
     setMonth(month);
   }, [year, month]);
 
+  const calendarValue = React.useMemo<{
+    date: Date;
+    yearName: string;
+    years: number[];
+    month: number;
+    activeCalendarMonthDetail: CalendarMonth;
+    calendarYear: CalendarYear;
+  }>(() => {
+    const date = getDateFromYearDataAndMonth(state.year, state.month);
+
+    const activeCalendarMonthDetail = {
+      ...calendarYear?.months?.[date.getMonth()],
+      payDay: getPayDay(
+        getNextMonth(date.getMonth(), calendarYear, getCalendarYear(+calendarYear.year + 1))
+      )
+    };
+
+    return {
+      date,
+      calendarYear,
+      yearName: state.year,
+      month: state.month,
+      years: getThisYearAndTwoYearsIntoTheFuture(),
+      activeCalendarMonthDetail
+    };
+  }, [calendarYear, state.month, state.year]);
+
   const value = React.useMemo(() => {
     const currentMonth = new Date().getMonth();
-
-    const date = getDateFromYearDataAndMonth(state.year, state.month);
-    const monthNames = getMonthNames();
-
-    const monthDetail = {
-      ...data?.months?.[date.getMonth()],
-      payDay: getPayDay(getNextMonth(date.getMonth(), data, nextYear))
-    };
 
     const nextMonthDetail = {
       ...getNextMonth(currentMonth, data, nextYear),
@@ -141,34 +163,28 @@ function CalendarProvider({ children, year = initialState.year, month = initialS
       year: data,
       lastYear,
       nextYear,
-      yearName: state.year,
-      months: monthNames,
-      years: getThisYearAndTwoYearsIntoTheFuture(),
-      month: state.month,
-      monthDetail,
       currentMonthDetail,
       lastMonthDetail,
       nextMonthDetail,
-      setYear,
-      incrementYear,
-      decrementYear,
-      incrementMonth,
-      decrementMonth,
-      date,
       isLoadingCalendar: !data
     };
-  }, [
-    data,
-    lastYear,
-    nextYear,
-    state,
-    incrementYear,
-    decrementYear,
-    incrementMonth,
-    decrementMonth
-  ]);
+  }, [data, lastYear, nextYear]);
 
-  return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
+  return (
+    <CalendarContext.Provider
+      value={{
+        ...value,
+        ...calendarValue,
+        decrementMonth,
+        incrementMonth,
+        decrementYear,
+        incrementYear,
+        setYear
+      }}
+    >
+      {children}
+    </CalendarContext.Provider>
+  );
 }
 function useCalendar() {
   const context = React.useContext(CalendarContext);

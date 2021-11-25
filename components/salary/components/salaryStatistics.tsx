@@ -1,9 +1,9 @@
+import { useCalendar } from "@/components/calendar";
+import { useSalary } from "@/components/salary";
 import Statistic from "@/components/statistic";
 import StatisticGroup from "@/components/statisticGroup";
-import { Alert, Text } from "@/components/ui";
+import { Alert, AppearInBox, Text } from "@/components/ui";
 import { CalendarMonthEarnings } from "@/types";
-import { useCalendar } from "@/utils/calendarProvider";
-import { useSalary } from "@/utils/salaryProvider";
 import * as React from "react";
 
 type SalaryStatisticsProps = {
@@ -11,19 +11,19 @@ type SalaryStatisticsProps = {
 };
 
 const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps) => {
-  const { monthDetail, isLoadingCalendar } = useCalendar();
-  const { monthStatistics, isLoadingSalary } = useSalary();
+  const { activeCalendarMonthDetail, isLoadingCalendar } = useCalendar();
+  const { activeCalendarMonthStatistics, isLoadingSalary } = useSalary();
 
   const isLoading = React.useMemo(
     () => (salaryStatistics ? isLoadingCalendar : isLoadingCalendar || isLoadingSalary),
     [salaryStatistics, isLoadingCalendar, isLoadingSalary]
   );
 
-  const statistics: CalendarMonthEarnings = salaryStatistics ?? monthStatistics;
+  const statistics: CalendarMonthEarnings = salaryStatistics ?? activeCalendarMonthStatistics;
 
   return (
     <>
-      {statistics.halfTax ? (
+      <AppearInBox appear={statistics?.halfTax ?? false}>
         <Alert
           variant="success"
           css={{
@@ -38,26 +38,26 @@ const SalaryStatistics = ({ salaryStatistics, ...other }: SalaryStatisticsProps)
             at {statistics.payDay}
           </Text>
         </Alert>
-      ) : null}
+      </AppearInBox>
       <StatisticGroup {...other}>
         <Statistic
-          title={`Work days in ${monthDetail?.month}`}
-          value={salaryStatistics?.workDays?.length ?? monthStatistics?.workDays?.length}
+          title={`Work days in ${activeCalendarMonthDetail?.month}`}
+          value={statistics?.workDays?.length}
           isLoading={isLoading}
         />
         <Statistic
-          title={`Work hours in ${monthDetail?.month}`}
-          value={salaryStatistics?.workHours ?? monthStatistics.workHours}
+          title={`Work hours in ${activeCalendarMonthDetail?.month}`}
+          value={statistics?.workHours}
           isLoading={isLoading}
         />
         <Statistic
-          title={`Gross salary ${monthDetail?.month}`}
-          value={salaryStatistics?.grossFormatted ?? monthStatistics.grossFormatted}
+          title={`Gross salary ${activeCalendarMonthDetail?.month}`}
+          value={statistics?.grossFormatted}
           isLoading={isLoading}
         />
         <Statistic
-          title={`Net salary ${monthDetail?.month}`}
-          value={salaryStatistics?.netFormatted ?? monthStatistics.netFormatted}
+          title={`Net salary ${activeCalendarMonthDetail?.month}`}
+          value={statistics?.netFormatted}
           isLoading={isLoading}
         />
       </StatisticGroup>
