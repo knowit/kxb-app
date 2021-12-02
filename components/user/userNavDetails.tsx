@@ -1,11 +1,11 @@
 import { useSalary } from "@/components/salary";
 import { Box, Flex, Text } from "@/components/ui";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import * as React from "react";
 import UserAvatarPopover from "./userAvatarPopover";
 
 const UserNavDetails = () => {
-  const [session] = useSession();
+  const { data: session } = useSession();
   const { nextPayDayStatistics } = useSalary();
 
   if (!session) {

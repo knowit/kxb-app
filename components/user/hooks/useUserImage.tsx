@@ -1,5 +1,5 @@
 import { fetchBlobWithToken } from "@/utils/fetcher";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import * as React from "react";
 import useSWR from "swr";
 
@@ -14,7 +14,7 @@ export default function useUserImage(size = "120x120") {
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
   );
 
-  const [session] = useSession();
+  const { data: session } = useSession();
 
   const { data } = useSWR(
     () => [`https://graph.microsoft.com/v1.0/me/photos/${size}/$value`, session?.accessToken],

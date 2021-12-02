@@ -11,7 +11,7 @@ import {
   Separator,
   Ul
 } from "@/components/ui";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import * as React from "react";
 import { styled } from "stitches.config";
 import { useUser } from ".";

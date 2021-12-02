@@ -1,8 +1,9 @@
 import prismaUser from "@/lib/prismaUser";
 import { fetchWithToken } from "@/utils/fetcher";
-import NextAuth, { Account, User } from "next-auth";
+import jwt_decode from "jwt-decode";
+import NextAuth, { Account, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import Providers from "next-auth/providers";
+import AzureAdProvider from "next-auth/providers/azure-ad";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;
@@ -11,6 +12,11 @@ const AZURE_AD_SCOPE = "offline_access openid User.Read";
 
 const AZURE_AD_ADMIN_GROUP_ID = process.env.AZURE_AD_ADMIN_GROUP_ID;
 const AZURE_AD_SPECIALIST_GROUP_ID = process.env.AZURE_AD_SPECIALIST_GROUP_ID;
+
+const getObjectIdFromAccount = (account: Account) => {
+  const meh: { oid: string } = jwt_decode(account.access_token);
+  return meh.oid;
+};
 
 const accessToGroupId = (groups = [], groupId) => {
   if (groups === null || groups === undefined) {
@@ -117,48 +123,63 @@ async function refreshAccessToken(token: JWT) {
   }
 }
 
-async function initialSignIn(account: Account, user: User, token: JWT) {
-  const { isAdmin, isSpecialist } = await getUserRoles(account.accessToken);
+async function initialSignIn(
+  account: Account & { accessToken?: string; refreshToken?: string; ext_expires_in?: number },
+  user: User,
+  token: JWT
+) {
+  const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
+
+  // TODO: Look into why sub is suddenly another ID
+  // than token oid in v4 from v3
+  const objectId = getObjectIdFromAccount(account);
 
   await prismaUser.upsert({
     create: {
       name: user.name,
       email: user.email,
-      activeDirectoryId: token.sub,
-      refreshToken: account.refreshToken,
+      activeDirectoryId: objectId,
+      refreshToken: account.refresh_token,
       isAdmin: isAdmin,
       isSpecialist: isSpecialist
     },
     update: {
-      refreshToken: account.refreshToken,
+      refreshToken: account.refresh_token,
       isAdmin: isAdmin,
       isSpecialist: isSpecialist
     },
     where: {
-      activeDirectoryId: token.sub
+      activeDirectoryId: objectId
     }
   });
 
   return {
     ...token,
-    accessToken: account.accessToken,
-    accessTokenExpires: Date.now() + account?.expires_in * 1000,
+    sub: objectId,
+    accessToken: account.access_token,
+    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
     isAdmin: isAdmin,
     isSpecialist: isSpecialist
   };
 }
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
-    Providers.AzureADB2C({
+    AzureAdProvider({
       clientId: AZURE_AD_CLIENT_ID,
       clientSecret: AZURE_AD_SECRET,
-      scope: AZURE_AD_SCOPE,
-      tenantId: AZURE_AD_TENANT_ID
+      // scope: AZURE_AD_SCOPE,
+      tenantId: AZURE_AD_TENANT_ID,
+      profilePhotoSize: 48,
+      authorization: {
+        params: {
+          scope: AZURE_AD_SCOPE
+        }
+      }
     })
   ],
   callbacks: {
-    async jwt(token, user, account, profile, isNewUser) {
+    async jwt({ token, user, account, profile, isNewUser }) {
       // Initial sign in
       if (account && user) {
         return initialSignIn(account, user, token);
@@ -177,7 +198,7 @@ export default NextAuth({
 
       return refreshAccessToken(token);
     },
-    async session(session, token) {
+    async session({ session, token, user }) {
       // Add property to session, like an access_token from a provider.
       return {
         ...session,
@@ -192,10 +213,10 @@ export default NextAuth({
       };
     }
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET
-  },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login"
   }
-});
+};
+
+export default NextAuth(authOptions);
