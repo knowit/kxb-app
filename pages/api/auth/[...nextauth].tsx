@@ -1,4 +1,5 @@
 import prismaUser from "@/lib/prismaUser";
+import { AzureAdTokenClaims } from "@/types";
 import { fetchWithToken } from "@/utils/fetcher";
 import jwt_decode from "jwt-decode";
 import NextAuth, { Account, NextAuthOptions, User } from "next-auth";
@@ -13,9 +14,8 @@ const AZURE_AD_SCOPE = "offline_access openid User.Read";
 const AZURE_AD_ADMIN_GROUP_ID = process.env.AZURE_AD_ADMIN_GROUP_ID;
 const AZURE_AD_SPECIALIST_GROUP_ID = process.env.AZURE_AD_SPECIALIST_GROUP_ID;
 
-const getObjectIdFromAccount = (account: Account) => {
-  const meh: { oid: string } = jwt_decode(account.access_token);
-  return meh.oid;
+const getAzureAdTokenClaims = (token: string): AzureAdTokenClaims => {
+  return jwt_decode(token) as AzureAdTokenClaims;
 };
 
 const accessToGroupId = (groups = [], groupId) => {
@@ -84,6 +84,8 @@ async function refreshAccessToken(token: JWT) {
       })
     });
 
+    console.log("REFRESHY");
+
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
@@ -130,15 +132,11 @@ async function initialSignIn(
 ) {
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
-  // TODO: Look into why sub is suddenly another ID
-  // than token oid in v4 from v3
-  const objectId = getObjectIdFromAccount(account);
-
   await prismaUser.upsert({
     create: {
       name: user.name,
       email: user.email,
-      activeDirectoryId: objectId,
+      activeDirectoryId: token.sub,
       refreshToken: account.refresh_token,
       isAdmin: isAdmin,
       isSpecialist: isSpecialist
@@ -149,13 +147,12 @@ async function initialSignIn(
       isSpecialist: isSpecialist
     },
     where: {
-      activeDirectoryId: objectId
+      activeDirectoryId: token.sub
     }
   });
 
   return {
     ...token,
-    sub: objectId,
     accessToken: account.access_token,
     accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
     isAdmin: isAdmin,
@@ -175,6 +172,28 @@ export const authOptions: NextAuthOptions = {
         params: {
           scope: AZURE_AD_SCOPE
         }
+      },
+      // next-auth v4 used sub claim for user id, but we need to use the oid claim
+      profile: async (profile, tokens) => {
+        // Fetch user image
+        // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0#examples
+        const response = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
+          headers: {
+            Authorization: `Bearer ${tokens.access_token}`
+          }
+        });
+
+        const pictureBuffer = await response.arrayBuffer();
+        const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
+
+        const claims = getAzureAdTokenClaims(tokens.access_token);
+
+        return {
+          id: claims.oid,
+          name: profile.name,
+          email: profile.email,
+          image: response.ok ? `data:image/jpeg;base64, ${pictureBase64}` : null
+        };
       }
     })
   ],
@@ -185,9 +204,9 @@ export const authOptions: NextAuthOptions = {
         return initialSignIn(account, user, token);
       }
 
-      // If specialist mark is false or not set yet then we should
-      // refresh access token to check if user should have access
-      if (token && !(token.isSpecialist ?? false)) {
+      // If token exists and isSpecialist mark is not defined
+      // refresh access token to add isSpecialist tag
+      if (token && (token.isSpecialist === undefined || token.isSpecialist === null)) {
         return refreshAccessToken(token);
       }
 
