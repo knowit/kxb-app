@@ -14,6 +14,25 @@ const AZURE_AD_SCOPE = "offline_access openid User.Read";
 const AZURE_AD_ADMIN_GROUP_ID = process.env.AZURE_AD_ADMIN_GROUP_ID;
 const AZURE_AD_SPECIALIST_GROUP_ID = process.env.AZURE_AD_SPECIALIST_GROUP_ID;
 
+const getUserImage = async (accessToken: string): Promise<string | null> => {
+  // Fetch user image
+  // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0#examples
+  const response = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const pictureBuffer = await response.arrayBuffer();
+  const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
+
+  return `data:image/jpeg;base64, ${pictureBase64}`;
+};
+
 const getAzureAdTokenClaims = (token: string): AzureAdTokenClaims => {
   return jwt_decode(token) as AzureAdTokenClaims;
 };
@@ -83,8 +102,6 @@ async function refreshAccessToken(token: JWT) {
         scope: AZURE_AD_SCOPE
       })
     });
-
-    console.log("REFRESHY");
 
     const refreshedTokens = await response.json();
 
@@ -177,22 +194,17 @@ export const authOptions: NextAuthOptions = {
       profile: async (profile, tokens) => {
         // Fetch user image
         // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0#examples
-        const response = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
-          headers: {
-            Authorization: `Bearer ${tokens.access_token}`
-          }
-        });
-
-        const pictureBuffer = await response.arrayBuffer();
-        const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
 
         const claims = getAzureAdTokenClaims(tokens.access_token);
+        const image = await getUserImage(tokens.access_token);
+
+        console.log(image);
 
         return {
           id: claims.oid,
           name: profile.name,
           email: profile.email,
-          image: response.ok ? `data:image/jpeg;base64, ${pictureBase64}` : null
+          image: image
         };
       }
     })
