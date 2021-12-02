@@ -198,8 +198,6 @@ export const authOptions: NextAuthOptions = {
         const claims = getAzureAdTokenClaims(tokens.access_token);
         const image = await getUserImage(tokens.access_token);
 
-        console.log(image);
-
         return {
           id: claims.oid,
           name: profile.name,
