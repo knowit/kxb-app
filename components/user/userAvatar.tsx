@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 /* next does not yet support blob usage in next image component */
 /* active PR: https://github.com/vercel/next.js/pull/23622 */
-import { Skeleton } from "@/components/ui";
-import { useUser, useUserImage } from "@/components/user/hooks";
+import { Box } from "@/components/ui";
+import { useUser } from "@/components/user/hooks";
+import { useSession } from "next-auth/react";
 import * as React from "react";
 import { styled } from "stitches.config";
 
@@ -26,7 +27,7 @@ const AvatarImageFallback = styled("div", {
 
 const UserAvatar = () => {
   const { user } = useUser();
-  const { userImageUrl, loading, error } = useUserImage();
+  const { data: session } = useSession();
 
   const initials = React.useMemo(
     () =>
@@ -39,8 +40,7 @@ const UserAvatar = () => {
   );
 
   return (
-    <Skeleton
-      loading={loading}
+    <Box
       css={{
         width: "100%",
         height: "100%",
@@ -51,12 +51,12 @@ const UserAvatar = () => {
         overflow: "hidden"
       }}
     >
-      {error ? (
-        <AvatarImageFallback>{initials}</AvatarImageFallback>
+      {session.user?.image ? (
+        <AvatarImage src={session.user?.image} alt="User avatar" />
       ) : (
-        <AvatarImage src={userImageUrl} alt="User avatar" />
+        <AvatarImageFallback>{initials}</AvatarImageFallback>
       )}
-    </Skeleton>
+    </Box>
   );
 };
 

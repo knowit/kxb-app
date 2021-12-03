@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Link, Paragraph, Svg } from "@/components/ui";
 import { sessionUserIsSpecialist } from "@/utils/sessionUtils";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import * as React from "react";
 import { HiLockClosed } from "react-icons/hi";
 

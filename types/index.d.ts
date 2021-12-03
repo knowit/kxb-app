@@ -143,3 +143,19 @@ export type NextAuthSession = {
 export type NextAuthToken = {
   sub: string;
 } & TokenSet;
+
+export type AzureAdTokenClaims = {
+  aud: string;
+  iss: string;
+  iat: number;
+  nbf: number;
+  exp: number;
+  family_name: string;
+  given_name: string;
+  name: string;
+  oid: string;
+  scp: string;
+  sub: string;
+  tid: string;
+  unique_name: string;
+};
