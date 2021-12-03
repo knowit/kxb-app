@@ -158,6 +158,7 @@ export type AzureAdTokenClaims = {
   sub: string;
   tid: string;
   unique_name: string;
+  upn: string;
 };
 
 export type GraphUser = {
