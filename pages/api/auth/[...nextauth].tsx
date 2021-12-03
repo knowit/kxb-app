@@ -1,5 +1,6 @@
 import prismaUser from "@/lib/prismaUser";
-import { AzureAdTokenClaims } from "@/types";
+import { validateEmail } from "@/logic/validationLogic";
+import { AzureAdTokenClaims, GraphUser } from "@/types";
 import { fetchWithToken } from "@/utils/fetcher";
 import jwt_decode from "jwt-decode";
 import NextAuth, { Account, NextAuthOptions, User } from "next-auth";
@@ -13,6 +14,34 @@ const AZURE_AD_SCOPE = "offline_access openid User.Read";
 
 const AZURE_AD_ADMIN_GROUP_ID = process.env.AZURE_AD_ADMIN_GROUP_ID;
 const AZURE_AD_SPECIALIST_GROUP_ID = process.env.AZURE_AD_SPECIALIST_GROUP_ID;
+
+const getAzureAdTokenClaims = (token: string): AzureAdTokenClaims => {
+  return jwt_decode(token) as AzureAdTokenClaims;
+};
+
+const getUserEmail = async (accessToken: string): Promise<string> => {
+  const claims = getAzureAdTokenClaims(accessToken);
+
+  // If claims contains unique principal name then use that
+  if (claims.upn && validateEmail(claims.upn)) {
+    return claims.upn;
+  }
+
+  // Fetch user profile from graph and retrieve email
+  const response = await fetch(`https://graph.microsoft.com/v1.0/me/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch user email");
+  }
+
+  const user: GraphUser = await response.json();
+
+  return user.mail ?? user.userPrincipalName;
+};
 
 const getUserImage = async (accessToken: string): Promise<string | null> => {
   // Fetch user image
@@ -31,10 +60,6 @@ const getUserImage = async (accessToken: string): Promise<string | null> => {
   const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
 
   return `data:image/jpeg;base64, ${pictureBase64}`;
-};
-
-const getAzureAdTokenClaims = (token: string): AzureAdTokenClaims => {
-  return jwt_decode(token) as AzureAdTokenClaims;
 };
 
 const accessToGroupId = (groups = [], groupId) => {
@@ -201,7 +226,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: claims.oid,
           name: profile.name,
-          email: profile.email,
+          email: profile.email ?? (await getUserEmail(tokens.access_token)),
           image: image
         };
       }
