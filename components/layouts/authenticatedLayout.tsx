@@ -4,7 +4,7 @@ import { SalaryProvider } from "@/components/salary";
 import { Box, Container, Flex, Footer, Heading, Li, Link, Main, Ul } from "@/components/ui";
 import { UserProvider } from "@/components/user/providers/userProvider";
 import { WithChildren } from "@/types";
-import { Provider as NextAuthProvider } from "next-auth/client";
+import { SessionProvider } from "next-auth/react";
 import * as React from "react";
 import { FeedbackForm } from "../feedback";
 import { Logo } from "../icons";
@@ -21,7 +21,7 @@ export default function AuthenticatedLayout({
   ...other
 }: LayoutProps) {
   return (
-    <NextAuthProvider session={pageProps.session}>
+    <SessionProvider session={pageProps.session}>
       <UserProvider session={pageProps.session} user={pageProps.user}>
         <CalendarProvider>
           <SalaryProvider>
@@ -157,6 +157,6 @@ export default function AuthenticatedLayout({
           </SalaryProvider>
         </CalendarProvider>
       </UserProvider>
-    </NextAuthProvider>
+    </SessionProvider>
   );
 }

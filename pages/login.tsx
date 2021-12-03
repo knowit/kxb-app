@@ -1,7 +1,7 @@
 import { LoginButtons } from "@/components/auth";
 import { Box, Flex, Heading, Image, Paragraph, Svg, Text } from "@/components/ui";
 import { GetServerSideProps } from "next";
-import { getProviders, getSession } from "next-auth/client";
+import { getProviders, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 

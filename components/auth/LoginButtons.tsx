@@ -1,6 +1,6 @@
 import { useAuthProviders } from "@/components/auth";
 import { Button } from "@/components/ui";
-import { signIn } from "next-auth/client";
+import { signIn } from "next-auth/react";
 import * as React from "react";
 
 type LoginButtonsProps = {} & React.HTMLAttributes<HTMLButtonElement>;
