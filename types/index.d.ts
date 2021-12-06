@@ -117,6 +117,7 @@ export type CalendarDay = {
   formattedLongDate: string;
   isHoliday: boolean;
   isWorkDay?: boolean;
+  isKnowitClosed: boolean;
 };
 
 export type Holiday = {

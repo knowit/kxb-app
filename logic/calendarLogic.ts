@@ -5,6 +5,7 @@ const PAY_DAY_DECEMBER: number = 10;
 
 export const isWorkDay = (day: CalendarDay): boolean =>
   (!day?.isHoliday ?? false) &&
+  (!day?.isKnowitClosed ?? false) &&
   day?.name?.toUpperCase() !== "SATURDAY" &&
   day?.name?.toUpperCase() !== "SUNDAY";
 
