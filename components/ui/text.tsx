@@ -73,6 +73,11 @@ const Text = styled("span", {
         fontSize: "$9"
       }
     },
+    fontStyle: {
+      italic: {
+        fontStyle: "italic"
+      }
+    },
     textAlign: {
       left: {
         textAlign: "left"

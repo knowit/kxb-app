@@ -10,7 +10,7 @@ import {
 } from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
 import EARNING_CONSTANTS from "@/constants/earningConstants";
-import { UserWorkDayDetail } from "@/types";
+import { CalendarDay, UserWorkDayDetail } from "@/types";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { ControlledCheckbox } from "../form";
@@ -46,7 +46,7 @@ function upsertWorkDayDetail(
   });
 }
 
-export default function UserWorkDayDetails({ day }) {
+export default function UserWorkDayDetails({ day }: { day: CalendarDay }) {
   const { user, update } = useUser();
   const { register, setValue, watch, control } = useForm();
 
@@ -75,6 +75,14 @@ export default function UserWorkDayDetails({ day }) {
     setValue("extraHours", userExtraHours);
     setValue("sickDay", userSickDay);
   }, [userNonCommissionedHours, userExtraHours, userSickDay, day.formattedDate, setValue]);
+
+  const isKnowitClosedDay = React.useMemo(
+    () =>
+      day.isKnowitClosed &&
+      day.name.toUpperCase() !== "SATURDAY" &&
+      day.name.toUpperCase() !== "SUNDAY",
+    [day.isKnowitClosed, day.name]
+  );
 
   React.useEffect(() => {
     async function persistUser() {
@@ -189,6 +197,11 @@ export default function UserWorkDayDetails({ day }) {
               </Flex>
             </AppearInBox>
           </>
+        ) : null}
+        {isKnowitClosedDay ? (
+          <Text size="2" color="textDark" fontStyle="italic" mb="3">
+            Knowit Experience is closed. Vacation days are not deducted for this day.
+          </Text>
         ) : null}
         <TextField
           id="extraHours"
