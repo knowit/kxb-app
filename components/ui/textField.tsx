@@ -61,7 +61,7 @@ type TextFieldProps = {
   error?: boolean;
   errorText?: string;
   step?: string;
-  min?: string;
+  min?: string | number;
   css?: CSS;
   fieldContainerCss?: CSS;
   labelSize?: TextFieldLabelSizeVariants;
