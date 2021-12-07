@@ -162,6 +162,16 @@ const isHoliday = (date: Date): boolean => {
   return getFormattedDate(date) in norwegianHolidays;
 };
 
+const isKnowitClosed = (date: Date): boolean => {
+  const year = getYear(date);
+  const knowitClosedDays = {
+    [getFormattedDate(new Date(year, 11, 24))]: true,
+    [getFormattedDate(new Date(year, 11, 31))]: true
+  };
+
+  return getFormattedDate(date) in knowitClosedDays;
+};
+
 const createHoliday = (name: string, date: Date): Holiday => ({
   name,
   date,
@@ -178,7 +188,8 @@ export const createDate = (date: Date, locale?: string): CalendarDay => {
     formattedDate: getFormattedDate(date, locale),
     formattedShortDate: getFormattedShortDate(date, locale),
     formattedLongDate: getFormattedLongDate(date, locale),
-    isHoliday: isHoliday(date)
+    isHoliday: isHoliday(date),
+    isKnowitClosed: isKnowitClosed(date)
   };
 
   return {
