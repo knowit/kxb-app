@@ -215,6 +215,7 @@ export const authOptions: NextAuthOptions = {
           scope: AZURE_AD_SCOPE
         }
       },
+      idToken: true,
       // next-auth v4 used sub claim for user id, but we need to use the oid claim
       profile: async (profile, tokens) => {
         // Fetch user image
