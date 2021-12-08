@@ -216,6 +216,7 @@ export const authOptions: NextAuthOptions = {
         }
       },
       idToken: true,
+      checks: "state",
       // next-auth v4 used sub claim for user id, but we need to use the oid claim
       profile: async (profile, tokens) => {
         // Fetch user image
