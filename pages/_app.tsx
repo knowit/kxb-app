@@ -1,4 +1,3 @@
-import { IdProvider } from "@radix-ui/react-id";
 import { ThemeProvider } from "next-themes";
 import * as React from "react";
 import { globalCss, lightTheme } from "stitches.config";
@@ -53,11 +52,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         light: lightTheme.className
       }}
     >
-      <IdProvider>
-        <Layout {...layoutProps}>
-          <Component {...pageProps} />
-        </Layout>
-      </IdProvider>
+      <Layout {...layoutProps}>
+        <Component {...pageProps} />
+      </Layout>
     </ThemeProvider>
   );
 }

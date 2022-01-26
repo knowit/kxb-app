@@ -158,6 +158,7 @@ const ExpandedCalendarDay = ({
   day,
   isWorkDay = false,
   isNonCommissionedToggled = false,
+  isExtraHoursToggled = false,
   workDayDetails,
   onCollapse = () => {},
   ...other
