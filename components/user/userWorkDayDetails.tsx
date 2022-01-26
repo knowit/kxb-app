@@ -9,7 +9,6 @@ import {
   TextField
 } from "@/components/ui";
 import { useUser } from "@/components/user/hooks";
-import EARNING_CONSTANTS from "@/constants/earningConstants";
 import { CalendarDay, UserWorkDayDetail } from "@/types";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -151,7 +150,10 @@ export default function UserWorkDayDetails({ day }: { day: CalendarDay }) {
                 variant={isNonCommissionedToggled ? "red" : "green"}
                 disabled={+extraHours > 0}
                 onClick={() =>
-                  setValue("nonCommissionedHours", isNonCommissionedToggled ? "0" : "7.5")
+                  setValue(
+                    "nonCommissionedHours",
+                    isNonCommissionedToggled ? "0" : user.workHours?.toString()
+                  )
                 }
                 css={{
                   maxWidth: "60px",
@@ -161,9 +163,7 @@ export default function UserWorkDayDetails({ day }: { day: CalendarDay }) {
                   marginBottom: "6px"
                 }}
               >
-                {isNonCommissionedToggled
-                  ? `-${nonCommissionedHours}`
-                  : `+${EARNING_CONSTANTS.WORK_HOURS_PER_DAY}`}
+                {isNonCommissionedToggled ? `-${nonCommissionedHours}` : `+${user.workHours}`}
               </Button>
             </Flex>
             <AppearInBox

@@ -45,7 +45,7 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
 
   // TODO: Rework update section
   if (req.method === "PUT" && req.body) {
-    const { commission, hourlyRate, tax, workDayDetails } = req.body;
+    const { commission, hourlyRate, tax, workHours, workDayDetails } = req.body;
 
     const workDaysToUpdate = (workDayDetails ?? []).filter(a =>
       user.workDayDetails.some(b => a.date === b.date)
@@ -59,6 +59,7 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
         commission,
         hourlyRate,
         tax,
+        workHours,
         workDayDetails: {
           // Create new records
           createMany: {

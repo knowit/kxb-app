@@ -8,6 +8,7 @@ const createPrismaUser = (user: PrismaUser): User => {
     ...user,
     tax: +(user?.tax ?? DEFAULT_USER_SALARY.tax),
     commission: +(user?.commission ?? DEFAULT_USER_SALARY.commission),
+    workHours: +(user?.workHours ?? DEFAULT_USER_SALARY.workHours),
     workDayDetails: (user?.workDayDetails ?? []).map(workDayDetail => ({
       ...workDayDetail,
       extraHours: +(workDayDetail?.extraHours ?? 0),

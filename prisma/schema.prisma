@@ -20,6 +20,7 @@ model User {
   hourlyRate        Int                 @default(1000)
   commission        Decimal             @default(0.40) @db.Decimal(5, 2)
   tax               Decimal             @default(0.35) @db.Decimal(5, 2)
+  workHours         Decimal             @default(7.5) @db.Decimal(5, 2)
   created           DateTime            @default(now())
   updated           DateTime            @default(now())
   isAdmin           Boolean             @default(false)

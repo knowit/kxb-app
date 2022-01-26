@@ -12,6 +12,7 @@ const FieldContainerRoot = styled("div", {
   flexDirection: "column",
   mb: "$4",
   width: "100%",
+  position: "relative",
   variants: {
     hidden: {
       true: {
