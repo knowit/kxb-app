@@ -81,11 +81,11 @@ const UserProfile = () => {
         />
         <TextField
           id="workHours"
-          label="Work hours"
+          label="Work hours per day"
           placeholder="7.5"
           type="number"
           step="0.5"
-          info="The normal a mount is 7.5 hours per day, but some consultants get their lunches covered by their employers i.e. their work hours per day will be 8 hours."
+          info="The normal amount is 7.5 hours per day, but some consultants get their lunches covered by their employers i.e. their work hours per day will be 8 hours."
           {...register("workHours", {
             required: true
           })}
