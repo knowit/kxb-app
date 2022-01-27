@@ -1,5 +1,6 @@
 import * as React from "react";
 import { CSS, css, styled, VariantProps } from "stitches.config";
+import { InfoButton } from ".";
 import Box from "./box";
 import ExpandingHelperText from "./expandingHelperText";
 import FieldContainer from "./fieldContainer";
@@ -65,6 +66,7 @@ type TextFieldProps = {
   css?: CSS;
   fieldContainerCss?: CSS;
   labelSize?: TextFieldLabelSizeVariants;
+  info?: string;
 };
 
 const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(function TextField(
@@ -82,6 +84,7 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
     min,
     fieldContainerCss,
     labelSize,
+    info,
     ...other
   } = props;
 
@@ -107,6 +110,9 @@ const TextField = React.forwardRef<React.ElementRef<"input">, TextFieldProps>(fu
         {label}
       </Label>
       <ExpandingHelperText expanded={error} text={helperText} />
+      {info ? (
+        <InfoButton css={{ position: "absolute", top: "-4px", right: 0, m: 0 }}>{info}</InfoButton>
+      ) : null}
     </FieldContainer>
   );
 });

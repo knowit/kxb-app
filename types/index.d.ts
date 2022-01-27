@@ -23,6 +23,7 @@ export type User = {
   hourlyRate: number;
   commission: number;
   tax: number;
+  workHours: number;
   created: Date;
   updated: Date;
   isAdmin: boolean;
@@ -34,6 +35,7 @@ export type UserSalaryDetails = {
   hourlyRate: number;
   commission: number;
   tax: number;
+  workHours: number;
 };
 
 export type CalendarMonthEarnings = {
@@ -87,6 +89,7 @@ export type PrismaUser = {
   hourlyRate: number;
   commission: Prisma.Decimal;
   tax: Prisma.Decimal;
+  workHours: Prisma.Decimal;
   created: Date;
   updated: Date;
   isAdmin: boolean;

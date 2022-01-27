@@ -15,11 +15,12 @@ const getHolidayPay = (gross: number): number => {
 };
 
 export const getWorkHours = (
-  workDays: number = 0,
-  nonCommissionedHours: number = 0,
-  extraHours: number = 0
+  workHours: number,
+  workDays: number,
+  nonCommissionedHours: number,
+  extraHours: number
 ): number => {
-  const regularWorkHours = EARNING_CONSTANTS.WORK_HOURS_PER_DAY * workDays;
+  const regularWorkHours = workHours * workDays;
   const regularWorkHoursWithExtraHours = regularWorkHours + Math.max(0, +extraHours);
 
   return regularWorkHoursWithExtraHours - Math.max(0, +nonCommissionedHours);
@@ -63,19 +64,29 @@ const getNonCommissionedHoursForMonth = (
   );
 };
 
+// When calculating work hours per day, we need to take into account all work hours
+// for the user. But when we calculate sick hours per day for gross income, we need
+// to cap the sick hours to the max number of work hours per day that the employer
+// will cover i.e. 7.5 hours per day.
 const getSickHoursForMonth = (
   month: CalendarMonth,
-  workDayDetails: UserWorkDayDetail[]
+  workDayDetails: UserWorkDayDetail[],
+  useMaxSickHours: boolean = false
 ): number => {
   return (
-    month.days.reduce<number>(
-      (sum: number, day: CalendarDay) =>
-        (sum +=
-          workDayDetails?.find(
-            workDayDetail => workDayDetail.date === day.formattedDate && workDayDetail.sickDay
-          )?.nonCommissionedHours ?? 0),
-      0
-    ) ?? 0
+    month.days.reduce<number>((sum: number, day: CalendarDay) => {
+      let nonCommissionedHours =
+        workDayDetails?.find(
+          workDayDetail => workDayDetail.date === day.formattedDate && workDayDetail.sickDay
+        )?.nonCommissionedHours ?? 0;
+
+      nonCommissionedHours =
+        useMaxSickHours && nonCommissionedHours > EARNING_CONSTANTS.WORK_HOURS_PER_DAY
+          ? EARNING_CONSTANTS.WORK_HOURS_PER_DAY
+          : nonCommissionedHours;
+
+      return (sum += nonCommissionedHours);
+    }, 0) ?? 0
   );
 };
 
@@ -96,6 +107,7 @@ export const getEarningsForMonth = (
   hourlyRate: number,
   commission: number,
   tax: number,
+  workHours: number,
   workDayDetails: UserWorkDayDetail[]
 ): CalendarMonthEarnings => {
   const workDays = getWorkDays(month);
@@ -105,20 +117,26 @@ export const getEarningsForMonth = (
 
   const taxConsideredHalfTax = month.halfTax ? tax / 2 : tax;
 
-  const workHours = getWorkHours(
+  const totalWorkHours = getWorkHours(
+    workHours,
     workDays.length,
     nonCommissionedHoursForMonth + sickHoursForMonth,
     extraHours
   );
 
-  const gross = getGrossIncome(workHours, hourlyRate, commission, sickHoursForMonth);
+  const gross = getGrossIncome(
+    totalWorkHours,
+    hourlyRate,
+    commission,
+    getSickHoursForMonth(month, workDayDetails, true)
+  );
   const net = getNetIncome(gross, taxConsideredHalfTax);
 
   return {
     monthName: month?.month,
     payDay: month?.payDay?.formattedShortDate,
     workDays,
-    workHours,
+    workHours: totalWorkHours,
     gross,
     net,
     grossFormatted: formatCurrency(gross),
@@ -132,6 +150,7 @@ export const getEarningsForYear = (
   hourlyRate: number,
   commission: number,
   tax: number,
+  workHours: number,
   workDayDetails: UserWorkDayDetail[]
 ): CalendarYearEarnings => {
   const { workDays } = (year?.months ?? []).reduce(
@@ -141,6 +160,7 @@ export const getEarningsForYear = (
         hourlyRate,
         commission,
         tax,
+        workHours,
         workDayDetails
       );
 
@@ -159,7 +179,7 @@ export const getEarningsForYear = (
     workDays > EARNING_CONSTANTS.WORK_VACATION_DAYS
       ? workDays - EARNING_CONSTANTS.WORK_VACATION_DAYS
       : workDays;
-  const workHoursWithoutVacation = getWorkHours(workDaysWithoutVacation, 0, 0);
+  const workHoursWithoutVacation = getWorkHours(workHours, workDaysWithoutVacation, 0, 0);
 
   const gross = getGrossIncome(workHoursWithoutVacation, hourlyRate, commission);
   const grossWithHolidayPay = gross + getHolidayPay(gross);
