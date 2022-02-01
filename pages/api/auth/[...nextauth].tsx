@@ -227,7 +227,10 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: claims.oid,
-          name: profile.name,
+          name:
+            profile.name ??
+            claims?.name ??
+            `${claims?.given_name}${claims?.family_name ? ` ${claims?.family_name}` : ""}`,
           email: profile.email ?? (await getUserEmail(tokens.access_token)),
           image: image
         };
