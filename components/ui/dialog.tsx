@@ -11,10 +11,32 @@ import Svg from "./svg";
 type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root> & {
   children: React.ReactNode;
   overlayProps?: {
+    enabled?: boolean;
     css?: CSS;
     variants?: VariantProps<typeof StyledOverlay>;
   };
 };
+
+export const DialogNonRemoveScrollOverlay = styled("div", overlayStyles, {
+  position: "fixed",
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  '&[data-state="open"]': {
+    animation: `${fadeIn} 500ms forwards`
+  },
+  '&[data-state="closed"]': {
+    animation: `${fadeOut} 500ms forwards`
+  },
+  variants: {
+    variant: {
+      absolute: {
+        position: "absolute"
+      }
+    }
+  }
+});
 
 const StyledOverlay = styled(DialogPrimitive.Overlay, overlayStyles, {
   position: "fixed",
@@ -38,10 +60,15 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, overlayStyles, {
 });
 
 export function Dialog({ children, overlayProps, ...props }: DialogProps) {
-  const { variants, ...otherOverlayProps } = overlayProps;
+  const {
+    enabled: overlayEnabled = false,
+    variants: overlayVariants,
+    ...otherOverlayProps
+  } = overlayProps;
+
   return (
-    <DialogPrimitive.Root {...props}>
-      <StyledOverlay {...variants} {...otherOverlayProps} />
+    <DialogPrimitive.Root onOpenChange={open => console.log(open)} {...props}>
+      {overlayEnabled ? <StyledOverlay {...overlayVariants} {...otherOverlayProps} /> : null}
       {children}
     </DialogPrimitive.Root>
   );
@@ -67,6 +94,13 @@ const StyledContent = styled(DialogPrimitive.Content, panelStyles, {
   },
   '&[data-state="closed"]': {
     animation: `${fadeOut} 500ms forwards`
+  },
+  variants: {
+    variant: {
+      absolute: {
+        position: "absolute"
+      }
+    }
   }
 });
 
@@ -89,18 +123,23 @@ const StyledDialogDescription = styled(DialogPrimitive.Description, {
   marginBottom: "$3"
 });
 
+type DialogVariantVariants = "absolute";
+type DialogVariants = Pick<VariantProps<typeof StyledContent>, "variant">;
 type DialogContentPrimitiveProps = React.ComponentProps<typeof DialogPrimitive.Content>;
-type DialogContentProps = DialogContentPrimitiveProps & { css?: CSS; portal?: boolean };
+type DialogContentProps = DialogContentPrimitiveProps &
+  DialogVariants & { variant?: DialogVariantVariants; css?: CSS; portal?: boolean };
 
 export const DialogContent = React.forwardRef<
   React.ElementRef<typeof StyledContent>,
   DialogContentProps
 >(({ children, ...props }, forwardedRef) => {
+  const { variant, ...other } = props;
+
   const DialogWrapper = props.portal ? DialogPrimitive.Portal : React.Fragment;
 
   return (
     <DialogWrapper>
-      <StyledContent {...props} ref={forwardedRef}>
+      <StyledContent variant={variant} {...other} ref={forwardedRef}>
         {children}
         <StyledCloseButton asChild>
           <IconButton variant="ghost">

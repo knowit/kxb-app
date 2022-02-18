@@ -10,6 +10,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogNonRemoveScrollOverlay,
   DialogTitle,
   DialogTrigger
 } from "./dialog";
@@ -57,6 +58,7 @@ export {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogNonRemoveScrollOverlay,
   DialogTitle,
   DialogTrigger,
   ExpandingHelperText,

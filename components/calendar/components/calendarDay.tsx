@@ -1,7 +1,15 @@
-import { Box, Dialog, DialogContent, DialogTrigger, Svg } from "@/components/ui";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogNonRemoveScrollOverlay,
+  DialogTrigger,
+  Svg
+} from "@/components/ui";
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
+import { Presence } from "@radix-ui/react-presence";
 import { motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp } from "react-icons/hi";
@@ -205,9 +213,7 @@ const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => 
       open={isExpanded}
       onOpenChange={open => setIsExpanded(open)}
       overlayProps={{
-        variants: {
-          variant: "absolute"
-        }
+        enabled: false
       }}
     >
       <DialogTrigger asChild>
@@ -221,9 +227,12 @@ const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => 
           {...other}
         />
       </DialogTrigger>
+      <Presence present={isExpanded}>
+        <DialogNonRemoveScrollOverlay variant="absolute" />
+      </Presence>
       <DialogContent
+        variant="absolute"
         css={{
-          position: "absolute",
           width: "90%",
           maxWidth: "270px",
           marginTop: 0
