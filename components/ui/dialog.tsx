@@ -90,21 +90,27 @@ const StyledDialogDescription = styled(DialogPrimitive.Description, {
 });
 
 type DialogContentPrimitiveProps = React.ComponentProps<typeof DialogPrimitive.Content>;
-type DialogContentProps = DialogContentPrimitiveProps & { css?: CSS };
+type DialogContentProps = DialogContentPrimitiveProps & { css?: CSS; portal?: boolean };
 
 export const DialogContent = React.forwardRef<
   React.ElementRef<typeof StyledContent>,
   DialogContentProps
->(({ children, ...props }, forwardedRef) => (
-  <StyledContent {...props} ref={forwardedRef}>
-    {children}
-    <StyledCloseButton asChild>
-      <IconButton variant="ghost">
-        <Svg color="white" as={IoClose} />
-      </IconButton>
-    </StyledCloseButton>
-  </StyledContent>
-));
+>(({ children, ...props }, forwardedRef) => {
+  const DialogWrapper = props.portal ? DialogPrimitive.Portal : React.Fragment;
+
+  return (
+    <DialogWrapper>
+      <StyledContent {...props} ref={forwardedRef}>
+        {children}
+        <StyledCloseButton asChild>
+          <IconButton variant="ghost">
+            <Svg color="white" as={IoClose} />
+          </IconButton>
+        </StyledCloseButton>
+      </StyledContent>
+    </DialogWrapper>
+  );
+});
 
 DialogContent.displayName = "DialogContent";
 
