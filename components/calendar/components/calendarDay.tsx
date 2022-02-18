@@ -1,10 +1,18 @@
-import { Box, Card, IconButton, Overlay, Svg } from "@/components/ui";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogNonRemoveScrollOverlay,
+  DialogTrigger,
+  Svg
+} from "@/components/ui";
 import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
-import { AnimateSharedLayout, motion } from "framer-motion";
+import { Presence } from "@radix-ui/react-presence";
+import { motion } from "framer-motion";
 import * as React from "react";
-import { HiChevronDoubleUp, HiOutlineX } from "react-icons/hi";
+import { HiChevronDoubleUp } from "react-icons/hi";
 import { IoBugOutline } from "react-icons/io5";
 import { CSS, styled } from "stitches.config";
 
@@ -16,7 +24,6 @@ type BaseDay = {
 };
 
 type CalendarDayDateProps = WithChildren<{
-  layoutId?: string;
   as?: React.ElementType;
   className?: string;
   isExpanded?: boolean;
@@ -143,7 +150,6 @@ const RegularCalendarDay = ({
 }: RegularCalendarDayProps) => {
   return (
     <CalendarDayDate
-      layoutId="expandable-card"
       isWorkDay={isWorkDay}
       isNonCommissionedToggled={isNonCommissionedToggled}
       onClick={() => onExpand()}
@@ -164,49 +170,15 @@ const ExpandedCalendarDay = ({
   ...other
 }: ExpandedCalendarDayProps) => {
   return (
-    <Box>
-      <Box
-        as={motion.div}
-        layoutId="expandable-card"
-        css={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 20,
-          maxWidth: "270px",
-          mx: "auto",
-          my: "$4"
-        }}
-        {...other}
+    <Box {...other}>
+      <CalendarDayDate
+        isWorkDay={isWorkDay}
+        isNonCommissionedToggled={isNonCommissionedToggled}
+        isExpanded
       >
-        <IconButton
-          as={motion.button}
-          variant={isNonCommissionedToggled ? "red" : isWorkDay ? "green" : "white"}
-          transition={{ delay: 0.3 }}
-          initial={{ opacity: 0, top: "-4rem" }}
-          animate={{ opacity: 1, top: "-0.875rem" }}
-          onClick={() => onCollapse()}
-          css={{
-            position: "absolute",
-            right: "-$3",
-            borderRadius: "$round",
-            zIndex: 1
-          }}
-        >
-          <Svg as={HiOutlineX} size="2" />
-        </IconButton>
-        <Card padding="medium">
-          <CalendarDayDate
-            isWorkDay={isWorkDay}
-            isNonCommissionedToggled={isNonCommissionedToggled}
-            isExpanded
-          >
-            {day?.formattedShortDate}
-          </CalendarDayDate>
-          <UserWorkDayDetails day={day} />
-        </Card>
-      </Box>
+        {day?.formattedShortDate}
+      </CalendarDayDate>
+      <UserWorkDayDetails day={day} />
     </Box>
   );
 };
@@ -237,37 +209,14 @@ const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => 
   );
 
   return (
-    <AnimateSharedLayout>
-      {isExpanded ? (
-        <>
-          <Overlay
-            as={motion.div}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={() => setIsExpanded(false)}
-            css={{
-              position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              bottom: "0",
-              backgroundColor: "$overlay",
-              transition: "opacity 0.2s ease-in-out",
-              zIndex: "10",
-              borderRadius: "$4"
-            }}
-          />
-          <ExpandedCalendarDay
-            day={day}
-            isWorkDay={isWorkDay}
-            isNonCommissionedToggled={isNonCommissionedToggled}
-            workDayDetails={workDayDetails}
-            isExtraHoursToggled={isExtraHoursToggled}
-            onCollapse={() => setIsExpanded(false)}
-            {...other}
-          />
-        </>
-      ) : (
+    <Dialog
+      open={isExpanded}
+      onOpenChange={open => setIsExpanded(open)}
+      overlayProps={{
+        enabled: false
+      }}
+    >
+      <DialogTrigger asChild>
         <RegularCalendarDay
           day={day}
           isWorkDay={isWorkDay}
@@ -277,8 +226,29 @@ const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => 
           onExpand={() => setIsExpanded(true)}
           {...other}
         />
-      )}
-    </AnimateSharedLayout>
+      </DialogTrigger>
+      <Presence present={isExpanded}>
+        <DialogNonRemoveScrollOverlay variant="absolute" />
+      </Presence>
+      <DialogContent
+        variant="absolute"
+        css={{
+          width: "90%",
+          maxWidth: "270px",
+          marginTop: 0
+        }}
+      >
+        <ExpandedCalendarDay
+          day={day}
+          isWorkDay={isWorkDay}
+          isNonCommissionedToggled={isNonCommissionedToggled}
+          workDayDetails={workDayDetails}
+          isExtraHoursToggled={isExtraHoursToggled}
+          onCollapse={() => setIsExpanded(false)}
+          {...other}
+        />
+      </DialogContent>
+    </Dialog>
   );
 };
 
