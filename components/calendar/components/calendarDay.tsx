@@ -201,7 +201,15 @@ const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => 
   );
 
   return (
-    <Dialog open={isExpanded} onOpenChange={open => setIsExpanded(open)}>
+    <Dialog
+      open={isExpanded}
+      onOpenChange={open => setIsExpanded(open)}
+      overlayProps={{
+        variants: {
+          variant: "absolute"
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <RegularCalendarDay
           day={day}

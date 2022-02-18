@@ -1,7 +1,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import React from "react";
 import { IoClose } from "react-icons/io5";
-import { CSS, styled } from "stitches.config";
+import { CSS, styled, VariantProps } from "stitches.config";
 import IconButton from "./iconButton";
 import { fadeIn, fadeOut } from "./keyframes";
 import { overlayStyles } from "./overlay";
@@ -10,6 +10,10 @@ import Svg from "./svg";
 
 type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root> & {
   children: React.ReactNode;
+  overlayProps?: {
+    css?: CSS;
+    variants?: VariantProps<typeof StyledOverlay>;
+  };
 };
 
 const StyledOverlay = styled(DialogPrimitive.Overlay, overlayStyles, {
@@ -23,13 +27,21 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, overlayStyles, {
   },
   '&[data-state="closed"]': {
     animation: `${fadeOut} 500ms forwards`
+  },
+  variants: {
+    variant: {
+      absolute: {
+        position: "absolute"
+      }
+    }
   }
 });
 
-export function Dialog({ children, ...props }: DialogProps) {
+export function Dialog({ children, overlayProps, ...props }: DialogProps) {
+  const { variants, ...otherOverlayProps } = overlayProps;
   return (
     <DialogPrimitive.Root {...props}>
-      <StyledOverlay />
+      <StyledOverlay {...variants} {...otherOverlayProps} />
       {children}
     </DialogPrimitive.Root>
   );
