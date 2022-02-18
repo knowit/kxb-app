@@ -2,7 +2,7 @@ import { CalendarDay } from "@/components/calendar";
 import { useCalendar } from "@/components/calendar/providers/calendarProvider";
 import { Box, Button, Card, Flex, Grid, IconButton, Svg, Text } from "@/components/ui";
 import { CalendarDay as CalendarDayType, WithChildren } from "@/types";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { useToggle } from "react-use";
@@ -134,6 +134,7 @@ const Calendar = ({ ...other }) => {
         gridTemplateColumns="7"
         gap="1"
         css={{
+          position: "relative",
           display: "grid",
           padding: "$1",
           minHeight: "315px",
@@ -189,28 +190,26 @@ const Calendar = ({ ...other }) => {
               padding: "$2"
             }}
           >
-            <AnimatePresence exitBeforeEnter>
-              {showYearPicker &&
-                years.map(year => (
-                  <Box
-                    as={motion.div}
-                    key={year}
-                    onClick={() => {
-                      setYear(year);
-                      toggleYearPicker();
-                    }}
-                    exit={{ opacity: 0 }}
-                    css={{
-                      cursor: "pointer",
-                      padding: "$1",
-                      fontSize: "$4",
-                      textAlign: "center"
-                    }}
-                  >
-                    {year}
-                  </Box>
-                ))}
-            </AnimatePresence>
+            {showYearPicker &&
+              years.map(year => (
+                <Box
+                  as={motion.div}
+                  key={year}
+                  onClick={() => {
+                    setYear(year);
+                    toggleYearPicker();
+                  }}
+                  exit={{ opacity: 0 }}
+                  css={{
+                    cursor: "pointer",
+                    padding: "$1",
+                    fontSize: "$4",
+                    textAlign: "center"
+                  }}
+                >
+                  {year}
+                </Box>
+              ))}
           </Grid>
         </Box>
       </Grid>
