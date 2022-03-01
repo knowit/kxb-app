@@ -10,7 +10,6 @@ import { UserWorkDayDetails, useUser } from "@/components/user";
 import { getUserWorkDayDetails } from "@/logic/userLogic";
 import { CalendarDay as CalendarDayType, UserWorkDayDetail, WithChildren } from "@/types";
 import { Presence } from "@radix-ui/react-presence";
-import { motion } from "framer-motion";
 import * as React from "react";
 import { HiChevronDoubleUp } from "react-icons/hi";
 import { IoBugOutline } from "react-icons/io5";
@@ -106,59 +105,66 @@ const DayText = styled("div", {
   ]
 });
 
-const CalendarDayDate = ({
-  children,
-  as = motion.div,
-  className,
-  isWorkDay,
-  isNonCommissionedToggled,
-  isExtraHoursToggled,
-  isSickDayToggled,
-  isExpanded = false,
-  ...other
-}: CalendarDayDateProps) => {
-  const Component = as ?? motion.div;
+const CalendarDayDate = React.forwardRef<React.ElementRef<typeof Box>, CalendarDayDateProps>(
+  function CalendarDayDate(
+    {
+      children,
+      className,
+      isWorkDay,
+      isNonCommissionedToggled,
+      isExtraHoursToggled,
+      isSickDayToggled,
+      isExpanded = false,
+      ...other
+    },
+    ref
+  ) {
+    const boxCss: CSS = isExpanded
+      ? {
+          display: "block"
+        }
+      : {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: "pointer"
+        };
 
-  const boxCss: CSS = isExpanded
-    ? {
-        display: "block"
-      }
-    : {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer"
-      };
+    return (
+      <Box css={boxCss} ref={ref} {...other}>
+        <DayText
+          workDay={isWorkDay}
+          nonCommissioned={isNonCommissionedToggled}
+          expanded={isExpanded}
+        >
+          {children}
+          {isExtraHoursToggled ? <Svg as={HiChevronDoubleUp} variant="green" size="2" /> : null}
+          {isSickDayToggled ? <Svg as={IoBugOutline} variant="red" size="2" /> : null}
+        </DayText>
+      </Box>
+    );
+  }
+);
 
-  return (
-    <Box as={as} css={boxCss} {...other}>
-      <DayText workDay={isWorkDay} nonCommissioned={isNonCommissionedToggled} expanded={isExpanded}>
-        {children}
-        {isExtraHoursToggled ? <Svg as={HiChevronDoubleUp} variant="green" size="2" /> : null}
-        {isSickDayToggled ? <Svg as={IoBugOutline} variant="red" size="2" /> : null}
-      </DayText>
-    </Box>
-  );
-};
-
-const RegularCalendarDay = ({
-  day,
-  isWorkDay = false,
-  isNonCommissionedToggled = false,
-  onExpand = () => {},
-  ...other
-}: RegularCalendarDayProps) => {
+const RegularCalendarDay = React.forwardRef<
+  React.ElementRef<typeof CalendarDayDate>,
+  RegularCalendarDayProps
+>(function RegularCalendarDay(
+  { day, isWorkDay = false, isNonCommissionedToggled = false, onExpand = () => {}, ...other },
+  ref
+) {
   return (
     <CalendarDayDate
       isWorkDay={isWorkDay}
       isNonCommissionedToggled={isNonCommissionedToggled}
       onClick={() => onExpand()}
+      ref={ref}
       {...other}
     >
       {day?.day}
     </CalendarDayDate>
   );
-};
+});
 
 const ExpandedCalendarDay = ({
   day,

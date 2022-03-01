@@ -59,7 +59,15 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, overlayStyles, {
   }
 });
 
-export function Dialog({ children, overlayProps, ...props }: DialogProps) {
+export function Dialog({
+  children,
+  overlayProps = {
+    enabled: true,
+    css: {},
+    variants: {}
+  },
+  ...props
+}: DialogProps) {
   const {
     enabled: overlayEnabled = false,
     variants: overlayVariants,
