@@ -21,7 +21,7 @@ export default function AuthenticatedLayout({
   ...other
 }: LayoutProps) {
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider session={pageProps.session} refetchInterval={30 * 60}>
       <UserProvider session={pageProps.session} user={pageProps.user}>
         <CalendarProvider>
           <SalaryProvider>

@@ -228,7 +228,10 @@ const CalendarDay = ({ day, isWorkDay = false, ...other }: CalendarDayProps) => 
         />
       </DialogTrigger>
       <Presence present={isExpanded}>
-        <DialogNonRemoveScrollOverlay variant="absolute" />
+        <DialogNonRemoveScrollOverlay
+          variant="absolute"
+          data-state={isExpanded ? "open" : "closed"}
+        />
       </Presence>
       <DialogContent
         variant="absolute"
