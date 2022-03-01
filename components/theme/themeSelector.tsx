@@ -46,42 +46,63 @@ const SelectValueIcon = ({ theme }) => {
   return <Svg as={Icon} size="2" variant="text" />;
 };
 
+const ThemeSelect = ({
+  theme,
+  setTheme,
+  themes = [],
+  ...other
+}: {
+  theme: string;
+  setTheme: (newThemeValue: string) => void;
+  themes: string[];
+  css?: CSS;
+}) => {
+  return (
+    <Select
+      name="theme-select"
+      defaultValue={theme}
+      value={theme}
+      onValueChange={value => setTheme(value)}
+    >
+      <SelectTrigger aria-label="Select Theme">
+        <SelectValueIcon theme={theme} />
+        <SelectValue />
+        <SelectIcon>
+          <IoChevronDown />
+        </SelectIcon>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectScrollUpButton>
+          <IoChevronUp />
+        </SelectScrollUpButton>
+        <SelectViewport>
+          <SelectGroup>
+            <SelectLabel>Theme</SelectLabel>
+            {themes.map(theme => (
+              <SelectItem key={`next-theme-${theme}`} value={theme}>
+                <SelectItemText>{stringToTitleCase(theme)}</SelectItemText>
+                <SelectItemIndicator>
+                  <IoCheckmark />
+                </SelectItemIndicator>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectViewport>
+        <SelectScrollDownButton>
+          <IoChevronDown />
+        </SelectScrollDownButton>
+      </SelectContent>
+    </Select>
+  );
+};
+
 const ThemeSelector = ({ showLabel = false, ...other }: { showLabel?: boolean; css?: CSS }) => {
   const { theme, setTheme, themes } = useTheme();
 
   return (
     <Flex alignItems="center" gap="3" {...other}>
       {showLabel ? <Label htmlFor="theme-select">Theme</Label> : null}
-      <Select name="theme-select" defaultValue={theme} onValueChange={value => setTheme(value)}>
-        <SelectTrigger aria-label="Select Theme">
-          <SelectValueIcon theme={theme} />
-          <SelectValue />
-          <SelectIcon>
-            <IoChevronDown />
-          </SelectIcon>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectScrollUpButton>
-            <IoChevronUp />
-          </SelectScrollUpButton>
-          <SelectViewport>
-            <SelectGroup>
-              <SelectLabel>Theme</SelectLabel>
-              {themes.map(theme => (
-                <SelectItem key={`next-theme-${theme}`} value={theme}>
-                  <SelectItemText>{stringToTitleCase(theme)}</SelectItemText>
-                  <SelectItemIndicator>
-                    <IoCheckmark />
-                  </SelectItemIndicator>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectViewport>
-          <SelectScrollDownButton>
-            <IoChevronDown />
-          </SelectScrollDownButton>
-        </SelectContent>
-      </Select>
+      <ThemeSelect theme={theme} setTheme={setTheme} themes={themes} />
     </Flex>
   );
 };
