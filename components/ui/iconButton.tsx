@@ -250,6 +250,11 @@ const IconButton = styled("button", {
       }
     },
     size: {
+      info: {
+        borderRadius: "$2",
+        height: "$4",
+        width: "$4"
+      },
       1: {
         borderRadius: "$2",
         height: "$5",

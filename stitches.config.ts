@@ -129,6 +129,8 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
       shadows: {
         card: "0 0 0 1px $colors$gray",
         input: "0 0 0 2px $colors$gray",
+        select: "0 0 0 1px $colors$gray",
+        selectHover: "0 0 0 1px $colors$secondary",
         inputHover: "0 0 0 2px $colors$secondary",
         inputActive: "0 0 0 2px $colors$secondary",
         inputFocus: "0 0 0 2px $colors$secondary",

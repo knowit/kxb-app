@@ -37,6 +37,22 @@ import Panel from "./panel";
 import Paragraph from "./paragraph";
 import Popover, { PopoverArrow, PopoverClose, PopoverContent, PopoverTrigger } from "./popover";
 import RadioGroup, { RadioGroupIndicator, RadioGroupRadio } from "./radioGroup";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+  SelectViewport
+} from "./select";
 import Separator from "./separator";
 import Skeleton from "./skeleton";
 import Svg from "./svg";
@@ -91,6 +107,20 @@ export {
   Skeleton,
   RadioGroupIndicator,
   RadioGroupRadio,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+  SelectViewport,
   Separator,
   Svg,
   Text,
