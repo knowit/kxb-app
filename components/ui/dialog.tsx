@@ -67,7 +67,7 @@ export function Dialog({ children, overlayProps, ...props }: DialogProps) {
   } = overlayProps;
 
   return (
-    <DialogPrimitive.Root onOpenChange={open => console.log(open)} {...props}>
+    <DialogPrimitive.Root {...props}>
       {overlayEnabled ? <StyledOverlay {...overlayVariants} {...otherOverlayProps} /> : null}
       {children}
     </DialogPrimitive.Root>
