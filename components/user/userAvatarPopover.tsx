@@ -15,6 +15,7 @@ import { signOut } from "next-auth/react";
 import * as React from "react";
 import { styled } from "stitches.config";
 import { useUser } from ".";
+import { ThemeSelector } from "../theme";
 import UserAvatar from "./userAvatar";
 
 const UserAvatarPopoverSection = styled("section", {
@@ -61,6 +62,10 @@ const UserAvatarPopover = ({}) => {
               </Link>
             </Li>
           </Ul>
+        </UserAvatarPopoverSection>
+        <Separator space="3" />
+        <UserAvatarPopoverSection>
+          <ThemeSelector showLabel />
         </UserAvatarPopoverSection>
         <Separator space="3" />
         <UserAvatarPopoverSection>

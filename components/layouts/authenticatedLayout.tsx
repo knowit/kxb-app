@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import * as React from "react";
 import { FeedbackForm } from "../feedback";
 import { Logo } from "../icons";
+import { ThemeSelector } from "../theme";
 
 type LayoutProps = WithChildren<{
   pageProps?: Record<string, any>;
@@ -142,6 +143,12 @@ export default function AuthenticatedLayout({
                   >
                     <Heading>Feedback</Heading>
                     <FeedbackForm />
+                    <ThemeSelector
+                      css={{
+                        mt: "$4",
+                        justifyContent: "flex-end"
+                      }}
+                    />
                   </Box>
                 </Flex>
                 <Flex
