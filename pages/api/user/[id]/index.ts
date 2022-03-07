@@ -18,7 +18,7 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
 
   const sessionUserActiveDirectoryId = getSessionUserActiveDirectoryId(session);
 
-  const { created, updated, refreshToken, ...user } = await prismaUser.getById(+id);
+  const { refreshToken, ...user } = await prismaUser.getById(+id);
 
   if (
     !sessionUserIsAdmin(session) &&
