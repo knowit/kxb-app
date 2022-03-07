@@ -1,9 +1,9 @@
-import { NextAuthSession, NextAuthSessionUser } from "@/types";
+import { Session } from "next-auth";
 
-const userIsAdmin = (user: NextAuthSessionUser): boolean => user?.isAdmin ?? false;
-const userIsSpecialist = (user: NextAuthSessionUser): boolean => user?.isSpecialist ?? false;
+const userIsAdmin = (user: Session["user"]): boolean => user?.isAdmin ?? false;
+const userIsSpecialist = (user: Session["user"]): boolean => user?.isSpecialist ?? false;
 
-export const sessionUserIsAdmin = (session: NextAuthSession) => userIsAdmin(session?.user);
-export const sessionUserIsSpecialist = (session: NextAuthSession) =>
-  userIsSpecialist(session?.user);
-export const getSessionUserActiveDirectoryId = (session: NextAuthSession) => session?.user?.id;
+export const sessionUserIsAdmin = (session: Session) => userIsAdmin(session?.user);
+export const sessionUserIsSpecialist = (session: Session) => userIsSpecialist(session?.user);
+export const getSessionUserActiveDirectoryId = (session: Session) =>
+  session?.user?.activeDirectoryId;

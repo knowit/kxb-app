@@ -1,9 +1,13 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
-import { PrismaUser, User } from "@/types";
+import { Unpacked, User } from "@/types";
+import { Prisma } from "@prisma/client";
 import prisma from "./prisma";
 
+export type PrismaUser = Unpacked<Prisma.PromiseReturnType<typeof getAll>>;
+
 // Convert decimals to number
-const createPrismaUser = (user: PrismaUser): User => {
+const createPrismaUser = (prismaUser: PrismaUser): User => {
+  const { created, updated, ...user } = prismaUser;
   return {
     ...user,
     tax: +(user?.tax ?? DEFAULT_USER_SALARY.tax),
@@ -13,9 +17,17 @@ const createPrismaUser = (user: PrismaUser): User => {
       ...workDayDetail,
       extraHours: +(workDayDetail?.extraHours ?? 0),
       nonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0)
-    }))
+    })),
+    accessTokenExpires: Number(user?.accessTokenExpires ?? 0)
   };
 };
+
+const getAll = async () =>
+  await prisma.user.findMany({
+    include: {
+      workDayDetails: true
+    }
+  });
 
 const get = async (): Promise<User[]> => {
   const entries = await prisma.user.findMany({

@@ -12,21 +12,22 @@ generator client {
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  email             String              @unique
-  name              String?
-  activeDirectoryId String              @unique
-  refreshToken      String?             @db.NVarChar(2000)
-  hourlyRate        Int                 @default(1000)
-  commission        Decimal             @default(0.40) @db.Decimal(5, 2)
-  tax               Decimal             @default(0.35) @db.Decimal(5, 2)
-  workHours         Decimal             @default(7.5) @db.Decimal(5, 2)
-  created           DateTime            @default(now())
-  updated           DateTime            @default(now())
-  isAdmin           Boolean             @default(false)
-  isSpecialist      Boolean             @default(false)
-  workDayDetails    UserWorkDayDetail[]
-  feedback          UserFeedback[]
+  id                 Int                 @id @default(autoincrement())
+  email              String              @unique
+  name               String?
+  activeDirectoryId  String              @unique
+  refreshToken       String?             @db.NVarChar(2000)
+  accessTokenExpires BigInt?
+  hourlyRate         Int                 @default(1000)
+  commission         Decimal             @default(0.40) @db.Decimal(5, 2)
+  tax                Decimal             @default(0.35) @db.Decimal(5, 2)
+  workHours          Decimal             @default(7.5) @db.Decimal(5, 2)
+  created            DateTime            @default(now())
+  updated            DateTime            @default(now())
+  isAdmin            Boolean             @default(false)
+  isSpecialist       Boolean             @default(false)
+  workDayDetails     UserWorkDayDetail[]
+  feedback           UserFeedback[]
 }
 
 model UserWorkDayDetail {

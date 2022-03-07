@@ -17,9 +17,9 @@ export const getResultForAuthenticatedPage = async (
     (session &&
       !(process.env.SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE?.toLowerCase() === "true" ?? false))
   ) {
-    const { created, updated, refreshToken, ...user } = await prismaUser.getByEmail(
-      session.user.email
-    );
+    const { refreshToken, ...user } = session.user?.activeDirectoryId
+      ? session.user
+      : await prismaUser.getByEmail(session.user.email);
 
     return {
       props: {
