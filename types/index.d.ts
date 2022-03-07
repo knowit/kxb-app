@@ -5,6 +5,8 @@ import { Session, TokenSet } from "next-auth";
 
 export type WithChildren<T = {}> = T & { children?: React.ReactNode };
 
+export type Unpacked<T> = T extends (infer U)[] ? U : T;
+
 export type UserWorkDayDetail = {
   id: number;
   date: string;
@@ -20,12 +22,11 @@ export type User = {
   name: string;
   activeDirectoryId: string;
   refreshToken: string;
+  accessTokenExpires?: number;
   hourlyRate: number;
   commission: number;
   tax: number;
   workHours: number;
-  created: Date;
-  updated: Date;
   isAdmin: boolean;
   isSpecialist: boolean;
   workDayDetails: UserWorkDayDetail[];
@@ -78,23 +79,6 @@ export type PrismaUserUserWorkDayDetail = {
   nonCommissionedHours: Prisma.Decimal;
   sickDay: boolean;
   userId: number;
-};
-
-export type PrismaUser = {
-  id: number;
-  email: string;
-  name: string | null;
-  activeDirectoryId: string;
-  refreshToken: string | null;
-  hourlyRate: number;
-  commission: Prisma.Decimal;
-  tax: Prisma.Decimal;
-  workHours: Prisma.Decimal;
-  created: Date;
-  updated: Date;
-  isAdmin: boolean;
-  isSpecialist: boolean;
-  workDayDetails: PrismaUserUserWorkDayDetail[];
 };
 
 export type CalendarYear = {

@@ -1,5 +1,6 @@
 import prismaUser from "@/lib/prismaUser";
 import { validateEmail } from "@/logic/validationLogic";
+import type { User as PrismaUser } from "@/types";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
 import { fetchWithToken } from "@/utils/fetcher";
 import jwt_decode from "jwt-decode";
@@ -108,11 +109,27 @@ async function getUserRoles(token: string) {
   }
 }
 
-async function refreshAccessToken(token: JWT) {
+async function handleToken(token: JWT) {
+  const dbUser = await prismaUser.getByActiveDirectoryId(token.sub);
+
+  if (Date.now() < new Date(dbUser.accessTokenExpires ?? 0).getTime()) {
+    return {
+      ...token,
+      dbUser
+    };
+  }
+
+  const refreshedToken = refreshAccessToken(token, dbUser);
+
+  return {
+    ...refreshedToken,
+    dbUser
+  };
+}
+
+async function refreshAccessToken(token: JWT, user: PrismaUser) {
   try {
     const url = `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/oauth2/v2.0/token`;
-
-    const user = await prismaUser.getByActiveDirectoryId(token.sub);
 
     const response = await fetch(url, {
       headers: {
@@ -130,6 +147,8 @@ async function refreshAccessToken(token: JWT) {
 
     const refreshedTokens = await response.json();
 
+    console.log(refreshedTokens);
+
     if (!response.ok) {
       throw refreshedTokens;
     }
@@ -139,6 +158,7 @@ async function refreshAccessToken(token: JWT) {
     await prismaUser.update({
       data: {
         refreshToken: refreshedTokens.refresh_token,
+        accessTokenExpires: Date.now() + refreshedTokens?.ext_expires_in * 1000,
         isAdmin: isAdmin ?? false,
         isSpecialist: isSpecialist ?? false,
         updated: new Date()
@@ -150,18 +170,13 @@ async function refreshAccessToken(token: JWT) {
 
     return {
       ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      isAdmin: isAdmin,
-      isSpecialist: isSpecialist
+      accessToken: refreshedTokens.access_token
     };
   } catch (error) {
     console.error(error);
 
     return {
       ...token,
-      isAdmin: token?.isAdmin ?? false,
-      isSpecialist: token?.isAdmin ?? false,
       error: "RefreshAccessTokenError"
     };
   }
@@ -180,6 +195,7 @@ async function initialSignIn(
       email: user.email,
       activeDirectoryId: token.sub,
       refreshToken: account.refresh_token,
+      accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
       isAdmin: isAdmin,
       isSpecialist: isSpecialist
     },
@@ -194,11 +210,7 @@ async function initialSignIn(
   });
 
   return {
-    ...token,
-    accessToken: account.access_token,
-    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
-    isAdmin: isAdmin,
-    isSpecialist: isSpecialist
+    ...token
   };
 }
 
@@ -244,31 +256,20 @@ export const authOptions: NextAuthOptions = {
         return initialSignIn(account, user, token);
       }
 
-      // If token exists and isSpecialist mark is not defined
-      // refresh access token to add isSpecialist tag
-      if (token && (token.isSpecialist === undefined || token.isSpecialist === null)) {
-        return refreshAccessToken(token);
-      }
-
-      // Return previous token if the access token has not expired yet
-      if (Date.now() < token.accessTokenExpires) {
-        return token;
-      }
-
-      return refreshAccessToken(token);
+      return handleToken(token);
     },
     async session({ session, token, user }) {
+      const dbUser = (token?.dbUser as PrismaUser) ?? ({} as PrismaUser);
       // Add property to session, like an access_token from a provider.
       return {
         ...session,
         user: {
           ...session.user,
           id: token.sub,
-          isAdmin: token.isAdmin,
-          isSpecialist: token.isSpecialist
+          ...dbUser
         },
-        accessToken: token.accessToken,
-        accessTokenExpires: token.accessTokenExpires
+        accessToken: token.accessToken as string,
+        accessTokenExpires: token.accessTokenExpires as number
       };
     }
   },
@@ -277,5 +278,19 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login"
   }
 };
+
+declare module "next-auth" {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user: PrismaUser & {
+      image: string;
+    };
+    expires: Date;
+    accessToken: string;
+    accessTokenExpires: number;
+  }
+}
 
 export default NextAuth(authOptions);
