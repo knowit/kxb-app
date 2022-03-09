@@ -32,13 +32,13 @@ const getAll = async () =>
     }
   });
 
-const get = async (): Promise<User[]> => {
+const get = async (includeWorkDayDetails = false): Promise<User[]> => {
   const entries = await prisma.user.findMany({
     orderBy: {
       updated: "desc"
     },
     include: {
-      workDayDetails: true
+      workDayDetails: includeWorkDayDetails
     }
   });
 
