@@ -29,6 +29,8 @@ export type User = {
   workHours: number;
   isAdmin: boolean;
   isSpecialist: boolean;
+  updated: string;
+  created: string;
   workDayDetails: UserWorkDayDetail[];
 };
 

@@ -1,5 +1,6 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
 import { Unpacked, User } from "@/types";
+import { getFormattedIsoDateAndTime } from "@/utils/dateUtils";
 import { Prisma } from "@prisma/client";
 import prisma from "./prisma";
 
@@ -13,6 +14,8 @@ const createPrismaUser = (prismaUser: PrismaUser): User => {
     tax: +(user?.tax ?? DEFAULT_USER_SALARY.tax),
     commission: +(user?.commission ?? DEFAULT_USER_SALARY.commission),
     workHours: +(user?.workHours ?? DEFAULT_USER_SALARY.workHours),
+    updated: getFormattedIsoDateAndTime(prismaUser.updated),
+    created: getFormattedIsoDateAndTime(prismaUser.created),
     workDayDetails: (user?.workDayDetails ?? []).map(workDayDetail => ({
       ...workDayDetail,
       extraHours: +(workDayDetail?.extraHours ?? 0),
