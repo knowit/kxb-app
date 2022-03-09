@@ -21,6 +21,15 @@ export const getFormattedMonth = (date: Date, locale?: string): string =>
 export const getFormattedMicrosoftSqlDate = (date: Date, locale?: string): string =>
   format(date, "yyyy-MM-dd hh-mm-ss", { locale: getLocale(locale) });
 
+export const getFormattedTime = (date: Date, locale?: string): string =>
+  format(date, "HH:mm:ss", { locale: getLocale(locale) });
+
+export const getFormattedDateAndTime = (date: Date, locale?: string): string =>
+  `${getFormattedDate(date, locale)} ${getFormattedTime(date, locale)}`;
+
+export const getFormattedIsoDateAndTime = (date: Date, locale?: string): string =>
+  format(date, "yyyy-MM-dd'T'HH:mm:ssXX", { locale: getLocale(locale) });
+
 export const getMonthFromName = (monthName: string) => {
   switch (monthName?.toUpperCase()) {
     case MONTH_NAMES.JANUARY:

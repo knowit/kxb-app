@@ -1,29 +1,44 @@
 import DEFAULT_USER_SALARY from "@/constants/defaultUserSalary";
-import { PrismaUser, User } from "@/types";
+import { Unpacked, User } from "@/types";
+import { getFormattedIsoDateAndTime } from "@/utils/dateUtils";
+import { Prisma } from "@prisma/client";
 import prisma from "./prisma";
 
+export type PrismaUser = Unpacked<Prisma.PromiseReturnType<typeof getAll>>;
+
 // Convert decimals to number
-const createPrismaUser = (user: PrismaUser): User => {
+const createPrismaUser = (prismaUser: PrismaUser): User => {
+  const { created, updated, ...user } = prismaUser;
   return {
     ...user,
     tax: +(user?.tax ?? DEFAULT_USER_SALARY.tax),
     commission: +(user?.commission ?? DEFAULT_USER_SALARY.commission),
     workHours: +(user?.workHours ?? DEFAULT_USER_SALARY.workHours),
+    updated: getFormattedIsoDateAndTime(prismaUser.updated),
+    created: getFormattedIsoDateAndTime(prismaUser.created),
     workDayDetails: (user?.workDayDetails ?? []).map(workDayDetail => ({
       ...workDayDetail,
       extraHours: +(workDayDetail?.extraHours ?? 0),
       nonCommissionedHours: +(workDayDetail?.nonCommissionedHours ?? 0)
-    }))
+    })),
+    accessTokenExpires: Number(user?.accessTokenExpires ?? 0)
   };
 };
 
-const get = async (): Promise<User[]> => {
+const getAll = async () =>
+  await prisma.user.findMany({
+    include: {
+      workDayDetails: true
+    }
+  });
+
+const get = async (includeWorkDayDetails = false): Promise<User[]> => {
   const entries = await prisma.user.findMany({
     orderBy: {
       updated: "desc"
     },
     include: {
-      workDayDetails: true
+      workDayDetails: includeWorkDayDetails
     }
   });
 

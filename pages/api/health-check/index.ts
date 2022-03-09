@@ -2,7 +2,7 @@ import prismaUser from "@/lib/prismaUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function User(req: NextApiRequest, res: NextApiResponse) {
-  const { created, updated, refreshToken, ...user } = await prismaUser.getByEmail(
+  const { refreshToken, ...user } = await prismaUser.getByEmail(
     "kxb.specialist.test.user@knowitgroup.com"
   );
 
