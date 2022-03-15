@@ -115,7 +115,7 @@ export default function Login({ session }) {
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
             aria-hidden="true"
-            variant="black"
+            variant="main"
             css={{
               position: "absolute",
               top: 0,
