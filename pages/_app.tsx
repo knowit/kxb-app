@@ -10,7 +10,7 @@ const globalStyles = globalCss({
     borderColor: "currentColor"
   },
   html: {
-    overflowX: "hidden"
+    
   },
   body: {
     backgroundColor: "$main",
@@ -19,7 +19,8 @@ const globalStyles = globalCss({
     minWidth: "360px",
     scrollBehavior: "smooth",
     margin: 0,
-    padding: 0
+    padding: 0,
+    overflowX: "hidden"
   },
   "#__next": {
     display: "flex",
