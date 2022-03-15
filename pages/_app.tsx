@@ -9,9 +9,7 @@ const globalStyles = globalCss({
     borderStyle: "solid",
     borderColor: "currentColor"
   },
-  html: {
-    
-  },
+  html: {},
   body: {
     backgroundColor: "$main",
     color: "$text",

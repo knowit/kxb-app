@@ -75,6 +75,9 @@ const Svg = styled("svg", {
       },
       white: {
         color: "$white"
+      },
+      main: {
+        color: "$main"
       }
     },
     spin: {
