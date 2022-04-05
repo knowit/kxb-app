@@ -15,7 +15,7 @@ export default function SalaryCalculator() {
   const [hourlyRate, setHourlyRate] = React.useState(DEFAULT_USER_SALARY.hourlyRate);
   const [commission, setCommission] = React.useState(DEFAULT_USER_SALARY.commission);
   const [tax, setTax] = React.useState(DEFAULT_USER_SALARY.tax);
-  const [workHours, setWorkHours] = React.useState(DEFAULT_USER_SALARY.workHours);
+  const workHours = DEFAULT_USER_SALARY.workHours;
 
   const salaryStatistics = React.useMemo(
     () =>
@@ -88,15 +88,6 @@ export default function SalaryCalculator() {
             onChange={e => setTax(+e.target.value)}
             type="number"
             step="0.01"
-          />
-          <TextField
-            id="workHours"
-            label="Work hours"
-            placeholder={DEFAULT_USER_SALARY.workHours.toString()}
-            value={workHours}
-            onChange={e => setWorkHours(+e.target.value)}
-            type="number"
-            step="0.5"
           />
         </Box>
         <Box

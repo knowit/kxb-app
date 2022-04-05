@@ -91,7 +91,8 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         lgContainer: "1024px",
         xlContainer: "1280px",
         scrollBar: "10px",
-        calendarContainer: "512px"
+        calendarContainer: "512px",
+        themeSelect: "88px"
       },
       fontSizes: {
         tiny: "10px",

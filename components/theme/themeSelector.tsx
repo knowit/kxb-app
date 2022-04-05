@@ -64,7 +64,13 @@ const ThemeSelect = ({
       value={theme}
       onValueChange={value => setTheme(value)}
     >
-      <SelectTrigger aria-label="Select Theme">
+      <SelectTrigger
+        aria-label="Select Theme"
+        css={{
+          width: "$themeSelect",
+          justifyContent: "space-between"
+        }}
+      >
         <SelectValueIcon theme={theme} />
         <SelectValue />
         <SelectIcon>
