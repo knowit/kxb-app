@@ -257,7 +257,7 @@ export const authOptions: NextAuthOptions = {
       return handleToken(token);
     },
     async session({ session, token, user }) {
-      const dbUser = (token?.dbUser as PrismaUser) ?? ({} as PrismaUser);
+      const dbUser = token?.dbUser;
       // Add property to session, like an access_token from a provider.
       return {
         ...session,
@@ -276,19 +276,5 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login"
   }
 };
-
-declare module "next-auth" {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
-  interface Session {
-    user: PrismaUser & {
-      image: string;
-    };
-    expires: Date;
-    accessToken: string;
-    accessTokenExpires: number;
-  }
-}
 
 export default NextAuth(authOptions);
