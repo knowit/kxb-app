@@ -1,4 +1,6 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
+import * as React from "react";
+import type { CSS, VariantProps } from "stitches.config";
 import { styled } from "stitches.config";
 
 const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
@@ -91,11 +93,29 @@ const StyledScrollUpButton = styled(SelectPrimitive.ScrollUpButton, scrollButton
 
 const StyledScrollDownButton = styled(SelectPrimitive.ScrollDownButton, scrollButtonStyles);
 
+type SelectContentPrimitiveProps = React.ComponentProps<typeof SelectPrimitive.Content>;
+type SelectContentProps = SelectContentPrimitiveProps &
+  VariantProps<typeof StyledContent> & {
+    css?: CSS;
+  };
+
+export const SelectContent = React.forwardRef<
+  React.ElementRef<typeof StyledContent>,
+  SelectContentProps
+>(({ children, ...other }, forwardedRef) => (
+  <SelectPrimitive.Portal>
+    <StyledContent {...other} ref={forwardedRef}>
+      {children}
+    </StyledContent>
+  </SelectPrimitive.Portal>
+));
+
+SelectContent.displayName = "SelectContent";
+
 export const Select = SelectPrimitive.Root;
 export const SelectTrigger = StyledTrigger;
 export const SelectValue = SelectPrimitive.Value;
 export const SelectIcon = SelectPrimitive.Icon;
-export const SelectContent = StyledContent;
 export const SelectViewport = StyledViewport;
 export const SelectGroup = SelectPrimitive.Group;
 export const SelectItem = StyledItem;

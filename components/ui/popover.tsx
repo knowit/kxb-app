@@ -1,4 +1,6 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as React from "react";
+import type { CSS, VariantProps } from "stitches.config";
 import { styled } from "stitches.config";
 import { slideDownAndFade, slideLeftAndFade, slideRightAndFade, slideUpAndFade } from "./keyframes";
 
@@ -65,10 +67,28 @@ const StyledClose = styled(PopoverPrimitive.Close, {
   right: 5
 });
 
+type PopoverContentPrimitiveProps = React.ComponentProps<typeof PopoverPrimitive.Content>;
+type PopoverContentProps = PopoverContentPrimitiveProps &
+  VariantProps<typeof StyledContent> & {
+    css?: CSS;
+  };
+
+export const PopoverContent = React.forwardRef<
+  React.ElementRef<typeof StyledContent>,
+  PopoverContentProps
+>(({ children, ...other }, forwardedRef) => (
+  <PopoverPrimitive.Portal>
+    <StyledContent {...other} ref={forwardedRef}>
+      {children}
+    </StyledContent>
+  </PopoverPrimitive.Portal>
+));
+
+PopoverContent.displayName = "PopoverContent";
+
 // Exports
 const Popover = PopoverPrimitive.Root;
 export const PopoverTrigger = PopoverPrimitive.Trigger;
-export const PopoverContent = StyledContent;
 export const PopoverArrow = StyledArrow;
 export const PopoverClose = StyledClose;
 

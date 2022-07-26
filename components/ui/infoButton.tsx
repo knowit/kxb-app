@@ -24,10 +24,7 @@ type InfoButtonProps = VariantProps<typeof IconButton> &
 
 const InfoButton = React.forwardRef<React.ElementRef<typeof Button>, InfoButtonProps>(
   function InfoButton({ children, popoverSide = "top", popoverSize = "2", ...other }, ref) {
-    const popoverContentSize: Record<
-      PopoverContentSizeVariants,
-      Pick<VariantProps<typeof PopoverContent>, "size">["size"]
-    > = {
+    const popoverContentSize = {
       1: { "@initial": "1" },
       2: { "@initial": "1", "@bp1": "2" },
       3: { "@initial": "1", "@bp2": "3" }
