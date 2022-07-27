@@ -24,10 +24,7 @@ type InfoButtonProps = VariantProps<typeof IconButton> &
 
 const InfoButton = React.forwardRef<React.ElementRef<typeof Button>, InfoButtonProps>(
   function InfoButton({ children, popoverSide = "top", popoverSize = "2", ...other }, ref) {
-    const popoverContentSize: Record<
-      PopoverContentSizeVariants,
-      Pick<VariantProps<typeof PopoverContent>, "size">["size"]
-    > = {
+    const popoverContentSize = {
       1: { "@initial": "1" },
       2: { "@initial": "1", "@bp1": "2" },
       3: { "@initial": "1", "@bp2": "3" }
@@ -40,7 +37,7 @@ const InfoButton = React.forwardRef<React.ElementRef<typeof Button>, InfoButtonP
             <Svg as={IoInformationCircleOutline} variant="textDark" />
           </IconButton>
         </PopoverTrigger>
-        <PopoverContent variant="gray" side={popoverSide} size={popoverContentSize[popoverSize]}>
+        <PopoverContent portal side={popoverSide} size={popoverContentSize[popoverSize]}>
           {children}
           <PopoverArrow variant="gray" offset={11} />
         </PopoverContent>

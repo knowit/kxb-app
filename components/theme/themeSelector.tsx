@@ -77,7 +77,7 @@ const ThemeSelect = ({
           <IoChevronDown />
         </SelectIcon>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent portal>
         <SelectScrollUpButton>
           <IoChevronUp />
         </SelectScrollUpButton>
