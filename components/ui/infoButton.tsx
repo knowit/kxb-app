@@ -37,7 +37,12 @@ const InfoButton = React.forwardRef<React.ElementRef<typeof Button>, InfoButtonP
             <Svg as={IoInformationCircleOutline} variant="textDark" />
           </IconButton>
         </PopoverTrigger>
-        <PopoverContent variant="gray" side={popoverSide} size={popoverContentSize[popoverSize]}>
+        <PopoverContent
+          portal
+          variant="gray"
+          side={popoverSide}
+          size={popoverContentSize[popoverSize]}
+        >
           {children}
           <PopoverArrow variant="gray" offset={11} />
         </PopoverContent>

@@ -37,6 +37,7 @@ const UserAvatarPopover = ({}) => {
         </IconButton>
       </PopoverTrigger>
       <PopoverContent
+        portal
         align="start"
         sideOffset={10}
         css={{

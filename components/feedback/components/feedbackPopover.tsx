@@ -9,6 +9,7 @@ const FeedbackPopover = ({}) => {
         <Button variant="text">Feedback</Button>
       </PopoverTrigger>
       <PopoverContent
+        portal
         align="start"
         sideOffset={10}
         css={{

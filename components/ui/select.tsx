@@ -96,19 +96,25 @@ const StyledScrollDownButton = styled(SelectPrimitive.ScrollDownButton, scrollBu
 type SelectContentPrimitiveProps = React.ComponentProps<typeof SelectPrimitive.Content>;
 type SelectContentProps = SelectContentPrimitiveProps &
   VariantProps<typeof StyledContent> & {
+    portal?: boolean;
+
     css?: CSS;
   };
 
 export const SelectContent = React.forwardRef<
   React.ElementRef<typeof StyledContent>,
   SelectContentProps
->(({ children, ...other }, forwardedRef) => (
-  <SelectPrimitive.Portal>
-    <StyledContent {...other} ref={forwardedRef}>
-      {children}
-    </StyledContent>
-  </SelectPrimitive.Portal>
-));
+>(({ children, portal = false, ...other }, forwardedRef) => {
+  const SelectWrapper = portal ? SelectPrimitive.Portal : React.Fragment;
+
+  return (
+    <SelectWrapper>
+      <StyledContent {...other} ref={forwardedRef}>
+        {children}
+      </StyledContent>
+    </SelectWrapper>
+  );
+});
 
 SelectContent.displayName = "SelectContent";
 

@@ -70,19 +70,24 @@ const StyledClose = styled(PopoverPrimitive.Close, {
 type PopoverContentPrimitiveProps = React.ComponentProps<typeof PopoverPrimitive.Content>;
 type PopoverContentProps = PopoverContentPrimitiveProps &
   VariantProps<typeof StyledContent> & {
+    portal?: boolean;
     css?: CSS;
   };
 
 export const PopoverContent = React.forwardRef<
   React.ElementRef<typeof StyledContent>,
   PopoverContentProps
->(({ children, ...other }, forwardedRef) => (
-  <PopoverPrimitive.Portal>
-    <StyledContent {...other} ref={forwardedRef}>
-      {children}
-    </StyledContent>
-  </PopoverPrimitive.Portal>
-));
+>(({ children, portal = false, ...other }, forwardedRef) => {
+  const PopoverWrapper = portal ? PopoverPrimitive.Portal : React.Fragment;
+
+  return (
+    <PopoverWrapper>
+      <StyledContent {...other} ref={forwardedRef}>
+        {children}
+      </StyledContent>
+    </PopoverWrapper>
+  );
+});
 
 PopoverContent.displayName = "PopoverContent";
 
