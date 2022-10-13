@@ -110,7 +110,11 @@ async function getUserRoles(token: string) {
 }
 
 async function handleToken(token: JWT) {
-  const dbUser = await prismaUser.getByActiveDirectoryId(token.sub);
+  const dbUser = await prismaUser.getByActiveDirectoryId(token.sub, {
+    include: {
+      workDayDetails: false
+    }
+  });
 
   if (Date.now() < new Date(dbUser.accessTokenExpires ?? 0).getTime()) {
     return {
@@ -119,7 +123,7 @@ async function handleToken(token: JWT) {
     };
   }
 
-  const refreshedToken = refreshAccessToken(token, dbUser);
+  const refreshedToken = await refreshAccessToken(token, dbUser);
 
   return {
     ...refreshedToken,
@@ -208,7 +212,9 @@ async function initialSignIn(
   });
 
   return {
-    ...token
+    ...token,
+    accessToken: account.access_token,
+    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000
   };
 }
 
@@ -257,7 +263,8 @@ export const authOptions: NextAuthOptions = {
       return handleToken(token);
     },
     async session({ session, token, user }) {
-      const dbUser = token?.dbUser;
+      const { workDayDetails, ...dbUser } = token?.dbUser;
+
       // Add property to session, like an access_token from a provider.
       return {
         ...session,
