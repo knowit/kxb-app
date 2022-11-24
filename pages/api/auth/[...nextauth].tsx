@@ -225,6 +225,15 @@ async function initialSignIn(
 }
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+    // max age 90 days
+    maxAge: 90 * 24 * 60 * 60
+  },
+  jwt: {
+    // max age 90 days
+    maxAge: 90 * 24 * 60 * 60
+  },
   providers: [
     AzureAdProvider({
       clientId: AZURE_AD_CLIENT_ID,

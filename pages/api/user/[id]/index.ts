@@ -123,16 +123,6 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
               in: workDaysToDelete.map(workDayDetail => workDayDetail.id)
             }
           }
-          // Delete records where both non commissioned hours and
-          // extra hours is less than or equals 0
-          // deleteMany: {
-          //   nonCommissionedHours: {
-          //     lte: 0
-          //   },
-          //   extraHours: {
-          //     lte: 0
-          //   }
-          // }
         },
         updated: new Date()
       },
