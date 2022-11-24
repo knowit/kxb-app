@@ -11,9 +11,7 @@ declare module "next-auth" {
       User & {
         image: string;
       };
-    expires: ISODateString;
     accessToken: string;
-    accessTokenExpires: number;
   }
 }
 
@@ -29,5 +27,6 @@ declare module "next-auth/jwt" {
     exp: number;
     jti: string;
     dbUser?: Omit<User, "refreshToken">;
+    accessToken?: string;
   }
 }

@@ -1,8 +1,12 @@
 import { useSalary } from "@/components/salary";
 import { Box, Flex, Text } from "@/components/ui";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import * as React from "react";
-import UserAvatarPopover from "./userAvatarPopover";
+
+const UserAvatarPopover = dynamic(() => import("./userAvatarPopover"), {
+  ssr: true
+});
 
 const UserNavDetails = () => {
   const { data: session } = useSession();

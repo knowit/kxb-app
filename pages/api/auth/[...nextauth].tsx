@@ -1,4 +1,3 @@
-import { uploadUserImage } from "@/lib/azure-storage";
 import prismaUser from "@/lib/prismaUser";
 import { validateEmail } from "@/logic/validationLogic";
 import type { User as PrismaUser } from "@/types";
@@ -43,24 +42,6 @@ const getUserEmail = async (accessToken: string): Promise<string> => {
   const user: GraphUser = await response.json();
 
   return user.mail ?? user.userPrincipalName;
-};
-
-const getUserImage = async (accessToken: string): Promise<ArrayBuffer | null> => {
-  // Fetch user image
-  // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0#examples
-  const response = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const pictureBuffer = await response.arrayBuffer();
-
-  return pictureBuffer;
 };
 
 const accessToGroupId = (groups = [], groupId) => {
@@ -193,12 +174,6 @@ async function initialSignIn(
 ): Promise<JWT> {
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
-  const image = await getUserImage(account.access_token);
-
-  if (image) {
-    await uploadUserImage(image, user.id);
-  }
-
   await prismaUser.upsert({
     create: {
       name: user.name,
@@ -278,6 +253,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token, user }) {
       const dbUser = token?.dbUser;
       // Add property to session, like an access_token from a provider.
+
       return {
         ...session,
         user: {
