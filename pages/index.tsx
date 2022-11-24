@@ -5,7 +5,6 @@ import { Heading } from "@/components/ui";
 import { useUser } from "@/components/user";
 import { getResultForAuthenticatedPage } from "@/utils/pageUtils";
 import { GetServerSideProps } from "next";
-import * as React from "react";
 
 export default function Home() {
   const { user } = useUser();
