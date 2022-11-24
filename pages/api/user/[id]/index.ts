@@ -1,4 +1,5 @@
 import prismaUser from "@/lib/prismaUser";
+import { UserWorkDayDetail } from "@/types";
 import { getSessionUserActiveDirectoryId, sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
@@ -47,11 +48,46 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "PUT" && req.body) {
     const { commission, hourlyRate, tax, workHours, workDayDetails } = req.body;
 
-    const workDaysToUpdate = (workDayDetails ?? []).filter(a =>
-      user.workDayDetails.some(b => a.date === b.date)
-    );
-    const workDaysToCreate = (workDayDetails ?? []).filter(
-      a => !workDaysToUpdate.some(b => a.date === b.date)
+    const { workDaysToCreate, workDaysToDelete, workDaysToUpdate } = (
+      (workDayDetails ?? []) as UserWorkDayDetail[]
+    )?.reduce(
+      (acc, curr) => {
+        const existing = user.workDayDetails.find(a => a.date === curr.date);
+
+        if (existing && curr.extraHours === 0 && curr.nonCommissionedHours === 0) {
+          return {
+            ...acc,
+            workDaysToDelete: [...acc.workDaysToDelete, curr]
+          };
+        }
+
+        if (
+          existing &&
+          (curr.extraHours !== 0 || curr.nonCommissionedHours !== 0) &&
+          (existing.extraHours !== curr.extraHours ||
+            existing.nonCommissionedHours !== curr.nonCommissionedHours ||
+            existing.sickDay !== curr.sickDay)
+        ) {
+          return {
+            ...acc,
+            workDaysToUpdate: [...acc.workDaysToUpdate, curr]
+          };
+        }
+
+        if (!existing && (curr.extraHours !== 0 || curr.nonCommissionedHours !== 0)) {
+          return {
+            ...acc,
+            workDaysToCreate: [...acc.workDaysToCreate, curr]
+          };
+        }
+
+        return acc;
+      },
+      {
+        workDaysToCreate: [] as UserWorkDayDetail[],
+        workDaysToDelete: [] as UserWorkDayDetail[],
+        workDaysToUpdate: [] as UserWorkDayDetail[]
+      }
     );
 
     await prismaUser.update({
@@ -81,7 +117,12 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
               date: workDayDetail.date,
               userId: user.id
             }
-          }))
+          })),
+          deleteMany: {
+            id: {
+              in: workDaysToDelete.map(workDayDetail => workDayDetail.id)
+            }
+          }
           // Delete records where both non commissioned hours and
           // extra hours is less than or equals 0
           // deleteMany: {
