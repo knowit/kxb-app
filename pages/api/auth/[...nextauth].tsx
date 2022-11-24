@@ -125,7 +125,7 @@ async function handleToken(token: JWT): Promise<JWT> {
     };
   }
 
-  const refreshedToken = await refreshAccessToken(token, dbUser);
+  const refreshedToken = refreshAccessToken(token, dbUser);
 
   return {
     ...refreshedToken,
@@ -220,9 +220,7 @@ async function initialSignIn(
   });
 
   return {
-    ...token,
-    accessToken: account.access_token,
-    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000
+    ...token
   };
 }
 
@@ -269,8 +267,7 @@ export const authOptions: NextAuthOptions = {
       return await handleToken(token);
     },
     async session({ session, token, user }) {
-      const { workDayDetails, ...dbUser } = token?.dbUser;
-
+      const dbUser = token?.dbUser;
       // Add property to session, like an access_token from a provider.
       return {
         ...session,
