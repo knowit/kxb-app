@@ -28,6 +28,7 @@ const AvatarImageFallback = styled("div", {
 const UserAvatar = () => {
   const { user } = useUser();
   const { data: session } = useSession();
+  const [imageError, setImageError] = React.useState(false);
 
   const initials = React.useMemo(
     () =>
@@ -51,10 +52,16 @@ const UserAvatar = () => {
         overflow: "hidden"
       }}
     >
-      {session.user?.image ? (
-        <AvatarImage src={session.user?.image} alt="User avatar" />
-      ) : (
+      {imageError ? (
         <AvatarImageFallback>{initials}</AvatarImageFallback>
+      ) : (
+        <AvatarImage
+          src={session.user?.image}
+          alt="User avatar"
+          onError={() => {
+            setImageError(true);
+          }}
+        />
       )}
     </Box>
   );

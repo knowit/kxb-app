@@ -105,11 +105,9 @@ const Link = ({ children, href, as, isExternal = false, ...other }: LinkProps) =
   }
 
   return (
-    <NextLink {...linkProps}>
-      <LinkRoot active={active} {...other}>
-        {children}
-      </LinkRoot>
-    </NextLink>
+    <LinkRoot as={NextLink} {...linkProps} active={active} {...other}>
+      {children}
+    </LinkRoot>
   );
 };
 

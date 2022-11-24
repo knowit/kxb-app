@@ -10,7 +10,7 @@ type LinkButtonProps = LinkButtonPrimitiveProps & { href: string; css?: CSS };
 
 export const LinkButton = ({ children, href, ...props }: LinkButtonProps) => {
   return (
-    <Link href={href} passHref>
+    <Link href={href} legacyBehavior passHref>
       <StyledLinkButton {...props}>{children}</StyledLinkButton>
     </Link>
   );
