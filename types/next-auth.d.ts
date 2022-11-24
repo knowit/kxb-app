@@ -28,6 +28,6 @@ declare module "next-auth/jwt" {
     iat: number;
     exp: number;
     jti: string;
-    dbUser?: User;
+    dbUser?: Omit<User, "refreshToken">;
   }
 }

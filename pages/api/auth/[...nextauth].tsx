@@ -1,3 +1,4 @@
+import { uploadUserImage } from "@/lib/azure-storage";
 import prismaUser from "@/lib/prismaUser";
 import { validateEmail } from "@/logic/validationLogic";
 import type { User as PrismaUser } from "@/types";
@@ -44,7 +45,7 @@ const getUserEmail = async (accessToken: string): Promise<string> => {
   return user.mail ?? user.userPrincipalName;
 };
 
-const getUserImage = async (accessToken: string): Promise<string | null> => {
+const getUserImage = async (accessToken: string): Promise<ArrayBuffer | null> => {
   // Fetch user image
   // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0#examples
   const response = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
@@ -58,9 +59,8 @@ const getUserImage = async (accessToken: string): Promise<string | null> => {
   }
 
   const pictureBuffer = await response.arrayBuffer();
-  const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
 
-  return `data:image/jpeg;base64, ${pictureBase64}`;
+  return pictureBuffer;
 };
 
 const accessToGroupId = (groups = [], groupId) => {
@@ -109,25 +109,27 @@ async function getUserRoles(token: string) {
   }
 }
 
-async function handleToken(token: JWT) {
+async function handleToken(token: JWT): Promise<JWT> {
   const dbUser = await prismaUser.getByActiveDirectoryId(token.sub, {
     include: {
       workDayDetails: false
     }
   });
 
+  const { refreshToken, ...restDbUser } = dbUser;
+
   if (Date.now() < new Date(dbUser.accessTokenExpires ?? 0).getTime()) {
     return {
       ...token,
-      dbUser
+      dbUser: restDbUser
     };
   }
 
-  const refreshedToken = await refreshAccessToken(token, dbUser);
+  const refreshedToken = refreshAccessToken(token, dbUser);
 
   return {
     ...refreshedToken,
-    dbUser
+    dbUser: restDbUser
   };
 }
 
@@ -188,8 +190,14 @@ async function initialSignIn(
   account: Account & { accessToken?: string; refreshToken?: string; ext_expires_in?: number },
   user: User,
   token: JWT
-) {
+): Promise<JWT> {
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
+
+  const image = await getUserImage(account.access_token);
+
+  if (image) {
+    await uploadUserImage(image, user.id);
+  }
 
   await prismaUser.upsert({
     create: {
@@ -212,9 +220,7 @@ async function initialSignIn(
   });
 
   return {
-    ...token,
-    accessToken: account.access_token,
-    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000
+    ...token
   };
 }
 
@@ -239,7 +245,6 @@ export const authOptions: NextAuthOptions = {
         // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0#examples
 
         const claims = getAzureAdTokenClaims(tokens.access_token);
-        const image = await getUserImage(tokens.access_token);
 
         return {
           id: claims.oid,
@@ -247,8 +252,7 @@ export const authOptions: NextAuthOptions = {
             profile.name ??
             claims?.name ??
             `${claims?.given_name}${claims?.family_name ? ` ${claims?.family_name}` : ""}`,
-          email: profile.email ?? (await getUserEmail(tokens.access_token)),
-          image: image
+          email: profile.email ?? (await getUserEmail(tokens.access_token))
         };
       }
     })
@@ -257,24 +261,23 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account, profile, isNewUser }) {
       // Initial sign in
       if (account && user) {
-        return initialSignIn(account, user, token);
+        return await initialSignIn(account, user, token);
       }
 
-      return handleToken(token);
+      return await handleToken(token);
     },
     async session({ session, token, user }) {
-      const { workDayDetails, ...dbUser } = token?.dbUser;
-
+      const dbUser = token?.dbUser;
       // Add property to session, like an access_token from a provider.
       return {
         ...session,
         user: {
-          ...session.user,
-          id: token.sub,
-          ...dbUser
-        },
-        accessToken: token.accessToken as string,
-        accessTokenExpires: token.accessTokenExpires as number
+          ...session?.user,
+          ...(dbUser ?? {}),
+          image: `https://kxbspecialistappstorage.blob.core.windows.net/user-images/${
+            dbUser?.activeDirectoryId ?? token.sub
+          }.png`
+        }
       };
     }
   },
