@@ -1,6 +1,12 @@
+import { Inter as FontSans } from "@next/font/google";
 import { ThemeProvider } from "next-themes";
 import * as React from "react";
 import { globalCss, lightTheme, theme } from "stitches.config";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-inter"
+});
 
 const globalStyles = globalCss({
   "*, ::before, ::after": {
@@ -39,7 +45,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const Layout = Component.layoutProps?.Layout || React.Fragment;
 
   const layoutProps = Component.layoutProps?.Layout
-    ? { pageProps, layoutProps: Component.layoutProps }
+    ? { pageProps, layoutProps: { ...Component.layoutProps, className: fontSans.className } }
     : {};
 
   return (

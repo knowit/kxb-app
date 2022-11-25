@@ -8,7 +8,7 @@ export default function Header({ userNavDetails = true, ...other }) {
   const { user } = useUser();
 
   return (
-    <Nav variant="header">
+    <Nav variant="header" {...other}>
       <Container
         size="4"
         center

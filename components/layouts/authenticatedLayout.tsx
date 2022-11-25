@@ -26,8 +26,8 @@ export default function AuthenticatedLayout({
       <UserProvider session={pageProps.session} user={pageProps.user}>
         <CalendarProvider>
           <SalaryProvider>
-            <Header {...layoutProps} />
-            <Main>
+            <Header className={layoutProps.className} />
+            <Main className={layoutProps.className}>
               <Container
                 size="3"
                 center
@@ -43,7 +43,7 @@ export default function AuthenticatedLayout({
                 {children}
               </Container>
             </Main>
-            <Footer variant="main">
+            <Footer className={layoutProps.className} variant="main">
               <Container
                 size="3"
                 center

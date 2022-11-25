@@ -16,6 +16,7 @@
   "author": "Tommy Lunde Barvåg",
   "license": "MIT",
   "dependencies": {
+    "@next/font": "^13.0.5",
     "@prisma/client": "^4.6.1",
     "@radix-ui/react-checkbox": "^1.0.1",
     "@radix-ui/react-dialog": "^1.0.2",

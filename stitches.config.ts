@@ -46,7 +46,7 @@ export const { styled, css, theme, createTheme, getCssText, globalCss, keyframes
         overlay: "rgba(0, 0, 0, 0.8)"
       },
       fonts: {
-        default: "Inter, -apple-system, system-ui, sans-serif"
+        default: "-apple-system, system-ui, sans-serif"
       },
       space: {
         1: "4px",
