@@ -10,7 +10,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "Tommy Lunde Barvåg",
