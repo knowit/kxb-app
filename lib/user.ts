@@ -3,7 +3,7 @@ import { getUserEarningsDetails } from "@/utils/user-utils";
 import { cache } from "react";
 import prisma from "./prisma";
 
-const getUserEarnings = cache(async (activeDirectoryId: string) => {
+const getUserWithWorkDayDetails = cache(async (activeDirectoryId: string) => {
   const user = await prisma.user.findUnique({
     where: {
       activeDirectoryId: activeDirectoryId
@@ -12,6 +12,12 @@ const getUserEarnings = cache(async (activeDirectoryId: string) => {
       workDayDetails: true
     }
   });
+
+  return user;
+});
+
+const getUserEarnings = cache(async (activeDirectoryId: string) => {
+  const user = await getUserWithWorkDayDetails(activeDirectoryId);
 
   if (!user) {
     return null;

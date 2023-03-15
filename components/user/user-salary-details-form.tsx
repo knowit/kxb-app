@@ -145,6 +145,7 @@ export function UserSalaryDetailsForm({ user, className, ...props }: UserSalaryD
             <Input
               id="name"
               type="number"
+              step="0.5"
               className="w-[400px]"
               size={32}
               {...register("workHours", {

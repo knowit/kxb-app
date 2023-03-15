@@ -122,6 +122,7 @@ type CalendarEntries = {
   isHoliday?: boolean;
   isSunday?: boolean;
   isStartOfWeek?: boolean;
+  isWorkDay?: boolean;
 };
 
 export type AzureAdTokenClaims = {

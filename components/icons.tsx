@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 
 export type Icon = IconProps;
@@ -25,5 +25,7 @@ export const Icons = {
     </svg>
   ),
   ChevronLeft: ChevronLeftIcon,
-  Close: Cross2Icon
+  ChevronRight: ChevronRightIcon,
+  Close: Cross2Icon,
+  Check: CheckIcon
 };

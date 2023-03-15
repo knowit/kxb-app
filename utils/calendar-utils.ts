@@ -48,7 +48,7 @@ const isKnowitClosed = (date: Date): boolean => {
 
 export const getLocale = (locale: string | undefined): Locale => {
   if (!locale || !isString(locale)) {
-    return nb;
+    return enUS;
   }
 
   switch (locale.toLowerCase()) {
@@ -65,7 +65,7 @@ export const getLocale = (locale: string | undefined): Locale => {
       return enUS;
 
     default:
-      return nb;
+      return enUS;
   }
 };
 
@@ -293,8 +293,8 @@ export const getCalendarMonthEntries = (
     // then we need to add spacing days
     if (index === 0) {
       (showWeeks
-        ? ["uke", "man.", "tir.", "ons.", "tor.", "fre.", "lør.", "søn."]
-        : ["man.", "tir.", "ons.", "tor.", "fre.", "lør.", "søn."]
+        ? ["week", "mon.", "tue.", "wed.", "thu.", "fri.", "sat.", "sun."]
+        : ["mon.", "tue.", "wed.", "thu.", "fri.", "sat.", "sun."]
       ).forEach(value => {
         acc.push({
           type: "header",
@@ -336,7 +336,8 @@ export const getCalendarMonthEntries = (
           value: lastMonth[lastMonth.length - (spacingDays - i)].getDate(),
           week: getWeek(day.date),
           isOdd: isStriped(acc.length, showWeeks),
-          isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0
+          isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
+          isWorkDay: day.isWorkDay
         });
       }
     }
@@ -353,7 +354,8 @@ export const getCalendarMonthEntries = (
       isOdd: isStriped(acc.length, showWeeks),
       isHoliday: day.isHoliday,
       isSunday: day.isSunday,
-      isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0
+      isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
+      isWorkDay: day.isWorkDay
     });
 
     // if index is last day of month, we need to add spacing days
@@ -375,7 +377,8 @@ export const getCalendarMonthEntries = (
           value: i + 1,
           week: getWeek(day.date),
           isOdd: isStriped(acc.length, showWeeks),
-          isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0
+          isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
+          isWorkDay: day.isWorkDay
         });
       }
     }
