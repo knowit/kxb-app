@@ -1,376 +1,48 @@
-import { css, styled } from "stitches.config";
-import Svg from "./svg";
-import Text from "./text";
+import { cva, VariantProps } from "class-variance-authority";
+import * as React from "react";
 
-export const buttonStyles = css({
-  // Reset
-  all: "unset",
-  alignItems: "center",
-  boxSizing: "border-box",
-  userSelect: "none",
-  "&::before": {
-    boxSizing: "border-box"
-  },
-  "&::after": {
-    boxSizing: "border-box"
-  },
+import { cn } from "@/lib/utils";
 
-  // Custom reset?
-  display: "inline-flex",
-  flexShrink: 0,
-  justifyContent: "center",
-  lineHeight: "1",
-  letterSpacing: "normal",
-  WebkitTapHighlightColor: "rgba(0,0,0,0)",
-  fontWeight: 400,
-  // Custom
-  cursor: "pointer",
-  height: "$5",
-  px: "$2",
-  fontSize: "$3",
-  transition: "all 0.2s ease-in-out",
-
-  //   fontVariantNumeric: "tabular-nums",
-
-  "&:disabled": {
-    opacity: "0.6",
-    cursor: "not-allowed",
-    pointerEvents: "none"
-  },
-
-  variants: {
-    size: {
-      1: {
-        borderRadius: "$2",
-        height: "$5",
-        px: "$2",
-        fontSize: "$1",
-        lineHeight: "$sizes$5"
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 disabled:opacity-50 dark:focus:ring-neutral-400 disabled:pointer-events-none dark:focus:ring-offset-neutral-900 data-[state=open]:bg-neutral-100 dark:data-[state=open]:bg-neutral-800",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-neutral-50 dark:text-neutral-900",
+        destructive: "bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-600",
+        outline:
+          "bg-transparent border border-neutral-200 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-100",
+        subtle:
+          "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-100",
+        ghost:
+          "bg-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-neutral-100 dark:hover:text-neutral-100 data-[state=open]:bg-transparent dark:data-[state=open]:bg-transparent",
+        link: "bg-transparent underline-offset-4 hover:underline text-neutral-900 dark:text-neutral-100 hover:bg-transparent dark:hover:bg-transparent"
       },
-      2: {
-        borderRadius: "$2",
-        height: "$6",
-        px: "$4",
-        fontSize: "$3",
-        lineHeight: "$sizes$6"
-      },
-      3: {
-        borderRadius: "$2",
-        height: "$7",
-        px: "$4",
-        fontSize: "$4",
-        lineHeight: "$sizes$7"
+      size: {
+        default: "h-10 py-2 px-4",
+        sm: "h-9 px-2 rounded-md",
+        lg: "h-11 px-8 rounded-md"
       }
     },
-    variant: {
-      green: {
-        backgroundColor: "$green",
-        border: "2px solid $colors$green",
-        color: "$black",
-        [`${Text}`]: {
-          color: "$black"
-        },
-        [`${Svg}`]: {
-          color: "$black"
-        },
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "$greenDark",
-            border: "2px solid $colors$greenDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "$green",
-          border: "2px solid $colors$greenDark"
-        },
-        "&:focus": {
-          backgroundColor: "$green",
-          border: "2px solid $colors$greenDark"
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-      },
-      red: {
-        backgroundColor: "$red",
-        border: "2px solid $colors$red",
-        color: "$black",
-        [`${Text}`]: {
-          color: "$black"
-        },
-        [`${Svg}`]: {
-          color: "$black"
-        },
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "$redDark",
-            border: "2px solid $colors$redDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "$red",
-          border: "2px solid $colors$redDark"
-        },
-        "&:focus": {
-          backgroundColor: "$red",
-          border: "2px solid $colors$redDark"
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-      },
-      white: {
-        backgroundColor: "$white",
-        border: "2px solid $colors$white",
-        color: "$black",
-        [`${Text}`]: {
-          color: "$black"
-        },
-        [`${Svg}`]: {
-          color: "$black"
-        },
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "$white",
-            border: "2px solid $colors$gray"
-          }
-        },
-        "&:active": {
-          backgroundColor: "$white",
-          border: "2px solid $colors$grayDark"
-        },
-        "&:focus": {
-          backgroundColor: "$white",
-          border: "2px solid $colors$grayDark"
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-      },
-      black: {
-        backgroundColor: "$black",
-        border: "2px solid $colors$black",
-        color: "$white",
-        [`${Text}`]: {
-          color: "$white"
-        },
-        [`${Svg}`]: {
-          color: "$white"
-        },
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "$black",
-            border: "2px solid $colors$grayDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "$black",
-          border: "2px solid $colors$white"
-        },
-        "&:focus": {
-          backgroundColor: "$black",
-          border: "2px solid $colors$white"
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-      },
-      text: {
-        backgroundColor: "transparent",
-        border: "2px solid transparent",
-        color: "$text",
-        [`${Text}`]: {
-          color: "$text"
-        },
-        [`${Svg}`]: {
-          color: "$text"
-        },
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "transparent",
-            border: "2px solid $colors$textDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$text"
-        },
-        "&:focus": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$text"
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-      },
-      textDark: {
-        backgroundColor: "transparent",
-        border: "2px solid transparent",
-        color: "$textDark",
-        [`${Text}`]: {
-          color: "$textDark"
-        },
-        [`${Svg}`]: {
-          color: "$textDark"
-        },
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "transparent",
-            border: "2px solid $colors$textDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$text"
-        },
-        "&:focus": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$text"
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-      }
-    },
-
-    state: {
-      active: {
-        backgroundColor: "$grayLight",
-        boxShadow: "inset 0 0 0 1px $grayLight",
-        color: "$grayLight",
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-        },
-        "&:active": {
-          backgroundColor: "$grayLight"
-        },
-        "&:focus": {
-          boxShadow: "inset 0 0 0 1px $grayLight, 0 0 0 1px $grayLight"
-        }
-      },
-      waiting: {
-        backgroundColor: "$grayLight",
-        boxShadow: "inset 0 0 0 1px $",
-        color: "transparent",
-        pointerEvents: "none",
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "$grayLight",
-            boxShadow: "inset 0 0 0 1px $grayLight"
-          }
-        },
-        "&:active": {
-          backgroundColor: "$grayLight"
-        },
-        "&:focus": {
-          boxShadow: "inset 0 0 0 1px $grayLight"
-        }
-      }
-    },
-    ghost: {
-      true: {
-        backgroundColor: "transparent",
-        boxShadow: "none"
-      }
-    },
-    fullWidth: {
-      true: {
-        width: "100%"
-      }
+    defaultVariants: {
+      variant: "default",
+      size: "default"
     }
-  },
-  compoundVariants: [
-    {
-      ghost: true,
-      variant: "green",
-      css: {
-        backgroundColor: "transparent",
-        border: "2px solid transparent",
-        color: "$green",
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "transparent",
-            border: "2px solid $colors$greenDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$green"
-        },
-        "&:focus": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$green"
-        }
-      }
-    },
-    {
-      ghost: true,
-      variant: "red",
-      css: {
-        backgroundColor: "transparent",
-        border: "2px solid transparent",
-        color: "$red",
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "transparent",
-            border: "2px solid $colors$redDark"
-          }
-        },
-        "&:active": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$red"
-        },
-        "&:focus": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$red"
-        }
-      }
-    },
-    {
-      ghost: true,
-      variant: "black",
-      css: {
-        backgroundColor: "transparent",
-        border: "2px solid transparent",
-        color: "$white",
-        "@hover": {
-          "&:hover": {
-            backgroundColor: "transparent",
-            border: "2px solid $colors$grayLightest"
-          }
-        },
-        "&:active": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$gray"
-        },
-        "&:focus": {
-          backgroundColor: "transparent",
-          border: "2px solid $colors$gray"
-        }
-      }
-    }
-  ],
-  defaultVariants: {
-    size: "2",
-    variant: "green"
   }
-});
+);
 
-const Button = styled("button", buttonStyles);
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {}
 
-export default Button;
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <button className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    );
+  }
+);
+Button.displayName = "Button";
+
+export { Button, buttonVariants };

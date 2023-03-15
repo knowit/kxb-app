@@ -1,8 +1,5 @@
 /// <reference types="node" />
 
-import { Prisma } from ".prisma/client";
-import { Session, TokenSet } from "next-auth";
-
 export type WithChildren<T = {}> = T & { children?: React.ReactNode };
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T;
@@ -74,13 +71,9 @@ export type UserEarningsDetails = {
   nextYearSalaryStatistics: CalendarYearEarnings;
 };
 
-export type PrismaUserUserWorkDayDetail = {
-  id: number;
-  date: string;
-  extraHours: Prisma.Decimal;
-  nonCommissionedHours: Prisma.Decimal;
-  sickDay: boolean;
-  userId: number;
+export type CalendarHolidayInformation = {
+  name: string;
+  shortDate: string;
 };
 
 export type CalendarYear = {
@@ -91,9 +84,11 @@ export type CalendarYear = {
 
 export type CalendarMonth = {
   month: string;
-  halfTax: boolean;
+  monthNumber: number;
+  year: number;
   days: CalendarDay[];
   payDay?: CalendarDay;
+  halfTax: boolean;
 };
 
 export type CalendarDay = {
@@ -104,9 +99,11 @@ export type CalendarDay = {
   formattedDate: string;
   formattedShortDate: string;
   formattedLongDate: string;
+  holidayInformation?: CalendarHolidayInformation;
   isHoliday: boolean;
   isWorkDay?: boolean;
-  isKnowitClosed: boolean;
+  isSunday?: boolean;
+  isKnowitClosed?: boolean;
 };
 
 export type Holiday = {
@@ -116,23 +113,16 @@ export type Holiday = {
   formattedLongDate: string;
 };
 
-export type NextAuthSessionUser = {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  id?: string | null;
-  isAdmin?: boolean;
-  isSpecialist?: boolean;
-  activeDirectoryId?: string;
+type CalendarEntries = {
+  type: "header" | "week" | "spacing" | "day";
+  value: string | number | null;
+  week?: number;
+  isToday?: boolean;
+  isOdd?: boolean;
+  isHoliday?: boolean;
+  isSunday?: boolean;
+  isStartOfWeek?: boolean;
 };
-
-export type NextAuthSession = {
-  user?: NextAuthSessionUser;
-} & Session;
-
-export type NextAuthToken = {
-  sub: string;
-} & TokenSet;
 
 export type AzureAdTokenClaims = {
   aud: string;

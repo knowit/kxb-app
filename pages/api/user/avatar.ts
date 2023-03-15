@@ -15,16 +15,20 @@ export default async function Avatar(req: NextApiRequest, res: NextApiResponse) 
   }
 
   if (req.method === "GET") {
-    const { refreshToken } = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
-        id: session.user.id
+        activeDirectoryId: session.user.activeDirectoryId
       },
       select: {
         refreshToken: true
       }
     });
 
-    if (!refreshToken) {
+    if (!user) {
+      return res.status(404).end();
+    }
+
+    if (!user.refreshToken) {
       return res.status(404).end();
     }
 
@@ -39,7 +43,7 @@ export default async function Avatar(req: NextApiRequest, res: NextApiResponse) 
         client_id: AZURE_AD_CLIENT_ID,
         client_secret: AZURE_AD_SECRET,
         grant_type: "refresh_token",
-        refresh_token: refreshToken,
+        refresh_token: user.refreshToken,
         scope: AZURE_AD_SCOPE
       })
     });
@@ -57,7 +61,7 @@ export default async function Avatar(req: NextApiRequest, res: NextApiResponse) 
         updated: new Date()
       },
       where: {
-        id: session.user.id
+        activeDirectoryId: session.user.activeDirectoryId
       }
     });
 

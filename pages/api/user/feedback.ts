@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
-import { getFeedbackEmailTemplate } from "@/utils/emailUtils";
-import { getSessionUserActiveDirectoryId } from "@/utils/sessionUtils";
+import { getFeedbackEmailTemplate } from "@/utils/email-utils";
 import sendGridMail from "@sendgrid/mail";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
@@ -12,9 +11,8 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
     return res.status(401).end();
   }
 
-  const sessionUserActiveDirectoryId = getSessionUserActiveDirectoryId(session);
 
-  if (sessionUserActiveDirectoryId === null || sessionUserActiveDirectoryId === undefined) {
+  if (!session.user.activeDirectoryId) {
     return res.status(400).end();
   }
 
@@ -42,13 +40,13 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
     );
   }
 
-  const {
-    id: userId,
-    email,
-    name
-  } = await prisma.user.findUnique({
-    where: { activeDirectoryId: sessionUserActiveDirectoryId }
+  const user = await prisma.user.findUnique({
+    where: { activeDirectoryId: session.user.activeDirectoryId }
   });
+
+  if (!user) {
+    return res.status(404).end();
+  }
 
   if (req.method === "POST") {
     const message: string = req.body.message;
@@ -62,7 +60,7 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
       data: {
         feedback: message,
         reaction: reaction,
-        userId
+        userId: user.id
       }
     });
 
@@ -74,8 +72,8 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
       await sendGridMail.send({
         to: process.env.FEEDBACK_RECIPIENT_EMAIL,
         from: "tommy.barvag@knowit.no",
-        subject: `kxb.app feedback from ${name}`,
-        html: getFeedbackEmailTemplate(name, message, email)
+        subject: `kxb.app feedback from ${user.name ?? user.email}`,
+        html: getFeedbackEmailTemplate(user.name ?? user.email, message, user.email)
       });
     }
 
