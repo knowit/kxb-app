@@ -9,12 +9,12 @@ import * as z from "zod";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { useState, useTransition, type HTMLAttributes } from "react";
+import { Show } from "../ui/show";
 
 interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
   user: {
@@ -74,7 +74,9 @@ export function UserSalaryDetailsForm({ user, className, ...props }: UserSalaryD
     }
 
     toast({
-      description: "Your salary details has been updated."
+      description: "Your salary details has been updated.",
+      duration: 5000,
+      variant: "success"
     });
 
     // start transition
@@ -86,84 +88,81 @@ export function UserSalaryDetailsForm({ user, className, ...props }: UserSalaryD
   }
 
   return (
-    <form className={cn(className)} onSubmit={handleSubmit(onSubmit)} {...props}>
-      <Card>
-        <Card.Header>
-          <Card.Title>Your Name</Card.Title>
-          <Card.Description>
-            Please enter your full name or a display name you are comfortable with.
-          </Card.Description>
-        </Card.Header>
-        <Card.Content>
-          <div className="grid gap-1">
-            <Label htmlFor="name">Hourly rate</Label>
-            <Input
-              id="name"
-              type="number"
-              className="w-[400px]"
-              size={32}
-              {...register("hourlyRate", {
-                valueAsNumber: true
-              })}
-            />
-            {errors?.hourlyRate && (
-              <p className="px-1 text-xs text-red-600">{errors.hourlyRate.message}</p>
-            )}
-          </div>
-          <div className="grid gap-1">
-            <Label htmlFor="name">Commission</Label>
-            <Input
-              id="name"
-              type="number"
-              step="0.01"
-              className="w-[400px]"
-              size={32}
-              {...register("commission", {
-                valueAsNumber: true
-              })}
-            />
-            {errors?.commission && (
-              <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
-            )}
-          </div>
-          <div className="grid gap-1">
-            <Label htmlFor="name">Tax</Label>
-            <Input
-              id="name"
-              type="number"
-              step="0.01"
-              className="w-[400px]"
-              size={32}
-              {...register("tax", {
-                valueAsNumber: true
-              })}
-            />
-            {errors?.tax && <p className="px-1 text-xs text-red-600">{errors.tax.message}</p>}
-          </div>
-          <div className="grid gap-1">
-            <Label htmlFor="name">Work hours</Label>
-            <Input
-              id="name"
-              type="number"
-              step="0.5"
-              className="w-[400px]"
-              size={32}
-              {...register("workHours", {
-                valueAsNumber: true
-              })}
-            />
-            {errors?.workHours && (
-              <p className="px-1 text-xs text-red-600">{errors.workHours.message}</p>
-            )}
-          </div>
-        </Card.Content>
-        <Card.Footer>
-          <Button type="submit" disabled={isSaving || isPending}>
-            {(isSaving || isPending) && <Icons.Logo className="mr-2 h-4 w-4 animate-spin" />}
-            <span>Save</span>
-          </Button>
-        </Card.Footer>
-      </Card>
+    <form
+      className={cn("flex flex-col gap-y-2", className)}
+      onSubmit={handleSubmit(onSubmit)}
+      {...props}
+    >
+      <div className="">
+        <Label htmlFor="name">Hourly rate</Label>
+        <Input
+          id="name"
+          type="number"
+          className="w-full max-w-[400px]"
+          size={32}
+          {...register("hourlyRate", {
+            valueAsNumber: true
+          })}
+        />
+        {errors?.hourlyRate && (
+          <p className="px-1 text-xs text-red-600">{errors.hourlyRate.message}</p>
+        )}
+      </div>
+      <div className="">
+        <Label htmlFor="name">Commission</Label>
+        <Input
+          id="name"
+          type="number"
+          step="0.01"
+          className="w-full max-w-[400px]"
+          size={32}
+          {...register("commission", {
+            valueAsNumber: true
+          })}
+        />
+        {errors?.commission && (
+          <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
+        )}
+      </div>
+      <div className="">
+        <Label htmlFor="name">Tax</Label>
+        <Input
+          id="name"
+          type="number"
+          step="0.01"
+          className="w-full max-w-[400px]"
+          size={32}
+          {...register("tax", {
+            valueAsNumber: true
+          })}
+        />
+        {errors?.tax && <p className="px-1 text-xs text-red-600">{errors.tax.message}</p>}
+      </div>
+      <div className="">
+        <Label htmlFor="name">Work hours</Label>
+        <Input
+          id="name"
+          type="number"
+          step="0.5"
+          className="w-full max-w-[400px]"
+          size={32}
+          {...register("workHours", {
+            valueAsNumber: true
+          })}
+        />
+        {errors?.workHours && (
+          <p className="px-1 text-xs text-red-600">{errors.workHours.message}</p>
+        )}
+      </div>
+      <Button className="mt-4" type="submit" disabled={isSaving || isPending}>
+        <span>Save</span>
+        <Show when={!isSaving && !isPending}>
+          <Icons.Check className="ml-2 h-4 w-4" />
+        </Show>
+        <Show when={isSaving || isPending}>
+          <Icons.Logo className="ml-2 h-4 w-4 animate-spin" />
+        </Show>
+      </Button>
     </form>
   );
 }

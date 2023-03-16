@@ -4,7 +4,15 @@ import { cn } from "@/lib/utils";
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Card({ className, ...props }: CardProps) {
-  return <div className={cn("overflow-hidden rounded-lg border", className)} {...props} />;
+  return (
+    <div
+      className={cn(
+        "overflow-hidden rounded-lg border dark:border-neutral-700 dark:bg-black",
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -16,7 +24,7 @@ Card.Header = function CardHeader({ className, ...props }: CardHeaderProps) {
 interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 Card.Content = function CardContent({ className, ...props }: CardContentProps) {
-  return <div className={cn("px-6 pb-4", className)} {...props} />;
+  return <div className={cn("px-6 pb-4 ", className)} {...props} />;
 };
 
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -24,7 +32,10 @@ interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 Card.Footer = function CardFooter({ className, ...props }: CardFooterProps) {
   return (
     <div
-      className={cn("border-t bg-neutral-50 px-6 py-4 dark:bg-neutral-800", className)}
+      className={cn(
+        "border-t border-neutral-700 bg-neutral-50 px-6 py-4 dark:bg-neutral-800",
+        className
+      )}
       {...props}
     />
   );

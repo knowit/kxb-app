@@ -1,3 +1,4 @@
+import { Show } from "@/components/ui/show";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { CalendarMonth } from "@/types";
@@ -16,7 +17,7 @@ const CalendarMonth: React.FC<{ month: CalendarMonth; big?: boolean }> = ({
   const calendarEntries = getCalendarMonthEntries(month, currentDate, showWeeks);
 
   return (
-    <div className="min-h-[290px]">
+    <div className="min-h-[240px] lg:min-h-[410px]">
       <div className="flex items-center justify-center gap-3">
         <div className="flex items-center justify-center gap-1">
           <div className="h-2 w-2 rounded-full border-neutral-50 bg-neutral-50" />
@@ -51,7 +52,7 @@ const CalendarMonth: React.FC<{ month: CalendarMonth; big?: boolean }> = ({
               "min-h-[50px] md:min-h-[112px]":
                 big && (calendarDay.type === "day" || calendarDay.type === "spacing"),
               "items-end justify-start py-1 px-1 md:py-2 md:px-3": big,
-              "min-h-[34px] items-center justify-center": !big,
+              "items-center justify-center lg:min-h-[50px] lg:min-w-[50px]": !big,
               "text-xs": calendarDay.type === "header"
             })}
           >
@@ -87,7 +88,7 @@ const CalendarMonth: React.FC<{ month: CalendarMonth; big?: boolean }> = ({
           </div>
         ))}
       </div>
-      {holidayInfos.length ? (
+      <Show when={holidayInfos.length > 0}>
         <div className="mt-4">
           {holidayInfos.map((day, index) => (
             <div
@@ -100,7 +101,7 @@ const CalendarMonth: React.FC<{ month: CalendarMonth; big?: boolean }> = ({
             </div>
           ))}
         </div>
-      ) : null}
+      </Show>
     </div>
   );
 };

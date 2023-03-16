@@ -1,11 +1,20 @@
-import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import {
+  ArrowTopRightIcon,
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Cross2Icon,
+  GearIcon
+} from "@radix-ui/react-icons";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 
 export type Icon = IconProps;
 
 export const Icons = {
-  Logo: ({ ...other }: Icon) => (
+  Logo: ({ className, ...other }: Icon) => (
     <svg
+      className={cn("w-[140px]", className)}
       xmlns="http://www.w3.org/2000/svg"
       width="233"
       height="72"
@@ -24,8 +33,10 @@ export const Icons = {
       </g>
     </svg>
   ),
+  Gear: GearIcon,
   ChevronLeft: ChevronLeftIcon,
   ChevronRight: ChevronRightIcon,
   Close: Cross2Icon,
-  Check: CheckIcon
+  Check: CheckIcon,
+  ArrowTopRight: ArrowTopRightIcon
 };

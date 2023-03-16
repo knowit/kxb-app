@@ -15,7 +15,7 @@ const CompanyBenefit = ({ text }: { text: string }) => (
 export default function CompanyBenefits() {
   return (
     <div className="my-8 grid grid-cols-12 gap-8">
-      <div className="col-span-4">
+      <div className="col-span-12 lg:col-span-4">
         <h2 className="mb-2 text-3xl font-bold text-emerald-500">Knowit Experience Bergen</h2>
         <h3 className="mb-4 text-2xl font-bold">Company Benefits</h3>
         <p>
@@ -27,7 +27,7 @@ export default function CompanyBenefits() {
           </span>
         </p>
       </div>
-      <div className="col-span-8 grid grid-cols-2 gap-3">
+      <div className="col-span-12 grid grid-cols-2 gap-3 lg:col-span-8">
         {/* transform all to CompanyBenefit component */}
         <CompanyBenefit text="Full pay on paternity leave" />
         <CompanyBenefit text="Pension 5,5% of salary from 1G to 12G" />

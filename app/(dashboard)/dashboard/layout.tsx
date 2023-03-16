@@ -1,13 +1,22 @@
 import { Icons } from "@/components/icons";
-import { UserAvatar } from "@/components/user/user-avatar";
+import { getCurrentUser } from "@/lib/session";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import Avatar, { AvatarSkeleton } from "./_components/avatar";
+import Footer from "./_components/footer";
 import NextPaycheck from "./_components/next-paycheck";
 
-export default function DashboardLayout({ children }) {
+export default async function DashboardLayout({ children }) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <>
-      <nav className="flex items-center justify-between">
+      <nav className="flex items-center justify-between border-b border-b-neutral-700 bg-black px-8 py-4">
         <Link href="/">
           <Icons.Logo />
         </Link>
@@ -16,10 +25,14 @@ export default function DashboardLayout({ children }) {
             {/* @ts-expect-error Async Server Component */}
             <NextPaycheck />
           </Suspense>
-          <UserAvatar />
+          <Suspense fallback={<AvatarSkeleton />}>
+            {/* @ts-expect-error Async Server Component */}
+            <Avatar />
+          </Suspense>
         </div>
       </nav>
-      <main className="mx-auto max-w-5xl">{children}</main>
+      <main className="my-24 mx-auto max-w-5xl px-4">{children}</main>
+      <Footer />
     </>
   );
 }

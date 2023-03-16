@@ -18,7 +18,7 @@ const MonthSelect = forwardRef<
   ComponentPropsWithoutRef<typeof SelectTrigger> & {
     year: number;
     month: number;
-    isSelected: boolean;
+    isSelected?: boolean;
   }
 >(({ className, year, month, isSelected = false, ...other }, forwardedRef) => {
   const router = useRouter();
@@ -52,12 +52,12 @@ const MonthSelect = forwardRef<
         ref={forwardedRef}
       >
         <SelectValue placeholder={month} />
-        <span className="sr-only">Toggle theme</span>
+        <span className="sr-only">Toggle month</span>
       </SelectTrigger>
       <SelectContent>
-        {Object.values(MONTH).map(theme => (
-          <SelectItem key={theme.value} value={theme.value.toString()}>
-            <div className="flex items-center gap-3">{theme.i18n.no}</div>
+        {Object.values(MONTH).map(m => (
+          <SelectItem key={m.value} value={m.value.toString()}>
+            <div className="flex items-center gap-3">{m.i18n.en}</div>
           </SelectItem>
         ))}
       </SelectContent>
@@ -65,6 +65,6 @@ const MonthSelect = forwardRef<
   );
 });
 
-MonthSelect.displayName = "ThemeSelect";
+MonthSelect.displayName = "MonthSelect";
 
 export { MonthSelect };

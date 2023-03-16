@@ -154,20 +154,34 @@ const getNorwegianHolidays = memoize(function (year: number): Holiday[] {
   const christmasDay = new Date(year, 11, 25);
   const stStephensDay = new Date(year, 11, 26);
 
+  // TODO: Handle i18n
   return [
-    createHoliday("1. nyttårsdag", newYearsDay),
-    createHoliday("Palmesøndag", palmSunday),
-    createHoliday("Skjærtorsdag", maundyThursday),
-    createHoliday("Langfredag", goodFriday),
-    createHoliday("1. påskedag", easter),
-    createHoliday("2. påskedag", easterMonday),
-    createHoliday("Arbeidernes dag", labourDay),
-    createHoliday("Grunnlovsdag", constitutionDay),
-    createHoliday("Kristi Himmelfartsdag", ascensionDay),
-    createHoliday("1. pinsedag", whitsun),
-    createHoliday("2. pinsedag", whitMonday),
-    createHoliday("1. juledag", christmasDay),
-    createHoliday("2. juledag", stStephensDay)
+    // 1. nyttårsdag
+    createHoliday("New Year's Day", newYearsDay),
+    // Palmesøndag
+    createHoliday("Palm Sunday", palmSunday),
+    // Skjærtorsdag
+    createHoliday("Maundy Thursday", maundyThursday),
+    // Langfredag
+    createHoliday("Good Friday", goodFriday),
+    // 1. påskedag
+    createHoliday("Easter", easter),
+    // 2. påskedag
+    createHoliday("Easter Monday", easterMonday),
+    // 1. mai / Arbeidernes dag
+    createHoliday("Labour Day", labourDay),
+    // 17. mai / Grunnlovsdag
+    createHoliday("Constitution Day", constitutionDay),
+    // Kristi himmelfartsdag
+    createHoliday("Ascension Day", ascensionDay),
+    // 1. pinsedag
+    createHoliday("Whitsun", whitsun),
+    // 2. pinsedag
+    createHoliday("Whit Monday", whitMonday),
+    // 1. juledag
+    createHoliday("Christmas Day", christmasDay),
+    // 2. juledag
+    createHoliday("St. Stephen's Day", stStephensDay)
   ];
 });
 
