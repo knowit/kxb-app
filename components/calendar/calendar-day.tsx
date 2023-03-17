@@ -87,4 +87,6 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
   }
 );
 
+CalendarDay.displayName = "CalendarDay";
+
 export { CalendarDay };

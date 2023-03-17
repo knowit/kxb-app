@@ -59,7 +59,7 @@ export function UserWorkDayDetailForm({
     if (nonCommissionedHours <= 0) {
       setValue("sickDay", false);
     }
-  }, [nonCommissionedHours]);
+  }, [nonCommissionedHours, setValue]);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);

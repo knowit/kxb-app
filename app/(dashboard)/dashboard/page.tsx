@@ -3,8 +3,10 @@ import { getCurrentUser } from "@/lib/session";
 import { getUserEarnings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import CalendarMonthWithSalary from "./_components/calendar-month-with-salary";
 import CompanyBenefits from "./_components/company-benefits";
+import YearlyEconomicOverview from "./_components/yearly-economic-overview";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -27,6 +29,10 @@ export default async function DashboardPage() {
         userEarnings={userEarnings}
       />
       <CompanyBenefits />
+      <Suspense fallback={<div />}>
+        {/* @ts-expect-error Async Server Component */}
+        <YearlyEconomicOverview />
+      </Suspense>
     </>
   );
 }

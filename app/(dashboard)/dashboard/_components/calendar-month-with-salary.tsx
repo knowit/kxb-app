@@ -1,5 +1,6 @@
 import { MonthSelect } from "@/components/calendar/month-select";
 import { Icons } from "@/components/icons";
+import { SalaryDetailsCard } from "@/components/salary/salary-details-card";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
@@ -8,15 +9,6 @@ import { UserEarningsDetails, type CalendarMonth as CalendarMonthType } from "@/
 import { Session } from "next-auth";
 import Link from "next/link";
 import { CalendarMonth } from "./calendar-month";
-
-const SalaryDetailsCard = ({ heading, value }: { heading: string; value?: string }) => {
-  return (
-    <Card className="py-3">
-      <Card.Header className="mb-1 px-3 py-0 text-xs uppercase">{heading}</Card.Header>
-      <Card.Content className="px-3 py-0 text-lg font-bold">{value}</Card.Content>
-    </Card>
-  );
-};
 
 export default function CalendarMonthWithSalary({
   user,
@@ -34,22 +26,18 @@ export default function CalendarMonthWithSalary({
           Salary details for {calendarMonth.month} {calendarMonth.year}
         </h2>
         <div className="grid grid-cols-2 gap-3">
-          <SalaryDetailsCard
-            heading="Work days"
-            value={userEarnings?.activeCalendarMonthStatistics.workDays.length.toString()}
-          />
-          <SalaryDetailsCard
-            heading="Work hours"
-            value={userEarnings?.activeCalendarMonthStatistics.workHours.toString()}
-          />
-          <SalaryDetailsCard
-            heading="Gross salary"
-            value={userEarnings?.activeCalendarMonthStatistics.grossFormatted}
-          />
-          <SalaryDetailsCard
-            heading="Net salary"
-            value={userEarnings?.activeCalendarMonthStatistics.netFormatted}
-          />
+          <SalaryDetailsCard heading="Work days">
+            {userEarnings?.activeCalendarMonthStatistics.workDays.length.toString()}
+          </SalaryDetailsCard>
+          <SalaryDetailsCard heading="Work hours">
+            {userEarnings?.activeCalendarMonthStatistics.workHours.toString()}
+          </SalaryDetailsCard>
+          <SalaryDetailsCard heading="Gross salary">
+            {userEarnings?.activeCalendarMonthStatistics.grossFormatted}
+          </SalaryDetailsCard>
+          <SalaryDetailsCard heading="Net salary">
+            {userEarnings?.activeCalendarMonthStatistics.netFormatted}
+          </SalaryDetailsCard>
         </div>
         <Show when={calendarMonth.halfTax}>
           <Card className="flex items-center">
