@@ -160,7 +160,7 @@ export function UserSalaryDetailsForm({ user, className, ...props }: UserSalaryD
           <Icons.Check className="ml-2 h-4 w-4" />
         </Show>
         <Show when={isSaving || isPending}>
-          <Icons.Logo className="ml-2 h-4 w-4 animate-spin" />
+          <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
       </Button>
     </form>

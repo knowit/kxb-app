@@ -35,10 +35,7 @@ const ThemeSelect = forwardRef<
   return (
     <Select
       defaultValue={selectedTheme ?? THEME_CONSTANTS.SYSTEM.value}
-      onValueChange={value => {
-        console.log(value);
-        setTheme(value);
-      }}
+      onValueChange={value => setTheme(value)}
     >
       <SelectTrigger className={cn("max-w-[8rem]", className)} {...other} ref={forwardedRef}>
         <SelectValue placeholder={selectedTheme ?? "System"} />

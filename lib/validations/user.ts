@@ -6,3 +6,11 @@ export const userSalaryDetailSchema = z.object({
   tax: z.number().min(0).max(100),
   workHours: z.number().min(0).max(24)
 });
+
+export const userWorkDayDetailSchema = z.object({
+  id: z.number().min(0).optional(),
+  date: z.string(),
+  nonCommissionedHours: z.number().min(0).max(24),
+  extraHours: z.number().min(0).max(24),
+  sickDay: z.boolean()
+});

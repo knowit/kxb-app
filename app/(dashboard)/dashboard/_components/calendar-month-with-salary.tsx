@@ -29,25 +29,25 @@ export default function CalendarMonthWithSalary({
 }) {
   return (
     <div className="flex flex-col gap-12 lg:flex-row">
-      <div className="flex max-w-[380px] flex-col gap-3">
+      <div className="flex max-w-[380px] flex-col gap-3 lg:min-w-[380px]">
         <h2 className="font-bold">
           Salary details for {calendarMonth.month} {calendarMonth.year}
         </h2>
         <div className="grid grid-cols-2 gap-3">
           <SalaryDetailsCard
-            heading={`Work days in ${calendarMonth.month}`}
+            heading="Work days"
             value={userEarnings?.activeCalendarMonthStatistics.workDays.length.toString()}
           />
           <SalaryDetailsCard
-            heading={`Work hours in ${calendarMonth.month}`}
+            heading="Work hours"
             value={userEarnings?.activeCalendarMonthStatistics.workHours.toString()}
           />
           <SalaryDetailsCard
-            heading={`Gross salary ${calendarMonth.month}`}
+            heading="Gross salary"
             value={userEarnings?.activeCalendarMonthStatistics.grossFormatted}
           />
           <SalaryDetailsCard
-            heading={`Net salary ${calendarMonth.month}`}
+            heading="Net salary"
             value={userEarnings?.activeCalendarMonthStatistics.netFormatted}
           />
         </div>
@@ -104,7 +104,7 @@ export default function CalendarMonthWithSalary({
             </Link>
           </div>
         </div>
-        <CalendarMonth month={calendarMonth} />
+        <CalendarMonth month={calendarMonth} workDayDetails={userEarnings?.workDayDetails} />
       </div>
     </div>
   );

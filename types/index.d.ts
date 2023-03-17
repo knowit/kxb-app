@@ -116,6 +116,8 @@ export type Holiday = {
 type CalendarEntries = {
   type: "header" | "week" | "spacing" | "day";
   value: string | number | null;
+  date: string;
+  formattedDate: string;
   week?: number;
   isToday?: boolean;
   isOdd?: boolean;
@@ -123,6 +125,8 @@ type CalendarEntries = {
   isSunday?: boolean;
   isStartOfWeek?: boolean;
   isWorkDay?: boolean;
+  isNonCommissionedWorkDay?: boolean;
+  workDayDetails?: UserWorkDayDetail;
 };
 
 export type AzureAdTokenClaims = {

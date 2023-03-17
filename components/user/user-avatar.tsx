@@ -17,7 +17,7 @@ function UserAvatar({ name, src }: { name: Session["user"]["name"]; src?: string
         <Button variant="outline" className="h-12 w-12 rounded-full p-0">
           {src ? (
             <Image
-              className="h-12 w-12 rounded-full p-0"
+              className="aspect-square rounded-full p-0"
               src={src}
               alt="User avatar"
               width={48}

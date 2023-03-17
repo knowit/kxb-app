@@ -1,5 +1,5 @@
 import { getPayDay } from "@/logic/calendar-logic";
-import { CalendarDay, CalendarEntries, CalendarMonth, Holiday } from "@/types";
+import { CalendarDay, CalendarEntries, CalendarMonth, Holiday, UserWorkDayDetail } from "@/types";
 import { isString, memoize, range } from "@/utils/common-utils";
 import {
   getFormattedDate,
@@ -296,7 +296,8 @@ const isStriped = (index: number, showWeeks = false) => {
 export const getCalendarMonthEntries = (
   month: CalendarMonth,
   currentDate: Date,
-  showWeeks = true
+  showWeeks = true,
+  workDayDetails?: UserWorkDayDetail[]
 ) => {
   const lastMonth = getAllDaysInMonth(addMonths(month.days[0].date, -1));
 
@@ -313,6 +314,8 @@ export const getCalendarMonthEntries = (
         acc.push({
           type: "header",
           value,
+          date: day.date.toISOString(),
+          formattedDate: day.formattedDate,
           isOdd: isStriped(acc.length, showWeeks)
         });
       });
@@ -323,9 +326,15 @@ export const getCalendarMonthEntries = (
       acc.push({
         type: "week",
         value: getWeek(day.date),
+        date: day.date.toISOString(),
+        formattedDate: day.formattedDate,
         isOdd: isStriped(acc.length, showWeeks)
       });
     }
+
+    const workDayDetail = workDayDetails?.find(
+      userWorkDayDetail => userWorkDayDetail.date === day.formattedDate
+    );
 
     // render spacing days for month
     // week starts on monday
@@ -348,10 +357,14 @@ export const getCalendarMonthEntries = (
           type: "spacing",
           // we use date from last month to render spacing days
           value: lastMonth[lastMonth.length - (spacingDays - i)].getDate(),
+          date: day.date.toISOString(),
+          formattedDate: day.formattedDate,
           week: getWeek(day.date),
           isOdd: isStriped(acc.length, showWeeks),
           isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
-          isWorkDay: day.isWorkDay
+          isWorkDay: day.isWorkDay,
+          isNonCommissionedWorkDay: (workDayDetail?.nonCommissionedHours ?? 0) > 0,
+          workDayDetails: workDayDetail
         });
       }
     }
@@ -360,6 +373,8 @@ export const getCalendarMonthEntries = (
     acc.push({
       type: "day",
       value: day.date.getDate(),
+      date: day.date.toISOString(),
+      formattedDate: day.formattedDate,
       week: getWeek(day.date),
       isToday:
         day.date.getDate() === currentDate.getDate() &&
@@ -369,7 +384,9 @@ export const getCalendarMonthEntries = (
       isHoliday: day.isHoliday,
       isSunday: day.isSunday,
       isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
-      isWorkDay: day.isWorkDay
+      isWorkDay: day.isWorkDay,
+      isNonCommissionedWorkDay: (workDayDetail?.nonCommissionedHours ?? 0) > 0,
+      workDayDetails: workDayDetail
     });
 
     // if index is last day of month, we need to add spacing days
@@ -389,10 +406,14 @@ export const getCalendarMonthEntries = (
         acc.push({
           type: "spacing",
           value: i + 1,
+          date: day.date.toISOString(),
+          formattedDate: day.formattedDate,
           week: getWeek(day.date),
           isOdd: isStriped(acc.length, showWeeks),
           isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
-          isWorkDay: day.isWorkDay
+          isWorkDay: day.isWorkDay,
+          isNonCommissionedWorkDay: (workDayDetail?.nonCommissionedHours ?? 0) > 0,
+          workDayDetails: workDayDetail
         });
       }
     }

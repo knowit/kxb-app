@@ -1,20 +1,22 @@
+import { CalendarDay } from "@/components/calendar/calendar-day";
 import { Show } from "@/components/ui/show";
+import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-day-detail-dialog";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { CalendarMonth } from "@/types";
+import { CalendarMonth, UserWorkDayDetail } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
 import * as React from "react";
 
-const CalendarMonth: React.FC<{ month: CalendarMonth; big?: boolean }> = ({
-  month,
-  big = false,
-  ...other
-}) => {
+const CalendarMonth: React.FC<{
+  month: CalendarMonth;
+  big?: boolean;
+  workDayDetails?: UserWorkDayDetail[];
+}> = ({ month, big = false, workDayDetails = [], ...other }) => {
   const currentDate = getRequestDateNow();
   const showWeeks = true && !big;
   const holidayInfos = month.days.filter(day => day.holidayInformation);
 
-  const calendarEntries = getCalendarMonthEntries(month, currentDate, showWeeks);
+  const calendarEntries = getCalendarMonthEntries(month, currentDate, showWeeks, workDayDetails);
 
   return (
     <div className="min-h-[240px] lg:min-h-[410px]">
@@ -38,55 +40,28 @@ const CalendarMonth: React.FC<{ month: CalendarMonth; big?: boolean }> = ({
           "grid-cols-7": !showWeeks
         })}
       >
-        {calendarEntries.map((calendarDay, index) => (
-          <div
-            key={`calendar-day-${index}`}
-            className={cn("flex flex-col border-2 border-transparent", {
-              "border-emerald-500 font-medium ": calendarDay.isToday,
-              "dark:text-emerald-500": calendarDay.isToday || calendarDay.isWorkDay,
-              "dark:text-zinc-450 text-zinc-500":
-                calendarDay.type === "spacing" ||
-                calendarDay.type === "week" ||
-                calendarDay.type === "header",
-              "bg-zinc-200 dark:bg-zinc-800": calendarDay.isOdd,
-              "min-h-[50px] md:min-h-[112px]":
-                big && (calendarDay.type === "day" || calendarDay.type === "spacing"),
-              "items-end justify-start py-1 px-1 md:py-2 md:px-3": big,
-              "items-center justify-center lg:min-h-[50px] lg:min-w-[50px]": !big,
-              "text-xs": calendarDay.type === "header"
-            })}
-          >
-            <div
-              className={cn("flex", {
-                "w-full items-center justify-end pb-1.5 md:pb-2":
-                  big && (calendarDay.type === "day" || calendarDay.type === "spacing"),
-                "justify-between": big && calendarDay.isStartOfWeek
-              })}
-            >
-              {big && calendarDay.isStartOfWeek ? (
-                <div className="text-xs dark:text-zinc-600 md:text-base">{calendarDay.week}</div>
-              ) : null}
-              <div>{calendarDay.value}</div>
-            </div>
-            {big &&
-              (calendarDay.type === "day" || calendarDay.type === "spacing") &&
-              holidayInfos
-                .filter(
-                  x =>
-                    x.day === calendarDay.value &&
-                    x.weekNumber === calendarDay.week &&
-                    !!x?.holidayInformation?.name
-                )
-                .map((x, index) => (
-                  <div key={`holiday-info-inline-${index}`} className="w-full">
-                    <div className="bg-red-zinc-contrast hidden rounded-md px-2 py-1 text-xs leading-tight text-zinc-900 md:block">
-                      {x.holidayInformation?.name}
-                    </div>
-                    <div className="dark:border-red-zinc-contrast dark:bg-red-zinc-contrast block h-2 w-full rounded-full border border-red-700 bg-red-700 md:hidden"></div>
-                  </div>
-                ))}
-          </div>
-        ))}
+        {calendarEntries.map((calendarDay, index) => {
+          switch (calendarDay.type) {
+            case "day":
+              return (
+                <UserEditWorkDayDetailDialog
+                  key={`calendar-day-${index}`}
+                  calendarDay={calendarDay}
+                  big={big}
+                  holidayInfos={holidayInfos}
+                />
+              );
+            default:
+              return (
+                <CalendarDay
+                  key={`calendar-day-${index}`}
+                  calendarDay={calendarDay}
+                  big={big}
+                  holidayInfos={holidayInfos}
+                />
+              );
+          }
+        })}
       </div>
       <Show when={holidayInfos.length > 0}>
         <div className="mt-4">
