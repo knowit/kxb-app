@@ -1,6 +1,5 @@
-import prismaUser from "@/lib/prismaUser";
+import prisma from "@/lib/prisma";
 import { UserWorkDayDetail } from "@/types";
-import { getSessionUserActiveDirectoryId, sessionUserIsAdmin } from "@/utils/sessionUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 
@@ -17,13 +16,22 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).end();
   }
 
-  const sessionUserActiveDirectoryId = getSessionUserActiveDirectoryId(session);
+  const user = await prisma.user.findUnique({
+    where: {
+      id: +id
+    },
+    include: {
+      workDayDetails: true
+    }
+  });
 
-  const { refreshToken, ...user } = await prismaUser.getById(+id);
+  if (!user) {
+    return res.status(404).end();
+  }
 
   if (
-    !sessionUserIsAdmin(session) &&
-    user.activeDirectoryId !== sessionUserActiveDirectoryId?.toLowerCase()
+    !session.user.isAdmin &&
+    user.activeDirectoryId !== session.user.activeDirectoryId
   ) {
     return res.status(403).end();
   }
@@ -64,8 +72,8 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
         if (
           existing &&
           (curr.extraHours !== 0 || curr.nonCommissionedHours !== 0) &&
-          (existing.extraHours !== curr.extraHours ||
-            existing.nonCommissionedHours !== curr.nonCommissionedHours ||
+          (existing.extraHours.toNumber() !== curr.extraHours ||
+            existing.nonCommissionedHours.toNumber() !== curr.nonCommissionedHours ||
             existing.sickDay !== curr.sickDay)
         ) {
           return {
@@ -90,7 +98,7 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
       }
     );
 
-    await prismaUser.update({
+    await prisma.user.update({
       data: {
         commission,
         hourlyRate,
@@ -135,7 +143,11 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === "DELETE") {
-    await prismaUser.deleteById(+id);
+    await prisma.user.delete({
+      where: {
+        id: +id
+      }
+    });
 
     return res.status(204).json({});
   }

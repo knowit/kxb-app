@@ -1,133 +1,114 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
-import type { CSS, VariantProps } from "stitches.config";
-import { styled } from "stitches.config";
 
-const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
-  all: "unset",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderRadius: 4,
-  padding: "0 15px",
-  fontSize: 13,
-  lineHeight: 1,
-  height: 35,
-  gap: 5,
-  backgroundColor: "panel",
-  color: "$text",
-  cursor: "pointer",
-  boxShadow: `$select`,
-  "&:hover": { boxShadow: "$selectHover" },
-  "&:focus": { boxShadow: `$select` }
-});
+const Select = SelectPrimitive.Root;
 
-const StyledContent = styled(SelectPrimitive.Content, {
-  overflow: "hidden",
-  backgroundColor: "$panel",
-  borderRadius: 6,
-  boxShadow: "$select"
-});
+const SelectGroup = SelectPrimitive.Group;
 
-const StyledViewport = styled(SelectPrimitive.Viewport, {
-  padding: 5
-});
+const SelectValue = SelectPrimitive.Value;
 
-const StyledItem = styled(SelectPrimitive.Item, {
-  all: "unset",
-  fontSize: 13,
-  lineHeight: 1,
-  color: "$text",
-  borderRadius: 3,
-  display: "flex",
-  alignItems: "center",
-  height: 25,
-  padding: "0 35px 0 25px",
-  position: "relative",
-  userSelect: "none",
+const SelectTrigger = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "flex h-10 w-full items-center justify-between gap-2 rounded-md border border-neutral-500 bg-transparent py-2 px-3 text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-50 dark:focus:ring-neutral-400 dark:focus:ring-offset-neutral-900",
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <ChevronDownIcon className="h-4 w-4 opacity-50" />
+  </SelectPrimitive.Trigger>
+));
 
-  "&[data-disabled]": {
-    color: "$gray",
-    pointerEvents: "none"
-  },
+SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-  "&:focus": {
-    backgroundColor: "$grayLightest",
-    color: "$grayDark"
-  }
-});
+const SelectContent = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Portal>
+    <SelectPrimitive.Content
+      ref={ref}
+      className={cn(
+        "relative z-50 overflow-hidden rounded-md border border-neutral-100 bg-white text-neutral-700 shadow-md animate-in fade-in-80 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-400",
+        className
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ScrollUpButton className="flex w-full justify-center py-2">
+        <ChevronUpIcon />
+      </SelectPrimitive.ScrollUpButton>
+      <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
+      <SelectPrimitive.ScrollDownButton className="flex w-full justify-center py-2">
+        <ChevronDownIcon />
+      </SelectPrimitive.ScrollDownButton>
+    </SelectPrimitive.Content>
+  </SelectPrimitive.Portal>
+));
+SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-const StyledLabel = styled(SelectPrimitive.Label, {
-  padding: "0 25px",
-  fontSize: 12,
-  lineHeight: "25px",
-  color: "$textDark"
-});
+const SelectLabel = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Label
+    ref={ref}
+    className={cn("py-1.5 pr-2 pl-8 text-sm text-neutral-900 dark:text-neutral-500", className)}
+    {...props}
+  />
+));
+SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
-const StyledSeparator = styled(SelectPrimitive.Separator, {
-  height: 1,
-  backgroundColor: "$gray",
-  margin: 5
-});
+const SelectItem = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Item
+    ref={ref}
+    className={cn(
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none focus:bg-neutral-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-neutral-700",
+      className
+    )}
+    {...props}
+  >
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+      <SelectPrimitive.ItemIndicator>
+        <CheckIcon className="h-4 w-4" />
+      </SelectPrimitive.ItemIndicator>
+    </span>
 
-const StyledItemIndicator = styled(SelectPrimitive.ItemIndicator, {
-  position: "absolute",
-  left: 0,
-  width: 25,
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center"
-});
+    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+  </SelectPrimitive.Item>
+));
+SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-const scrollButtonStyles = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  height: 25,
-  backgroundColor: "white",
-  color: "$text",
-  cursor: "default"
+const SelectSeparator = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Separator
+    ref={ref}
+    className={cn("-mx-1 my-1 h-px bg-neutral-100 dark:bg-neutral-700", className)}
+    {...props}
+  />
+));
+SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
+
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator
 };
-
-const StyledScrollUpButton = styled(SelectPrimitive.ScrollUpButton, scrollButtonStyles);
-
-const StyledScrollDownButton = styled(SelectPrimitive.ScrollDownButton, scrollButtonStyles);
-
-type SelectContentPrimitiveProps = React.ComponentProps<typeof SelectPrimitive.Content>;
-type SelectContentProps = SelectContentPrimitiveProps &
-  VariantProps<typeof StyledContent> & {
-    portal?: boolean;
-
-    css?: CSS;
-  };
-
-export const SelectContent = React.forwardRef<
-  React.ElementRef<typeof StyledContent>,
-  SelectContentProps
->(({ children, portal = false, ...other }, forwardedRef) => {
-  const SelectWrapper = portal ? SelectPrimitive.Portal : React.Fragment;
-
-  return (
-    <SelectWrapper>
-      <StyledContent {...other} ref={forwardedRef}>
-        {children}
-      </StyledContent>
-    </SelectWrapper>
-  );
-});
-
-SelectContent.displayName = "SelectContent";
-
-export const Select = SelectPrimitive.Root;
-export const SelectTrigger = StyledTrigger;
-export const SelectValue = SelectPrimitive.Value;
-export const SelectIcon = SelectPrimitive.Icon;
-export const SelectViewport = StyledViewport;
-export const SelectGroup = SelectPrimitive.Group;
-export const SelectItem = StyledItem;
-export const SelectItemText = SelectPrimitive.ItemText;
-export const SelectItemIndicator = StyledItemIndicator;
-export const SelectLabel = StyledLabel;
-export const SelectSeparator = StyledSeparator;
-export const SelectScrollUpButton = StyledScrollUpButton;
-export const SelectScrollDownButton = StyledScrollDownButton;

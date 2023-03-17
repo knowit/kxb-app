@@ -1,10 +1,21 @@
-import prismaUser from "@/lib/prismaUser";
+import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function User(req: NextApiRequest, res: NextApiResponse) {
-  const { refreshToken, ...user } = await prismaUser.getByEmail(
-    "kxb.specialist.test.user@knowitgroup.com"
+  const user = await prisma.user.findUnique(
+    {
+      where: {
+        email: "kxb.specialist.test.user@knowitgroup.com"
+      },
+      include: {
+        workDayDetails: true
+      }
+    }
   );
+
+  if (!user) {
+    return res.status(404).end();
+  }
 
   if (req.method === "GET") {
     return res.status(200).json({
