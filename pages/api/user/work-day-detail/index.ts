@@ -34,7 +34,7 @@ export default async function User(req: NextApiRequest, res: NextApiResponse) {
     const { id, date, extraHours, nonCommissionedHours, sickDay } =
       userWorkDayDetailSchema.parse(body);
 
-    await prisma.userWorkDayDetail.upsert({
+    await prisma.user_work_day_detail.upsert({
       where: {
         id: id
       },

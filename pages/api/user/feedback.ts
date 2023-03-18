@@ -11,13 +11,12 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
     return res.status(401).end();
   }
 
-
   if (!session.user.activeDirectoryId) {
     return res.status(400).end();
   }
 
   if (req.method === "GET") {
-    const feedback = await prisma.userFeedback.findMany({
+    const feedback = await prisma.user_feedback.findMany({
       include: {
         user: true
       }
@@ -56,7 +55,7 @@ export default async function Feedback(req: NextApiRequest, res: NextApiResponse
       return res.status(400).end();
     }
 
-    await prisma.userFeedback.create({
+    await prisma.user_feedback.create({
       data: {
         feedback: message,
         reaction: reaction,

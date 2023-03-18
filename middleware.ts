@@ -26,6 +26,13 @@ export default withAuth(
 
       return NextResponse.redirect(new URL(`/login?from=${encodeURIComponent(from)}`, req.url));
     }
+
+    // Store the response so we can modify its headers
+    const response = NextResponse.next();
+    // Set custom header
+    response.headers.set("x-active-directory-id", token.activeDirectoryId);
+    // Return response
+    return response;
   },
   {
     callbacks: {

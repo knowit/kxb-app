@@ -2,7 +2,7 @@
 
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
+import { user } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -18,7 +18,7 @@ import { Show } from "../ui/show";
 
 interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
   user: {
-    id: User["id"];
+    id: user["id"];
     commission: number;
     hourlyRate: number;
     tax: number;
