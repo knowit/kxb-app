@@ -5,8 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { UserEditSalaryDetailsDialog } from "@/components/user/user-edit-salary-details-dialog";
-import { UserEarningsDetails, type CalendarMonth as CalendarMonthType } from "@/types";
-import { Session } from "next-auth";
+import { User, UserEarningsDetails, type CalendarMonth as CalendarMonthType } from "@/types";
 import Link from "next/link";
 import { CalendarMonth } from "./calendar-month";
 
@@ -15,7 +14,7 @@ export default function CalendarMonthWithSalary({
   calendarMonth,
   userEarnings
 }: {
-  user: Session["user"];
+  user: User;
   calendarMonth: CalendarMonthType;
   userEarnings?: UserEarningsDetails;
 }) {

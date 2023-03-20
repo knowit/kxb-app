@@ -9,7 +9,7 @@ function LoginButton() {
 
   return (
     <Button
-      onClick={() =>
+      onClick={async () =>
         signIn("azure-ad", {
           redirect: false,
           callbackUrl: searchParams?.get("from") || "/dashboard"

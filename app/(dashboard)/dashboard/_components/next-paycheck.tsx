@@ -1,14 +1,7 @@
-import { getCurrentUser } from "@/lib/session";
 import { getUserEarnings } from "@/lib/user";
 
 export default async function NextPaycheck() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return <div>Not logged in</div>;
-  }
-
-  const userEarnings = await getUserEarnings(user?.activeDirectoryId);
+  const userEarnings = await getUserEarnings();
 
   return (
     <div>

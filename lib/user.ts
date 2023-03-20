@@ -1,11 +1,51 @@
 import "server-only";
 
+import { SITE_CONSTANTS } from "@/constants/site-constants";
+import { User } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { cache } from "react";
 import { queryBuilder } from "./planetscale";
-import prisma from "./prisma";
 import { query } from "./query";
+
+const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
+  const userActiveDirectoryId =
+    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+
+  if (!userActiveDirectoryId) {
+    return redirect("/login");
+  }
+
+  const user = await queryBuilder
+    .selectFrom("user")
+    .where("user.activeDirectoryId", "=", userActiveDirectoryId)
+    .selectAll("user")
+    .executeTakeFirst();
+
+  if (!user) {
+    return redirect("/login");
+  }
+
+  return {
+    activeDirectoryId: user.activeDirectoryId,
+    accessTokenExpires: user.accessTokenExpires,
+    commission: user.commission,
+    created: user.created?.toISOString(),
+    email: user.email,
+    hourlyRate: user.hourlyRate,
+    id: user.id,
+    isAdmin: user.isAdmin,
+    isSpecialist: user.isSpecialist,
+    name: user.name ?? "",
+    refreshToken: user.refreshToken ?? "",
+    tax: user.tax,
+    updated: user.updated?.toISOString(),
+    workDayDetails: [],
+    workHours: user.workHours
+  };
+});
 
 const getUserWithWorkDayDetails = cache(async (activeDirectoryId: string) => {
   const user = queryBuilder
@@ -29,8 +69,15 @@ const getUserWithWorkDayDetails = cache(async (activeDirectoryId: string) => {
   };
 });
 
-const getUserEarnings = cache(async (activeDirectoryId: string, activeDate?: Date) => {
-  const user = await getUserWithWorkDayDetails(activeDirectoryId);
+const getUserEarnings = cache(async (activeDirectoryId?: string, activeDate?: Date) => {
+  const userActiveDirectoryId =
+    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+
+  if (!userActiveDirectoryId) {
+    return redirect("/login");
+  }
+
+  const user = await getUserWithWorkDayDetails(userActiveDirectoryId);
 
   if (!user) {
     return undefined;
@@ -79,11 +126,18 @@ const getUserEarnings = cache(async (activeDirectoryId: string, activeDate?: Dat
   );
 });
 
-const getUserAvatar = cache(async (activeDirectoryId: string) => {
+const getUserAvatar = cache(async (activeDirectoryId?: string) => {
+  const userActiveDirectoryId =
+    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+
+  if (!userActiveDirectoryId) {
+    return redirect("/login");
+  }
+
   const user = await queryBuilder
     .selectFrom("user")
-    .where("user.activeDirectoryId", "=", activeDirectoryId)
-    .select("user.refreshToken")
+    .where("user.activeDirectoryId", "=", userActiveDirectoryId)
+    .select(["user.refreshToken", "user.name"])
     .executeTakeFirst();
 
   if (!user?.refreshToken) {
@@ -112,16 +166,16 @@ const getUserAvatar = cache(async (activeDirectoryId: string) => {
     return undefined;
   }
 
-  await prisma.user.update({
-    data: {
-      refreshToken: refreshedTokens.refresh_token,
-      accessTokenExpires: Date.now() + refreshedTokens?.ext_expires_in * 1000,
-      updated: new Date()
-    },
-    where: {
-      activeDirectoryId: activeDirectoryId
-    }
-  });
+  // await prisma.user.update({
+  //   data: {
+  //     refreshToken: refreshedTokens.refresh_token,
+  //     accessTokenExpires: Date.now() + refreshedTokens?.ext_expires_in * 1000,
+  //     updated: new Date()
+  //   },
+  //   where: {
+  //     activeDirectoryId: userActiveDirectoryId
+  //   }
+  // });
 
   const avatarResponse = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
     headers: {
@@ -135,9 +189,12 @@ const getUserAvatar = cache(async (activeDirectoryId: string) => {
 
   const pictureBuffer = await avatarResponse.arrayBuffer();
 
-  return `data:image/jpeg;base64,${btoa(
-    String.fromCharCode.apply(null, new Uint8Array(pictureBuffer))
-  )}`;
+  return {
+    src: `data:image/jpeg;base64,${btoa(
+      String.fromCharCode.apply(null, new Uint8Array(pictureBuffer))
+    )}`,
+    name: user.name
+  };
 });
 
-export { getUserEarnings, getUserAvatar };
+export { getUser, getUserEarnings, getUserAvatar };

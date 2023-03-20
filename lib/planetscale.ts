@@ -1,5 +1,5 @@
-// import 'server-only' not working with API routes yet
-import { Generated, Kysely } from "kysely";
+import type { Generated } from "kysely";
+import { Kysely } from "kysely";
 import { PlanetScaleDialect } from "kysely-planetscale";
 
 export interface UserTable {
@@ -13,8 +13,8 @@ export interface UserTable {
   commission: number;
   tax: number;
   workHours: number;
-  created: string;
-  updated: string;
+  created: Date;
+  updated: Date;
   isAdmin: boolean;
   isSpecialist: boolean;
   workDayDetails: UserWorkDayDetailTable[];
@@ -48,6 +48,8 @@ export interface Database {
 
 export const queryBuilder = new Kysely<Database>({
   dialect: new PlanetScaleDialect({
-    url: process.env.DATABASE_URL
+    host: "eu-central.connect.psdb.cloud",
+    username: "dk2z083cwgg2hnkxd1o6",
+    password: "pscale_pw_uLa6PjlV84CDeqkaHhOCj5YZyjcPWXIjXMmWOxbrcWT"
   })
 });

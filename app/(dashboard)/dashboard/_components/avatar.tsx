@@ -1,18 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/user/user-avatar";
-import { getCurrentUser } from "@/lib/session";
 import { getUserAvatar } from "@/lib/user";
 
 export default async function Avatar() {
-  const user = await getCurrentUser();
+  const userAvatar = await getUserAvatar();
 
-  if (!user) {
-    return <div>Not logged in</div>;
+  if (!userAvatar) {
+    return <AvatarSkeleton />;
   }
 
-  const userAvatar = await getUserAvatar(user?.activeDirectoryId);
-
-  return <UserAvatar name={user.name} src={userAvatar} />;
+  return <UserAvatar name={userAvatar.name} src={userAvatar?.src} />;
 }
 
 function AvatarSkeleton() {

@@ -1,19 +1,11 @@
 import { Icons } from "@/components/icons";
-import { getCurrentUser } from "@/lib/session";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Avatar, { AvatarSkeleton } from "./_components/avatar";
 import Footer from "./_components/footer";
 import NextPaycheck from "./_components/next-paycheck";
 
-export default async function DashboardLayout({ children }) {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <nav className="flex items-center justify-between border-b border-b-neutral-700 bg-black px-8 py-4">

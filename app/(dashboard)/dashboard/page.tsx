@@ -1,6 +1,6 @@
 import { getRequestDateNow } from "@/lib/date";
-import { getCurrentUser } from "@/lib/session";
-import { getUserEarnings } from "@/lib/user";
+import { query } from "@/lib/query";
+import { getUser, getUserEarnings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -8,25 +8,27 @@ import CalendarMonthWithSalary from "./_components/calendar-month-with-salary";
 import CompanyBenefits from "./_components/company-benefits";
 import YearlyEconomicOverview from "./_components/yearly-economic-overview";
 
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+
 export default async function DashboardPage() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return redirect("/login");
-  }
-
   const currentDate = getRequestDateNow();
 
   const calendarMonth = getCalendarMonth(currentDate);
 
-  const userEarnings = await getUserEarnings(user.activeDirectoryId);
+  const [user, userEarnings] = await query([getUser(), getUserEarnings()]);
+
+  if (!user.data) {
+    return redirect("/login");
+  }
 
   return (
     <>
       <CalendarMonthWithSalary
-        user={user}
+        user={user.data}
         calendarMonth={calendarMonth}
-        userEarnings={userEarnings}
+        userEarnings={userEarnings.data ?? undefined}
       />
       <CompanyBenefits />
       <Suspense fallback={<div />}>

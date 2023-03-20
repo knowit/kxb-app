@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import { SITE_CONSTANTS } from "./constants/site-constants";
 
 export default withAuth(
   async function middleware(req) {
@@ -24,15 +25,22 @@ export default withAuth(
         from += req.nextUrl.search;
       }
 
+      // remove cookie
+      const response = NextResponse.next();
+
+      response.cookies.delete(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID);
+
       return NextResponse.redirect(new URL(`/login?from=${encodeURIComponent(from)}`, req.url));
     }
 
-    // Store the response so we can modify its headers
-    const response = NextResponse.next();
-    // Set custom header
-    response.headers.set("x-active-directory-id", token.activeDirectoryId);
-    // Return response
-    return response;
+    if (isAuth) {
+      const response = NextResponse.next();
+
+      // Set a cookie
+      response.cookies.set(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID, token.activeDirectoryId);
+
+      return response;
+    }
   },
   {
     callbacks: {

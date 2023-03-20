@@ -9,11 +9,11 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import { Session } from "next-auth";
+import { User } from "@/types";
 import { Icons } from "../icons";
 import { UserSalaryDetailsForm } from "./user-salary-details-form";
 
-export function UserEditSalaryDetailsDialog({ user }: { user: Session["user"] }) {
+export function UserEditSalaryDetailsDialog({ user }: { user: User }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
