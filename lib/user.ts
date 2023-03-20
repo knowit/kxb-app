@@ -33,22 +33,14 @@ const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
   }
 
   return {
-    activeDirectoryId: user.activeDirectoryId,
-    accessTokenExpires: user.accessTokenExpires,
-    commission: user.commission,
-    created: user.created,
-    email: user.email,
-    hourlyRate: user.hourlyRate,
-    id: user.id,
-    isAdmin: user.isAdmin,
-    isSpecialist: user.isSpecialist,
-    name: user.name ?? "",
-    refreshToken: user.refreshToken ?? "",
-    tax: user.tax,
-    updated: user.updated,
-    workDayDetails: [],
-    workHours: user.workHours,
-    feedback: []
+    ...user,
+    // convert string decimal to number
+    tax: Number(rows[0]?.["tax"]),
+    workHours: Number(rows[0]?.["workHours"]),
+    commission: Number(rows[0]?.["commission"]),
+    hourlyRate: Number(rows[0]?.["hourlyRate"]),
+    workDayDetails: user?.workDayDetails ?? [],
+    feedback: user?.feedback ?? []
   };
 });
 
@@ -61,13 +53,17 @@ const getUserWorkDayDetails = cache(async (activeDirectoryId?: string) => {
   }
 
   const { rows } = await planetscaleEdge.execute(
-    "SELECT * FROM user INNER JOIN user_work_day_detail ON user.id = user_work_day_detail.userId WHERE activeDirectoryId = ?",
+    "SELECT uwdd.id, uwdd.date, uwdd.nonCommissionedHours, uwdd.extraHours, uwdd.sickDay, uwdd.userId FROM user LEFT JOIN user_work_day_detail AS uwdd ON user.id = uwdd.userId WHERE user.activeDirectoryId = ?",
     [userActiveDirectoryId]
   );
 
   const userWorkDayDetail = rows as UserWorkDayDetail[];
 
-  return userWorkDayDetail;
+  return (userWorkDayDetail ?? []).map(userWorkDayDetail => ({
+    ...userWorkDayDetail,
+    nonCommissionedHours: Number(userWorkDayDetail.nonCommissionedHours),
+    extraHours: Number(userWorkDayDetail.extraHours)
+  }));
 });
 
 const getUserWithWorkDayDetails = cache(async (activeDirectoryId?: string) => {
