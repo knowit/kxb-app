@@ -1,8 +1,8 @@
 import { UserSalaryDetailsForm } from "@/components/user/user-salary-details-form";
-import { getCurrentUser } from "@/lib/session";
+import { getUser } from "@/lib/user";
 
 export default async function SalaryForm() {
-  const user = await getCurrentUser();
+  const user = await getUser();
 
   if (!user) {
     return <div>Not logged in</div>;

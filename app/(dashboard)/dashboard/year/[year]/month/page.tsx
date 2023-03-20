@@ -12,10 +12,10 @@ export default async function SelectedYearMonthPageRoot({ params }: SelectedYear
   const dateNow = getRequestDateNow();
 
   if (params.year === dateNow.getFullYear().toString()) {
-    redirect(`/me/year/${params.year}/month/${dateNow.getMonth()}`);
+    redirect(`/dashboard/year/${params.year}/month/${dateNow.getMonth()}`);
   }
 
-  redirect(`/me/year/${params.year}/month/0`);
+  redirect(`/dashboard/year/${params.year}/month/0`);
 
   return <div>...</div>;
 }

@@ -25,7 +25,7 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
           {/* Go to previous year */}
           <Link
             className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
-            href={`/me/year/${year - 1}`}
+            href={`/dashboard/year/${year - 1}`}
           >
             <span className="sr-only">Forrige år</span>
             <ChevronLeftIcon />
@@ -33,14 +33,14 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
           {/* Go to current year */}
           <Link
             className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
-            href={`/me/year/${currentDate.getFullYear()}`}
+            href={`/dashboard/year/${currentDate.getFullYear()}`}
           >
             I dag
           </Link>
           {/* Go to next year */}
           <Link
             className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
-            href={`/me/year/${year + 1}`}
+            href={`/dashboard/year/${year + 1}`}
           >
             <span className="sr-only">Neste år</span>
             <ChevronRightIcon />
@@ -50,7 +50,7 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
       <div className="my-4 grid grid-cols-1 gap-8 lg:grid-cols-3">
         {calendarYear.months.map((month, index) => (
           <div key={`calendar-year-calendar-month-${index}`}>
-            <Link href={`/me/year/${month.year}/month/${month.monthNumber}`}>
+            <Link href={`/dashboard/year/${month.year}/month/${month.monthNumber}`}>
               <h2
                 className={cn({
                   "underline underline-offset-2 dark:text-emerald-500":

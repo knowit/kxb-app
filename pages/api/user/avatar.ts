@@ -66,7 +66,7 @@ export default async function Avatar(req: NextApiRequest, res: NextApiResponse) 
     });
 
     const avatarResponse = await fetch(
-      `https://graph.microsoft.com/v1.0/me/photos/120x120/$value`,
+      `https://graph.microsoft.com/v1.0/dashboard/photos/120x120/$value`,
       {
         headers: {
           Authorization: `Bearer ${refreshedTokens.access_token}`

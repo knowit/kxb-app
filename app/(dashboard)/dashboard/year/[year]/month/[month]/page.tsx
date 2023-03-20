@@ -1,4 +1,4 @@
-import CalendarMonthWithSalary from "@/app/(dashboard)/me/_components/calendar-month-with-salary";
+import CalendarMonthWithSalary from "@/app/(dashboard)/dashboard/_components/calendar-month-with-salary";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getUser, getUserEarnings } from "@/lib/user";

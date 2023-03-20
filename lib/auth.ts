@@ -28,7 +28,7 @@ const getUserEmail = async (accessToken: string): Promise<string> => {
   }
 
   // Fetch user profile from graph and retrieve email
-  const response = await fetch(`https://graph.microsoft.com/v1.0/me/`, {
+  const response = await fetch(`https://graph.microsoft.com/v1.0/dashboard/`, {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
@@ -65,7 +65,7 @@ const accessToSpecialistGroup = groups => accessToGroupId(groups, AZURE_AD_SPECI
 async function getUserRoles(token: string) {
   try {
     const { value: groups } = await fetchWithToken(
-      "https://graph.microsoft.com/v1.0/me/memberOf?$select=displayName,id",
+      "https://graph.microsoft.com/v1.0/dashboard/memberOf?$select=displayName,id",
       token
     );
 

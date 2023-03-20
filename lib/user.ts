@@ -182,11 +182,14 @@ const getUserAvatar = cache(async (activeDirectoryId?: string) => {
   //   }
   // });
 
-  const avatarResponse = await fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
-    headers: {
-      Authorization: `Bearer ${refreshedTokens.access_token}`
+  const avatarResponse = await fetch(
+    `https://graph.microsoft.com/v1.0/dashboard/photos/120x120/$value`,
+    {
+      headers: {
+        Authorization: `Bearer ${refreshedTokens.access_token}`
+      }
     }
-  });
+  );
 
   if (!avatarResponse.ok) {
     return undefined;
