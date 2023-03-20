@@ -48,8 +48,6 @@ export interface Database {
 
 export const queryBuilder = new Kysely<Database>({
   dialect: new PlanetScaleDialect({
-    host: "eu-central.connect.psdb.cloud",
-    username: "dk2z083cwgg2hnkxd1o6",
-    password: "pscale_pw_uLa6PjlV84CDeqkaHhOCj5YZyjcPWXIjXMmWOxbrcWT"
+    url: process.env.DATABASE_URL
   })
 });

@@ -1,13 +1,13 @@
 import "server-only";
 
 import { SITE_CONSTANTS } from "@/constants/site-constants";
-import { User } from "@/types";
+import { User, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
-import { queryBuilder } from "./planetscale";
+import { planetscaleEdge } from "./planetscale-edge";
 import { query } from "./query";
 
 const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
@@ -18,11 +18,15 @@ const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
     return redirect("/login");
   }
 
-  const user = await queryBuilder
-    .selectFrom("user")
-    .where("user.activeDirectoryId", "=", userActiveDirectoryId)
-    .selectAll("user")
-    .executeTakeFirst();
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE activeDirectoryId = ?", [
+    userActiveDirectoryId
+  ]);
+
+  if (!rows?.length) {
+    return redirect("/login");
+  }
+
+  const user = rows[0] as User;
 
   if (!user) {
     return redirect("/login");
@@ -32,7 +36,7 @@ const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
     activeDirectoryId: user.activeDirectoryId,
     accessTokenExpires: user.accessTokenExpires,
     commission: user.commission,
-    created: user.created?.toISOString(),
+    created: user.created,
     email: user.email,
     hourlyRate: user.hourlyRate,
     id: user.id,
@@ -41,27 +45,36 @@ const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
     name: user.name ?? "",
     refreshToken: user.refreshToken ?? "",
     tax: user.tax,
-    updated: user.updated?.toISOString(),
+    updated: user.updated,
     workDayDetails: [],
-    workHours: user.workHours
+    workHours: user.workHours,
+    feedback: []
   };
 });
 
-const getUserWithWorkDayDetails = cache(async (activeDirectoryId: string) => {
-  const user = queryBuilder
-    .selectFrom("user")
-    .where("user.activeDirectoryId", "=", activeDirectoryId)
-    .selectAll("user")
-    .executeTakeFirst();
+const getUserWorkDayDetails = cache(async (activeDirectoryId?: string) => {
+  const userActiveDirectoryId =
+    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
 
-  const userWorkDayDetail = queryBuilder
-    .selectFrom("user")
-    .leftJoin("user_work_day_detail", "user_work_day_detail.userId", "user.id")
-    .where("user.activeDirectoryId", "=", activeDirectoryId)
-    .selectAll("user_work_day_detail")
-    .execute();
+  if (!userActiveDirectoryId) {
+    return redirect("/login");
+  }
 
-  const [userResult, userWorkDayDetailResult] = await query([user, userWorkDayDetail]);
+  const { rows } = await planetscaleEdge.execute(
+    "SELECT * FROM user INNER JOIN user_work_day_detail ON user.id = user_work_day_detail.userId WHERE activeDirectoryId = ?",
+    [userActiveDirectoryId]
+  );
+
+  const userWorkDayDetail = rows as UserWorkDayDetail[];
+
+  return userWorkDayDetail;
+});
+
+const getUserWithWorkDayDetails = cache(async (activeDirectoryId?: string) => {
+  const [userResult, userWorkDayDetailResult] = await query([
+    getUser(activeDirectoryId),
+    getUserWorkDayDetails(activeDirectoryId)
+  ]);
 
   return {
     ...userResult.data,
@@ -134,11 +147,7 @@ const getUserAvatar = cache(async (activeDirectoryId?: string) => {
     return redirect("/login");
   }
 
-  const user = await queryBuilder
-    .selectFrom("user")
-    .where("user.activeDirectoryId", "=", userActiveDirectoryId)
-    .select(["user.refreshToken", "user.name"])
-    .executeTakeFirst();
+  const user = await getUser(userActiveDirectoryId);
 
   if (!user?.refreshToken) {
     return undefined;

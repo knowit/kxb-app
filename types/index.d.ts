@@ -4,31 +4,40 @@ export type WithChildren<T = {}> = T & { children?: React.ReactNode };
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T;
 
-export type UserWorkDayDetail = {
+export interface UserWorkDayDetail {
   id: number;
   date: string;
+  nonCommissionedHours: number;
   extraHours: number;
   sickDay: boolean;
-  nonCommissionedHours: number;
   userId: number;
-};
+}
+
+export interface UserFeedback {
+  id: number;
+  date: string;
+  userId: number;
+  feedback: string;
+  reaction: number;
+}
 
 export type User = {
   id: number;
   email: string;
-  name: string;
+  name?: string;
   activeDirectoryId: string;
-  refreshToken: string;
+  refreshToken?: string;
   accessTokenExpires?: number;
   hourlyRate: number;
   commission: number;
   tax: number;
   workHours: number;
+  created: Date;
+  updated: Date;
   isAdmin: boolean;
   isSpecialist: boolean;
-  updated: string;
-  created: string;
   workDayDetails: UserWorkDayDetail[];
+  feedback: UserFeedback[];
 };
 
 export type UserSalaryDetails = {
