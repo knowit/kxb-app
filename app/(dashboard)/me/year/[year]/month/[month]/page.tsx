@@ -9,7 +9,7 @@ interface SelectedYearMonthPageProps {
   params: { year: string; month: string };
 }
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 

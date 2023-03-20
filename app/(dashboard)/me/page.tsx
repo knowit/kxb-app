@@ -8,7 +8,7 @@ import CalendarMonthWithSalary from "./_components/calendar-month-with-salary";
 import CompanyBenefits from "./_components/company-benefits";
 import YearlyEconomicOverview from "./_components/yearly-economic-overview";
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
