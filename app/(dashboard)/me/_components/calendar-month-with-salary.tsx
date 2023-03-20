@@ -68,7 +68,7 @@ export default function CalendarMonthWithSalary({
             {/* Go to previous month if month.MonthNumber is 0, go to previous year and month 11 */}
             <Link
               className={buttonVariants({ variant: "outline" })}
-              href={`/dashboard/year/${
+              href={`/me/year/${
                 calendarMonth.monthNumber === 0 ? calendarMonth.year - 1 : calendarMonth.year
               }/month/${calendarMonth.monthNumber === 0 ? 11 : calendarMonth.monthNumber - 1}`}
             >
@@ -76,13 +76,13 @@ export default function CalendarMonthWithSalary({
               <Icons.ChevronLeft />
             </Link>
             {/* Go to current month */}
-            <Link className={buttonVariants({ variant: "outline" })} href="/dashboard">
+            <Link className={buttonVariants({ variant: "outline" })} href="/me">
               <span className="">I dag</span>
             </Link>
             {/* Go to next month if month.MonthNumber is 11, go to next year and month 0 */}
             <Link
               className={buttonVariants({ variant: "outline" })}
-              href={`/dashboard/year/${
+              href={`/me/year/${
                 calendarMonth.monthNumber === 11 ? calendarMonth.year + 1 : calendarMonth.year
               }/month/${calendarMonth.monthNumber === 11 ? 0 : calendarMonth.monthNumber + 1}`}
             >

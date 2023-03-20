@@ -39,7 +39,7 @@ function UserAvatar({ name, src }: { name: Session["user"]["name"]; src?: string
         </div>
         <Separator />
         <div className="px-6 py-4">
-          <Link href="/dashboard/profile">Profile</Link>
+          <Link href="/me/profile">Profile</Link>
         </div>
         <Separator />
         <div className="flex items-center gap-3 px-6 py-4">

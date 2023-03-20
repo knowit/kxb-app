@@ -51,10 +51,10 @@ export default function Footer() {
                 <Link href="/dashboard">Home</Link>
               </li>
               <li>
-                <Link href="/dashboard/profile">Profile</Link>
+                <Link href="/me/profile">Profile</Link>
               </li>
               <li>
-                <Link href="/dashboard/feedback">Feedback</Link>
+                <Link href="/me/feedback">Feedback</Link>
               </li>
             </ul>
           </Box>

@@ -28,9 +28,9 @@ const MonthSelect = forwardRef<
     <Select
       defaultValue={month.toString()}
       onValueChange={value => {
-        router.prefetch(`/dashboard/year/${year}/month/${value}`);
+        router.prefetch(`/me/year/${year}/month/${value}`);
         // update url
-        router.push(`/dashboard/year/${year}/month/${value}`, {
+        router.push(`/me/year/${year}/month/${value}`, {
           forceOptimisticNavigation: true
         });
 
@@ -61,7 +61,7 @@ const MonthSelect = forwardRef<
             key={m.value}
             value={m.value.toString()}
             onMouseEnter={() => {
-              router.prefetch(`/dashboard/year/${year}/month/${m.value}`);
+              router.prefetch(`/me/year/${year}/month/${m.value}`);
             }}
           >
             <div className="flex items-center gap-3">{m.i18n.en}</div>
