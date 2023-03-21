@@ -223,7 +223,7 @@ export const createDate = (date: Date, locale?: string): CalendarDay => {
   const { isHoliday, holidayInformation } = getHolidayInformation(date);
 
   const modifiedDate = {
-    date,
+    date: date.toISOString(),
     day: getDate(date),
     name: getFormattedDay(date, locale),
     weekNumber: getWeek(date, locale),
@@ -299,9 +299,11 @@ export const getCalendarMonthEntries = (
   showWeeks = true,
   workDayDetails?: UserWorkDayDetail[]
 ) => {
-  const lastMonth = getAllDaysInMonth(addMonths(month.days[0].date, -1));
+  const lastMonth = getAllDaysInMonth(addMonths(new Date(month.days[0].date), -1));
 
   const calendarEntries = month.days.reduce<CalendarEntries[]>((acc, day, index) => {
+    const date = new Date(day.date);
+
     // if index is 0, we are on the first day of the month
     // first we need to add header days
     // then we need to add week number
@@ -314,7 +316,7 @@ export const getCalendarMonthEntries = (
         acc.push({
           type: "header",
           value,
-          date: day.date.toISOString(),
+          date: day.date,
           formattedDate: day.formattedDate,
           isOdd: isStriped(acc.length, showWeeks)
         });
@@ -325,8 +327,8 @@ export const getCalendarMonthEntries = (
     if (showWeeks && acc.length % (showWeeks ? 8 : 7) === 0) {
       acc.push({
         type: "week",
-        value: getWeek(day.date),
-        date: day.date.toISOString(),
+        value: getWeek(date),
+        date: day.date,
         formattedDate: day.formattedDate,
         isOdd: isStriped(acc.length, showWeeks)
       });
@@ -350,16 +352,16 @@ export const getCalendarMonthEntries = (
           5: 4,
           6: 5,
           7: 6
-        }[day.date.getDay()] ?? 0;
+        }[date.getDay()] ?? 0;
 
       for (let i = 0; i < spacingDays; i++) {
         acc.push({
           type: "spacing",
           // we use date from last month to render spacing days
           value: lastMonth[lastMonth.length - (spacingDays - i)].getDate(),
-          date: day.date.toISOString(),
+          date: day.date,
           formattedDate: day.formattedDate,
-          week: getWeek(day.date),
+          week: getWeek(date),
           isOdd: isStriped(acc.length, showWeeks),
           isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
           isWorkDay: day.isWorkDay,
@@ -372,14 +374,14 @@ export const getCalendarMonthEntries = (
     // render day
     acc.push({
       type: "day",
-      value: day.date.getDate(),
-      date: day.date.toISOString(),
+      value: date.getDate(),
+      date: day.date,
       formattedDate: day.formattedDate,
-      week: getWeek(day.date),
+      week: getWeek(date),
       isToday:
-        day.date.getDate() === currentDate.getDate() &&
-        day.date.getMonth() === currentDate.getMonth() &&
-        day.date.getFullYear() === currentDate.getFullYear(),
+        date.getDate() === currentDate.getDate() &&
+        date.getMonth() === currentDate.getMonth() &&
+        date.getFullYear() === currentDate.getFullYear(),
       isOdd: isStriped(acc.length, showWeeks),
       isHoliday: day.isHoliday,
       isSunday: day.isSunday,
@@ -401,14 +403,14 @@ export const getCalendarMonthEntries = (
           5: 2,
           6: 1,
           7: 0
-        }[day.date.getDay()] ?? 0;
+        }[date.getDay()] ?? 0;
       for (let i = 0; i < spacingDays; i++) {
         acc.push({
           type: "spacing",
           value: i + 1,
-          date: day.date.toISOString(),
+          date: day.date,
           formattedDate: day.formattedDate,
-          week: getWeek(day.date),
+          week: getWeek(date),
           isOdd: isStriped(acc.length, showWeeks),
           isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
           isWorkDay: day.isWorkDay,

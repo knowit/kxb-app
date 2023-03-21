@@ -5,11 +5,7 @@ import { getUserAvatar } from "@/lib/user";
 export default async function Avatar() {
   const userAvatar = await getUserAvatar();
 
-  if (!userAvatar) {
-    return <AvatarSkeleton />;
-  }
-
-  return <UserAvatar name={userAvatar.name} src={userAvatar?.src} />;
+  return <UserAvatar name={userAvatar?.name} src={userAvatar?.src} />;
 }
 
 function AvatarSkeleton() {

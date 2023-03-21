@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { GearIcon } from "@radix-ui/react-icons";
-import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
-function UserAvatar({ name, src }: { name: Session["user"]["name"]; src?: string }) {
+function UserAvatar({ name, src }: { name?: string; src?: string }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -24,7 +23,7 @@ function UserAvatar({ name, src }: { name: Session["user"]["name"]; src?: string
               height={48}
             />
           ) : (
-            <GearIcon className="h-12 w-12" />
+            <GearIcon className="h-6 w-6" />
           )}
           <span className="sr-only">Open popover</span>
         </Button>

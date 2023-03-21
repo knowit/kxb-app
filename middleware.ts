@@ -32,15 +32,6 @@ export default withAuth(
 
       return NextResponse.redirect(new URL(`/login?from=${encodeURIComponent(from)}`, req.url));
     }
-
-    if (isAuth) {
-      const response = NextResponse.next();
-
-      // Set a cookie
-      response.cookies.set(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID, token.activeDirectoryId);
-
-      return response;
-    }
   },
   {
     callbacks: {

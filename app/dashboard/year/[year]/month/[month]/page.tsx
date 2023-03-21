@@ -1,4 +1,4 @@
-import CalendarMonthWithSalary from "@/app/(dashboard)/dashboard/_components/calendar-month-with-salary";
+import CalendarMonthWithSalary from "@/app/dashboard/_components/calendar-month-with-salary";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getUser, getUserEarnings } from "@/lib/user";
@@ -19,7 +19,7 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
   const date = new Date(+(params.year ?? currentDate.getFullYear()), +params.month);
   const calendarMonth = getCalendarMonth(date);
 
-  const [user, userEarnings] = await query([getUser(), getUserEarnings()]);
+  const [user, userEarnings] = await query([getUser(), getUserEarnings(undefined, date)]);
 
   if (!user.data) {
     return redirect("/login");

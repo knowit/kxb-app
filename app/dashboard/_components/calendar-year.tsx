@@ -48,22 +48,25 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
         </div>
       </div>
       <div className="my-4 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {calendarYear.months.map((month, index) => (
-          <div key={`calendar-year-calendar-month-${index}`}>
-            <Link href={`/dashboard/year/${month.year}/month/${month.monthNumber}`}>
-              <h2
-                className={cn({
-                  "underline underline-offset-2 dark:text-emerald-500":
-                    currentDate.getMonth() === month.days[0].date.getMonth() &&
-                    currentDate.getFullYear() === month.days[0].date.getFullYear()
-                })}
-              >
-                {month.month}
-              </h2>
-            </Link>
-            <CalendarMonth month={month} />
-          </div>
-        ))}
+        {calendarYear.months.map((month, index) => {
+          const date = new Date(month.days[0].date);
+          return (
+            <div key={`calendar-year-calendar-month-${index}`}>
+              <Link href={`/dashboard/year/${month.year}/month/${month.monthNumber}`}>
+                <h2
+                  className={cn({
+                    "underline underline-offset-2 dark:text-emerald-500":
+                      currentDate.getMonth() === date.getMonth() &&
+                      currentDate.getFullYear() === date.getFullYear()
+                  })}
+                >
+                  {month.month}
+                </h2>
+              </Link>
+              <CalendarMonth month={month} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

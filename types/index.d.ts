@@ -101,7 +101,7 @@ export type CalendarMonth = {
 };
 
 export type CalendarDay = {
-  date: Date;
+  date: string;
   day: number;
   name: string;
   weekNumber: number;

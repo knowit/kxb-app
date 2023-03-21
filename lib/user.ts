@@ -1,18 +1,34 @@
 import "server-only";
 
-import { SITE_CONSTANTS } from "@/constants/site-constants";
 import { User, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
-import { cookies } from "next/headers";
+import { getToken, JWT } from "next-auth/jwt";
+import { RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { NextRequest } from "next/server";
 import { cache } from "react";
 import { planetscaleEdge } from "./planetscale-edge";
 import { query } from "./query";
 
+// Temporary workaround for enabling NextAuth to work with Edge Functions
+// Clean up when @auth/next is ready
+const getEdgeFriendlyToken = cache(async (): Promise<JWT | null> => {
+  // @ts-ignore
+  const req: NextRequest = {
+    headers: headers(),
+    cookies: cookies() as RequestCookies
+  };
+
+  const token = await getToken({ req });
+
+  return token;
+});
+
 const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
   const userActiveDirectoryId =
-    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
 
   if (!userActiveDirectoryId) {
     return redirect("/login");
@@ -46,7 +62,7 @@ const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
 
 const getUserWorkDayDetails = cache(async (activeDirectoryId?: string) => {
   const userActiveDirectoryId =
-    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
 
   if (!userActiveDirectoryId) {
     return redirect("/login");
@@ -80,7 +96,7 @@ const getUserWithWorkDayDetails = cache(async (activeDirectoryId?: string) => {
 
 const getUserEarnings = cache(async (activeDirectoryId?: string, activeDate?: Date) => {
   const userActiveDirectoryId =
-    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
 
   if (!userActiveDirectoryId) {
     return redirect("/login");
@@ -137,7 +153,7 @@ const getUserEarnings = cache(async (activeDirectoryId?: string, activeDate?: Da
 
 const getUserAvatar = cache(async (activeDirectoryId?: string) => {
   const userActiveDirectoryId =
-    activeDirectoryId ?? cookies().get(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID)?.value;
+    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
 
   if (!userActiveDirectoryId) {
     return redirect("/login");
@@ -170,32 +186,28 @@ const getUserAvatar = cache(async (activeDirectoryId?: string) => {
   if (!response.ok) {
     return undefined;
   }
-
-  // await prisma.user.update({
-  //   data: {
-  //     refreshToken: refreshedTokens.refresh_token,
-  //     accessTokenExpires: Date.now() + refreshedTokens?.ext_expires_in * 1000,
-  //     updated: new Date()
-  //   },
-  //   where: {
-  //     activeDirectoryId: userActiveDirectoryId
-  //   }
-  // });
-
-  const avatarResponse = await fetch(
-    `https://graph.microsoft.com/v1.0/dashboard/photos/120x120/$value`,
-    {
+  const [avatarResponse] = await query([
+    fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
       headers: {
         Authorization: `Bearer ${refreshedTokens.access_token}`
       }
-    }
-  );
+    }),
+    planetscaleEdge.execute(
+      "UPDATE user SET refreshToken = ?, accessTokenExpires = ?, updated = ? WHERE activeDirectoryId = ?",
+      [
+        refreshedTokens.refresh_token,
+        Date.now() + refreshedTokens?.ext_expires_in * 1000,
+        new Date(),
+        userActiveDirectoryId
+      ]
+    )
+  ]);
 
-  if (!avatarResponse.ok) {
+  if (!avatarResponse?.data?.ok) {
     return undefined;
   }
 
-  const pictureBuffer = await avatarResponse.arrayBuffer();
+  const pictureBuffer = await avatarResponse?.data.arrayBuffer();
 
   return {
     src: `data:image/jpeg;base64,${btoa(

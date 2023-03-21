@@ -65,16 +65,19 @@ const CalendarMonth: React.FC<{
       </div>
       <Show when={holidayInfos.length > 0}>
         <div className="mt-4">
-          {holidayInfos.map((day, index) => (
-            <div
-              key={`holiday-info-${index}`}
-              className="mr-1 inline-flex text-xs leading-tight dark:text-zinc-400"
-            >
-              {`${day.date.getDate()}.${day.date.getMonth() + 1}: ${day.holidayInformation?.name}${
-                holidayInfos.length === index + 1 ? "" : ","
-              }`}
-            </div>
-          ))}
+          {holidayInfos.map((day, index) => {
+            const date = new Date(day.date);
+            return (
+              <div
+                key={`holiday-info-${index}`}
+                className="mr-1 inline-flex text-xs leading-tight dark:text-zinc-400"
+              >
+                {`${date.getDate()}.${date.getMonth() + 1}: ${day.holidayInformation?.name}${
+                  holidayInfos.length === index + 1 ? "" : ","
+                }`}
+              </div>
+            );
+          })}
         </div>
       </Show>
     </div>

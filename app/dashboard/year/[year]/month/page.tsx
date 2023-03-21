@@ -5,6 +5,7 @@ interface SelectedYearPageProps {
   params: { year: string };
 }
 
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
