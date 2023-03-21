@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CalendarDay, CalendarEntries } from "@/types";
+import { CalendarDay, CalendarEntries, CalendarSizeVariant } from "@/types";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 import { Icons } from "../icons";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
@@ -7,30 +7,40 @@ import { Show } from "../ui/show";
 
 type CalendarDayProps = ComponentPropsWithoutRef<"div"> & {
   calendarDay: CalendarEntries;
-  big?: boolean;
+  calendarSizeVariant?: CalendarSizeVariant;
   holidayInfos?: CalendarDay[];
 };
 
 const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
-  ({ className, calendarDay, big = false, holidayInfos = [], ...other }, ref) => {
+  (
+    { className, calendarDay, calendarSizeVariant = "default", holidayInfos = [], ...other },
+    ref
+  ) => {
     return (
       <div
         className={cn(
-          "flex flex-col border-2 border-transparent",
+          "flex flex-col dark:bg-black",
           {
-            "border-emerald-500 font-medium ": calendarDay.isToday,
+            "font-medium underline underline-offset-4": calendarDay.isToday,
             "dark:text-emerald-500": calendarDay.isToday || calendarDay.isWorkDay,
             "dark:text-red-500": calendarDay.isNonCommissionedWorkDay,
             "dark:text-zinc-450 text-zinc-500":
               calendarDay.type === "spacing" ||
               calendarDay.type === "week" ||
               calendarDay.type === "header",
-            "bg-zinc-200 dark:bg-zinc-800": calendarDay.isOdd,
+            "border-l border-t border-l-zinc-700 border-t-zinc-700":
+              calendarDay.type === "day" || calendarDay.type === "spacing",
+            "border-t border-t-zinc-700": calendarDay.type === "week",
+            "": calendarDay.isOdd,
             "min-h-[50px] md:min-h-[112px]":
-              big && (calendarDay.type === "day" || calendarDay.type === "spacing"),
-            "items-end justify-start py-1 px-1 md:py-2 md:px-3": big,
-            "items-center justify-center lg:min-h-[50px] lg:min-w-[50px]": !big,
-            "text-xs": calendarDay.type === "header"
+              calendarSizeVariant === "large" &&
+              (calendarDay.type === "day" || calendarDay.type === "spacing"),
+            "items-end justify-start py-1 px-1 md:py-2 md:px-3": calendarSizeVariant === "large",
+            "h-full min-h-[44px] items-center justify-center lg:min-h-[50px] lg:min-w-[50px]":
+              calendarSizeVariant === "default",
+            "text-sm": calendarDay.type === "header",
+            "text-xs": calendarDay.type === "header" && calendarSizeVariant === "small",
+            "h-full min-h-[36px] items-center justify-center": calendarSizeVariant === "small"
           },
           className
         )}
@@ -38,13 +48,16 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
         ref={ref}
       >
         <div
-          className={cn("flex", {
+          className={cn("flex items-center justify-center", {
             "w-full items-center justify-end pb-1.5 md:pb-2":
-              big && (calendarDay.type === "day" || calendarDay.type === "spacing"),
-            "justify-between": big && calendarDay.isStartOfWeek
+              calendarSizeVariant === "large" &&
+              (calendarDay.type === "day" || calendarDay.type === "spacing"),
+            "justify-between": calendarSizeVariant === "large" && calendarDay.isStartOfWeek,
+            "text-[15px]": calendarSizeVariant === "small",
+            "text-xs": calendarSizeVariant === "small" && calendarDay.type === "header"
           })}
         >
-          {big && calendarDay.isStartOfWeek ? (
+          {calendarSizeVariant === "large" && calendarDay.isStartOfWeek ? (
             <div className="text-xs dark:text-zinc-600 md:text-base">{calendarDay.week}</div>
           ) : null}
           <div className="flex items-center gap-1">
@@ -65,7 +78,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
             </Show>
           </div>
         </div>
-        {big &&
+        {calendarSizeVariant === "large" &&
           (calendarDay.type === "day" || calendarDay.type === "spacing") &&
           holidayInfos
             .filter(

@@ -30,16 +30,20 @@ export async function PATCH(request: NextRequest) {
       [token.id, date]
     );
 
-    if (!rows?.length) {
-      return new Response("Not found", {
-        status: 404
-      });
-    }
-
-    const existing = rows[0] as UserWorkDayDetail;
-
     // update
-    if (existing) {
+    if (rows?.length > 0) {
+      let existing = rows[0] as UserWorkDayDetail;
+
+      if (extraHours === 0 && nonCommissionedHours === 0) {
+        await planetscaleEdge.execute("DELETE FROM user_work_day_detail WHERE id = ?", [
+          +existing.id
+        ]);
+
+        return new Response("Patched", {
+          status: 200
+        });
+      }
+
       await planetscaleEdge.execute(
         "UPDATE user_work_day_detail SET nonCommissionedHours = ?, extraHours = ?, sickDay = ? WHERE id = ?",
         [nonCommissionedHours, extraHours, sickDay, +existing.id]

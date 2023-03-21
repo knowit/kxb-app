@@ -1,8 +1,10 @@
 import { SalaryDetailsCard } from "@/components/salary/salary-details-card";
+import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 
 export default async function YearlyEconomicOverview() {
-  const userEarnings = await getUserEarnings();
+  const token = await getEdgeFriendlyToken();
+  const userEarnings = await getUserEarnings(token.id);
 
   return (
     <div className="flex flex-col gap-y-8">

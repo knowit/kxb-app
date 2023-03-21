@@ -1,11 +1,15 @@
 import { UserSalaryDetailsForm } from "@/components/user/user-salary-details-form";
+import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
+import { redirect } from "next/navigation";
 
 export default async function SalaryForm() {
-  const user = await getUser();
+  const token = await getEdgeFriendlyToken();
+
+  const user = await getUser(token.id);
 
   if (!user) {
-    return <div>Not logged in</div>;
+    return redirect("/login");
   }
 
   return (

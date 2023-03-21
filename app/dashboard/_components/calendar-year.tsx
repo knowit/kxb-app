@@ -14,13 +14,9 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
   const calendarYear = getCalendarYear(year);
 
   return (
-    <div className="max-w-4xl">
-      <h1 className="mb-4">
-        Norsk kalender med helligdager
-        <span className="sr-only"> - Kalender {getYear(date)}</span>
-      </h1>
+    <div className="max-w-5xl">
       <div className="flex items-center justify-between">
-        <h2>Kalender {getYear(date)}</h2>
+        <h1 className="mb-4">Calendar {getYear(date)}</h1>
         <div className="flex items-center gap-2">
           {/* Go to previous year */}
           <Link
@@ -35,7 +31,7 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
             className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
             href={`/dashboard/year/${currentDate.getFullYear()}`}
           >
-            I dag
+            Today
           </Link>
           {/* Go to next year */}
           <Link
@@ -54,7 +50,7 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
             <div key={`calendar-year-calendar-month-${index}`}>
               <Link href={`/dashboard/year/${month.year}/month/${month.monthNumber}`}>
                 <h2
-                  className={cn({
+                  className={cn("mb-3 text-center", {
                     "underline underline-offset-2 dark:text-emerald-500":
                       currentDate.getMonth() === date.getMonth() &&
                       currentDate.getFullYear() === date.getFullYear()
@@ -63,7 +59,7 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
                   {month.month}
                 </h2>
               </Link>
-              <CalendarMonth month={month} />
+              <CalendarMonth month={month} calendarSizeVariant="small" />
             </div>
           );
         })}

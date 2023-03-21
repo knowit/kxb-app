@@ -21,6 +21,7 @@ import { Show } from "../ui/show";
 interface UserWorkDayDetailFormProps extends HTMLAttributes<HTMLFormElement> {
   date: string;
   userWorkDayDetail?: UserWorkDayDetail;
+  onFormSubmitSuccess?: () => void;
 }
 
 type FormData = z.infer<typeof userWorkDayDetailSchema>;
@@ -29,6 +30,7 @@ export function UserWorkDayDetailForm({
   date,
   userWorkDayDetail,
   className,
+  onFormSubmitSuccess,
   ...props
 }: UserWorkDayDetailFormProps) {
   const router = useRouter();
@@ -53,6 +55,7 @@ export function UserWorkDayDetailForm({
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const nonCommissionedHours = watch("nonCommissionedHours");
+  const extraHours = watch("extraHours");
 
   useEffect(() => {
     if (nonCommissionedHours <= 0) {
@@ -95,6 +98,7 @@ export function UserWorkDayDetailForm({
 
     // start transition
     startTransition(() => {
+      onFormSubmitSuccess?.();
       // Refresh the current route and fetch new data from the server without
       // losing client-side browser or React state.
       router.refresh();
@@ -108,7 +112,7 @@ export function UserWorkDayDetailForm({
       {...props}
     >
       <Input
-        id="name"
+        id="id"
         type="hidden"
         className="w-full"
         {...register("id", {
@@ -120,13 +124,14 @@ export function UserWorkDayDetailForm({
       />
       <Input id="date" type="hidden" className="w-full" {...register("date")} />
       <div className="">
-        <Label htmlFor="name">Non commissioned hours</Label>
+        <Label htmlFor="nonCommissionedHours">Non commissioned hours</Label>
         <div className="flex gap-3">
           <Input
-            id="name"
+            id="nonCommissionedHours"
             type="number"
             step="0.5"
             className="w-full"
+            disabled={extraHours > 0}
             {...register("nonCommissionedHours", {
               valueAsNumber: true
             })}
@@ -136,6 +141,7 @@ export function UserWorkDayDetailForm({
             type="button"
             variant={nonCommissionedHours > 0 ? "destructive" : "outline"}
             onClick={() => setValue("nonCommissionedHours", nonCommissionedHours > 0 ? 0 : 7.5)}
+            disabled={extraHours > 0}
           >
             <Show when={nonCommissionedHours <= 0}>
               <Icons.PlusCircled className="h-4 w-4" />
@@ -179,12 +185,13 @@ export function UserWorkDayDetailForm({
         {errors?.sickDay && <p className="px-1 text-xs text-red-600">{errors.sickDay.message}</p>}
       </div>
       <div className="">
-        <Label htmlFor="name">Extra hours</Label>
+        <Label htmlFor="extraHours">Extra hours</Label>
         <Input
-          id="name"
+          id="extraHours"
           type="number"
           step="0.5"
           className="w-full"
+          disabled={nonCommissionedHours > 0}
           {...register("extraHours", {
             valueAsNumber: true
           })}

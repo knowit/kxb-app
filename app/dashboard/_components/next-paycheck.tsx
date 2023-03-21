@@ -1,7 +1,9 @@
+import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 
 export default async function NextPaycheck() {
-  const userEarnings = await getUserEarnings();
+  const token = await getEdgeFriendlyToken();
+  const userEarnings = await getUserEarnings(token.id);
 
   return (
     <div>

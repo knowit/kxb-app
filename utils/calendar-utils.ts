@@ -365,8 +365,7 @@ export const getCalendarMonthEntries = (
           isOdd: isStriped(acc.length, showWeeks),
           isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
           isWorkDay: day.isWorkDay,
-          isNonCommissionedWorkDay: (workDayDetail?.nonCommissionedHours ?? 0) > 0,
-          workDayDetails: workDayDetail
+          isNonCommissionedWorkDay: false
         });
       }
     }
@@ -414,8 +413,7 @@ export const getCalendarMonthEntries = (
           isOdd: isStriped(acc.length, showWeeks),
           isStartOfWeek: acc.length % (showWeeks ? 8 : 7) === 0,
           isWorkDay: day.isWorkDay,
-          isNonCommissionedWorkDay: (workDayDetail?.nonCommissionedHours ?? 0) > 0,
-          workDayDetails: workDayDetail
+          isNonCommissionedWorkDay: false
         });
       }
     }

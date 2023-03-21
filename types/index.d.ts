@@ -47,6 +47,13 @@ export type UserSalaryDetails = {
   workHours: number;
 };
 
+export type UserSettings = {
+  id: number;
+  userId: number;
+  closeUserSalaryDialogOnSaveSuccess: boolean;
+  closeUserWorkDayDetailsDialogOnSaveSuccess: boolean;
+};
+
 export type CalendarMonthEarnings = {
   monthName: string;
   payDay: string;
@@ -169,3 +176,5 @@ export type GraphUser = {
   userPrincipalName: string;
   id: string;
 };
+
+export type CalendarSizeVariant = "default" | "small" | "large";

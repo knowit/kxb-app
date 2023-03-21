@@ -24,11 +24,17 @@ interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
     tax: number;
     workHours: number;
   };
+  onFormSubmitSuccess?: () => void;
 }
 
 type FormData = z.infer<typeof userSalaryDetailSchema>;
 
-export function UserSalaryDetailsForm({ user, className, ...props }: UserSalaryDetailsFormProps) {
+export function UserSalaryDetailsForm({
+  user,
+  className,
+  onFormSubmitSuccess,
+  ...props
+}: UserSalaryDetailsFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -81,6 +87,7 @@ export function UserSalaryDetailsForm({ user, className, ...props }: UserSalaryD
 
     // start transition
     startTransition(() => {
+      onFormSubmitSuccess?.();
       // Refresh the current route and fetch new data from the server without
       // losing client-side browser or React state.
       router.refresh();

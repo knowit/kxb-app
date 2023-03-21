@@ -1,27 +1,32 @@
 "use client";
 
-import { CalendarDay as CalendarDayType, CalendarEntries } from "@/types";
+import { CalendarDay as CalendarDayType, CalendarEntries, CalendarSizeVariant } from "@/types";
+import { useState } from "react";
 import { CalendarDay } from "../calendar/calendar-day";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { UserWorkDayDetailForm } from "./user-work-day-detail-form";
 
 export function UserEditWorkDayDetailDialog({
   calendarDay,
-  big = false,
+  calendarSizeVariant = "default",
   holidayInfos = [],
+  closeDialogOnFormSubmitSuccess = false,
   ...other
 }: {
   calendarDay: CalendarEntries;
-  big?: boolean;
+  calendarSizeVariant?: CalendarSizeVariant;
   holidayInfos?: CalendarDayType[];
+  closeDialogOnFormSubmitSuccess?: boolean;
 }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
-    <Dialog {...other}>
+    <Dialog open={isOpen} onOpenChange={open => setIsOpen(open)} {...other}>
       <DialogTrigger asChild>
         <CalendarDay
           className="cursor-pointer"
           calendarDay={calendarDay}
-          big={big}
+          calendarSizeVariant={calendarSizeVariant}
           holidayInfos={holidayInfos}
         />
       </DialogTrigger>
@@ -31,6 +36,11 @@ export function UserEditWorkDayDetailDialog({
         <UserWorkDayDetailForm
           date={calendarDay.formattedDate}
           userWorkDayDetail={calendarDay.workDayDetails}
+          onFormSubmitSuccess={() => {
+            if (closeDialogOnFormSubmitSuccess) {
+              setIsOpen(false);
+            }
+          }}
         />
       </DialogContent>
     </Dialog>

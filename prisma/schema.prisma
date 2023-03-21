@@ -28,6 +28,7 @@ model user {
   isSpecialist       Boolean                @default(false)
   workDayDetails     user_work_day_detail[]
   feedback           user_feedback[]
+  settings           user_settings?
 }
 
 model user_work_day_detail {
@@ -52,4 +53,12 @@ model user_feedback {
   reaction Int
 
   @@index([userId])
+}
+
+model user_settings {
+  id                                         Int     @id @default(autoincrement())
+  user                                       user    @relation(fields: [userId], references: [id])
+  userId                                     Int     @unique
+  closeUserSalaryDialogOnSaveSuccess         Boolean @default(true)
+  closeUserWorkDayDetailsDialogOnSaveSuccess Boolean @default(true)
 }

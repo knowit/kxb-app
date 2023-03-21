@@ -1,6 +1,7 @@
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
-import { getUser, getUserEarnings } from "@/lib/user";
+import { getEdgeFriendlyToken } from "@/lib/token";
+import { getUser, getUserEarnings, getUserSettings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -13,11 +14,17 @@ export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 export default async function DashboardPage() {
+  const token = await getEdgeFriendlyToken();
+
   const currentDate = getRequestDateNow();
 
   const calendarMonth = getCalendarMonth(currentDate);
 
-  const [user, userEarnings] = await query([getUser(), getUserEarnings()]);
+  const [user, userEarnings, userSettings] = await query([
+    getUser(token.id),
+    getUserEarnings(token.id),
+    getUserSettings(token.id)
+  ]);
 
   if (!user.data) {
     return redirect("/login");
@@ -28,7 +35,8 @@ export default async function DashboardPage() {
       <CalendarMonthWithSalary
         user={user.data}
         calendarMonth={calendarMonth}
-        userEarnings={userEarnings.data ?? undefined}
+        userEarnings={userEarnings.data}
+        userSettings={userSettings.data}
       />
       <CompanyBenefits />
       <Suspense fallback={<div />}>

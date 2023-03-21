@@ -10,12 +10,20 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import { User } from "@/types";
+import { useState } from "react";
 import { Icons } from "../icons";
 import { UserSalaryDetailsForm } from "./user-salary-details-form";
 
-export function UserEditSalaryDetailsDialog({ user }: { user: User }) {
+export function UserEditSalaryDetailsDialog({
+  user,
+  closeDialogOnFormSubmitSuccess = false
+}: {
+  user: User;
+  closeDialogOnFormSubmitSuccess?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={open => setIsOpen(open)}>
       <DialogTrigger asChild>
         <Button className="gap-3" variant="subtle">
           <Icons.Gear className="h-4 w-4" />
@@ -36,6 +44,11 @@ export function UserEditSalaryDetailsDialog({ user }: { user: User }) {
             tax: user.tax,
             workHours: user.workHours,
             id: +user.id
+          }}
+          onFormSubmitSuccess={() => {
+            if (closeDialogOnFormSubmitSuccess) {
+              setIsOpen(false);
+            }
           }}
         />
       </DialogContent>

@@ -1,9 +1,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/user/user-avatar";
+import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserAvatar } from "@/lib/user";
 
 export default async function Avatar() {
-  const userAvatar = await getUserAvatar();
+  const token = await getEdgeFriendlyToken();
+  const userAvatar = await getUserAvatar(token.id);
 
   return <UserAvatar name={userAvatar?.name} src={userAvatar?.src} />;
 }

@@ -5,22 +5,29 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { UserEditSalaryDetailsDialog } from "@/components/user/user-edit-salary-details-dialog";
-import { User, UserEarningsDetails, type CalendarMonth as CalendarMonthType } from "@/types";
+import {
+  User,
+  UserEarningsDetails,
+  UserSettings,
+  type CalendarMonth as CalendarMonthType
+} from "@/types";
 import Link from "next/link";
 import { CalendarMonth } from "./calendar-month";
 
 export default function CalendarMonthWithSalary({
   user,
   calendarMonth,
-  userEarnings
+  userEarnings,
+  userSettings
 }: {
   user: User;
   calendarMonth: CalendarMonthType;
   userEarnings?: UserEarningsDetails;
+  userSettings?: UserSettings;
 }) {
   return (
     <div className="flex flex-col gap-12 lg:flex-row">
-      <div className="flex max-w-[380px] flex-col gap-3 lg:min-w-[380px]">
+      <div className="order-1 flex max-w-[380px] flex-col gap-3 lg:-order-1 lg:min-w-[380px]">
         <h2 className="font-bold">
           Salary details for {calendarMonth.month} {calendarMonth.year}
         </h2>
@@ -52,12 +59,17 @@ export default function CalendarMonthWithSalary({
             </Card.Content>
           </Card>
         </Show>
-        <UserEditSalaryDetailsDialog user={user} />
+        <UserEditSalaryDetailsDialog
+          user={user}
+          closeDialogOnFormSubmitSuccess={userSettings?.closeUserSalaryDialogOnSaveSuccess}
+        />
       </div>
       <div className="grow">
         <div className="flex items-start justify-between">
           <div className="">
-            <h2 className="text-xs">{calendarMonth.year}</h2>
+            <Link href={`/dashboard/year/${calendarMonth.year}`}>
+              <h2 className="text-xs">{calendarMonth.year}</h2>
+            </Link>
             <MonthSelect
               className="max-w-[110px]"
               year={calendarMonth.year}
@@ -77,7 +89,7 @@ export default function CalendarMonthWithSalary({
             </Link>
             {/* Go to current month */}
             <Link className={buttonVariants({ variant: "outline" })} href="/dashboard">
-              <span className="">I dag</span>
+              <span className="">Today</span>
             </Link>
             {/* Go to next month if month.MonthNumber is 11, go to next year and month 0 */}
             <Link
@@ -91,7 +103,13 @@ export default function CalendarMonthWithSalary({
             </Link>
           </div>
         </div>
-        <CalendarMonth month={calendarMonth} workDayDetails={userEarnings?.workDayDetails} />
+        <CalendarMonth
+          month={calendarMonth}
+          workDayDetails={userEarnings?.workDayDetails}
+          closeUserWorkDayDetailsDialogOnSaveSuccess={
+            userSettings?.closeUserWorkDayDetailsDialogOnSaveSuccess
+          }
+        />
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import CalendarMonthWithSalary from "@/app/dashboard/_components/calendar-month-with-salary";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
-import { getUser, getUserEarnings } from "@/lib/user";
+import { getEdgeFriendlyToken } from "@/lib/token";
+import { getUser, getUserEarnings, getUserSettings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
 
@@ -14,12 +15,17 @@ export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 export default async function SelectedYearMonthPage({ params }: SelectedYearMonthPageProps) {
+  const token = await getEdgeFriendlyToken();
   const currentDate = getRequestDateNow();
 
   const date = new Date(+(params.year ?? currentDate.getFullYear()), +params.month);
   const calendarMonth = getCalendarMonth(date);
 
-  const [user, userEarnings] = await query([getUser(), getUserEarnings(undefined, date)]);
+  const [user, userEarnings, userSettings] = await query([
+    getUser(token.id),
+    getUserEarnings(token.id, date),
+    getUserSettings(token.id)
+  ]);
 
   if (!user.data) {
     return redirect("/login");
@@ -29,7 +35,8 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
       <CalendarMonthWithSalary
         user={user.data}
         calendarMonth={calendarMonth}
-        userEarnings={userEarnings.data ?? undefined}
+        userEarnings={userEarnings.data}
+        userSettings={userSettings.data}
       />
     </>
   );

@@ -1,41 +1,53 @@
 import { CalendarDay } from "@/components/calendar/calendar-day";
+import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-day-detail-dialog";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { CalendarMonth, UserWorkDayDetail } from "@/types";
+import { CalendarMonth, CalendarSizeVariant, UserWorkDayDetail } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
 import * as React from "react";
 
 const CalendarMonth: React.FC<{
   month: CalendarMonth;
-  big?: boolean;
+  calendarSizeVariant?: CalendarSizeVariant;
   workDayDetails?: UserWorkDayDetail[];
-}> = ({ month, big = false, workDayDetails = [], ...other }) => {
+  closeUserWorkDayDetailsDialogOnSaveSuccess?: boolean;
+}> = ({
+  month,
+  calendarSizeVariant = "default",
+  workDayDetails = [],
+  closeUserWorkDayDetailsDialogOnSaveSuccess = false,
+  ...other
+}) => {
   const currentDate = getRequestDateNow();
-  const showWeeks = true && !big;
+  const showWeeks = true && calendarSizeVariant !== "large";
   const holidayInfos = month.days.filter(day => day.holidayInformation);
 
   const calendarEntries = getCalendarMonthEntries(month, currentDate, showWeeks, workDayDetails);
 
   return (
-    <div className="min-h-[240px] lg:min-h-[410px]">
+    <div
+      className={cn({
+        "min-h-[240px] lg:min-h-[410px]": calendarSizeVariant === "default"
+      })}
+    >
       <div className="flex items-center justify-center gap-3">
-        <div className="flex items-center justify-center gap-1">
-          <div className="h-2 w-2 rounded-full border-neutral-50 bg-neutral-50" />
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-3 w-3 rounded-full border-neutral-50 bg-neutral-50" />
           <span className="text-xs">Off work</span>
         </div>
-        <div className="flex items-center justify-center gap-1">
-          <div className="h-2 w-2 rounded-full border-emerald-500 bg-emerald-500" />
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-3 w-3 rounded-full border-emerald-500 bg-emerald-500" />
           <span className="text-xs">Work</span>
         </div>
-        <div className="flex items-center justify-center gap-1">
-          <div className="h-2 w-2 rounded-full border-red-500 bg-red-500" />
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-3 w-3 rounded-full border-red-500 bg-red-500" />
           <span className="text-xs">Non commissioned</span>
         </div>
       </div>
-      <div
-        className={cn("grid", {
+      <Card
+        className={cn("mt-3 grid", {
           "grid-cols-8": showWeeks,
           "grid-cols-7": !showWeeks
         })}
@@ -47,8 +59,9 @@ const CalendarMonth: React.FC<{
                 <UserEditWorkDayDetailDialog
                   key={`calendar-day-${index}`}
                   calendarDay={calendarDay}
-                  big={big}
+                  calendarSizeVariant={calendarSizeVariant}
                   holidayInfos={holidayInfos}
+                  closeDialogOnFormSubmitSuccess={closeUserWorkDayDetailsDialogOnSaveSuccess}
                 />
               );
             default:
@@ -56,13 +69,13 @@ const CalendarMonth: React.FC<{
                 <CalendarDay
                   key={`calendar-day-${index}`}
                   calendarDay={calendarDay}
-                  big={big}
+                  calendarSizeVariant={calendarSizeVariant}
                   holidayInfos={holidayInfos}
                 />
               );
           }
         })}
-      </div>
+      </Card>
       <Show when={holidayInfos.length > 0}>
         <div className="mt-4">
           {holidayInfos.map((day, index) => {

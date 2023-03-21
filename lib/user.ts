@@ -2,30 +2,22 @@ import "server-only";
 
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { query } from "@/lib/query";
-import { getEdgeFriendlyToken } from "@/lib/token";
-import { User, UserWorkDayDetail } from "@/types";
+import { User, UserSettings, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
-import { redirect } from "next/navigation";
 import { cache } from "react";
 
-const getUser = cache(async (id?: string): Promise<User> => {
-  const userId = id ?? (await getEdgeFriendlyToken())?.id;
-
-  if (!userId) {
-    return redirect("/login");
-  }
-
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = 1", [userId]);
+const getUser = cache(async (id: string): Promise<User | undefined> => {
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = 1", [id]);
 
   if (!rows?.length) {
-    return redirect("/login");
+    return undefined;
   }
 
   const user = rows[0] as User;
 
   if (!user) {
-    return redirect("/login");
+    return undefined;
   }
 
   return {
@@ -40,16 +32,10 @@ const getUser = cache(async (id?: string): Promise<User> => {
   };
 });
 
-const getUserWorkDayDetails = cache(async (id?: string) => {
-  const userId = id ?? (await getEdgeFriendlyToken())?.id;
-
-  if (!userId) {
-    return redirect("/login");
-  }
-
+const getUserWorkDayDetails = cache(async (id: string) => {
   const { rows } = await planetscaleEdge.execute(
     "SELECT uwdd.id, uwdd.date, uwdd.nonCommissionedHours, uwdd.extraHours, uwdd.sickDay, uwdd.userId FROM user LEFT JOIN user_work_day_detail AS uwdd ON user.id = uwdd.userId WHERE user.id = ?",
-    [userId]
+    [id]
   );
 
   const userWorkDayDetail = rows as UserWorkDayDetail[];
@@ -62,7 +48,7 @@ const getUserWorkDayDetails = cache(async (id?: string) => {
   }));
 });
 
-const getUserWithWorkDayDetails = cache(async (id?: string) => {
+const getUserWithWorkDayDetails = cache(async (id: string) => {
   const [userResult, userWorkDayDetailResult] = await query([
     getUser(id),
     getUserWorkDayDetails(id)
@@ -74,14 +60,8 @@ const getUserWithWorkDayDetails = cache(async (id?: string) => {
   };
 });
 
-const getUserEarnings = cache(async (id?: string, activeDate?: Date) => {
-  const userId = id ?? (await getEdgeFriendlyToken())?.id;
-
-  if (!userId) {
-    return redirect("/login");
-  }
-
-  const user = await getUserWithWorkDayDetails(userId);
+const getUserEarnings = cache(async (id: string, activeDate?: Date) => {
+  const user = await getUserWithWorkDayDetails(id);
 
   if (!user) {
     return undefined;
@@ -130,14 +110,43 @@ const getUserEarnings = cache(async (id?: string, activeDate?: Date) => {
   );
 });
 
-const getUserAvatar = cache(async (id?: string) => {
-  const userId = id ?? (await getEdgeFriendlyToken())?.id;
+const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user_settings WHERE userId = ?", [
+    id
+  ]);
 
-  if (!userId) {
-    return redirect("/login");
+  if (!rows?.length) {
+    // insert
+    await planetscaleEdge.execute("INSERT INTO user_settings (userId) VALUES (?)", [id]);
+
+    const { rows } = await planetscaleEdge.execute("SELECT * FROM user_settings WHERE userId = ?", [
+      id
+    ]);
+
+    const userSettings = rows?.[0] as UserSettings;
+
+    return {
+      ...userSettings,
+      closeUserSalaryDialogOnSaveSuccess: Boolean(userSettings.closeUserSalaryDialogOnSaveSuccess),
+      closeUserWorkDayDetailsDialogOnSaveSuccess: Boolean(
+        userSettings.closeUserWorkDayDetailsDialogOnSaveSuccess
+      )
+    };
   }
 
-  const user = await getUser(userId);
+  const userSettings = rows?.[0] as UserSettings;
+
+  return {
+    ...userSettings,
+    closeUserSalaryDialogOnSaveSuccess: Boolean(userSettings.closeUserSalaryDialogOnSaveSuccess),
+    closeUserWorkDayDetailsDialogOnSaveSuccess: Boolean(
+      userSettings.closeUserWorkDayDetailsDialogOnSaveSuccess
+    )
+  };
+});
+
+const getUserAvatar = cache(async (id: string) => {
+  const user = await getUser(id);
 
   if (!user?.refreshToken) {
     return undefined;
@@ -176,7 +185,7 @@ const getUserAvatar = cache(async (id?: string) => {
         refreshedTokens.refresh_token,
         Date.now() + refreshedTokens?.ext_expires_in * 1000,
         new Date(),
-        userId
+        id
       ]
     )
   ]);
@@ -195,4 +204,4 @@ const getUserAvatar = cache(async (id?: string) => {
   };
 });
 
-export { getUser, getUserEarnings, getUserAvatar };
+export { getUser, getUserEarnings, getUserAvatar, getUserSettings };
