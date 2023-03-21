@@ -1,42 +1,22 @@
 import "server-only";
 
+import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { query } from "@/lib/query";
+import { getEdgeFriendlyToken } from "@/lib/token";
 import { User, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
-import { getToken, JWT } from "next-auth/jwt";
-import { RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
-import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { NextRequest } from "next/server";
 import { cache } from "react";
-import { planetscaleEdge } from "./planetscale-edge";
-import { query } from "./query";
 
-// Temporary workaround for enabling NextAuth to work with Edge Functions
-// Clean up when @auth/next is ready
-const getEdgeFriendlyToken = cache(async (): Promise<JWT | null> => {
-  // @ts-ignore
-  const req: NextRequest = {
-    headers: headers(),
-    cookies: cookies() as RequestCookies
-  };
+const getUser = cache(async (id?: string): Promise<User> => {
+  const userId = id ?? (await getEdgeFriendlyToken())?.id;
 
-  const token = await getToken({ req });
-
-  return token;
-});
-
-const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
-  const userActiveDirectoryId =
-    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
-
-  if (!userActiveDirectoryId) {
+  if (!userId) {
     return redirect("/login");
   }
 
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE activeDirectoryId = ?", [
-    userActiveDirectoryId
-  ]);
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = 1", [userId]);
 
   if (!rows?.length) {
     return redirect("/login");
@@ -60,17 +40,16 @@ const getUser = cache(async (activeDirectoryId?: string): Promise<User> => {
   };
 });
 
-const getUserWorkDayDetails = cache(async (activeDirectoryId?: string) => {
-  const userActiveDirectoryId =
-    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
+const getUserWorkDayDetails = cache(async (id?: string) => {
+  const userId = id ?? (await getEdgeFriendlyToken())?.id;
 
-  if (!userActiveDirectoryId) {
+  if (!userId) {
     return redirect("/login");
   }
 
   const { rows } = await planetscaleEdge.execute(
-    "SELECT uwdd.id, uwdd.date, uwdd.nonCommissionedHours, uwdd.extraHours, uwdd.sickDay, uwdd.userId FROM user LEFT JOIN user_work_day_detail AS uwdd ON user.id = uwdd.userId WHERE user.activeDirectoryId = ?",
-    [userActiveDirectoryId]
+    "SELECT uwdd.id, uwdd.date, uwdd.nonCommissionedHours, uwdd.extraHours, uwdd.sickDay, uwdd.userId FROM user LEFT JOIN user_work_day_detail AS uwdd ON user.id = uwdd.userId WHERE user.id = ?",
+    [userId]
   );
 
   const userWorkDayDetail = rows as UserWorkDayDetail[];
@@ -78,14 +57,15 @@ const getUserWorkDayDetails = cache(async (activeDirectoryId?: string) => {
   return (userWorkDayDetail ?? []).map(userWorkDayDetail => ({
     ...userWorkDayDetail,
     nonCommissionedHours: Number(userWorkDayDetail.nonCommissionedHours),
-    extraHours: Number(userWorkDayDetail.extraHours)
+    extraHours: Number(userWorkDayDetail.extraHours),
+    sickDay: Boolean(userWorkDayDetail.sickDay)
   }));
 });
 
-const getUserWithWorkDayDetails = cache(async (activeDirectoryId?: string) => {
+const getUserWithWorkDayDetails = cache(async (id?: string) => {
   const [userResult, userWorkDayDetailResult] = await query([
-    getUser(activeDirectoryId),
-    getUserWorkDayDetails(activeDirectoryId)
+    getUser(id),
+    getUserWorkDayDetails(id)
   ]);
 
   return {
@@ -94,15 +74,14 @@ const getUserWithWorkDayDetails = cache(async (activeDirectoryId?: string) => {
   };
 });
 
-const getUserEarnings = cache(async (activeDirectoryId?: string, activeDate?: Date) => {
-  const userActiveDirectoryId =
-    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
+const getUserEarnings = cache(async (id?: string, activeDate?: Date) => {
+  const userId = id ?? (await getEdgeFriendlyToken())?.id;
 
-  if (!userActiveDirectoryId) {
+  if (!userId) {
     return redirect("/login");
   }
 
-  const user = await getUserWithWorkDayDetails(userActiveDirectoryId);
+  const user = await getUserWithWorkDayDetails(userId);
 
   if (!user) {
     return undefined;
@@ -151,15 +130,14 @@ const getUserEarnings = cache(async (activeDirectoryId?: string, activeDate?: Da
   );
 });
 
-const getUserAvatar = cache(async (activeDirectoryId?: string) => {
-  const userActiveDirectoryId =
-    activeDirectoryId ?? (await getEdgeFriendlyToken())?.activeDirectoryId;
+const getUserAvatar = cache(async (id?: string) => {
+  const userId = id ?? (await getEdgeFriendlyToken())?.id;
 
-  if (!userActiveDirectoryId) {
+  if (!userId) {
     return redirect("/login");
   }
 
-  const user = await getUser(userActiveDirectoryId);
+  const user = await getUser(userId);
 
   if (!user?.refreshToken) {
     return undefined;
@@ -193,12 +171,12 @@ const getUserAvatar = cache(async (activeDirectoryId?: string) => {
       }
     }),
     planetscaleEdge.execute(
-      "UPDATE user SET refreshToken = ?, accessTokenExpires = ?, updated = ? WHERE activeDirectoryId = ?",
+      "UPDATE user SET refreshToken = ?, accessTokenExpires = ?, updated = ? WHERE id = ?",
       [
         refreshedTokens.refresh_token,
         Date.now() + refreshedTokens?.ext_expires_in * 1000,
         new Date(),
-        userActiveDirectoryId
+        userId
       ]
     )
   ]);

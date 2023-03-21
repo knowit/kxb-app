@@ -1,19 +1,18 @@
 "use client";
 
-import { toast } from "@/hooks/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
 import { UserWorkDayDetail } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition, type HTMLAttributes } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { Checkbox } from "../ui/checkbox";
 import { InfoButton } from "../ui/info-button";
 import Link from "../ui/link";
@@ -64,7 +63,7 @@ export function UserWorkDayDetailForm({
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api/user/work-day-detail`, {
+    const response = await fetch(`/api-v2/user/work-day-detail`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"

@@ -1,7 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import { SITE_CONSTANTS } from "./constants/site-constants";
 
 export default withAuth(
   async function middleware(req) {
@@ -24,11 +23,6 @@ export default withAuth(
       if (req.nextUrl.search) {
         from += req.nextUrl.search;
       }
-
-      // remove cookie
-      const response = NextResponse.next();
-
-      response.cookies.delete(SITE_CONSTANTS.COOKIE_KEY_ACTIVE_DIRECTORY_ID);
 
       return NextResponse.redirect(new URL(`/login?from=${encodeURIComponent(from)}`, req.url));
     }

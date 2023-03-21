@@ -1,5 +1,3 @@
-const SITE_CONSTANTS = {
-  COOKIE_KEY_ACTIVE_DIRECTORY_ID: "kxp-app.activeDirectoryId"
-};
+const SITE_CONSTANTS = {};
 
 export { SITE_CONSTANTS };

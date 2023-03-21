@@ -39,6 +39,7 @@ model user_work_day_detail {
   user                 user    @relation(fields: [userId], references: [id])
   userId               Int
 
+  @@unique([userId, date])
   @@index([userId])
 }
 
