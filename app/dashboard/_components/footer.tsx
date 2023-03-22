@@ -7,11 +7,11 @@ import Link from "@/components/ui/link";
 export default function Footer() {
   return (
     <footer className="border-t border-t-neutral-700">
-      <div className="mx-auto max-w-5xl px-3 pt-4 md:px-4 md:pt-8">
+      <div className="mx-auto max-w-5xl px-3 pt-4 md:px-4 md:pt-8 pb-24">
         <Flex justify="between">
           <Box>
-            <h2 className="text-lg font-bold">Resources</h2>
-            <ul>
+            <h2 className="text-lg font-bold  mb-3">Resources</h2>
+            <ul className="space-y-2">
               <li>
                 <Link href="https://handbooks.simployer.com/nb-no/handbook/100006?sasid=977f713d-b5c3-45ec-ae83-4ff323b4e473">
                   Personal handbook
@@ -45,8 +45,8 @@ export default function Footer() {
             </ul>
           </Box>
           <Box>
-            <h2 className="text-lg font-bold">Site</h2>
-            <ul>
+            <h2 className="text-lg font-bold mb-3">Site</h2>
+            <ul className="space-y-2">
               <li>
                 <Link href="/dashboard">Home</Link>
               </li>
@@ -59,12 +59,12 @@ export default function Footer() {
             </ul>
           </Box>
           <Box className="max-w-[360px] grow">
-            <h2 className="text-lg font-bold">Feedback</h2>
+            <h2 className="text-lg font-bold  mb-3">Feedback</h2>
             <ThemeSelect className="ml-auto" />
           </Box>
         </Flex>
         <Flex className="px-0 pt-10 pb-5" justify="center">
-          <Icons.Logo />
+          <Icons.Logo className="max-w-[140px]" />
         </Flex>
       </div>
     </footer>

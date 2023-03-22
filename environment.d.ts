@@ -1,6 +1,7 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      API_KEY: string;
       SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE: string;
       NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE: string;
       NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION: string;

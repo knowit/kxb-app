@@ -8,7 +8,7 @@ import { getUserEarningsDetails } from "@/utils/user-utils";
 import { cache } from "react";
 
 const getUser = cache(async (id: string): Promise<User | undefined> => {
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = 1", [id]);
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = ?", [id]);
 
   if (!rows?.length) {
     return undefined;
