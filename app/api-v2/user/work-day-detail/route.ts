@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 
 // TODO: fix this once await request.json() is supported
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 

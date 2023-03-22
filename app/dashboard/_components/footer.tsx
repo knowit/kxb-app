@@ -6,7 +6,7 @@ import Link from "@/components/ui/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-t-neutral-700 bg-black">
+    <footer className="border-t border-t-neutral-700">
       <div className="mx-auto max-w-5xl px-3 pt-4 md:px-4 md:pt-8">
         <Flex justify="between">
           <Box>

@@ -6,6 +6,10 @@ export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
+export const metadata = {
+  title: "Profile"
+};
+
 export default async function ProfilePage() {
   return (
     <div className="grid grid-cols-2">

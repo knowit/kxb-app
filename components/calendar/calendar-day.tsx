@@ -19,7 +19,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
     return (
       <div
         className={cn(
-          "flex flex-col dark:bg-black",
+          "flex flex-col dark:bg-neutral-950",
           {
             "font-medium underline underline-offset-4": calendarDay.isToday,
             "dark:text-emerald-500": calendarDay.isToday || calendarDay.isWorkDay,

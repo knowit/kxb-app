@@ -20,7 +20,7 @@ export type Icon = IconProps;
 export const Icons = {
   Logo: ({ className, ...other }: Icon) => (
     <svg
-      className={cn("w-[140px]", className)}
+      className={cn("", className)}
       xmlns="http://www.w3.org/2000/svg"
       width="233"
       height="72"

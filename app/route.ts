@@ -1,9 +1,8 @@
+import { getAbsoluteUrl } from "@/utils/common-utils";
 import { redirect } from "next/navigation";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "edge";
 
 export async function GET(request: Request) {
-  redirect("/login");
+  return redirect(`${getAbsoluteUrl()}/login`);
 }

@@ -4,11 +4,16 @@ import { getYear } from "date-fns";
 import Link from "next/link";
 import * as React from "react";
 
+import { buttonVariants } from "@/components/ui/button";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
+import { UserWorkDayDetail } from "@/types";
 import { CalendarMonth } from "./calendar-month";
 
-const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
+const CalendarYear: React.FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
+  date,
+  workDayDetails = []
+}) => {
   const currentDate = getRequestDateNow();
   const year = date.getFullYear();
   const calendarYear = getCalendarYear(year);
@@ -20,25 +25,25 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
         <div className="flex items-center gap-2">
           {/* Go to previous year */}
           <Link
-            className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
+            className={buttonVariants({ variant: "outline" })}
             href={`/dashboard/year/${year - 1}`}
           >
-            <span className="sr-only">Forrige år</span>
+            <span className="sr-only">Last year</span>
             <ChevronLeftIcon />
           </Link>
           {/* Go to current year */}
           <Link
-            className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
+            className={buttonVariants({ variant: "outline" })}
             href={`/dashboard/year/${currentDate.getFullYear()}`}
           >
             Today
           </Link>
           {/* Go to next year */}
           <Link
-            className="inline-flex min-h-[34px] items-center rounded-md border border-transparent bg-zinc-200 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 hover:dark:bg-zinc-700"
+            className={buttonVariants({ variant: "outline" })}
             href={`/dashboard/year/${year + 1}`}
           >
-            <span className="sr-only">Neste år</span>
+            <span className="sr-only">Next year</span>
             <ChevronRightIcon />
           </Link>
         </div>
@@ -59,7 +64,11 @@ const CalendarYear: React.FC<{ date: Date }> = ({ date }) => {
                   {month.month}
                 </h2>
               </Link>
-              <CalendarMonth month={month} calendarSizeVariant="small" />
+              <CalendarMonth
+                month={month}
+                calendarSizeVariant="small"
+                workDayDetails={workDayDetails}
+              />
             </div>
           );
         })}

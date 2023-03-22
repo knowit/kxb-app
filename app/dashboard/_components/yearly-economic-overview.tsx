@@ -1,4 +1,8 @@
-import { SalaryDetailsCard } from "@/components/salary/salary-details-card";
+import {
+  SalaryDetailsCard,
+  SalaryDetailsCardSkeleton
+} from "@/components/salary/salary-details-card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 
@@ -45,3 +49,30 @@ export default async function YearlyEconomicOverview() {
     </div>
   );
 }
+
+function YearlyEconomicOverviewSkeleton() {
+  return (
+    <div className="flex flex-col gap-y-8">
+      <div>
+        <Skeleton className="mb-3 h-[28px] w-28 text-lg" />
+        <div className="grid grid-cols-2 gap-3">
+          <SalaryDetailsCardSkeleton />
+          <SalaryDetailsCardSkeleton />
+          <SalaryDetailsCardSkeleton />
+          <SalaryDetailsCardSkeleton />
+        </div>
+      </div>
+      <div>
+        <Skeleton className="mb-3 h-[28px] w-28 text-lg" />
+        <div className="grid grid-cols-2 gap-3">
+          <SalaryDetailsCardSkeleton />
+          <SalaryDetailsCardSkeleton />
+          <SalaryDetailsCardSkeleton />
+          <SalaryDetailsCardSkeleton />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export { YearlyEconomicOverview, YearlyEconomicOverviewSkeleton };

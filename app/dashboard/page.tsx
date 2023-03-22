@@ -7,11 +7,17 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import CalendarMonthWithSalary from "./_components/calendar-month-with-salary";
 import CompanyBenefits from "./_components/company-benefits";
-import YearlyEconomicOverview from "./_components/yearly-economic-overview";
+import YearlyEconomicOverview, {
+  YearlyEconomicOverviewSkeleton
+} from "./_components/yearly-economic-overview";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+
+export const metadata = {
+  title: "Dashboard"
+};
 
 export default async function DashboardPage() {
   const token = await getEdgeFriendlyToken();
@@ -39,7 +45,7 @@ export default async function DashboardPage() {
         userSettings={userSettings.data}
       />
       <CompanyBenefits />
-      <Suspense fallback={<div />}>
+      <Suspense fallback={<YearlyEconomicOverviewSkeleton />}>
         {/* @ts-expect-error Async Server Component */}
         <YearlyEconomicOverview />
       </Suspense>

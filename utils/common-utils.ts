@@ -1,7 +1,6 @@
-export const isString = (value: any) =>
-  Object.prototype.toString.call(value) === "[object String]";
+export const isString = (value: any) => Object.prototype.toString.call(value) === "[object String]";
 
-export const memoize = (func) => {
+export const memoize = func => {
   const cache = {};
   return (...args) => {
     const key = JSON.stringify(args);
@@ -14,14 +13,14 @@ export const range = (min: number, max: number) =>
 
 export const omit = (obj: {}, keys: string[]) =>
   Object.keys(obj)
-    .filter((k) => !keys.includes(k))
+    .filter(k => !keys.includes(k))
     .reduce((res, k) => Object.assign(res, { [k]: obj[k] }), {});
 
 export const capitalize = (str: string): string =>
   str.length === 0 ? str : `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
 export function getAbsoluteUrl(path?: string) {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://kxb.app";
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXTAUTH_URL ?? "https://kxb.app";
 
   if (path) {
     return `${base}${path}`;
