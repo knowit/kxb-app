@@ -1,11 +1,12 @@
-import prisma from "@/lib/prisma";
 import { validateEmail } from "@/logic/validation-logic";
+import type { User as DbUser } from "@/types";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
 import { fetchWithToken } from "@/utils/fetcher";
 import jwt_decode from "jwt-decode";
 import { Account, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import AzureAdProvider from "next-auth/providers/azure-ad";
+import { planetscaleEdge } from "./planetscale-edge";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;
@@ -106,25 +107,31 @@ async function initialSignIn(
 
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
-  await prisma.user.upsert({
-    create: {
-      name: user.name,
-      email: user.email,
-      activeDirectoryId: token.sub,
-      refreshToken: account.refresh_token,
-      accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
-      isAdmin: isAdmin,
-      isSpecialist: isSpecialist
-    },
-    update: {
-      refreshToken: account.refresh_token,
-      isAdmin: isAdmin,
-      isSpecialist: isSpecialist
-    },
-    where: {
-      activeDirectoryId: token.sub
-    }
-  });
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE activeDirectoryId = ?", [
+    token.sub
+  ]);
+
+  if (rows.length === 0) {
+    await planetscaleEdge.execute(
+      "INSERT INTO user (name, email, activeDirectoryId, refreshToken, accessTokenExpires, isAdmin, isSpecialist) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [
+        user.name,
+        user.email,
+        token.sub,
+        account.refresh_token,
+        Date.now() + account?.ext_expires_in * 1000,
+        isAdmin,
+        isSpecialist
+      ]
+    );
+  } else {
+    const user = rows[0] as DbUser;
+
+    await planetscaleEdge.execute(
+      "UPDATE user SET refreshToken = ?, isAdmin = ?, isSpecialist = ? WHERE id = ?",
+      [account.refresh_token, isAdmin, isSpecialist, +user.id]
+    );
+  }
 }
 
 export const authOptions: NextAuthOptions = {
@@ -180,15 +187,12 @@ export const authOptions: NextAuthOptions = {
         await initialSignIn(account, user, token);
       }
 
-      const dbUser = await prisma.user.findUnique({
-        where: {
-          activeDirectoryId: token.sub
-        },
-        include: {
-          feedback: false,
-          workDayDetails: false
-        }
-      });
+      const { rows } = await planetscaleEdge.execute(
+        "SELECT * FROM user WHERE activeDirectoryId = ?",
+        [token.sub]
+      );
+
+      const dbUser = rows[0] as DbUser;
 
       return {
         ...token,
@@ -198,12 +202,16 @@ export const authOptions: NextAuthOptions = {
         isAdmin: dbUser?.isAdmin ?? false,
         isSpecialist: dbUser?.isSpecialist ?? false,
         activeDirectoryId: dbUser?.activeDirectoryId ?? token.sub ?? "unknown",
-        commission:
-          dbUser?.commission?.toNumber() ?? +(+process.env.NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION),
-        hourlyRate: dbUser?.hourlyRate ?? +process.env.NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE,
-        tax: dbUser?.tax?.toNumber() ?? +process.env.NEXT_PUBLIC_SALARY_DEFAULT_TAX,
-        workHours:
-          dbUser?.workHours?.toNumber() ?? +process.env.NEXT_PUBLIC_SALARY_DEFAULT_WORK_HOURS
+        commission: Number(
+          rows[0]?.["commission"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION
+        ),
+        hourlyRate: Number(
+          rows[0]?.["hourlyRate"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE
+        ),
+        tax: Number(rows[0]?.["tax"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_TAX),
+        workHours: Number(
+          rows[0]?.["workHours"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_WORK_HOURS
+        )
       };
     },
     async session({ token, session }) {
