@@ -8,10 +8,13 @@ import { Separator } from "@/components/ui/separator";
 import { getInitials } from "@/utils/common-utils";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 
 function UserAvatar({ name, src }: { name?: string; src?: string }) {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={open => setOpen(open)}>
       <PopoverTrigger asChild>
         <Button variant="outline" className="h-12 w-12 rounded-full p-0">
           <Avatar>
@@ -30,8 +33,13 @@ function UserAvatar({ name, src }: { name?: string; src?: string }) {
           <span className="text-lg font-bold uppercase">{name}</span>
         </div>
         <Separator />
-        <div className="px-6 py-4">
-          <Link href="/dashboard/profile">Profile</Link>
+        <div className="flex flex-col space-y-2 px-6 py-4">
+          <Link href="/dashboard/profile" onClick={() => setOpen(false)}>
+            Profile
+          </Link>
+          <Link href="/dashboard/feedback" onClick={() => setOpen(false)}>
+            Feedback
+          </Link>
         </div>
         <Separator />
         <div className="flex items-center gap-3 px-6 py-4">

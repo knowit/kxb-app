@@ -38,7 +38,7 @@ const FeedbackEmojiSelector = ({
   };
 
   return (
-    <Flex className="mt-3 h-[34px] leading-relaxed" gap="3">
+    <Flex className="h-[34px]" gap="3">
       {Object.entries(SITE_CONSTANTS.EMOJIS).map(([emoji, { src, alt, value }]) => (
         <Button
           className={cn("h-[34px] w-[34px] rounded-full p-0 transition-transform hover:scale-110", {
@@ -122,7 +122,7 @@ export function UserFeedbackForm({ user, className, ...other }: UserFeedbackForm
       {...other}
     >
       <div>
-        <Label htmlFor="feedback">Feedback</Label>
+        <Label htmlFor="feedback">Your feedback</Label>
         <TextArea
           id="feedback"
           className="w-full resize-none scroll-py-2"
@@ -134,18 +134,18 @@ export function UserFeedbackForm({ user, className, ...other }: UserFeedbackForm
           <p className="mt-2 px-1 text-xs text-red-600">{errors.feedback.message}</p>
         )}
       </div>
-      <div>
+      <div className="mt-2 flex items-center justify-between">
         <FeedbackEmojiSelector onSelected={emojiValue => setValue("reaction", emojiValue)} />
+        <Button type="submit" disabled={isSaving || isPending} variant="subtle">
+          <span>Send</span>
+          <Show when={!isSaving && !isPending}>
+            <Icons.PaperPlane className="ml-2 h-4 w-4" />
+          </Show>
+          <Show when={isSaving || isPending}>
+            <Icons.Loader className="ml-2 h-4 w-4" />
+          </Show>
+        </Button>
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
-        <span>Send</span>
-        <Show when={!isSaving && !isPending}>
-          <Icons.PaperPlane className="ml-2 h-4 w-4" />
-        </Show>
-        <Show when={isSaving || isPending}>
-          <Icons.Loader className="ml-2 h-4 w-4" />
-        </Show>
-      </Button>
     </form>
   );
 }
@@ -153,17 +153,21 @@ export function UserFeedbackForm({ user, className, ...other }: UserFeedbackForm
 const UserFeedbackFormSkeleton = () => {
   return (
     <div className="flex flex-col gap-y-2">
-      <div className="flex h-[36px] items-center gap-3">
-        <Skeleton className="h-[20px] w-[20px] rounded-none" />
-        <Skeleton className="h-[20px] w-44" />
-        <Skeleton className="h-[20px] w-[20px]" />
+      <div className="h-[104px]">
+        <Skeleton className="mb-1 h-[17px] w-1/4" />
+        <Skeleton className="h-[80px] w-full" />
       </div>
-      <div className="flex h-[36px] items-center gap-3">
-        <Skeleton className="h-[20px] w-[20px] rounded-none" />
-        <Skeleton className="h-[20px] w-48" />
-        <Skeleton className="h-[20px] w-[20px]" />
+      <div className="mt-2 flex items-center justify-between">
+        <div className="flex h-[34px] gap-3">
+          {Object.entries(SITE_CONSTANTS.EMOJIS).map(([emoji, { src, alt }]) => (
+            <ButtonSkeleton
+              className="h-[34px] w-[34px] rounded-full p-0"
+              key={`emoji-button-twemoji-${emoji}`}
+            />
+          ))}
+        </div>
+        <ButtonSkeleton className="w-24" />
       </div>
-      <ButtonSkeleton className="mt-4" />
     </div>
   );
 };

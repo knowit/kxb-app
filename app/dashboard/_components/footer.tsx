@@ -3,6 +3,9 @@ import { ThemeSelect } from "@/components/theme-select";
 import { Box } from "@/components/ui/box";
 import { Flex } from "@/components/ui/flex";
 import Link from "@/components/ui/link";
+import { UserFeedbackFormSkeleton } from "@/components/user/user-feedback-form";
+import { Suspense } from "react";
+import FeedbackForm from "./feedback-form";
 
 export default function Footer() {
   return (
@@ -63,7 +66,11 @@ export default function Footer() {
           </Box>
           <Box className="max-w-[360px] grow">
             <h2 className="mb-3 text-lg  font-bold">Feedback</h2>
-            <ThemeSelect className="ml-auto" />
+            <Suspense fallback={<UserFeedbackFormSkeleton />}>
+              {/* @ts-expect-error Async Server Component */}
+              <FeedbackForm />
+            </Suspense>
+            <ThemeSelect className="ml-auto mt-8" />
           </Box>
         </Flex>
         <Flex className="px-0 pt-10 pb-5" justify="center">
