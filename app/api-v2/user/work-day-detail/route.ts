@@ -48,8 +48,8 @@ export async function PATCH(request: NextRequest) {
         "UPDATE user_work_day_detail SET nonCommissionedHours = ?, extraHours = ?, sickDay = ? WHERE id = ?",
         [nonCommissionedHours, extraHours, sickDay, +existing.id]
       );
-      // create
-    } else {
+      // create if extra hours or non commissioned hours are greater than 0
+    } else if (extraHours > 0 || nonCommissionedHours > 0) {
       await planetscaleEdge.execute(
         "INSERT INTO user_work_day_detail (userId, date, nonCommissionedHours, extraHours, sickDay) VALUES (?, ?, ?, ?, ?)",
         [+token.id, date, nonCommissionedHours, extraHours, sickDay]

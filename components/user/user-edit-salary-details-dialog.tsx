@@ -12,6 +12,7 @@ import {
 import { User } from "@/types";
 import { useState } from "react";
 import { Icons } from "../icons";
+import Link from "../ui/link";
 import { UserSalaryDetailsForm } from "./user-salary-details-form";
 
 export function UserEditSalaryDetailsDialog({
@@ -34,7 +35,12 @@ export function UserEditSalaryDetailsDialog({
         <DialogHeader>
           <DialogTitle>Edit salary details</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+            Make changes to your salary details here. Click save when you&apos;re done. You can view
+            your{" "}
+            <Link className="underline underline-offset-2" href="/dashboard/profile">
+              profile here
+            </Link>
+            .
           </DialogDescription>
         </DialogHeader>
         <UserSalaryDetailsForm

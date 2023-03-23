@@ -46,7 +46,7 @@ export const getFormattedIsoDateAndTime = (date: Date, locale?: string) =>
 export const getWeek = (date: Date, locale?: string) =>
   getWeekDateFns(date, {
     locale: getLocale(locale),
-    weekStartsOn: getWeekStarsOn(locale),
+    weekStartsOn: getWeekStarsOn(locale)
   });
 export const getDayName = (date: Date, locale?: string) =>
   format(date, "EE", { locale: getLocale(locale) });
@@ -104,7 +104,7 @@ export const extractDate = (input: Date) => {
     day: date < 10 ? `0${date}` : date.toString(),
     hour: hours < 10 ? `0${hours}` : hours.toString(),
     minute: minutes < 10 ? `0${minutes}` : minutes.toString(),
-    second: seconds < 10 ? `0${seconds}` : seconds.toString(),
+    second: seconds < 10 ? `0${seconds}` : seconds.toString()
   };
 };
 

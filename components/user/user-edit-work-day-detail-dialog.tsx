@@ -34,7 +34,7 @@ export function UserEditWorkDayDetailDialog({
         <DialogTitle>{calendarDay.formattedDate}</DialogTitle>
         <DialogDescription>Edit work day details</DialogDescription>
         <UserWorkDayDetailForm
-          date={calendarDay.formattedDate}
+          calendarDay={calendarDay}
           userWorkDayDetail={calendarDay.workDayDetails}
           onFormSubmitSuccess={() => {
             if (closeDialogOnFormSubmitSuccess) {

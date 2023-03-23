@@ -28,3 +28,18 @@ export function getAbsoluteUrl(path?: string) {
 
   return base;
 }
+
+export const getInitials = (name?: string) => {
+  if (!name) {
+    return "";
+  }
+
+  // take first letter of each word and capitalize it
+  const initials = name
+    .split(" ")
+    .map(word => word.charAt(0))
+    .join("")
+    .toUpperCase();
+
+  return initials;
+};

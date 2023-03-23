@@ -1,5 +1,6 @@
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { getEdgeFriendlyToken } from "@/lib/token";
+import { createUser } from "@/lib/user";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge";
@@ -22,7 +23,11 @@ export async function GET(request: Request) {
   try {
     const { rows } = await planetscaleEdge.execute("SELECT * FROM user", []);
 
-    return NextResponse.json(rows);
+    const users = rows
+      .map(row => createUser(row))
+      .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+
+    return NextResponse.json(users);
   } catch (error) {
     return new Response(error, {
       status: 422

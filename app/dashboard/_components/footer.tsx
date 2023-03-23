@@ -7,8 +7,11 @@ import Link from "@/components/ui/link";
 export default function Footer() {
   return (
     <footer className="border-t border-t-neutral-700">
-      <div className="mx-auto max-w-5xl px-3 pt-4 pb-24 md:px-4 md:pt-8">
-        <Flex justify="between">
+      <div className="mx-auto max-w-5xl px-4 pt-4 pb-24 md:px-4 md:pt-8">
+        <Flex
+          className="flex-col justify-center space-y-6 md:flex-row md:justify-between md:space-y-0"
+          justify="between"
+        >
           <Box>
             <h2 className="mb-3 text-lg font-bold">Resources</h2>
             <ul className="space-y-2">

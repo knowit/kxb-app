@@ -12,7 +12,7 @@ const HoverCardTrigger = HoverCardPrimitive.Trigger;
 const HoverCardContent = React.forwardRef<
   React.ElementRef<typeof HoverCardPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
->(({ children, className, align = "center", sideOffset = 4, ...props }, ref) => (
+>(({ children, className, align = "center", sideOffset = 4, ...other }, ref) => (
   <HoverCardPrimitive.Content
     ref={ref}
     align={align}
@@ -21,7 +21,7 @@ const HoverCardContent = React.forwardRef<
       "z-50 rounded-md border border-neutral-100 bg-white p-2 text-sm shadow-md outline-none animate-in zoom-in-90 dark:border-neutral-700 dark:bg-neutral-900",
       className
     )}
-    {...props}
+    {...other}
   >
     {children}
     <HoverCardPrimitive.Arrow className="fill-current text-neutral-700" />

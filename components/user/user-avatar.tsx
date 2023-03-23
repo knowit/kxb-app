@@ -1,12 +1,12 @@
 "use client";
 
 import { ThemeSelect } from "@/components/theme-select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { GearIcon } from "@radix-ui/react-icons";
+import { getInitials } from "@/utils/common-utils";
 import { signOut } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 
 function UserAvatar({ name, src }: { name?: string; src?: string }) {
@@ -14,17 +14,10 @@ function UserAvatar({ name, src }: { name?: string; src?: string }) {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" className="h-12 w-12 rounded-full p-0">
-          {src ? (
-            <Image
-              className="aspect-square rounded-full p-0"
-              src={src}
-              alt="User avatar"
-              width={48}
-              height={48}
-            />
-          ) : (
-            <GearIcon className="h-6 w-6" />
-          )}
+          <Avatar>
+            <AvatarImage src={src} alt={`Avatar image of ${name}`} />
+            <AvatarFallback delayMs={500}>{getInitials(name)}</AvatarFallback>
+          </Avatar>
           <span className="sr-only">Open popover</span>
         </Button>
       </PopoverTrigger>

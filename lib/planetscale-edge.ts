@@ -1,5 +1,7 @@
 import { connect } from "@planetscale/database";
 
+type Row = Record<string, any> | any[];
+
 export const planetscaleEdge = connect({
   url: process.env.DATABASE_URL,
   fetch: (url, options) => {
@@ -12,3 +14,5 @@ export const planetscaleEdge = connect({
     });
   }
 });
+
+export type { Row };

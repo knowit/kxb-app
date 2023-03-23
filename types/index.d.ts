@@ -32,8 +32,8 @@ export type User = {
   commission: number;
   tax: number;
   workHours: number;
-  created: Date;
-  updated: Date;
+  created: string;
+  updated: string;
   isAdmin: boolean;
   isSpecialist: boolean;
   workDayDetails: UserWorkDayDetail[];

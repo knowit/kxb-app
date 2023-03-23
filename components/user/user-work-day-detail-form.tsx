@@ -2,36 +2,38 @@
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InfoButton } from "@/components/ui/info-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "@/components/ui/link";
+import { Show } from "@/components/ui/show";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
-import { UserWorkDayDetail } from "@/types";
+import { CalendarEntries, UserWorkDayDetail } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Checkbox } from "../ui/checkbox";
-import { InfoButton } from "../ui/info-button";
-import Link from "../ui/link";
-import { Show } from "../ui/show";
 
 interface UserWorkDayDetailFormProps extends HTMLAttributes<HTMLFormElement> {
-  date: string;
+  calendarDay: CalendarEntries;
   userWorkDayDetail?: UserWorkDayDetail;
+  isWorkDay?: boolean;
   onFormSubmitSuccess?: () => void;
 }
 
 type FormData = z.infer<typeof userWorkDayDetailSchema>;
 
 export function UserWorkDayDetailForm({
-  date,
+  calendarDay,
   userWorkDayDetail,
+  isWorkDay = false,
   className,
   onFormSubmitSuccess,
-  ...props
+  ...other
 }: UserWorkDayDetailFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -46,7 +48,7 @@ export function UserWorkDayDetailForm({
     resolver: zodResolver(userWorkDayDetailSchema),
     defaultValues: {
       id: userWorkDayDetail?.id,
-      date: date,
+      date: calendarDay.formattedDate,
       nonCommissionedHours: userWorkDayDetail?.nonCommissionedHours ?? 0,
       extraHours: userWorkDayDetail?.extraHours ?? 0,
       sickDay: userWorkDayDetail?.sickDay ?? false
@@ -109,7 +111,7 @@ export function UserWorkDayDetailForm({
     <form
       className={cn("flex flex-col gap-y-2", className)}
       onSubmit={handleSubmit(onSubmit)}
-      {...props}
+      {...other}
     >
       <Input
         id="id"
@@ -123,7 +125,11 @@ export function UserWorkDayDetailForm({
         })}
       />
       <Input id="date" type="hidden" className="w-full" {...register("date")} />
-      <div className="">
+      <div
+        className={cn("", {
+          hidden: !(calendarDay.isWorkDay ?? false) || (calendarDay.isHoliday ?? false)
+        })}
+      >
         <Label htmlFor="nonCommissionedHours">Non commissioned hours</Label>
         <div className="flex gap-3">
           <Input
@@ -137,7 +143,7 @@ export function UserWorkDayDetailForm({
             })}
           />
           <Button
-            className="min-w-[80px] gap-2"
+            className="h-[40px] min-w-[80px] gap-2"
             type="button"
             variant={nonCommissionedHours > 0 ? "destructive" : "outline"}
             onClick={() => setValue("nonCommissionedHours", nonCommissionedHours > 0 ? 0 : 7.5)}
@@ -184,7 +190,7 @@ export function UserWorkDayDetailForm({
         </InfoButton>
         {errors?.sickDay && <p className="px-1 text-xs text-red-600">{errors.sickDay.message}</p>}
       </div>
-      <div className="">
+      <div>
         <Label htmlFor="extraHours">Extra hours</Label>
         <Input
           id="extraHours"
@@ -201,7 +207,7 @@ export function UserWorkDayDetailForm({
         )}
       </div>
 
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending}>
+      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
         <span>Save</span>
         <Show when={!isSaving && !isPending}>
           <Icons.Check className="ml-2 h-4 w-4" />

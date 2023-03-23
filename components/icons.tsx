@@ -51,7 +51,7 @@ export const Icons = {
   Rocket: RocketIcon,
   CheckCircled: CheckCircledIcon,
   MinusCircled: MinusCircledIcon,
-  Loader: ({ className, ...other }) => (
+  Loader: ({ className, ...other }: Icon) => (
     <svg
       className={cn("fill-current", className)}
       xmlns="http://www.w3.org/2000/svg"

@@ -30,14 +30,14 @@ export type InfoButtonProps = React.ComponentPropsWithoutRef<typeof Button> &
   VariantProps<typeof infoButtonVariants>;
 
 const InfoButton = React.forwardRef<React.ElementRef<"button">, InfoButtonProps>(
-  ({ children, className, variant, size, ...props }, ref) => {
+  ({ children, className, variant, size, ...other }, ref) => {
     return (
       <Popover>
         <PopoverTrigger asChild>
           <button
             className={cn(infoButtonVariants({ variant, size, className }))}
             ref={ref}
-            {...props}
+            {...other}
           >
             <Icons.Info />
           </button>

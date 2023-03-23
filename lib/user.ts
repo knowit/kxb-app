@@ -1,35 +1,44 @@
 import "server-only";
 
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { planetscaleEdge, Row } from "@/lib/planetscale-edge";
 import { query } from "@/lib/query";
-import { User, UserSettings, UserWorkDayDetail } from "@/types";
+import { User, UserFeedback, UserSettings, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
 import { cache } from "react";
 
-const getUser = cache(async (id: string): Promise<User | undefined> => {
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = ?", [id]);
-
-  if (!rows?.length) {
-    return undefined;
-  }
-
-  const user = rows[0] as User;
-
-  if (!user) {
-    return undefined;
-  }
+const createUser = (
+  row: Row,
+  workDayDetails?: UserWorkDayDetail[],
+  feedback?: UserFeedback[]
+): User => {
+  // check if row is an array
+  const user = (Array.isArray(row) ? row[0] : row) as User;
 
   return {
     ...user,
     // convert string decimal to number
-    tax: Number(rows[0]?.["tax"]),
-    workHours: Number(rows[0]?.["workHours"]),
-    commission: Number(rows[0]?.["commission"]),
-    hourlyRate: Number(rows[0]?.["hourlyRate"]),
-    workDayDetails: user?.workDayDetails ?? [],
-    feedback: user?.feedback ?? []
+    tax: Number(user?.tax ?? 0),
+    workHours: Number(user?.workHours ?? 0),
+    commission: Number(user?.commission ?? 0),
+    hourlyRate: Number(user?.hourlyRate ?? 0),
+    isAdmin: Boolean(user?.isAdmin ?? false),
+    isSpecialist: Boolean(user?.isSpecialist ?? false),
+    workDayDetails: workDayDetails ?? user?.workDayDetails ?? [],
+    feedback: feedback ?? user?.feedback ?? []
   };
+};
+
+const getUser = cache(async (id: string): Promise<User | undefined> => {
+  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = ?", [id]);
+
+  const row = rows?.[0];
+
+  if (!row) {
+    return undefined;
+  }
+
+  return createUser(row);
 });
 
 const getUserWorkDayDetails = cache(async (id: string) => {
@@ -204,4 +213,4 @@ const getUserAvatar = cache(async (id: string) => {
   };
 });
 
-export { getUser, getUserEarnings, getUserAvatar, getUserSettings };
+export { createUser, getUser, getUserEarnings, getUserAvatar, getUserSettings };

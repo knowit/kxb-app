@@ -1,7 +1,7 @@
 "use client";
 
 import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonSkeleton } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ import * as z from "zod";
 import { Checkbox } from "../ui/checkbox";
 import { InfoButton } from "../ui/info-button";
 import { Show } from "../ui/show";
+import { Skeleton } from "../ui/skeleton";
 
 interface UserSettingsFormProps extends HTMLAttributes<HTMLFormElement> {
   userSettings: UserSettings;
@@ -22,7 +23,7 @@ interface UserSettingsFormProps extends HTMLAttributes<HTMLFormElement> {
 
 type FormData = z.infer<typeof userSettingsSchema>;
 
-export function UserSettingsForm({ userSettings, className, ...props }: UserSettingsFormProps) {
+export function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -83,7 +84,7 @@ export function UserSettingsForm({ userSettings, className, ...props }: UserSett
     <form
       className={cn("flex flex-col gap-y-2", className)}
       onSubmit={handleSubmit(onSubmit)}
-      {...props}
+      {...other}
     >
       <div className={cn("flex items-center gap-3")}>
         <Checkbox
@@ -94,11 +95,9 @@ export function UserSettingsForm({ userSettings, className, ...props }: UserSett
           }
           {...register("closeUserSalaryDialogOnSaveSuccess", {})}
         />
-        <Label htmlFor="closeUserSalaryDialogOnSaveSuccess">
-          Close user salary dialog on save success?
-        </Label>
+        <Label htmlFor="closeUserSalaryDialogOnSaveSuccess">Auto close user salary dialog</Label>
         <InfoButton>
-          <></>
+          Automatically close the user salary dialog after successfully saving.
         </InfoButton>
         {errors?.closeUserSalaryDialogOnSaveSuccess && (
           <p className="px-1 text-xs text-red-600">
@@ -116,10 +115,10 @@ export function UserSettingsForm({ userSettings, className, ...props }: UserSett
           {...register("closeUserWorkDayDetailsDialogOnSaveSuccess", {})}
         />
         <Label htmlFor="closeUserWorkDayDetailsDialogOnSaveSuccess">
-          Close user work day details dialog on save success?
+          Auto close work day details dialog
         </Label>
         <InfoButton>
-          <></>
+          Automatically close the work day details dialog after successfully saving.
         </InfoButton>
         {errors?.closeUserWorkDayDetailsDialogOnSaveSuccess && (
           <p className="px-1 text-xs text-red-600">
@@ -127,7 +126,7 @@ export function UserSettingsForm({ userSettings, className, ...props }: UserSett
           </p>
         )}
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending}>
+      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
         <span>Save</span>
         <Show when={!isSaving && !isPending}>
           <Icons.Check className="ml-2 h-4 w-4" />
@@ -139,3 +138,23 @@ export function UserSettingsForm({ userSettings, className, ...props }: UserSett
     </form>
   );
 }
+
+const UserSettingsFormSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-y-2">
+      <div className="flex h-[36px] items-center gap-3">
+        <Skeleton className="h-[20px] w-[20px] rounded-none" />
+        <Skeleton className="h-[20px] w-44" />
+        <Skeleton className="h-[20px] w-[20px]" />
+      </div>
+      <div className="flex h-[36px] items-center gap-3">
+        <Skeleton className="h-[20px] w-[20px] rounded-none" />
+        <Skeleton className="h-[20px] w-48" />
+        <Skeleton className="h-[20px] w-[20px]" />
+      </div>
+      <ButtonSkeleton className="mt-4" />
+    </div>
+  );
+};
+
+export { UserSettingsFormSkeleton };
