@@ -21,7 +21,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <>
       <nav className="flex items-center justify-between border-b border-b-neutral-700 px-8 py-4">
-        <Link href="/">
+        <Link href="/dashboard">
           <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
         </Link>
         <div className="flex items-center gap-8">
