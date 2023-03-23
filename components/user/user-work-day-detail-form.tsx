@@ -206,7 +206,6 @@ export function UserWorkDayDetailForm({
           <p className="px-1 text-xs text-red-600">{errors.extraHours.message}</p>
         )}
       </div>
-
       <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
         <span>Save</span>
         <Show when={!isSaving && !isPending}>

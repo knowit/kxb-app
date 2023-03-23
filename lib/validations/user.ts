@@ -21,3 +21,11 @@ export const userSettingsSchema = z.object({
   closeUserSalaryDialogOnSaveSuccess: z.boolean(),
   closeUserWorkDayDetailsDialogOnSaveSuccess: z.boolean()
 });
+
+export const userFeedbackSchema = z.object({
+  id: z.number().min(0).optional(),
+  date: z.string().optional(),
+  userId: z.number().min(0),
+  feedback: z.string().min(3).max(1000),
+  reaction: z.number().min(1).max(4)
+});

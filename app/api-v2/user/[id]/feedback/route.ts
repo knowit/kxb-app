@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 
 import { planetscaleEdge } from "@/lib/planetscale-edge";
-import { userSalaryDetailSchema } from "@/lib/validations/user";
+import { userFeedbackSchema } from "@/lib/validations/user";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import * as z from "zod";
@@ -10,7 +10,7 @@ export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const token = await getToken({ req: request });
 
   if (!token) {
@@ -22,15 +22,15 @@ export async function PUT(request: NextRequest) {
   try {
     const res = await request.json();
 
-    const { commission, hourlyRate, tax, workHours } = await userSalaryDetailSchema.parseAsync(res);
+    const { feedback, reaction, userId } = await userFeedbackSchema.parseAsync(res);
 
     await planetscaleEdge.execute(
-      "UPDATE user SET commission = ?, hourlyRate = ?, tax = ?, workHours = ? WHERE id = ?",
-      [commission, hourlyRate, tax, workHours, +token.id]
+      "INSERT INTO user_feedback (feedback, reaction, userId) VALUES (?, ?, ?)",
+      [feedback, reaction, +userId]
     );
 
-    return new Response("Patched", {
-      status: 200
+    return new Response("Created", {
+      status: 201
     });
   } catch (error) {
     console.error(JSON.stringify(error));

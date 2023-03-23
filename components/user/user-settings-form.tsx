@@ -61,7 +61,7 @@ export function UserSettingsForm({ userSettings, className, ...other }: UserSett
     if (!response?.ok) {
       return toast({
         title: "Something went wrong.",
-        description: "Your settins was not updated. Please try again.",
+        description: "Your settings was not updated. Please try again.",
         variant: "destructive"
       });
     }

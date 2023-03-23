@@ -1,12 +1,9 @@
-import { type NextRequest } from "next/server";
-
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { userSettingsSchema } from "@/lib/validations/user";
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
 
-// TODO: fix this once await request.json() is supported
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;

@@ -9,6 +9,7 @@ import {
   GearIcon,
   InfoCircledIcon,
   MinusCircledIcon,
+  PaperPlaneIcon,
   PlusCircledIcon,
   PlusIcon,
   RocketIcon
@@ -51,6 +52,7 @@ export const Icons = {
   Rocket: RocketIcon,
   CheckCircled: CheckCircledIcon,
   MinusCircled: MinusCircledIcon,
+  PaperPlane: PaperPlaneIcon,
   Loader: ({ className, ...other }: Icon) => (
     <svg
       className={cn("fill-current", className)}
