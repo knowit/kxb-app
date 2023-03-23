@@ -2,7 +2,11 @@
 
 import { Icons } from "@/components/icons";
 import { Button, ButtonSkeleton } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InfoButton } from "@/components/ui/info-button";
 import { Label } from "@/components/ui/label";
+import { Show } from "@/components/ui/show";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { userSettingsSchema } from "@/lib/validations/user";
@@ -12,10 +16,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Checkbox } from "../ui/checkbox";
-import { InfoButton } from "../ui/info-button";
-import { Show } from "../ui/show";
-import { Skeleton } from "../ui/skeleton";
 
 interface UserSettingsFormProps extends HTMLAttributes<HTMLFormElement> {
   userSettings: UserSettings;

@@ -2,6 +2,11 @@
 
 import { Icons } from "@/components/icons";
 import { Button, ButtonSkeleton } from "@/components/ui/button";
+import { Flex } from "@/components/ui/flex";
+import { Label } from "@/components/ui/label";
+import { Show } from "@/components/ui/show";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TextArea } from "@/components/ui/text-area";
 import { SITE_CONSTANTS } from "@/constants/site-constants";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -13,11 +18,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Flex } from "../ui/flex";
-import { Label } from "../ui/label";
-import { Show } from "../ui/show";
-import { Skeleton } from "../ui/skeleton";
-import { TextArea } from "../ui/text-area";
 
 interface UserFeedbackFormProps extends HTMLAttributes<HTMLFormElement> {
   user: User;

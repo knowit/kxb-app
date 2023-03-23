@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { UserFeedbackForm } from "@/components/user/user-feedback-form";
 import { User } from "@/types";
-import { UserFeedbackForm } from "./user-feedback-form";
 
 const UserFeedback = ({ user }: { user: User }) => {
   return (

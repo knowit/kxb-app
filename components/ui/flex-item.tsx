@@ -1,5 +1,5 @@
+import { Flex } from "@/components/ui/flex";
 import { forwardRef } from "react";
-import { Flex } from "./flex";
 
 type FlexItemElementRef = React.ElementRef<typeof Flex>;
 type FlexItemProps = React.ComponentPropsWithoutRef<typeof Flex> & {

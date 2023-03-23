@@ -1,6 +1,6 @@
+import SettingsForm from "@/app/dashboard/_components/settings-form";
 import { UserSettingsFormSkeleton } from "@/components/user/user-settings-form";
 import { Suspense } from "react";
-import SettingsForm from "../../_components/settings-form";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";

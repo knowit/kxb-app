@@ -3,8 +3,9 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Icons } from "../icons";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -43,16 +44,21 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed bottom-0 z-50 grid w-full gap-4 rounded-b-lg border border-neutral-700 bg-white p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-full sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 lg:bottom-auto",
+        "fixed top-0 z-50 grid w-full gap-4 rounded-b-lg border border-neutral-700 bg-white p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-top-full sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-top-0 lg:top-auto",
         "dark:bg-neutral-900",
         className
       )}
       {...other}
     >
       {children}
-      <DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 dark:focus:ring-neutral-400 dark:focus:ring-offset-neutral-900 dark:data-[state=open]:bg-neutral-800">
-        <Icons.Close className="h-4 w-4" />
-        <span className="sr-only">Close</span>
+      <DialogPrimitive.Close
+        asChild
+        className="absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 dark:focus:ring-neutral-400 dark:focus:ring-offset-neutral-900 dark:data-[state=open]:bg-neutral-800"
+      >
+        <Button className="absolute top-4 right-4" variant="ghost">
+          <Icons.Close className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </Button>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

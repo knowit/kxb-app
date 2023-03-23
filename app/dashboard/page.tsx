@@ -1,3 +1,8 @@
+import CalendarMonthWithSalary from "@/app/dashboard/_components/calendar-month-with-salary";
+import CompanyBenefits from "@/app/dashboard/_components/company-benefits";
+import YearlyEconomicOverview, {
+  YearlyEconomicOverviewSkeleton
+} from "@/app/dashboard/_components/yearly-economic-overview";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getEdgeFriendlyToken } from "@/lib/token";
@@ -5,11 +10,6 @@ import { getUser, getUserEarnings, getUserSettings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import CalendarMonthWithSalary from "./_components/calendar-month-with-salary";
-import CompanyBenefits from "./_components/company-benefits";
-import YearlyEconomicOverview, {
-  YearlyEconomicOverviewSkeleton
-} from "./_components/yearly-economic-overview";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";

@@ -1,10 +1,16 @@
 "use client";
 
+import { CalendarDay } from "@/components/calendar/calendar-day";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
+import { UserWorkDayDetailForm } from "@/components/user/user-work-day-detail-form";
 import { CalendarDay as CalendarDayType, CalendarEntries, CalendarSizeVariant } from "@/types";
 import { useState } from "react";
-import { CalendarDay } from "../calendar/calendar-day";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { UserWorkDayDetailForm } from "./user-work-day-detail-form";
 
 export function UserEditWorkDayDetailDialog({
   calendarDay,

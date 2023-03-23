@@ -1,9 +1,9 @@
+import { Icons } from "@/components/icons";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Show } from "@/components/ui/show";
 import { cn } from "@/lib/utils";
 import { CalendarDay, CalendarEntries, CalendarSizeVariant } from "@/types";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
-import { Icons } from "../icons";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
-import { Show } from "../ui/show";
 
 type CalendarDayProps = ComponentPropsWithoutRef<"div"> & {
   calendarDay: CalendarEntries;

@@ -1,3 +1,4 @@
+import { CalendarMonth } from "@/app/dashboard/_components/calendar-month";
 import { MonthSelect } from "@/components/calendar/month-select";
 import { Icons } from "@/components/icons";
 import { SalaryDetailsCard } from "@/components/salary/salary-details-card";
@@ -12,7 +13,6 @@ import {
   type CalendarMonth as CalendarMonthType
 } from "@/types";
 import Link from "next/link";
-import { CalendarMonth } from "./calendar-month";
 
 export default function CalendarMonthWithSalary({
   user,

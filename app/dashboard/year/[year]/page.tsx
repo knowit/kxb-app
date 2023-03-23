@@ -1,8 +1,8 @@
+import { CalendarYear } from "@/app/dashboard/_components/calendar-year";
 import { getRequestDateNow } from "@/lib/date";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 import { Metadata } from "next";
-import { CalendarYear } from "../../_components/calendar-year";
 
 interface SelectedYearPageProps {
   params: { year: string };

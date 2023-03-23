@@ -1,6 +1,6 @@
+import SalaryForm from "@/app/dashboard/_components/salary-form";
 import { UserSalaryDetailsFormSkeleton } from "@/components/user/user-salary-details-form";
 import { Suspense } from "react";
-import SalaryForm from "../../_components/salary-form";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";

@@ -9,15 +9,15 @@ import * as z from "zod";
 
 import { Icons } from "@/components/icons";
 import { Button, ButtonSkeleton } from "@/components/ui/button";
+import { InfoButton } from "@/components/ui/info-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Show } from "@/components/ui/show";
+import { Skeleton } from "@/components/ui/skeleton";
 import EARNING_CONSTANTS from "@/constants/earning-constants";
 import { cn } from "@/lib/utils";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { useState, useTransition, type HTMLAttributes } from "react";
-import { InfoButton } from "../ui/info-button";
-import { Show } from "../ui/show";
-import { Skeleton } from "../ui/skeleton";
 
 interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
   user: {

@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,11 +10,10 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import Link from "@/components/ui/link";
+import { UserSalaryDetailsForm } from "@/components/user/user-salary-details-form";
 import { User } from "@/types";
 import { useState } from "react";
-import { Icons } from "../icons";
-import Link from "../ui/link";
-import { UserSalaryDetailsForm } from "./user-salary-details-form";
 
 export function UserEditSalaryDetailsDialog({
   user,

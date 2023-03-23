@@ -6,9 +6,9 @@ export type Item = {
   segment?: string;
 };
 
+import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { buttonVariants } from "./ui/button";
 
 const TabNavigationItem = ({ path, item }: { path: string; item: Item }) => {
   const segment = useSelectedLayoutSegment();

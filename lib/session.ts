@@ -1,5 +1,5 @@
+import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth";
 
 async function getSession() {
   return await getServerSession(authOptions);

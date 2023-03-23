@@ -1,7 +1,7 @@
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { ComponentPropsWithoutRef } from "react";
-import { Card } from "../ui/card";
-import { Skeleton } from "../ui/skeleton";
 
 const SalaryDetailsCard = ({
   children,

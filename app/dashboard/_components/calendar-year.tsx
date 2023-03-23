@@ -1,3 +1,4 @@
+import { CalendarMonth } from "@/app/dashboard/_components/calendar-month";
 import { buttonVariants } from "@/components/ui/button";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
@@ -7,7 +8,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { getYear } from "date-fns";
 import Link from "next/link";
 import * as React from "react";
-import { CalendarMonth } from "./calendar-month";
 
 const CalendarYear: React.FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
   date,

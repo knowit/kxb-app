@@ -1,8 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "../ui/button";
 
 function LoginButton({
   children,

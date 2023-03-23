@@ -1,3 +1,6 @@
+import Avatar, { AvatarSkeleton } from "@/app/dashboard/_components/avatar";
+import Footer from "@/app/dashboard/_components/footer";
+import NextPaycheck, { NextPaycheckSkeleton } from "@/app/dashboard/_components/next-paycheck";
 import { Icons } from "@/components/icons";
 import { UserFeedback } from "@/components/user/user-feedback";
 import { getEdgeFriendlyToken } from "@/lib/token";
@@ -5,9 +8,6 @@ import { getUser } from "@/lib/user";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import Avatar, { AvatarSkeleton } from "./_components/avatar";
-import Footer from "./_components/footer";
-import NextPaycheck, { NextPaycheckSkeleton } from "./_components/next-paycheck";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const token = await getEdgeFriendlyToken();

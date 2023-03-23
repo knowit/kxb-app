@@ -1,3 +1,4 @@
+import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { validateEmail } from "@/logic/validation-logic";
 import type { User as DbUser } from "@/types";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
@@ -6,7 +7,6 @@ import jwt_decode from "jwt-decode";
 import { Account, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import AzureAdProvider from "next-auth/providers/azure-ad";
-import { planetscaleEdge } from "./planetscale-edge";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;

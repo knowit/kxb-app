@@ -1,4 +1,5 @@
 import { MONTH_NAMES, MONTH_VALUES } from "@/constants/date-constants";
+import { getLocale, getWeekStarsOn } from "@/utils/calendar-utils";
 import { range } from "@/utils/common-utils";
 import {
   format,
@@ -10,8 +11,6 @@ import {
   getWeek as getWeekDateFns,
   getYear
 } from "date-fns";
-
-import { getLocale, getWeekStarsOn } from "./calendar-utils";
 
 export const getFormattedDate = (date: Date, locale?: string) =>
   format(date, "dd-MM-yyyy", { locale: getLocale(locale) });
