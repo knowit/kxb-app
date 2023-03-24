@@ -28,8 +28,13 @@ const getUserEmail = async (accessToken: string): Promise<string> => {
     return claims.upn;
   }
 
+  // If claims contains unique_name then use that
+  if (claims.unique_name && validateEmail(claims.unique_name)) {
+    return claims.unique_name;
+  }
+
   // Fetch user profile from graph and retrieve email
-  const response = await fetch(`https://graph.microsoft.com/v1.0/dashboard/`, {
+  const response = await fetch(`https://graph.microsoft.com/v1.0/me/`, {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

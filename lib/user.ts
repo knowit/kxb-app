@@ -158,7 +158,10 @@ const getUserAvatar = cache(async (id: string) => {
   const user = await getUser(id);
 
   if (!user?.refreshToken) {
-    return undefined;
+    return {
+      src: undefined,
+      name: user?.name
+    };
   }
 
   const url = `https://login.microsoftonline.com/${process.env.NEXTAUTH_AZURE_AD_TENANT_ID}/oauth2/v2.0/token`;
@@ -180,7 +183,10 @@ const getUserAvatar = cache(async (id: string) => {
   const refreshedTokens = await response.json();
 
   if (!response.ok) {
-    return undefined;
+    return {
+      src: undefined,
+      name: user.name
+    };
   }
   const [avatarResponse] = await query([
     fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
@@ -200,7 +206,10 @@ const getUserAvatar = cache(async (id: string) => {
   ]);
 
   if (!avatarResponse?.data?.ok) {
-    return undefined;
+    return {
+      src: undefined,
+      name: user.name
+    };
   }
 
   const pictureBuffer = await avatarResponse?.data.arrayBuffer();
