@@ -1,11 +1,10 @@
-// Currently a bug in V8 regarding nb-NO and Intl.NumberFormat
-// https://bugs.chromium.org/p/v8/issues/detail?id=11897
-// using sv-SE as a workaround for now
-const currencyFormatter = new Intl.NumberFormat("sv-SE", {
+const currencyFormatter = new Intl.NumberFormat("nb-NO", {
   style: "currency",
   currency: "NOK",
-  currencyDisplay: "code",
-  minimumFractionDigits: 2
+  currencyDisplay: "symbol",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  currencySign: "accounting"
 });
 
 export const formatCurrency = (number: number): string => currencyFormatter.format(number);

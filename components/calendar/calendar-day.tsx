@@ -22,7 +22,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
           "flex flex-col dark:bg-neutral-950",
           {
             "font-medium underline underline-offset-4": calendarDay.isToday,
-            "dark:text-emerald-500": calendarDay.isToday || calendarDay.isWorkDay,
+            "dark:text-emerald-500": calendarDay.isWorkDay,
             "dark:text-red-500": calendarDay.isNonCommissionedWorkDay,
             "dark:text-zinc-450 text-zinc-500":
               calendarDay.type === "spacing" ||
