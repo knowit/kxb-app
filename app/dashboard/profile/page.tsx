@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "experimental-edge";
 
 export const metadata = {
   title: "Profile"

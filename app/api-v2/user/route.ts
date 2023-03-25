@@ -3,7 +3,7 @@ import { getEdgeFriendlyToken } from "@/lib/token";
 import { createUser } from "@/lib/user";
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
+export const runtime = "experimental-edge";
 
 export async function GET(request: Request) {
   const token = await getEdgeFriendlyToken();

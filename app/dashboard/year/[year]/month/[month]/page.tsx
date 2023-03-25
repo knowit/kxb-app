@@ -12,9 +12,7 @@ interface SelectedYearMonthPageProps {
   params: { year: string; month: string };
 }
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "experimental-edge";
 
 export function generateMetadata({ params }: SelectedYearMonthPageProps): Metadata {
   const month = Object.values(MONTH).find(month => month.value === +params.month);

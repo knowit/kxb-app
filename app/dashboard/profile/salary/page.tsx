@@ -2,9 +2,7 @@ import SalaryForm from "@/app/dashboard/_components/salary-form";
 import { UserSalaryDetailsFormSkeleton } from "@/components/user/user-salary-details-form";
 import { Suspense } from "react";
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "experimental-edge";
 
 export const metadata = {
   title: "Profile"

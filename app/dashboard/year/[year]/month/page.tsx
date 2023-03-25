@@ -5,9 +5,7 @@ interface SelectedYearPageProps {
   params: { year: string };
 }
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "experimental-edge";
 
 export default async function SelectedYearMonthPageRoot({ params }: SelectedYearPageProps) {
   const dateNow = getRequestDateNow();

@@ -1,7 +1,7 @@
 import { getAbsoluteUrl } from "@/utils/common-utils";
 import { redirect } from "next/navigation";
 
-export const runtime = "edge";
+export const runtime = "experimental-edge";
 
 export async function GET(request: Request) {
   return redirect(`${getAbsoluteUrl()}/login`);

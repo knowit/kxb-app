@@ -8,9 +8,7 @@ interface SelectedYearPageProps {
   params: { year: string };
 }
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "experimental-edge";
 
 export function generateMetadata({ params }: SelectedYearPageProps): Metadata {
   return {

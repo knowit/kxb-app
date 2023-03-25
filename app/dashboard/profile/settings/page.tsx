@@ -2,9 +2,7 @@ import SettingsForm from "@/app/dashboard/_components/settings-form";
 import { UserSettingsFormSkeleton } from "@/components/user/user-settings-form";
 import { Suspense } from "react";
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+export const runtime = "experimental-edge";
 
 export const metadata = {
   title: "Settings"
