@@ -24,10 +24,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       });
     }
 
-    const res = await request.json();
+    const body = await request.json();
 
     const { closeUserSalaryDialogOnSaveSuccess, closeUserWorkDayDetailsDialogOnSaveSuccess } =
-      await userSettingsSchema.parseAsync(res);
+      await userSettingsSchema.parseAsync(body);
 
     await planetscaleEdge.execute(
       "UPDATE user_settings SET closeUserSalaryDialogOnSaveSuccess = ?, closeUserWorkDayDetailsDialogOnSaveSuccess = ? WHERE userId = ?",

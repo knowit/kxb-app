@@ -7,4 +7,12 @@ const currencyFormatter = new Intl.NumberFormat("nb-NO", {
   currencySign: "accounting"
 });
 
+const percentFormatter = new Intl.NumberFormat("nb-NO", {
+  style: "percent",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
+
 export const formatCurrency = (number: number): string => currencyFormatter.format(number);
+
+export const formatPercent = (number: number): string => percentFormatter.format(number);

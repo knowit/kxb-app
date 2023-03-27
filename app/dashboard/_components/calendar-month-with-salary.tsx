@@ -1,10 +1,8 @@
 import { CalendarMonth } from "@/app/dashboard/_components/calendar-month";
 import { MonthSelect } from "@/components/calendar/month-select";
 import { Icons } from "@/components/icons";
-import { SalaryDetailsCard } from "@/components/salary/salary-details-card";
 import { buttonVariants } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Show } from "@/components/ui/show";
+import { UserEarnings } from "@/components/user/user-earnings";
 import { UserEditSalaryDetailsDialog } from "@/components/user/user-edit-salary-details-dialog";
 import {
   User,
@@ -42,34 +40,7 @@ export default function CalendarMonthWithSalary({
         <h2 className="font-bold">
           Salary details for {calendarMonth.month} {calendarMonth.year}
         </h2>
-        <div className="grid grid-cols-2 gap-3">
-          <SalaryDetailsCard heading="Work days">
-            {userEarnings?.activeCalendarMonthStatistics.workDays.length.toString()}
-          </SalaryDetailsCard>
-          <SalaryDetailsCard heading="Work hours">
-            {userEarnings?.activeCalendarMonthStatistics.workHours.toString()}
-          </SalaryDetailsCard>
-          <SalaryDetailsCard heading="Gross salary">
-            {userEarnings?.activeCalendarMonthStatistics.grossFormatted}
-          </SalaryDetailsCard>
-          <SalaryDetailsCard heading="Net salary">
-            {userEarnings?.activeCalendarMonthStatistics.netFormatted}
-          </SalaryDetailsCard>
-        </div>
-        <Show when={calendarMonth.halfTax}>
-          <Card className="flex items-center">
-            <Card.Content className="flex items-center gap-3 p-4">
-              <div className="flex h-6 w-6 min-w-[1.5rem] items-center justify-center rounded-full border border-emerald-500 text-emerald-500">
-                <Icons.Check />
-              </div>
-              <span className="text-emerald-500">
-                Salary for {calendarMonth.month} paid with{" "}
-                <span className="underline">half tax</span> at{" "}
-                {userEarnings?.nextMonthStatistics?.payDay}
-              </span>
-            </Card.Content>
-          </Card>
-        </Show>
+        <UserEarnings userEarnings={userEarnings} calendarMonth={calendarMonth} />
         <UserEditSalaryDetailsDialog
           user={user}
           closeDialogOnFormSubmitSuccess={userSettings?.closeUserSalaryDialogOnSaveSuccess}
@@ -116,6 +87,7 @@ export default function CalendarMonthWithSalary({
           closeUserWorkDayDetailsDialogOnSaveSuccess={
             userSettings?.closeUserWorkDayDetailsDialogOnSaveSuccess
           }
+          showDialogOnCalendarDayClick
         />
       </div>
     </div>

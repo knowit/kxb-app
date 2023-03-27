@@ -65,3 +65,23 @@ model user_settings {
   closeUserSalaryDialogOnSaveSuccess         Boolean @default(true)
   closeUserWorkDayDetailsDialogOnSaveSuccess Boolean @default(true)
 }
+
+model job_offer {
+  id              Int       @id @default(autoincrement())
+  created         DateTime  @default(now())
+  updated         DateTime  @default(now())
+  commission      Decimal   @default(0.40) @db.Decimal(5, 2)
+  guaranteeSalary Int       @default(40000)
+  name            String
+  email           String    @unique
+  shareId         String    @unique
+  sent            Boolean   @default(false)
+  sentDate        DateTime?
+  sentBy          String
+  accepted        Boolean   @default(false)
+  acceptedDate    DateTime?
+  rejected        Boolean   @default(false)
+  rejectedDate    DateTime?
+
+  @@index([email])
+}

@@ -7,7 +7,7 @@ export default async function Avatar() {
   const token = await getEdgeFriendlyToken();
   const userAvatar = await getUserAvatar(token.id);
 
-  return <UserAvatar name={userAvatar?.name} src={userAvatar?.src} />;
+  return <UserAvatar name={userAvatar?.name} src={userAvatar?.src} isAdmin={token.isAdmin} />;
 }
 
 function AvatarSkeleton() {

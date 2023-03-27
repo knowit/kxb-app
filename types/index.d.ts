@@ -178,3 +178,21 @@ export type GraphUser = {
 };
 
 export type CalendarSizeVariant = "default" | "small" | "large";
+
+export type JobOffer = {
+  id: number;
+  name: string;
+  email: string;
+  commission: number;
+  guaranteeSalary: number;
+  created: string;
+  updated: string;
+  shareId: string;
+  sent: boolean;
+  sentBy: string;
+  sentDate: string;
+  accepted: boolean;
+  acceptedDate: string;
+  rejected: boolean;
+  rejectedDate: string;
+};

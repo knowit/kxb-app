@@ -1,3 +1,4 @@
+import { Prose } from "@/components/prose";
 import { UserFeedbackForm } from "@/components/user/user-feedback-form";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
@@ -18,13 +19,13 @@ export default async function FeedbackPage() {
   }
 
   return (
-    <div className="">
-      <div className="prose prose-neutral mb-8 dark:prose-invert prose-p:text-neutral-50">
+    <div>
+      <Prose>
         <h1>We appreciate all feedback</h1>
         <p>Good or bad, small or big.</p>
         <p>Help us make this app better for you.</p>
         <p>Thank you!</p>
-      </div>
+      </Prose>
       <div className="w-full max-w-[320px]">
         <UserFeedbackForm user={user} />
       </div>

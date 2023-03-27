@@ -9,8 +9,17 @@ import { getInitials } from "@/utils/common-utils";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import { Show } from "../ui/show";
 
-function UserAvatar({ name, src }: { name?: string; src?: string }) {
+function UserAvatar({
+  name,
+  src,
+  isAdmin = false
+}: {
+  name?: string;
+  src?: string;
+  isAdmin?: boolean;
+}) {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -40,6 +49,16 @@ function UserAvatar({ name, src }: { name?: string; src?: string }) {
           <Link href="/dashboard/feedback" onClick={() => setOpen(false)}>
             Feedback
           </Link>
+          <Show when={isAdmin}>
+            <Link href="/dashboard/salary-calculator" onClick={() => setOpen(false)}>
+              Salary Calculator
+            </Link>
+          </Show>
+          <Show when={isAdmin}>
+            <Link href="/dashboard/job-offer" onClick={() => setOpen(false)}>
+              Job offers
+            </Link>
+          </Show>
         </div>
         <Separator />
         <div className="flex items-center gap-3 px-6 py-4">

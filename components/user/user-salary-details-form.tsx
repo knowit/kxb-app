@@ -104,9 +104,9 @@ export function UserSalaryDetailsForm({
       {...other}
     >
       <div className="w-full max-w-[400px]">
-        <Label htmlFor="name">Hourly rate</Label>
+        <Label htmlFor="hourlyRate">Hourly rate</Label>
         <Input
-          id="name"
+          id="hourlyRate"
           type="number"
           className="w-full"
           size={32}
@@ -119,9 +119,9 @@ export function UserSalaryDetailsForm({
         )}
       </div>
       <div className="w-full max-w-[400px]">
-        <Label htmlFor="name">Commission</Label>
+        <Label htmlFor="commission">Commission</Label>
         <Input
-          id="name"
+          id="commission"
           type="number"
           step="0.01"
           className="w-full"
@@ -135,9 +135,9 @@ export function UserSalaryDetailsForm({
         )}
       </div>
       <div className="w-full max-w-[400px]">
-        <Label htmlFor="name">Tax</Label>
+        <Label htmlFor="tax">Tax</Label>
         <Input
-          id="name"
+          id="tax"
           type="number"
           step="0.01"
           className="w-full"
@@ -150,7 +150,7 @@ export function UserSalaryDetailsForm({
       </div>
       <div className="w-full max-w-[400px]">
         <div className="flex items-center justify-between">
-          <Label htmlFor="name">Work hours</Label>
+          <Label htmlFor="workHours">Work hours</Label>
           <InfoButton size="sm">
             The standard work hours for consultants is {EARNING_CONSTANTS.WORK_HOURS_PER_DAY} hours
             per day. However, some consultants may have their lunch covered by their employers,
@@ -158,7 +158,7 @@ export function UserSalaryDetailsForm({
           </InfoButton>
         </div>
         <Input
-          id="name"
+          id="workHours"
           type="number"
           step="0.5"
           className="w-full"

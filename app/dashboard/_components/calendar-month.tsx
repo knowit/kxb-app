@@ -2,7 +2,6 @@ import { CalendarDay } from "@/components/calendar/calendar-day";
 import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-day-detail-dialog";
-import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { CalendarMonth, CalendarSizeVariant, UserWorkDayDetail } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
@@ -13,14 +12,16 @@ const CalendarMonth: React.FC<{
   calendarSizeVariant?: CalendarSizeVariant;
   workDayDetails?: UserWorkDayDetail[];
   closeUserWorkDayDetailsDialogOnSaveSuccess?: boolean;
+  showDialogOnCalendarDayClick?: boolean;
 }> = ({
   month,
   calendarSizeVariant = "default",
   workDayDetails = [],
   closeUserWorkDayDetailsDialogOnSaveSuccess = false,
+  showDialogOnCalendarDayClick = false,
   ...other
 }) => {
-  const currentDate = getRequestDateNow();
+  const currentDate = new Date();
   const showWeeks = true && calendarSizeVariant !== "large";
   const holidayInfos = month.days.filter(day => day.holidayInformation);
 
@@ -55,13 +56,20 @@ const CalendarMonth: React.FC<{
         {calendarEntries.map((calendarDay, index) => {
           switch (calendarDay.type) {
             case "day":
-              return (
+              return showDialogOnCalendarDayClick ? (
                 <UserEditWorkDayDetailDialog
                   key={`calendar-day-${index}`}
                   calendarDay={calendarDay}
                   calendarSizeVariant={calendarSizeVariant}
                   holidayInfos={holidayInfos}
                   closeDialogOnFormSubmitSuccess={closeUserWorkDayDetailsDialogOnSaveSuccess}
+                />
+              ) : (
+                <CalendarDay
+                  key={`calendar-day-${index}`}
+                  calendarDay={calendarDay}
+                  calendarSizeVariant={calendarSizeVariant}
+                  holidayInfos={holidayInfos}
                 />
               );
             default:

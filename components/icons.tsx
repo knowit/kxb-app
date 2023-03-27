@@ -12,7 +12,9 @@ import {
   PaperPlaneIcon,
   PlusCircledIcon,
   PlusIcon,
-  RocketIcon
+  RocketIcon,
+  Share2Icon,
+  UpdateIcon
 } from "@radix-ui/react-icons";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 
@@ -79,5 +81,7 @@ export const Icons = {
         </g>
       </g>
     </svg>
-  )
+  ),
+  Share: Share2Icon,
+  Update: UpdateIcon
 };

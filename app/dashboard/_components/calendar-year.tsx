@@ -67,6 +67,7 @@ const CalendarYear: React.FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] 
                 month={month}
                 calendarSizeVariant="small"
                 workDayDetails={workDayDetails}
+                showDialogOnCalendarDayClick
               />
             </div>
           );
