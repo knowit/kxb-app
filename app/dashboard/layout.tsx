@@ -25,10 +25,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
         </Link>
         <div className="flex items-center gap-8">
-          <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
-            {/* @ts-expect-error Async Server Component */}
-            <FeedbackForm asPopover />
-          </Suspense>
+          <div className="hidden sm:block">
+            <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
+              {/* @ts-expect-error Async Server Component */}
+              <FeedbackForm asPopover />
+            </Suspense>
+          </div>
           <Suspense fallback={<NextPaycheckSkeleton />}>
             {/* @ts-expect-error Async Server Component */}
             <NextPaycheck />
