@@ -12,6 +12,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
 import { CalendarEntries, UserWorkDayDetail } from "@/types";
+import { getFormattedLongDate } from "@/utils/date-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition, type HTMLAttributes } from "react";
@@ -92,8 +93,27 @@ export function UserWorkDayDetailForm({
       });
     }
 
+    const getWorkDayHourText = () => {
+      let text = "Updated work day details";
+
+      if (data.nonCommissionedHours > 0) {
+        text += ` with ${data.nonCommissionedHours} non commissioned hours`;
+      }
+
+      if (data.extraHours > 0) {
+        text += ` with ${data.extraHours} extra hours`;
+      }
+
+      if (data.sickDay) {
+        text += ", marked as sick day";
+      }
+
+      return (text += ".");
+    };
+
     toast({
-      description: "Your salary details has been updated.",
+      title: getFormattedLongDate(new Date(calendarDay.date)),
+      description: getWorkDayHourText(),
       duration: 5000,
       variant: "success"
     });
