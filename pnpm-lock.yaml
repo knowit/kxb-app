@@ -5,6 +5,7 @@ specifiers:
   '@ianvs/prettier-plugin-sort-imports': ^3.7.1
   '@planetscale/database': ^1.6.0
   '@prisma/client': ^4.11.0
+  '@radix-ui/react-alert-dialog': ^1.0.3
   '@radix-ui/react-avatar': ^1.0.2
   '@radix-ui/react-checkbox': ^1.0.3
   '@radix-ui/react-dialog': ^1.0.3
@@ -60,6 +61,7 @@ dependencies:
   '@hookform/resolvers': 3.0.0_react-hook-form@7.43.7
   '@planetscale/database': 1.6.0
   '@prisma/client': 4.11.0_prisma@4.11.0
+  '@radix-ui/react-alert-dialog': 1.0.3_zula6vjvt3wdocc4mwcxqa6nzi
   '@radix-ui/react-avatar': 1.0.2_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-checkbox': 1.0.3_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-dialog': 1.0.3_zula6vjvt3wdocc4mwcxqa6nzi
@@ -646,6 +648,25 @@ packages:
     resolution: {integrity: sha512-3e7rn8FDMin4CgeL7Z/49smCA3rFYY3Ha2rUQ7HRWFadS5iCRw08ZgVT1LaNTCNqgvrUiyczLflrVrF0SRQtNA==}
     dependencies:
       '@babel/runtime': 7.21.0
+    dev: false
+
+  /@radix-ui/react-alert-dialog/1.0.3_zula6vjvt3wdocc4mwcxqa6nzi:
+    resolution: {integrity: sha512-QXFy7+bhGi0u+paF2QbJeSCHZs4gLMJIPm6sajUamyW0fro6g1CaSGc5zmc4QmK2NlSGUrq8m+UsUqJYtzvXow==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.21.0
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
+      '@radix-ui/react-context': 1.0.0_react@18.2.0
+      '@radix-ui/react-dialog': 1.0.3_zula6vjvt3wdocc4mwcxqa6nzi
+      '@radix-ui/react-primitive': 1.0.2_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-slot': 1.0.1_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - '@types/react'
     dev: false
 
   /@radix-ui/react-arrow/1.0.2_biqbaboplfbrettd7655fr4n2y:

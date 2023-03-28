@@ -1,9 +1,7 @@
-import { type NextRequest } from "next/server";
-
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
 
 export const runtime = "experimental-edge";
@@ -12,23 +10,29 @@ type Params = {
   id: string;
 };
 
+const userParamsSchema = z.object({
+  id: z.coerce.number()
+});
+
 export async function PUT(request: NextRequest, { params }: { params: Params }) {
   const token = await getToken({ req: request });
 
   if (!token) {
-    return new Response("Bad request", {
-      status: 400
+    return new Response("Unauthorized", {
+      status: 401
     });
   }
 
   try {
+    const { id } = await userParamsSchema.parseAsync(params);
+
     const res = await request.json();
 
     const { commission, hourlyRate, tax, workHours } = await userSalaryDetailSchema.parseAsync(res);
 
     await planetscaleEdge.execute(
       "UPDATE user SET commission = ?, hourlyRate = ?, tax = ?, workHours = ? WHERE id = ?",
-      [commission, hourlyRate, tax, workHours, +params.id]
+      [commission, hourlyRate, tax, workHours, id]
     );
 
     return new Response("Patched", {
@@ -37,8 +41,46 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
   } catch (error) {
     console.error(JSON.stringify(error));
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ status: 422, body: error.issues });
+      return NextResponse.json(
+        { error },
+        {
+          status: 422
+        }
+      );
     }
+
+    return new Response(error, {
+      status: 422
+    });
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: Params }) {
+  const token = await getToken({ req: request });
+
+  if (!token) {
+    return new Response("Unauthorized", {
+      status: 401
+    });
+  }
+
+  try {
+    const { id } = await userParamsSchema.parseAsync(params);
+
+    await planetscaleEdge.transaction(async trx => {
+      // delete settings
+      await trx.execute("DELETE FROM user_settings WHERE userId = ?", [id]);
+      // delete work day details
+      await trx.execute("DELETE FROM user_work_day_detail WHERE userId = ?", [id]);
+      // delete user
+      await trx.execute("DELETE FROM user WHERE id = ?", [id]);
+    });
+
+    return new Response("Deleted", {
+      status: 200
+    });
+  } catch (error) {
+    console.error(JSON.stringify(error));
 
     return new Response(error, {
       status: 422

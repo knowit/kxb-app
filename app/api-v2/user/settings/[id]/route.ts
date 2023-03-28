@@ -10,8 +10,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   const token = await getToken({ req: request });
 
   if (!token) {
-    return new Response("Bad request", {
-      status: 400
+    return new Response("Unauthorized", {
+      status: 401
     });
   }
 

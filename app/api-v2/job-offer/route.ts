@@ -1,17 +1,17 @@
 import { planetscaleEdge } from "@/lib/planetscale-edge";
-import { getEdgeFriendlyToken } from "@/lib/token";
 import { createJobOfferSchema } from "@/lib/validations/job-offer";
 import { nanoid } from "nanoid/non-secure";
-import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { NextResponse, type NextRequest } from "next/server";
 
 export const runtime = "experimental-edge";
 
-export async function POST(request: Request) {
-  const token = await getEdgeFriendlyToken();
+export async function POST(request: NextRequest) {
+  const token = await getToken({ req: request });
 
   if (!token) {
-    return new Response("Bad request", {
-      status: 400
+    return new Response("Unauthorized", {
+      status: 401
     });
   }
 
