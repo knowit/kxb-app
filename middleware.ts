@@ -1,3 +1,4 @@
+import { userIsSalesPerson } from "@/utils/user-utils";
 import { getToken } from "next-auth/jwt";
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
@@ -7,11 +8,14 @@ export default withAuth(
     const token = await getToken({ req });
 
     const isAuth = !!token;
-    const isAuthPage =
-      req.nextUrl.pathname.startsWith("/login") || req.nextUrl.pathname.startsWith("/register");
+    const isAuthPage = req.nextUrl.pathname.startsWith("/login");
 
     if (isAuthPage) {
       if (isAuth) {
+        if (userIsSalesPerson(token)) {
+          return NextResponse.redirect(new URL("/dashboard/salary-calculator", req.url));
+        }
+
         return NextResponse.redirect(new URL("/dashboard", req.url));
       }
 
@@ -40,5 +44,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"]
+  matcher: ["/dashboard/:path*", "/login"]
 };

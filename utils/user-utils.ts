@@ -1,4 +1,5 @@
 import DEFAULT_USER_SALARY from "@/constants/default-user-salary";
+import { SITE_CONSTANTS } from "@/constants/site-constants";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earnings-logic";
 import {
   CalendarMonth,
@@ -8,6 +9,7 @@ import {
   UserSalaryDetails,
   UserWorkDayDetail
 } from "@/types";
+import { JWT } from "next-auth/jwt";
 
 export const getUserSalaryDetails = (user: User): UserSalaryDetails => ({
   hourlyRate: user?.hourlyRate ?? DEFAULT_USER_SALARY.hourlyRate,
@@ -92,3 +94,8 @@ export const getUserEarningsDetails = (
     )
   };
 };
+
+export const userIsSalesPerson = (token: JWT) =>
+  token?.email !== undefined &&
+  token?.email !== null &&
+  process.env.SALES_EMAILS.split(SITE_CONSTANTS.SALES_EMAILS_DELIMITER).includes(token.email);

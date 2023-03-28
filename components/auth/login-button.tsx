@@ -20,7 +20,7 @@ function LoginButton({
         onLoginClicked?.();
         signIn("azure-ad", {
           redirect: true,
-          callbackUrl: searchParams?.get("from") || "/login/callback"
+          callbackUrl: searchParams?.get("from") || "/dashboard"
         });
       }}
       {...other}
