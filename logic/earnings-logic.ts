@@ -1,4 +1,4 @@
-import EARNING_CONSTANTS from "@/constants/earning-constants";
+import { EARNING_CONSTANTS } from "@/constants/earning-constants";
 import { getWorkDays } from "@/logic/calendar-logic";
 import {
   CalendarDay,

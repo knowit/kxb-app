@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,14 +13,13 @@ import {
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Show } from "@/components/ui/show";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { User } from "@/types";
 import { JWT } from "next-auth/jwt";
 import { signOut } from "next-auth/react";
 import { forwardRef, useState } from "react";
-import { Icons } from "../icons";
-import { Show } from "../ui/show";
 
 const UserDeleteDialog = forwardRef<
   React.ElementRef<typeof AlertDialogContent>,

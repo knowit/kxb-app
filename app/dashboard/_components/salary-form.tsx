@@ -3,7 +3,7 @@ import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
 
-export default async function SalaryForm() {
+async function SalaryForm() {
   const token = await getEdgeFriendlyToken();
 
   const user = await getUser(token.id);
@@ -24,3 +24,5 @@ export default async function SalaryForm() {
     />
   );
 }
+
+export { SalaryForm };

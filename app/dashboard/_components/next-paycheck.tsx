@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 
-export default async function NextPaycheck() {
+async function NextPaycheck() {
   const token = await getEdgeFriendlyToken();
   const userEarnings = await getUserEarnings(token.id);
 
@@ -31,4 +31,4 @@ const NextPaycheckSkeleton = () => {
   );
 };
 
-export { NextPaycheckSkeleton };
+export { NextPaycheck, NextPaycheckSkeleton };

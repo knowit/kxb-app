@@ -45,21 +45,19 @@ export const metadata = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-white font-sans text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-50",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-white font-sans text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-50",
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

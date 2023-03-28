@@ -1,6 +1,7 @@
-import CalendarMonthWithSalary from "@/app/dashboard/_components/calendar-month-with-salary";
-import CompanyBenefits from "@/app/dashboard/_components/company-benefits";
-import YearlyEconomicOverview, {
+import { CalendarMonthWithSalary } from "@/app/dashboard/_components/calendar-month-with-salary";
+import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
+import {
+  YearlyEconomicOverview,
   YearlyEconomicOverviewSkeleton
 } from "@/app/dashboard/_components/yearly-economic-overview";
 import { getRequestDateNow } from "@/lib/date";

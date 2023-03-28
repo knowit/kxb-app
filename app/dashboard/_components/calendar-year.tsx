@@ -7,9 +7,9 @@ import { getCalendarYear } from "@/utils/calendar-utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { getYear } from "date-fns";
 import Link from "next/link";
-import * as React from "react";
+import { type FC } from "react";
 
-const CalendarYear: React.FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
+const CalendarYear: FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
   date,
   workDayDetails = []
 }) => {

@@ -1,5 +1,7 @@
 "use client";
 
+import { CalendarMonth } from "@/app/dashboard/_components/calendar-month";
+import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
 import { Icons } from "@/components/icons";
 import { SalaryYearOverview } from "@/components/salary/salary-year-overview";
 import { Button } from "@/components/ui/button";
@@ -10,8 +12,6 @@ import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
 import { atom, useAtom } from "jotai";
 import { useMemo, useState } from "react";
-import { CalendarMonth } from "../_components/calendar-month";
-import CompanyBenefits from "../_components/company-benefits";
 
 const salaryAtom = atom({
   hourlyRate: +process.env.NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE,

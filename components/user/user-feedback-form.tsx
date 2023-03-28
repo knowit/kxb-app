@@ -56,7 +56,7 @@ const FeedbackEmojiSelector = ({
   );
 };
 
-export function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) {
+function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -172,4 +172,4 @@ const UserFeedbackFormSkeleton = () => {
   );
 };
 
-export { UserFeedbackFormSkeleton };
+export { UserFeedbackForm, UserFeedbackFormSkeleton };

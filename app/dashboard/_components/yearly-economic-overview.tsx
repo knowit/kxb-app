@@ -5,7 +5,7 @@ import {
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 
-export default async function YearlyEconomicOverview() {
+async function YearlyEconomicOverview() {
   const token = await getEdgeFriendlyToken();
   const userEarnings = await getUserEarnings(token.id);
 

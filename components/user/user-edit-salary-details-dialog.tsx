@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import Link from "@/components/ui/link";
+import { Link } from "@/components/ui/link";
 import { UserSalaryDetailsForm } from "@/components/user/user-salary-details-form";
 import { User } from "@/types";
 import { useState } from "react";
 
-export function UserEditSalaryDetailsDialog({
+function UserEditSalaryDetailsDialog({
   user,
   closeDialogOnFormSubmitSuccess = false
 }: {
@@ -61,3 +61,5 @@ export function UserEditSalaryDetailsDialog({
     </Dialog>
   );
 }
+
+export { UserEditSalaryDetailsDialog };

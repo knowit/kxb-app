@@ -1,5 +1,6 @@
-import CompanyBenefits from "@/app/dashboard/_components/company-benefits";
-import YearlyEconomicOverview, {
+import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
+import {
+  YearlyEconomicOverview,
   YearlyEconomicOverviewSkeleton
 } from "@/app/dashboard/_components/yearly-economic-overview";
 import { Suspense } from "react";

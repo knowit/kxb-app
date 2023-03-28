@@ -4,7 +4,7 @@ import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
 
-export default async function FeedbackForm({ asPopover = false }) {
+async function FeedbackForm({ asPopover = false }) {
   const token = await getEdgeFriendlyToken();
 
   const user = await getUser(token.id);
@@ -15,3 +15,5 @@ export default async function FeedbackForm({ asPopover = false }) {
 
   return asPopover ? <UserFeedbackPopover user={user} /> : <UserFeedbackForm user={user} />;
 }
+
+export { FeedbackForm };

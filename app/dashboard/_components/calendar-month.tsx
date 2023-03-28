@@ -5,9 +5,9 @@ import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-da
 import { cn } from "@/lib/utils";
 import { CalendarMonth, CalendarSizeVariant, UserWorkDayDetail } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
-import * as React from "react";
+import { type FC } from "react";
 
-const CalendarMonth: React.FC<{
+const CalendarMonth: FC<{
   month: CalendarMonth;
   calendarSizeVariant?: CalendarSizeVariant;
   workDayDetails?: UserWorkDayDetail[];

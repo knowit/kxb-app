@@ -19,7 +19,7 @@ export const omit = (obj: {}, keys: string[]) =>
 export const capitalize = (str: string): string =>
   str.length === 0 ? str : `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
-export function getAbsoluteUrl(path?: string) {
+export const getAbsoluteUrl = (path?: string) => {
   const base = process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXTAUTH_URL ?? "https://kxb.app";
 
   if (path) {
@@ -27,7 +27,7 @@ export function getAbsoluteUrl(path?: string) {
   }
 
   return base;
-}
+};
 
 export const getInitials = (name?: string) => {
   if (!name) {

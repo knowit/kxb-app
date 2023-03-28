@@ -1,5 +1,5 @@
 import { planetscaleEdge } from "@/lib/planetscale-edge";
-import { userSalaryDetailSchema } from "@/lib/validations/user";
+import { userProfileSchema } from "@/lib/validations/user";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
@@ -28,12 +28,9 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 
     const res = await request.json();
 
-    const { commission, hourlyRate, tax, workHours } = await userSalaryDetailSchema.parseAsync(res);
+    const { name } = await userProfileSchema.parseAsync(res);
 
-    await planetscaleEdge.execute(
-      "UPDATE user SET commission = ?, hourlyRate = ?, tax = ?, workHours = ? WHERE id = ?",
-      [commission, hourlyRate, tax, workHours, id]
-    );
+    await planetscaleEdge.execute("UPDATE user SET name = ? WHERE id = ?", [name, id]);
 
     return new Response("Patched", {
       status: 200

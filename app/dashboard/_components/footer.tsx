@@ -2,12 +2,12 @@ import { Icons } from "@/components/icons";
 import { ThemeSelect } from "@/components/theme-select";
 import { Box } from "@/components/ui/box";
 import { Flex } from "@/components/ui/flex";
-import Link from "@/components/ui/link";
+import { Link } from "@/components/ui/link";
 import { UserFeedbackFormSkeleton } from "@/components/user/user-feedback-form";
 import { Suspense } from "react";
-import FeedbackForm from "./feedback-form";
+import { FeedbackForm } from "./feedback-form";
 
-export default function Footer() {
+function Footer() {
   return (
     <footer className="border-t border-t-neutral-700">
       <div className="mx-auto max-w-5xl px-4 pt-4 pb-24 md:px-4 md:pt-8">
@@ -80,3 +80,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export { Footer };

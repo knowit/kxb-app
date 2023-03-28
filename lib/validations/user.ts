@@ -1,5 +1,10 @@
 import * as z from "zod";
 
+export const userProfileSchema = z.object({
+  id: z.number().min(0).optional(),
+  name: z.string().min(3).max(100)
+});
+
 export const userSalaryDetailSchema = z.object({
   commission: z.number().min(0).max(100),
   hourlyRate: z.number().min(0),

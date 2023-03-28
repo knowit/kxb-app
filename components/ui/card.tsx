@@ -5,7 +5,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "subtle";
 }
 
-export function Card({ className, variant = "default", ...other }: CardProps) {
+function Card({ className, variant = "default", ...other }: CardProps) {
   return (
     <div
       className={cn(
@@ -76,3 +76,5 @@ Card.Skeleton = function CardSeleton() {
     </Card>
   );
 };
+
+export { Card };

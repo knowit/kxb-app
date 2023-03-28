@@ -1,4 +1,4 @@
-import LoginPageContent from "@/components/auth/login-page-content";
+import { LoginPageContent } from "@/components/auth/login-page-content";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

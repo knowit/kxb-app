@@ -12,7 +12,7 @@ const CompanyBenefit = ({ text }: { text: string }) => (
   </Card>
 );
 
-export default function CompanyBenefits() {
+function CompanyBenefits() {
   return (
     <div className="my-8 grid grid-cols-12 gap-8">
       <div className="col-span-12 lg:col-span-4">
@@ -41,3 +41,5 @@ export default function CompanyBenefits() {
     </div>
   );
 }
+
+export { CompanyBenefits };

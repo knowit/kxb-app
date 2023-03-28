@@ -27,6 +27,7 @@ const HoverCardContent = React.forwardRef<
     <HoverCardPrimitive.Arrow className="fill-current text-neutral-700" />
   </HoverCardPrimitive.Content>
 ));
+
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
 export { HoverCard, HoverCardTrigger, HoverCardContent };

@@ -12,7 +12,7 @@ import { UserWorkDayDetailForm } from "@/components/user/user-work-day-detail-fo
 import { CalendarDay as CalendarDayType, CalendarEntries, CalendarSizeVariant } from "@/types";
 import { useState } from "react";
 
-export function UserEditWorkDayDetailDialog({
+function UserEditWorkDayDetailDialog({
   calendarDay,
   calendarSizeVariant = "default",
   holidayInfos = [],
@@ -52,3 +52,5 @@ export function UserEditWorkDayDetailDialog({
     </Dialog>
   );
 }
+
+export { UserEditWorkDayDetailDialog };

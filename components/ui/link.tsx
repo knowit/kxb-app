@@ -49,4 +49,4 @@ const Link = React.forwardRef<LinkElement, LinkProps>(
 
 Link.displayName = "Link";
 
-export default Link;
+export { Link };

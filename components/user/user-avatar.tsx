@@ -5,11 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
+import { Show } from "@/components/ui/show";
 import { getInitials } from "@/utils/common-utils";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
-import { Show } from "../ui/show";
 
 function UserAvatar({
   name,

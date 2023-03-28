@@ -1,4 +1,4 @@
-import DEFAULT_USER_SALARY from "@/constants/default-user-salary";
+import { DEFAULT_USER_SALARY } from "@/constants/default-user-salary";
 import { SITE_CONSTANTS } from "@/constants/site-constants";
 import { getEarningsForMonth, getEarningsForYear } from "@/logic/earnings-logic";
 import {

@@ -21,7 +21,7 @@ interface CreateJobOfferFormProps extends HTMLAttributes<HTMLFormElement> {
 
 type FormData = z.infer<typeof createJobOfferSchema>;
 
-export function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferFormProps) {
+function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -164,4 +164,4 @@ const CreateJobOfferFormSkeleton = () => {
   );
 };
 
-export { CreateJobOfferFormSkeleton };
+export { CreateJobOfferForm, CreateJobOfferFormSkeleton };

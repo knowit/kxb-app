@@ -23,7 +23,7 @@ interface UserSettingsFormProps extends HTMLAttributes<HTMLFormElement> {
 
 type FormData = z.infer<typeof userSettingsSchema>;
 
-export function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFormProps) {
+function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -86,16 +86,18 @@ export function UserSettingsForm({ userSettings, className, ...other }: UserSett
       onSubmit={handleSubmit(onSubmit)}
       {...other}
     >
-      <div className={cn("flex items-center gap-3")}>
+      <div className="flex items-center gap-3">
         <Checkbox
           id="closeUserSalaryDialogOnSaveSuccess"
           defaultChecked={userSettings?.closeUserSalaryDialogOnSaveSuccess ?? false}
           onCheckedChange={checked =>
             setValue("closeUserSalaryDialogOnSaveSuccess", Boolean(checked))
           }
-          {...register("closeUserSalaryDialogOnSaveSuccess", {})}
+          {...register("closeUserSalaryDialogOnSaveSuccess")}
         />
-        <Label htmlFor="closeUserSalaryDialogOnSaveSuccess">Auto close user salary dialog</Label>
+        <Label className="grow" htmlFor="closeUserSalaryDialogOnSaveSuccess">
+          Auto close user salary dialog
+        </Label>
         <InfoButton>
           Automatically close the user salary dialog after successfully saving.
         </InfoButton>
@@ -105,16 +107,16 @@ export function UserSettingsForm({ userSettings, className, ...other }: UserSett
           </p>
         )}
       </div>
-      <div className={cn("flex items-center gap-3")}>
+      <div className="flex items-center gap-3">
         <Checkbox
           id="closeUserWorkDayDetailsDialogOnSaveSuccess"
           defaultChecked={userSettings?.closeUserWorkDayDetailsDialogOnSaveSuccess ?? false}
           onCheckedChange={checked =>
             setValue("closeUserWorkDayDetailsDialogOnSaveSuccess", Boolean(checked))
           }
-          {...register("closeUserWorkDayDetailsDialogOnSaveSuccess", {})}
+          {...register("closeUserWorkDayDetailsDialogOnSaveSuccess")}
         />
-        <Label htmlFor="closeUserWorkDayDetailsDialogOnSaveSuccess">
+        <Label className="grow" htmlFor="closeUserWorkDayDetailsDialogOnSaveSuccess">
           Auto close work day details dialog
         </Label>
         <InfoButton>
@@ -157,4 +159,4 @@ const UserSettingsFormSkeleton = () => {
   );
 };
 
-export { UserSettingsFormSkeleton };
+export { UserSettingsForm, UserSettingsFormSkeleton };

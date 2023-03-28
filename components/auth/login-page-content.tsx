@@ -5,7 +5,7 @@ import { Icons } from "@/components/icons";
 import { Show } from "@/components/ui/show";
 import { useState } from "react";
 
-export default function LoginPageContent() {
+function LoginPageContent() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   return (
@@ -36,3 +36,5 @@ export default function LoginPageContent() {
     </div>
   );
 }
+
+export { LoginPageContent };

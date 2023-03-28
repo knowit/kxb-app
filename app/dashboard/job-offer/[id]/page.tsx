@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import Link from "@/components/ui/link";
+import { Link } from "@/components/ui/link";
 import { getJobOffer } from "@/lib/job-offer";
 import { formatCurrency, formatPercent } from "@/utils/currency-format";
 import { getFormattedLongDate } from "@/utils/date-utils";

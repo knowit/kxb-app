@@ -1,5 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
-import Link from "@/components/ui/link";
+import { Link } from "@/components/ui/link";
 import { getJobOffers } from "@/lib/job-offer";
 
 export default async function JobOffersPage() {

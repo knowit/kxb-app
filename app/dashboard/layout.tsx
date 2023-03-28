@@ -1,16 +1,16 @@
-import Avatar, { AvatarSkeleton } from "@/app/dashboard/_components/avatar";
-import Footer from "@/app/dashboard/_components/footer";
-import NextPaycheck, { NextPaycheckSkeleton } from "@/app/dashboard/_components/next-paycheck";
+import { Avatar, AvatarSkeleton } from "@/app/dashboard/_components/avatar";
+import { Footer } from "@/app/dashboard/_components/footer";
+import { NextPaycheck, NextPaycheckSkeleton } from "@/app/dashboard/_components/next-paycheck";
 import { Icons } from "@/components/icons";
 import { UserFeedbackPopoverSkeleton } from "@/components/user/user-feedback-popover";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import FeedbackForm from "./_components/feedback-form";
+import { Suspense, type ReactNode } from "react";
+import { FeedbackForm } from "./_components/feedback-form";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const token = await getEdgeFriendlyToken();
   const user = await getUser(token.id);
 

@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { InfoButton } from "@/components/ui/info-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "@/components/ui/link";
+import { Link } from "@/components/ui/link";
 import { Show } from "@/components/ui/show";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ interface UserWorkDayDetailFormProps extends HTMLAttributes<HTMLFormElement> {
 
 type FormData = z.infer<typeof userWorkDayDetailSchema>;
 
-export function UserWorkDayDetailForm({
+function UserWorkDayDetailForm({
   calendarDay,
   userWorkDayDetail,
   isWorkDay = false,
@@ -238,3 +238,5 @@ export function UserWorkDayDetailForm({
     </form>
   );
 }
+
+export { UserWorkDayDetailForm };

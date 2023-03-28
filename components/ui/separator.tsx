@@ -15,12 +15,13 @@ const Separator = React.forwardRef<
     orientation={orientation}
     className={cn(
       "bg-neutral-200 dark:bg-neutral-700",
-      orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
+      orientation === "horizontal" ? "h-[1px] w-full" : "h-auto w-[1px]",
       className
     )}
     {...other}
   />
 ));
+
 Separator.displayName = SeparatorPrimitive.Root.displayName;
 
 export { Separator };

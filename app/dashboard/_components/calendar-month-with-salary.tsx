@@ -12,7 +12,7 @@ import {
 } from "@/types";
 import Link from "next/link";
 
-export default function CalendarMonthWithSalary({
+function CalendarMonthWithSalary({
   user,
   calendarMonth,
   userEarnings,
@@ -93,3 +93,5 @@ export default function CalendarMonthWithSalary({
     </div>
   );
 }
+
+export { CalendarMonthWithSalary };

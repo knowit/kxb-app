@@ -1,4 +1,4 @@
-import SalaryForm from "@/app/dashboard/_components/salary-form";
+import { SalaryForm } from "@/app/dashboard/_components/salary-form";
 import { UserSalaryDetailsFormSkeleton } from "@/components/user/user-salary-details-form";
 import { Suspense } from "react";
 

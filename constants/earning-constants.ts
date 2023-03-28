@@ -5,4 +5,4 @@ const EARNING_CONSTANTS = {
   WORK_SICK_PAY_PER_HOUR: 327.33
 };
 
-export default EARNING_CONSTANTS;
+export { EARNING_CONSTANTS };

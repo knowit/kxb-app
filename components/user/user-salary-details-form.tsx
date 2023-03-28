@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Show } from "@/components/ui/show";
 import { Skeleton } from "@/components/ui/skeleton";
-import EARNING_CONSTANTS from "@/constants/earning-constants";
+import { EARNING_CONSTANTS } from "@/constants/earning-constants";
 import { cn } from "@/lib/utils";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { useState, useTransition, type HTMLAttributes } from "react";
@@ -32,7 +32,7 @@ interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
 
 type FormData = z.infer<typeof userSalaryDetailSchema>;
 
-export function UserSalaryDetailsForm({
+function UserSalaryDetailsForm({
   user,
   className,
   onFormSubmitSuccess,
@@ -59,7 +59,7 @@ export function UserSalaryDetailsForm({
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api-v2/user/${user.id}`, {
+    const response = await fetch(`/api-v2/user/${user.id}/salary`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -211,4 +211,4 @@ const UserSalaryDetailsFormSkeleton = () => {
   );
 };
 
-export { UserSalaryDetailsFormSkeleton };
+export { UserSalaryDetailsForm, UserSalaryDetailsFormSkeleton };

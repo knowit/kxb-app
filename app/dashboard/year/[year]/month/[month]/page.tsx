@@ -1,4 +1,4 @@
-import CalendarMonthWithSalary from "@/app/dashboard/_components/calendar-month-with-salary";
+import { CalendarMonthWithSalary } from "@/app/dashboard/_components/calendar-month-with-salary";
 import { MONTH } from "@/constants/date-constants";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";

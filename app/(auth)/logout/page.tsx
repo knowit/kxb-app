@@ -1,4 +1,4 @@
-import LogoutPageContent from "@/components/auth/logout-page-content";
+import { LogoutPageContent } from "@/components/auth/logout-page-content";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
