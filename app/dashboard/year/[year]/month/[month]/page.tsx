@@ -36,7 +36,7 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
   ]);
 
   if (!user.data) {
-    return redirect("/login");
+    return redirect("/logout");
   }
   return (
     <>

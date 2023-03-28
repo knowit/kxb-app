@@ -9,7 +9,7 @@ export default async function SalaryForm() {
   const user = await getUser(token.id);
 
   if (!user) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return (

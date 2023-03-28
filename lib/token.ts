@@ -16,7 +16,7 @@ const getEdgeFriendlyToken = cache(async () => {
   const token = await getToken({ req });
 
   if (!token) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return token;

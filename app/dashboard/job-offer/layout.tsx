@@ -7,7 +7,7 @@ export default async function JobOfferLayout({ children }: { children: React.Rea
   const user = await getUser(token.id);
 
   if (!(user?.isAdmin ?? false)) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return children;

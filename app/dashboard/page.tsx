@@ -31,7 +31,7 @@ export default async function DashboardPage() {
   ]);
 
   if (!user.data) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return (

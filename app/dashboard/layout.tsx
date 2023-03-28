@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const user = await getUser(token.id);
 
   if (!user) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return (

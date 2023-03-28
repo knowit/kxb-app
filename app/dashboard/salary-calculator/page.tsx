@@ -14,7 +14,7 @@ export default async function SalaryCalculatorPage() {
   const user = await getUser(token.id);
 
   if (!(user?.isAdmin ?? false)) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return (

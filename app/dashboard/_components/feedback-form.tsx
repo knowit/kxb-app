@@ -10,7 +10,7 @@ export default async function FeedbackForm({ asPopover = false }) {
   const user = await getUser(token.id);
 
   if (!user) {
-    return redirect("/login");
+    return redirect("/logout");
   }
 
   return asPopover ? <UserFeedbackPopover user={user} /> : <UserFeedbackForm user={user} />;
