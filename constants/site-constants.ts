@@ -8,6 +8,7 @@ type EmojiMap = Record<string, Emoji>;
 
 type SiteConstantsProps = {
   EMOJIS: EmojiMap;
+  SALES_EMAILS_DELIMITER: string;
 };
 
 const SITE_CONSTANTS: SiteConstantsProps = {
@@ -32,7 +33,8 @@ const SITE_CONSTANTS: SiteConstantsProps = {
       alt: "Emoji with sad expression",
       value: 4
     }
-  }
+  },
+  SALES_EMAILS_DELIMITER: ";"
 };
 
 export { SITE_CONSTANTS };

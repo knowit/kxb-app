@@ -19,8 +19,8 @@ function LoginButton({
       onClick={async () => {
         onLoginClicked?.();
         signIn("azure-ad", {
-          redirect: false,
-          callbackUrl: searchParams?.get("from") || "/dashboard"
+          redirect: true,
+          callbackUrl: searchParams?.get("from") || "/login/callback"
         });
       }}
       {...other}
