@@ -28,7 +28,7 @@ export const getUserEarningsDetails = (
   nextMonthDetail: CalendarMonth,
   workDayDetails: UserWorkDayDetail[] = []
 ): UserEarningsDetails => {
-  const { hourlyRate, commission, tax, workHours } = userSalaryDetails;
+  const { hourlyRate, commission, tax, workHours, taxTable } = userSalaryDetails;
 
   const activeCalendarMonthStatistics = getEarningsForMonth(
     activeCalendarMonthDetail,
@@ -36,7 +36,8 @@ export const getUserEarningsDetails = (
     commission,
     tax,
     workHours,
-    workDayDetails
+    workDayDetails,
+    taxTable
   );
 
   const currentMonthStatistics = getEarningsForMonth(
@@ -45,7 +46,8 @@ export const getUserEarningsDetails = (
     commission,
     tax,
     workHours,
-    workDayDetails
+    workDayDetails,
+    taxTable
   );
 
   const lastMonthStatistics = getEarningsForMonth(
@@ -54,7 +56,8 @@ export const getUserEarningsDetails = (
     commission,
     tax,
     workHours,
-    workDayDetails
+    workDayDetails,
+    taxTable
   );
   const nextMonthStatistics = getEarningsForMonth(
     nextMonthDetail,
@@ -62,7 +65,8 @@ export const getUserEarningsDetails = (
     commission,
     tax,
     workHours,
-    workDayDetails
+    workDayDetails,
+    taxTable
   );
 
   return {
@@ -80,7 +84,8 @@ export const getUserEarningsDetails = (
       commission,
       tax,
       workHours,
-      workDayDetails
+      workDayDetails,
+      taxTable
     ),
     // TODO: To be able to calculate yearly salary and include non commissioned hours
     // we need to change the logic to store non commissioned hours per month
@@ -90,7 +95,8 @@ export const getUserEarningsDetails = (
       commission,
       tax,
       workHours,
-      workDayDetails
+      workDayDetails,
+      taxTable
     )
   };
 };

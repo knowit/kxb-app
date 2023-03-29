@@ -9,6 +9,7 @@ import {
   UserWorkDayDetail
 } from "@/types";
 import { formatCurrency } from "@/utils/currency-format";
+import { getTableTax } from "@/utils/tax-utils";
 
 const getHolidayPay = (gross: number): number => {
   return gross * EARNING_CONSTANTS.WORK_HOLIDAY_PAY;
@@ -108,7 +109,8 @@ export const getEarningsForMonth = (
   commission: number,
   tax: number,
   workHours: number,
-  workDayDetails: UserWorkDayDetail[]
+  workDayDetails: UserWorkDayDetail[],
+  taxTable?: string
 ): CalendarMonthEarnings => {
   const workDays = getWorkDays(month);
   const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
@@ -130,7 +132,10 @@ export const getEarningsForMonth = (
     commission,
     getSickHoursForMonth(month, workDayDetails, true)
   );
-  const net = getNetIncome(gross, taxConsideredHalfTax);
+
+  const net = taxTable
+    ? gross - getTableTax(taxTable, gross)
+    : getNetIncome(gross, taxConsideredHalfTax);
 
   return {
     monthName: month?.month,
@@ -140,20 +145,24 @@ export const getEarningsForMonth = (
     gross,
     net,
     grossFormatted: formatCurrency(gross),
-    netFormatted: formatCurrency(getNetIncome(gross, taxConsideredHalfTax)),
+    netFormatted: formatCurrency(net),
     halfTax: month.halfTax
   };
 };
 
+// TODO: Includes some hacks to get gross and net without using vacation days
+// should traverse the calendar and send EARNING_CONSTANTS.WORK_VACATION_DAYS
+// into work day details as non commissioned hours
 export const getEarningsForYear = (
   year: CalendarYear,
   hourlyRate: number,
   commission: number,
   tax: number,
   workHours: number,
-  workDayDetails: UserWorkDayDetail[]
+  workDayDetails: UserWorkDayDetail[],
+  taxTable?: string
 ): CalendarYearEarnings => {
-  const { workDays } = (year?.months ?? []).reduce(
+  const { totalWorkDays, totalWorkHours, totalNet, totalGross } = (year?.months ?? []).reduce(
     (result, month) => {
       const earningsForMonth = getEarningsForMonth(
         month,
@@ -161,30 +170,46 @@ export const getEarningsForYear = (
         commission,
         tax,
         workHours,
-        workDayDetails
+        [],
+        taxTable
       );
 
       return {
-        workDays: (result?.workDays ?? 0) + earningsForMonth.workDays.length,
-        workHours: (result?.workHours ?? 0) + earningsForMonth.workHours
+        totalWorkDays: (result?.totalWorkDays ?? 0) + earningsForMonth.workDays.length,
+        totalWorkHours: (result?.totalWorkHours ?? 0) + earningsForMonth.workHours,
+        totalGross: (result?.totalGross ?? 0) + earningsForMonth.gross,
+        totalNet: (result?.totalNet ?? 0) + earningsForMonth.net
       };
     },
     {
-      workDays: 0,
-      workHours: 0
+      totalWorkDays: 0,
+      totalWorkHours: 0,
+      totalGross: 0,
+      totalNet: 0
     }
   );
 
   const workDaysWithoutVacation =
-    workDays > EARNING_CONSTANTS.WORK_VACATION_DAYS
-      ? workDays - EARNING_CONSTANTS.WORK_VACATION_DAYS
-      : workDays;
+    totalWorkDays > EARNING_CONSTANTS.WORK_VACATION_DAYS
+      ? totalWorkDays - EARNING_CONSTANTS.WORK_VACATION_DAYS
+      : totalWorkDays;
   const workHoursWithoutVacation = getWorkHours(workHours, workDaysWithoutVacation, 0, 0);
 
-  const gross = getGrossIncome(workHoursWithoutVacation, hourlyRate, commission);
-  const grossWithHolidayPay = gross + getHolidayPay(gross);
+  const grossByDay = totalGross / totalWorkDays;
+  const grossSubtractedByVacation = grossByDay * workDaysWithoutVacation;
 
-  const net = getNetIncome(grossWithHolidayPay, tax);
+  const holidayPay = getHolidayPay(grossSubtractedByVacation);
+
+  const grossWithHolidayPay = grossSubtractedByVacation + holidayPay;
+
+  const netByDay = totalNet / totalWorkDays;
+  const netSubtractedByVacation = netByDay * workDaysWithoutVacation;
+
+  // average tax percent between gross and net
+  const averageTaxPercent = (totalGross - totalNet) / totalGross;
+
+  // Lazily calculate net with holiday pay by using average tax percent
+  const net = netSubtractedByVacation + holidayPay * averageTaxPercent;
 
   return {
     year: year?.year,
