@@ -27,10 +27,25 @@ const infoButtonVariants = cva(
 );
 
 export type InfoButtonProps = React.ComponentPropsWithoutRef<typeof Button> &
-  VariantProps<typeof infoButtonVariants>;
+  VariantProps<typeof infoButtonVariants> & {
+    popoverProps?: React.ComponentPropsWithoutRef<typeof PopoverContent>;
+  };
 
 const InfoButton = React.forwardRef<React.ElementRef<"button">, InfoButtonProps>(
-  ({ children, className, variant, size, ...other }, ref) => {
+  (
+    {
+      children,
+      className,
+      variant,
+      size,
+      popoverProps = {
+        variant: "subtle",
+        side: "right"
+      },
+      ...other
+    },
+    ref
+  ) => {
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -42,7 +57,7 @@ const InfoButton = React.forwardRef<React.ElementRef<"button">, InfoButtonProps>
             <Icons.Info />
           </button>
         </PopoverTrigger>
-        <PopoverContent side="right">
+        <PopoverContent {...popoverProps}>
           {children}
           <PopoverArrow />
         </PopoverContent>

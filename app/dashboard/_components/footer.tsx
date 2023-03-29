@@ -10,7 +10,7 @@ import { FeedbackForm } from "./feedback-form";
 function Footer() {
   return (
     <footer className="border-t border-t-neutral-700">
-      <div className="mx-auto max-w-5xl px-4 pt-4 pb-24 md:px-4 md:pt-8">
+      <div className="mx-auto max-w-5xl px-4 pb-24 pt-4 md:px-4 md:pt-8">
         <Flex
           className="flex-col justify-center space-y-6 md:flex-row md:justify-between md:space-y-0"
           justify="between"
@@ -73,7 +73,7 @@ function Footer() {
             <ThemeSelect className="ml-auto mt-8" />
           </Box>
         </Flex>
-        <Flex className="px-0 pt-10 pb-5" justify="center">
+        <Flex className="px-0 pb-5 pt-10" justify="center">
           <Icons.Logo className="max-w-[140px]" />
         </Flex>
       </div>

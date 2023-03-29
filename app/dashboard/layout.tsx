@@ -42,7 +42,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         </div>
       </nav>
       <main className="dark:bg-neutral-900">
-        <div className="mx-auto max-w-5xl py-12 px-4 lg:py-24">{children}</div>
+        <div className="mx-auto max-w-5xl px-4 py-12 lg:py-24">{children}</div>
       </main>
       <Footer />
     </>

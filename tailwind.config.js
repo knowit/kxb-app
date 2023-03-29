@@ -13,13 +13,8 @@ module.exports = {
       }
     },
     extend: {
-      colors: {
-        neutral: {
-          950: "#0D0D0D"
-        }
-      },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans]
+        sans: ["Arial", "sans-serif", ...fontFamily.sans]
       },
       keyframes: {
         "accordion-down": {
@@ -37,9 +32,5 @@ module.exports = {
       }
     }
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/line-clamp"),
-    require("@tailwindcss/typography")
-  ]
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")]
 };

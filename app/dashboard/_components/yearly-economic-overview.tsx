@@ -15,10 +15,6 @@ async function YearlyEconomicOverview() {
         key="year-salary-statistics"
         yearSalaryStatistics={userEarnings?.yearSalaryStatistics}
       />
-      <SalaryYearOverview
-        key="next-year-salary-statistics"
-        yearSalaryStatistics={userEarnings?.nextYearSalaryStatistics}
-      />
     </div>
   );
 }
@@ -26,7 +22,6 @@ async function YearlyEconomicOverview() {
 function YearlyEconomicOverviewSkeleton() {
   return (
     <div className="flex flex-col gap-y-8">
-      <SalaryYearOverviewSkeleton />
       <SalaryYearOverviewSkeleton />
     </div>
   );

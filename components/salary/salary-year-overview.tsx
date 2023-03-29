@@ -20,10 +20,16 @@ const SalaryYearOverview = ({
       <div className="grid grid-cols-2 gap-3">
         <SalaryDetailsCard heading="Work days">{yearSalaryStatistics.workDays}</SalaryDetailsCard>
         <SalaryDetailsCard heading="Work hours">{yearSalaryStatistics.workHours}</SalaryDetailsCard>
-        <SalaryDetailsCard heading="Gross salary - 100% billable hours">
+        <SalaryDetailsCard
+          heading="Gross salary"
+          info="This calculation is based on the assumption that you can bill all of your hours during the given period and that you are entitled to 12% of your regular pay as holiday payment."
+        >
           {yearSalaryStatistics.grossFormatted}
         </SalaryDetailsCard>
-        <SalaryDetailsCard heading="Net salary - 100% billable hours">
+        <SalaryDetailsCard
+          heading="Net salary"
+          info="This calculation is based on the assumption that you can bill all of your hours during the given period and that you are entitled to 12% of your regular pay as holiday payment."
+        >
           {yearSalaryStatistics.netFormatted}
         </SalaryDetailsCard>
       </div>

@@ -13,7 +13,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
         ]}
       />
       <Card>
-        <Card.Content className="py-6 px-8">{children}</Card.Content>
+        <Card.Content className="px-8 py-6">{children}</Card.Content>
       </Card>
     </div>
   );
