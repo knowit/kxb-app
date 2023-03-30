@@ -41,7 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-white font-sans text-neutral-900 antialiased dark:bg-neutral-950  dark:text-neutral-50 "
+          "min-h-screen bg-white font-sans text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-50"
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

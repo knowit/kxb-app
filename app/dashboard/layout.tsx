@@ -20,25 +20,27 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   return (
     <>
-      <nav className="flex items-center justify-between border-b border-b-neutral-700 px-8 py-4">
-        <Link href="/dashboard">
-          <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
-        </Link>
-        <div className="flex items-center gap-8">
-          <div className="hidden sm:block">
-            <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
+      <nav className="border-b border-b-neutral-700">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+          <Link href="/dashboard">
+            <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
+          </Link>
+          <div className="flex items-center gap-8">
+            <div className="hidden sm:block">
+              <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
+                {/* @ts-expect-error Async Server Component */}
+                <FeedbackForm asPopover />
+              </Suspense>
+            </div>
+            <Suspense fallback={<NextPaycheckSkeleton />}>
               {/* @ts-expect-error Async Server Component */}
-              <FeedbackForm asPopover />
+              <NextPaycheck />
+            </Suspense>
+            <Suspense fallback={<AvatarSkeleton />}>
+              {/* @ts-expect-error Async Server Component */}
+              <Avatar />
             </Suspense>
           </div>
-          <Suspense fallback={<NextPaycheckSkeleton />}>
-            {/* @ts-expect-error Async Server Component */}
-            <NextPaycheck />
-          </Suspense>
-          <Suspense fallback={<AvatarSkeleton />}>
-            {/* @ts-expect-error Async Server Component */}
-            <Avatar />
-          </Suspense>
         </div>
       </nav>
       <main className="dark:bg-neutral-900">
