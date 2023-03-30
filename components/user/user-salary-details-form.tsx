@@ -1,12 +1,5 @@
 "use client";
 
-import { toast } from "@/hooks/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { user } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Icons } from "@/components/icons";
 import { Button, ButtonSkeleton } from "@/components/ui/button";
 import { InfoButton } from "@/components/ui/info-button";
@@ -14,10 +7,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Show } from "@/components/ui/show";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import { EARNING_CONSTANTS } from "@/constants/earning-constants";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
-import { useState, useTransition, type HTMLAttributes } from "react";
+import { User } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { user } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
   user: {
@@ -26,8 +28,10 @@ interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
     hourlyRate: number;
     tax: number;
     workHours: number;
+    taxTable: User["taxTable"];
   };
   onFormSubmitSuccess?: () => void;
+  variant?: "default" | "dialog";
 }
 
 type FormData = z.infer<typeof userSalaryDetailSchema>;
@@ -36,25 +40,34 @@ function UserSalaryDetailsForm({
   user,
   className,
   onFormSubmitSuccess,
+  variant = "default",
   ...other
 }: UserSalaryDetailsFormProps) {
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
+  const isLoading = useMemo(() => isPending || isSaving, [isPending, isSaving]);
+
+  const [isTaxTableMode, setIsTaxTableMode] = useState<boolean>(
+    user?.taxTable !== undefined && user?.taxTable !== null && user?.taxTable !== ""
+  );
 
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = useForm<FormData>({
     resolver: zodResolver(userSalaryDetailSchema),
     defaultValues: {
       commission: user.commission,
       hourlyRate: user.hourlyRate,
       tax: user.tax,
-      workHours: user.workHours
+      workHours: user.workHours,
+      taxTable: user.taxTable ?? undefined
     }
   });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
@@ -68,7 +81,8 @@ function UserSalaryDetailsForm({
         commission: data.commission,
         hourlyRate: data.hourlyRate,
         tax: data.tax,
-        workHours: data.workHours
+        workHours: data.workHours,
+        taxTable: data.taxTable
       })
     });
 
@@ -103,50 +117,103 @@ function UserSalaryDetailsForm({
       onSubmit={handleSubmit(onSubmit)}
       {...other}
     >
-      <div className="w-full max-w-[400px]">
-        <Label htmlFor="hourlyRate">Hourly rate</Label>
-        <Input
-          id="hourlyRate"
-          type="number"
-          className="w-full"
-          size={32}
-          {...register("hourlyRate", {
-            valueAsNumber: true
-          })}
-        />
-        {errors?.hourlyRate && (
-          <p className="px-1 text-xs text-red-600">{errors.hourlyRate.message}</p>
-        )}
+      <div
+        className={cn({
+          "flex gap-x-2 sm:flex-col": variant === "dialog"
+        })}
+      >
+        <div className="w-full max-w-[400px]">
+          <Label htmlFor="hourlyRate">Hourly rate</Label>
+          <Input
+            id="hourlyRate"
+            type="number"
+            className="w-full"
+            disabled={isLoading}
+            {...register("hourlyRate", {
+              valueAsNumber: true
+            })}
+          />
+          {errors?.hourlyRate && (
+            <p className="px-1 text-xs text-red-600">{errors.hourlyRate.message}</p>
+          )}
+        </div>
+        <div className="w-full max-w-[400px]">
+          <Label htmlFor="commission">Commission</Label>
+          <Input
+            id="commission"
+            type="number"
+            step="0.01"
+            className="w-full"
+            disabled={isLoading}
+            {...register("commission", {
+              valueAsNumber: true
+            })}
+          />
+          {errors?.commission && (
+            <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
+          )}
+        </div>
       </div>
       <div className="w-full max-w-[400px]">
-        <Label htmlFor="commission">Commission</Label>
-        <Input
-          id="commission"
-          type="number"
-          step="0.01"
-          className="w-full"
-          size={32}
-          {...register("commission", {
-            valueAsNumber: true
-          })}
-        />
-        {errors?.commission && (
-          <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
-        )}
-      </div>
-      <div className="w-full max-w-[400px]">
-        <Label htmlFor="tax">Tax</Label>
-        <Input
-          id="tax"
-          type="number"
-          step="0.01"
-          className="w-full"
-          size={32}
-          {...register("tax", {
-            valueAsNumber: true
-          })}
-        />
+        <Label htmlFor="tax">{isTaxTableMode ? "Tax table" : "Tax"}</Label>
+        <div className="flex items-center gap-x-4">
+          <Show when={isTaxTableMode}>
+            <Input
+              className="hidden"
+              id="tax-table"
+              hidden
+              disabled={isLoading}
+              {...register("taxTable")}
+            />
+            <Select
+              onValueChange={value => setValue("taxTable", value)}
+              defaultValue={isTaxTableMode && user?.taxTable ? user.taxTable : undefined}
+              disabled={isLoading}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select tax table" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(EARNING_CONSTANTS.TAX_TABLES).map(table => (
+                  <SelectItem key={table} value={table}>
+                    {table}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Show>
+          <Input
+            className={cn({
+              hidden: isTaxTableMode
+            })}
+            id="tax"
+            type="number"
+            step="0.01"
+            disabled={isLoading}
+            {...register("tax", {
+              valueAsNumber: true
+            })}
+          />
+          <div className="flex grow items-center gap-x-3">
+            <Label className="min-w-[82px]" htmlFor="tax-table-mode">
+              Use tax table
+            </Label>
+            <Switch
+              id="tax-table-mode"
+              defaultChecked={isTaxTableMode}
+              disabled={isLoading}
+              onCheckedChange={checked => {
+                if (!checked) {
+                  setValue("taxTable", undefined);
+                }
+
+                setIsTaxTableMode(checked);
+              }}
+            />
+          </div>
+        </div>
         {errors?.tax && <p className="px-1 text-xs text-red-600">{errors.tax.message}</p>}
+        {errors?.taxTable && <p className="px-1 text-xs text-red-600">{errors.taxTable.message}</p>}
       </div>
       <div className="w-full max-w-[400px]">
         <div className="flex items-center justify-between">
@@ -162,7 +229,7 @@ function UserSalaryDetailsForm({
           type="number"
           step="0.5"
           className="w-full"
-          size={32}
+          disabled={isLoading}
           {...register("workHours", {
             valueAsNumber: true
           })}
@@ -171,12 +238,12 @@ function UserSalaryDetailsForm({
           <p className="px-1 text-xs text-red-600">{errors.workHours.message}</p>
         )}
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
+      <Button className="mt-4" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
-        <Show when={!isSaving && !isPending}>
+        <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
         </Show>
-        <Show when={isSaving || isPending}>
+        <Show when={isLoading}>
           <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
       </Button>

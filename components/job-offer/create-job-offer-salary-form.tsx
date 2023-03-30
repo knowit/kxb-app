@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { createJobOfferSchema } from "@/lib/validations/job-offer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type HTMLAttributes } from "react";
+import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -23,7 +23,10 @@ type FormData = z.infer<typeof createJobOfferSchema>;
 
 function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferFormProps) {
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
+  const isLoading = useMemo(() => isPending || isSaving, [isPending, isSaving]);
 
   const {
     handleSubmit,
@@ -36,7 +39,6 @@ function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferF
       guaranteeSalary: 40000
     }
   });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
@@ -89,12 +91,12 @@ function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferF
     >
       <div className="w-full max-w-[400px]">
         <Label htmlFor="name">Name</Label>
-        <Input id="name" className="w-full" size={32} {...register("name")} />
+        <Input id="name" className="w-full" disabled={isLoading} {...register("name")} />
         {errors?.name && <p className="px-1 text-xs text-red-600">{errors.name.message}</p>}
       </div>
       <div className="w-full max-w-[400px]">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" className="w-full" size={32} {...register("email")} />
+        <Input id="email" className="w-full" disabled={isLoading} {...register("email")} />
         {errors?.email && <p className="mt-1 px-1 text-xs text-red-600">{errors.email.message}</p>}
       </div>
       <div className="w-full max-w-[400px]">
@@ -104,6 +106,7 @@ function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferF
           type="number"
           step="10000"
           className="w-full"
+          disabled={isLoading}
           {...register("guaranteeSalary", {
             valueAsNumber: true
           })}
@@ -119,6 +122,7 @@ function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferF
           type="number"
           step="0.01"
           className="w-full"
+          disabled={isLoading}
           {...register("commission", {
             valueAsNumber: true
           })}
@@ -127,12 +131,12 @@ function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferF
           <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
         )}
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="action">
+      <Button className="mt-4" type="submit" disabled={isLoading} variant="action">
         <span>Create</span>
-        <Show when={!isSaving && !isPending}>
+        <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
         </Show>
-        <Show when={isSaving || isPending}>
+        <Show when={isLoading}>
           <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
       </Button>

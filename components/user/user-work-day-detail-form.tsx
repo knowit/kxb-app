@@ -15,7 +15,7 @@ import { CalendarEntries, UserWorkDayDetail } from "@/types";
 import { getFormattedLongDate } from "@/utils/date-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition, type HTMLAttributes } from "react";
+import { useEffect, useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -37,7 +37,10 @@ function UserWorkDayDetailForm({
   ...other
 }: UserWorkDayDetailFormProps) {
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
+  const isLoading = useMemo(() => isPending || isSaving, [isPending, isSaving]);
 
   const {
     handleSubmit,
@@ -55,7 +58,6 @@ function UserWorkDayDetailForm({
       sickDay: userWorkDayDetail?.sickDay ?? false
     }
   });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const nonCommissionedHours = watch("nonCommissionedHours");
   const extraHours = watch("extraHours");
@@ -137,6 +139,7 @@ function UserWorkDayDetailForm({
         id="id"
         type="hidden"
         className="w-full"
+        disabled={isLoading}
         {...register("id", {
           setValueAs: value => {
             const number = Number(value);
@@ -144,7 +147,13 @@ function UserWorkDayDetailForm({
           }
         })}
       />
-      <Input id="date" type="hidden" className="w-full" {...register("date")} />
+      <Input
+        id="date"
+        type="hidden"
+        className="w-full"
+        disabled={isLoading}
+        {...register("date")}
+      />
       <div
         className={cn("", {
           hidden: !(calendarDay.isWorkDay ?? false) || (calendarDay.isHoliday ?? false)
@@ -157,7 +166,7 @@ function UserWorkDayDetailForm({
             type="number"
             step="0.5"
             className="w-full"
-            disabled={extraHours > 0}
+            disabled={extraHours > 0 || isLoading}
             {...register("nonCommissionedHours", {
               valueAsNumber: true
             })}
@@ -167,7 +176,7 @@ function UserWorkDayDetailForm({
             type="button"
             variant={nonCommissionedHours > 0 ? "destructive" : "outline"}
             onClick={() => setValue("nonCommissionedHours", nonCommissionedHours > 0 ? 0 : 7.5)}
-            disabled={extraHours > 0}
+            disabled={extraHours > 0 || isLoading}
           >
             <Show when={nonCommissionedHours <= 0}>
               <Icons.PlusCircled className="h-4 w-4" />
@@ -192,6 +201,7 @@ function UserWorkDayDetailForm({
           id="sick-days"
           defaultChecked={userWorkDayDetail?.sickDay ?? false}
           onCheckedChange={checked => setValue("sickDay", Boolean(checked))}
+          disabled={isLoading}
           {...register("sickDay", {})}
         />
         <Label htmlFor="sick-days">Send as sick hours?</Label>
@@ -217,7 +227,7 @@ function UserWorkDayDetailForm({
           type="number"
           step="0.5"
           className="w-full"
-          disabled={nonCommissionedHours > 0}
+          disabled={nonCommissionedHours > 0 || isLoading}
           {...register("extraHours", {
             valueAsNumber: true
           })}
@@ -226,12 +236,12 @@ function UserWorkDayDetailForm({
           <p className="px-1 text-xs text-red-600">{errors.extraHours.message}</p>
         )}
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
+      <Button className="mt-4" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
-        <Show when={!isSaving && !isPending}>
+        <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
         </Show>
-        <Show when={isSaving || isPending}>
+        <Show when={isLoading}>
           <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
       </Button>

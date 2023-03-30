@@ -10,9 +10,10 @@ import {
 } from "@/types";
 import { formatCurrency } from "@/utils/currency-format";
 import { getTableTax } from "@/utils/tax-utils";
+import Big from "big.js";
 
-const getHolidayPay = (gross: number): number => {
-  return gross * EARNING_CONSTANTS.WORK_HOLIDAY_PAY;
+const getHolidayPay = (gross: Big): Big => {
+  return gross.times(EARNING_CONSTANTS.WORK_HOLIDAY_PAY);
 };
 
 export const getWorkHours = (
@@ -33,21 +34,21 @@ export const getGrossIncome = (
   hourlyRate: number,
   commission: number,
   sickHours: number = 0
-): number => {
-  const grossCommissionedWorkHours: number = +(
-    Math.round((workHours * hourlyRate * commission + Number.EPSILON) * 100) / 100
-  ).toFixed(2);
+): Big => {
+  const grossCommissionedWorkHours = new Big(workHours)
+    .times(hourlyRate)
+    .times(commission)
+    .round(2, 0);
 
-  const grossSickHours: number = +(
-    Math.round((sickHours * EARNING_CONSTANTS.WORK_SICK_PAY_PER_HOUR + Number.EPSILON) * 100) / 100
-  ).toFixed(2);
+  const grossSickHours = new Big(sickHours)
+    .times(EARNING_CONSTANTS.WORK_SICK_PAY_PER_HOUR)
+    .round(2, 0);
 
-  return grossCommissionedWorkHours + grossSickHours;
+  return grossCommissionedWorkHours.plus(grossSickHours);
 };
 
-// https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-export const getNetIncome = (grossIncome: number, tax: number): number =>
-  +(Math.round((grossIncome - grossIncome * tax + Number.EPSILON) * 100) / 100).toFixed(2);
+export const getNetIncome = (grossIncome: Big, tax: number): Big =>
+  grossIncome.minus(new Big(grossIncome).times(tax));
 
 const getNonCommissionedHoursForMonth = (
   month: CalendarMonth,
@@ -72,7 +73,7 @@ const getNonCommissionedHoursForMonth = (
 const getSickHoursForMonth = (
   month: CalendarMonth,
   workDayDetails: UserWorkDayDetail[],
-  useMaxSickHours: boolean = false
+  useMaxSickHours: boolean = true
 ): number => {
   return (
     month.days.reduce<number>((sum: number, day: CalendarDay) => {
@@ -134,7 +135,9 @@ export const getEarningsForMonth = (
   );
 
   const net = taxTable
-    ? gross - getTableTax(taxTable, gross)
+    ? gross.minus(
+        month.halfTax ? getTableTax(taxTable, gross).div(2) : getTableTax(taxTable, gross)
+      )
     : getNetIncome(gross, taxConsideredHalfTax);
 
   return {
@@ -177,15 +180,15 @@ export const getEarningsForYear = (
       return {
         totalWorkDays: (result?.totalWorkDays ?? 0) + earningsForMonth.workDays.length,
         totalWorkHours: (result?.totalWorkHours ?? 0) + earningsForMonth.workHours,
-        totalGross: (result?.totalGross ?? 0) + earningsForMonth.gross,
-        totalNet: (result?.totalNet ?? 0) + earningsForMonth.net
+        totalGross: result.totalGross.plus(earningsForMonth.gross),
+        totalNet: result.totalNet.plus(earningsForMonth.net)
       };
     },
     {
       totalWorkDays: 0,
       totalWorkHours: 0,
-      totalGross: 0,
-      totalNet: 0
+      totalGross: new Big(0),
+      totalNet: new Big(0)
     }
   );
 
@@ -195,29 +198,29 @@ export const getEarningsForYear = (
       : totalWorkDays;
   const workHoursWithoutVacation = getWorkHours(workHours, workDaysWithoutVacation, 0, 0);
 
-  const grossByDay = totalGross / totalWorkDays;
-  const grossSubtractedByVacation = grossByDay * workDaysWithoutVacation;
+  const grossByDay = totalGross.div(totalWorkDays);
+  const grossSubtractedByVacation = grossByDay.times(workDaysWithoutVacation);
 
   const holidayPay = getHolidayPay(grossSubtractedByVacation);
 
-  const grossWithHolidayPay = grossSubtractedByVacation + holidayPay;
+  const gross = grossSubtractedByVacation.plus(holidayPay);
 
-  const netByDay = totalNet / totalWorkDays;
-  const netSubtractedByVacation = netByDay * workDaysWithoutVacation;
+  const netByDay = totalNet.div(totalWorkDays);
+  const netSubtractedByVacation = netByDay.times(workDaysWithoutVacation);
 
   // average tax percent between gross and net
-  const averageTaxPercent = (totalGross - totalNet) / totalGross;
+  const averageTaxPercent = totalGross.minus(totalNet).div(totalGross);
 
   // Lazily calculate net with holiday pay by using average tax percent
-  const net = netSubtractedByVacation + holidayPay * averageTaxPercent;
+  const net = netSubtractedByVacation.plus(holidayPay.times(averageTaxPercent));
 
   return {
     year: year?.year,
     workDays: workDaysWithoutVacation,
     workHours: workHoursWithoutVacation,
-    gross: grossWithHolidayPay,
+    gross,
     net,
-    grossFormatted: formatCurrency(grossWithHolidayPay),
+    grossFormatted: formatCurrency(gross),
     netFormatted: formatCurrency(net)
   };
 };

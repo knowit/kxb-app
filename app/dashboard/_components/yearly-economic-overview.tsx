@@ -7,13 +7,13 @@ import { getUserEarnings } from "@/lib/user";
 
 async function YearlyEconomicOverview() {
   const token = await getEdgeFriendlyToken();
-  const userEarnings = await getUserEarnings(token.id);
+  const { earnings } = await getUserEarnings(token.id);
 
   return (
     <div className="flex flex-col gap-y-8">
       <SalaryYearOverview
         key="year-salary-statistics"
-        yearSalaryStatistics={userEarnings?.yearSalaryStatistics}
+        yearSalaryStatistics={earnings?.yearSalaryStatistics}
       />
     </div>
   );

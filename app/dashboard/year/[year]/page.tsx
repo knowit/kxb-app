@@ -3,6 +3,7 @@ import { getRequestDateNow } from "@/lib/date";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserEarnings } from "@/lib/user";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 interface SelectedYearPageProps {
   params: { year: string };
@@ -19,11 +20,15 @@ export function generateMetadata({ params }: SelectedYearPageProps): Metadata {
 export default async function SelectedYearPage({ params }: SelectedYearPageProps) {
   const date = new Date(params.year ?? getRequestDateNow().getFullYear());
   const token = await getEdgeFriendlyToken();
-  const userEarnings = await getUserEarnings(token.id, date);
+  const { user, earnings } = await getUserEarnings(token.id, date);
+
+  if (!user) {
+    return redirect("/logout");
+  }
 
   return (
     <>
-      <CalendarYear date={date} workDayDetails={userEarnings?.workDayDetails} />
+      <CalendarYear date={date} workDayDetails={earnings?.workDayDetails} />
     </>
   );
 }

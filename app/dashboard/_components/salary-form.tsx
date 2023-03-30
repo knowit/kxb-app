@@ -19,7 +19,8 @@ async function SalaryForm() {
         commission: user.commission,
         hourlyRate: user.hourlyRate,
         tax: user.tax,
-        workHours: user.workHours
+        workHours: user.workHours,
+        taxTable: user.taxTable
       }}
     />
   );

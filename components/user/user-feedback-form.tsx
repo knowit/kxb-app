@@ -15,7 +15,7 @@ import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type HTMLAttributes } from "react";
+import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -58,7 +58,10 @@ const FeedbackEmojiSelector = ({
 
 function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) {
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
+  const isLoading = useMemo(() => isPending || isSaving, [isPending, isSaving]);
 
   const {
     handleSubmit,
@@ -73,7 +76,6 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
       reaction: 2
     }
   });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
@@ -128,6 +130,7 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
           className="w-full resize-none scroll-py-2"
           autoComplete="off"
           autoCorrect="off"
+          disabled={isLoading}
           {...register("feedback")}
         />
         {errors?.feedback && (
@@ -136,12 +139,12 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
       </div>
       <div className="mt-2 flex items-center justify-between">
         <FeedbackEmojiSelector onSelected={emojiValue => setValue("reaction", emojiValue)} />
-        <Button type="submit" disabled={isSaving || isPending} variant="subtle">
+        <Button type="submit" disabled={isLoading} variant="subtle">
           <span>Send</span>
-          <Show when={!isSaving && !isPending}>
+          <Show when={!isLoading}>
             <Icons.PaperPlane className="ml-2 h-4 w-4" />
           </Show>
-          <Show when={isSaving || isPending}>
+          <Show when={isLoading}>
             <Icons.Loader className="ml-2 h-4 w-4" />
           </Show>
         </Button>

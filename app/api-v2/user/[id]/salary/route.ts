@@ -28,11 +28,12 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 
     const res = await request.json();
 
-    const { commission, hourlyRate, tax, workHours } = await userSalaryDetailSchema.parseAsync(res);
+    const { commission, hourlyRate, tax, workHours, taxTable } =
+      await userSalaryDetailSchema.parseAsync(res);
 
     await planetscaleEdge.execute(
-      "UPDATE user SET commission = ?, hourlyRate = ?, tax = ?, workHours = ? WHERE id = ?",
-      [commission, hourlyRate, tax, workHours, id]
+      "UPDATE user SET commission = ?, hourlyRate = ?, tax = ?, workHours = ?, taxTable = ? WHERE id = ?",
+      [commission, hourlyRate, tax, workHours, taxTable, id]
     );
 
     return new Response("Patched", {

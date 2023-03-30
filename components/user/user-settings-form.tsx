@@ -13,7 +13,7 @@ import { userSettingsSchema } from "@/lib/validations/user";
 import { UserSettings } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type HTMLAttributes } from "react";
+import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -25,7 +25,10 @@ type FormData = z.infer<typeof userSettingsSchema>;
 
 function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFormProps) {
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
+  const isLoading = useMemo(() => isPending || isSaving, [isPending, isSaving]);
 
   const {
     handleSubmit,
@@ -40,7 +43,6 @@ function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFor
         userSettings.closeUserWorkDayDetailsDialogOnSaveSuccess
     }
   });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
@@ -93,6 +95,7 @@ function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFor
           onCheckedChange={checked =>
             setValue("closeUserSalaryDialogOnSaveSuccess", Boolean(checked))
           }
+          disabled={isLoading}
           {...register("closeUserSalaryDialogOnSaveSuccess")}
         />
         <Label className="grow" htmlFor="closeUserSalaryDialogOnSaveSuccess">
@@ -114,6 +117,7 @@ function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFor
           onCheckedChange={checked =>
             setValue("closeUserWorkDayDetailsDialogOnSaveSuccess", Boolean(checked))
           }
+          disabled={isLoading}
           {...register("closeUserWorkDayDetailsDialogOnSaveSuccess")}
         />
         <Label className="grow" htmlFor="closeUserWorkDayDetailsDialogOnSaveSuccess">
@@ -128,12 +132,12 @@ function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFor
           </p>
         )}
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
+      <Button className="mt-4" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
-        <Show when={!isSaving && !isPending}>
+        <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
         </Show>
-        <Show when={isSaving || isPending}>
+        <Show when={isLoading}>
           <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
       </Button>

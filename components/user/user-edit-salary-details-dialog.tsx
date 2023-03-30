@@ -49,13 +49,15 @@ function UserEditSalaryDetailsDialog({
             hourlyRate: user.hourlyRate,
             tax: user.tax,
             workHours: user.workHours,
-            id: +user.id
+            id: +user.id,
+            taxTable: user.taxTable
           }}
           onFormSubmitSuccess={() => {
             if (closeDialogOnFormSubmitSuccess) {
               setIsOpen(false);
             }
           }}
+          variant="dialog"
         />
       </DialogContent>
     </Dialog>

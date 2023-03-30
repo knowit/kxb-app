@@ -78,6 +78,7 @@ const SalaryCalculator = () => {
                   type="number"
                   name="hourlyRate"
                   id="hourlyRate"
+                  step="1"
                   value={salary.hourlyRate}
                   onChange={e => setSalary({ ...salary, hourlyRate: +e.target.value })}
                 />
@@ -89,6 +90,7 @@ const SalaryCalculator = () => {
                   type="number"
                   name="workHours"
                   id="workHours"
+                  step="0.5"
                   value={salary.workHours}
                   onChange={e => setSalary({ ...salary, workHours: +e.target.value })}
                 />
@@ -100,6 +102,7 @@ const SalaryCalculator = () => {
                   type="number"
                   name="commission"
                   id="commission"
+                  step="0.01"
                   value={salary.commission}
                   onChange={e => setSalary({ ...salary, commission: +e.target.value })}
                 />
@@ -111,6 +114,7 @@ const SalaryCalculator = () => {
                   type="number"
                   name="tax"
                   id="tax"
+                  step="0.01"
                   value={salary.tax}
                   onChange={e => setSalary({ ...salary, tax: +e.target.value })}
                 />

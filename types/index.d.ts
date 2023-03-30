@@ -1,5 +1,7 @@
 /// <reference types="node" />
 
+import Big from "big.js";
+
 export type WithChildren<T = {}> = T & { children?: React.ReactNode };
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T;
@@ -61,8 +63,8 @@ export type CalendarMonthEarnings = {
   payDay: string;
   workDays: WorkDay[];
   workHours: number;
-  gross: number;
-  net: number;
+  gross: Big;
+  net: Big;
   grossFormatted: string;
   netFormatted: string;
   halfTax: boolean;
@@ -72,8 +74,8 @@ export type CalendarYearEarnings = {
   year: number;
   workDays: number;
   workHours: number;
-  gross: number;
-  net: number;
+  gross: Big;
+  net: Big;
   grossFormatted: string;
   netFormatted: string;
 };

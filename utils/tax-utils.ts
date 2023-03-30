@@ -8,7 +8,7 @@
 // getTableTax return should equal the value returned from the API above
 
 import { TAX_CONSTANTS } from "@/constants/tax-constants";
-import { Big } from "big.js";
+import { Big, type BigSource } from "big.js";
 
 enum Tabelltype {
   VANLIG,
@@ -655,7 +655,7 @@ function beregnOverskytendeTrekk(tabellnummer: TaxTable, avrundetTrekkgrunnlag: 
     .round(0);
 }
 
-function getTableTax(taxTableName: string, gross: number) {
+function getTableTax(taxTableName: string, gross: BigSource) {
   const bigGross = new Big(gross);
 
   let avrundetTrekkgrunnlag = finnAvrundetTrekkgrunnlag(bigGross);
@@ -678,7 +678,7 @@ function getTableTax(taxTableName: string, gross: number) {
 
   if (trekk.gt(bigGross) && overskytendeTrekk.gt(0)) trekk = bigGross;
 
-  return trekk.toNumber();
+  return trekk;
 }
 
 export { getTableTax };

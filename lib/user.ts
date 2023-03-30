@@ -5,7 +5,9 @@ import { query } from "@/lib/query";
 import { User, UserFeedback, UserSettings, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
+import { redirect } from "next/navigation";
 import { cache } from "react";
+import { queryBuilder } from "./planetscale";
 
 const createUser = (
   row: Row,
@@ -29,13 +31,16 @@ const createUser = (
   };
 };
 
-const getUser = cache(async (id: string): Promise<User | undefined> => {
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE id = ?", [id]);
+const getUser = cache(async (id: string): Promise<User> => {
+  const { rows } = await planetscaleEdge.execute(
+    "SELECT id, email, name, activeDirectoryId, hourlyRate, commission, tax, taxTable, workHours, created, updated, isAdmin, isSpecialist FROM user WHERE id = ?",
+    [id]
+  );
 
   const row = rows?.[0];
 
   if (!row) {
-    return undefined;
+    return redirect("/logout");
   }
 
   return createUser(row);
@@ -54,18 +59,22 @@ const getUserWorkDayDetails = cache(async (id: string) => {
     nonCommissionedHours: Number(userWorkDayDetail.nonCommissionedHours),
     extraHours: Number(userWorkDayDetail.extraHours),
     sickDay: Boolean(userWorkDayDetail.sickDay)
-  }));
+  })) as UserWorkDayDetail[];
 });
 
-const getUserWithWorkDayDetails = cache(async (id: string) => {
+const getUserWithWorkDayDetails = cache(async (id: string): Promise<User> => {
   const [userResult, userWorkDayDetailResult] = await query([
     getUser(id),
     getUserWorkDayDetails(id)
   ]);
 
+  if (!userResult.data) {
+    return redirect("/logout");
+  }
+
   return {
     ...userResult.data,
-    workDayDetails: userWorkDayDetailResult.data
+    workDayDetails: userWorkDayDetailResult.data ?? []
   };
 });
 
@@ -73,7 +82,10 @@ const getUserEarnings = cache(async (id: string, activeDate?: Date) => {
   const user = await getUserWithWorkDayDetails(id);
 
   if (!user) {
-    return undefined;
+    return {
+      user: undefined,
+      earnings: undefined
+    };
   }
 
   const now = new Date();
@@ -95,28 +107,32 @@ const getUserEarnings = cache(async (id: string, activeDate?: Date) => {
 
   const nextMonth = getCalendarMonth(new Date(currentYear, currentMonth + 1));
 
-  return getUserEarningsDetails(
-    {
-      commission: user.commission ?? 0,
-      hourlyRate: user.hourlyRate ?? 0,
-      tax: user.tax ?? 0,
-      workHours: user.workHours ?? 0
-    },
-    year,
-    nextYear,
-    activeMonth,
-    month,
-    lastMonth,
-    nextMonth,
-    (user.workDayDetails ?? []).map(x => ({
-      extraHours: x.extraHours ?? 0,
-      nonCommissionedHours: x.nonCommissionedHours ?? 0,
-      date: x.date ?? new Date().toISOString(),
-      id: x.id ?? 0,
-      sickDay: x.sickDay ?? false,
-      userId: x.userId ?? 0
-    }))
-  );
+  return {
+    user,
+    earnings: getUserEarningsDetails(
+      {
+        commission: user.commission ?? 0,
+        hourlyRate: user.hourlyRate ?? 0,
+        tax: user.tax ?? 0,
+        workHours: user.workHours ?? 0,
+        taxTable: user.taxTable ?? undefined
+      },
+      year,
+      nextYear,
+      activeMonth,
+      month,
+      lastMonth,
+      nextMonth,
+      (user.workDayDetails ?? []).map(x => ({
+        extraHours: x.extraHours ?? 0,
+        nonCommissionedHours: x.nonCommissionedHours ?? 0,
+        date: x.date ?? new Date().toISOString(),
+        id: x.id ?? 0,
+        sickDay: x.sickDay ?? false,
+        userId: x.userId ?? 0
+      }))
+    )
+  };
 });
 
 const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
@@ -155,7 +171,11 @@ const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
 });
 
 const getUserAvatar = cache(async (id: string) => {
-  const user = await getUser(id);
+  const user = await queryBuilder
+    .selectFrom("user")
+    .select(["name", "refreshToken"])
+    .where("id", "=", +id)
+    .executeTakeFirst();
 
   if (!user?.refreshToken) {
     return {

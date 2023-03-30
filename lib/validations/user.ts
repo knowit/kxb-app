@@ -1,3 +1,4 @@
+import { EARNING_CONSTANTS } from "@/constants/earning-constants";
 import * as z from "zod";
 
 export const userProfileSchema = z.object({
@@ -9,7 +10,15 @@ export const userSalaryDetailSchema = z.object({
   commission: z.number().min(0).max(100),
   hourlyRate: z.number().min(0),
   tax: z.number().min(0).max(100),
-  workHours: z.number().min(0).max(24)
+  workHours: z.number().min(0).max(24),
+  // optional, but if present, must be 4 characters long
+  taxTable: z
+    .string()
+    .length(4)
+    .refine(taxTable => EARNING_CONSTANTS.TAX_TABLES.includes(taxTable), {
+      message: "Invalid tax table"
+    })
+    .optional()
 });
 
 export const userWorkDayDetailSchema = z.object({

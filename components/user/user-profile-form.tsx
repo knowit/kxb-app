@@ -12,7 +12,7 @@ import { userProfileSchema } from "@/lib/validations/user";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type HTMLAttributes } from "react";
+import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -24,7 +24,10 @@ type FormData = z.infer<typeof userProfileSchema>;
 
 function UserProfileForm({ user, className, ...other }: CreateJobOfferFormProps) {
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
+  const isLoading = useMemo(() => isPending || isSaving, [isPending, isSaving]);
 
   const {
     handleSubmit,
@@ -36,7 +39,6 @@ function UserProfileForm({ user, className, ...other }: CreateJobOfferFormProps)
       name: user.name
     }
   });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
@@ -83,15 +85,15 @@ function UserProfileForm({ user, className, ...other }: CreateJobOfferFormProps)
     >
       <div className="w-full max-w-[400px]">
         <Label htmlFor="name">Name</Label>
-        <Input id="name" className="w-full" size={32} {...register("name")} />
+        <Input id="name" disabled={isLoading} className="w-full" {...register("name")} />
         {errors?.name && <p className="px-1 text-xs text-red-600">{errors.name.message}</p>}
       </div>
-      <Button className="mt-4" type="submit" disabled={isSaving || isPending} variant="subtle">
+      <Button className="mt-4" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
-        <Show when={!isSaving && !isPending}>
+        <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
         </Show>
-        <Show when={isSaving || isPending}>
+        <Show when={isLoading}>
           <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
       </Button>
