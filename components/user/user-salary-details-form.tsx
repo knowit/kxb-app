@@ -170,12 +170,12 @@ function UserSalaryDetailsForm({
               defaultValue={isTaxTableMode && user?.taxTable ? user.taxTable : undefined}
               disabled={isLoading}
             >
-              <SelectTrigger>
+              <SelectTrigger className="text-base">
                 <SelectValue placeholder="Select tax table" />
               </SelectTrigger>
               <SelectContent>
                 {Object.values(EARNING_CONSTANTS.TAX_TABLES).map(table => (
-                  <SelectItem key={table} value={table}>
+                  <SelectItem key={table} className="text-base" value={table}>
                     {table}
                   </SelectItem>
                 ))}
