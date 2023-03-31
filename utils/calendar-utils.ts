@@ -250,12 +250,21 @@ export const getCalendarMonth = (date: Date, locale?: string): CalendarMonth => 
     monthNumber: getMonth(date),
     year: getYear(date),
     days: getAllDaysInMonth(date).map(date => createDate(date, locale)),
-    halfTax: month?.toUpperCase() === "NOVEMBER"
+    halfTax: date.getMonth() === 10
   };
+
+  // add one month to get the pay day
+  const payDayDate = addMonths(date, 1);
 
   return {
     ...calendarMonth,
-    payDay: getPayDay(calendarMonth)
+    payDay: getPayDay({
+      month,
+      monthNumber: getMonth(payDayDate),
+      year: getYear(payDayDate),
+      days: getAllDaysInMonth(payDayDate).map(date => createDate(date, locale)),
+      halfTax: payDayDate.getMonth() === 10
+    })
   };
 };
 

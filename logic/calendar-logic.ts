@@ -18,7 +18,7 @@ export const getPayDay = (month: CalendarMonth): CalendarDay | undefined => {
   }
 
   const workDays = getWorkDays(month);
-  const payDay = month?.month?.toUpperCase() === "DECEMBER" ? PAY_DAY_DECEMBER : PAY_DAY;
+  const payDay = month.monthNumber === 11 ? PAY_DAY_DECEMBER : PAY_DAY;
   const regularPayDay = workDays.find(workDay => workDay.day === payDay);
 
   return regularPayDay

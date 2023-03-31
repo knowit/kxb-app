@@ -50,7 +50,7 @@ function CalendarMonthWithSalary({
         <div className="flex items-start justify-between">
           <div className="">
             <Link href={`/dashboard/year/${calendarMonth.year}`}>
-              <h2 className="text-xs">{calendarMonth.year}</h2>
+              <h2 className="text-base">{calendarMonth.year}</h2>
             </Link>
             <MonthSelect
               className="max-w-[110px]"
