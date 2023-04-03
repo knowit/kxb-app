@@ -7,7 +7,7 @@ import {
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUserEarnings, getUserSettings } from "@/lib/user";
+import { getUser, getUserEarnings, getUserSettings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -25,19 +25,20 @@ export default async function DashboardPage() {
 
   const calendarMonth = getCalendarMonth(currentDate);
 
-  const [userEarnings, userSettings] = await query([
+  const [user, userEarnings, userSettings] = await query([
+    getUser(token.id),
     getUserEarnings(token.id),
     getUserSettings(token.id)
   ]);
 
-  if (!userEarnings.data?.user) {
+  if (!user.data) {
     return redirect("/logout");
   }
 
   return (
     <>
       <CalendarMonthWithSalary
-        user={userEarnings.data.user}
+        user={user.data}
         calendarMonth={calendarMonth}
         userEarnings={userEarnings.data?.earnings}
         userSettings={userSettings.data}

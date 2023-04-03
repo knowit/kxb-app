@@ -159,7 +159,43 @@ function UserWorkDayDetailForm({
           hidden: !(calendarDay.isWorkDay ?? false) || (calendarDay.isHoliday ?? false)
         })}
       >
-        <Label htmlFor="nonCommissionedHours">Non commissioned hours</Label>
+        <div className="mb-1 flex items-center justify-between">
+          <Label htmlFor="nonCommissionedHours">Non commissioned hours</Label>
+          <div
+            className={cn("invisible flex items-center gap-3", {
+              visible: nonCommissionedHours > 0
+            })}
+          >
+            <Checkbox
+              id="sick-days"
+              defaultChecked={userWorkDayDetail?.sickDay ?? false}
+              onCheckedChange={checked => setValue("sickDay", Boolean(checked))}
+              disabled={isLoading}
+              {...register("sickDay", {})}
+            />
+            <Label htmlFor="sick-days">Send as sick hours?</Label>
+            <InfoButton
+              popoverProps={{
+                side: "top"
+              }}
+            >
+              <span>
+                Sick leave or self-reported sickness grants payment upward limited to 6G. You can
+                read more in our{" "}
+                <Link
+                  className="underline underline-offset-4"
+                  href="https://handbooks.simployer.com/nb-no/article/100139"
+                >
+                  personal handbook
+                </Link>
+                .
+              </span>
+            </InfoButton>
+            {errors?.sickDay && (
+              <p className="px-1 text-xs text-red-600">{errors.sickDay.message}</p>
+            )}
+          </div>
+        </div>
         <div className="flex gap-3">
           <Input
             id="nonCommissionedHours"
@@ -192,41 +228,14 @@ function UserWorkDayDetailForm({
           <p className="px-1 text-xs text-red-600">{errors.nonCommissionedHours.message}</p>
         )}
       </div>
-      <div
-        className={cn("hidden", {
-          "flex items-center gap-3": nonCommissionedHours > 0
-        })}
-      >
-        <Checkbox
-          id="sick-days"
-          defaultChecked={userWorkDayDetail?.sickDay ?? false}
-          onCheckedChange={checked => setValue("sickDay", Boolean(checked))}
-          disabled={isLoading}
-          {...register("sickDay", {})}
-        />
-        <Label htmlFor="sick-days">Send as sick hours?</Label>
-        <InfoButton>
-          <span>
-            Sick leave or self-reported sickness grants payment upward limited to 6G. You can read
-            more in our{" "}
-            <Link
-              className="underline underline-offset-4"
-              href="https://handbooks.simployer.com/nb-no/article/100139"
-            >
-              personal handbook
-            </Link>
-            .
-          </span>
-        </InfoButton>
-        {errors?.sickDay && <p className="px-1 text-xs text-red-600">{errors.sickDay.message}</p>}
-      </div>
+
       <div>
         <Label htmlFor="extraHours">Extra hours</Label>
         <Input
           id="extraHours"
           type="number"
           step="0.5"
-          className="w-full"
+          className="mt-2 w-full"
           disabled={nonCommissionedHours > 0 || isLoading}
           {...register("extraHours", {
             valueAsNumber: true

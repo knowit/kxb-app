@@ -3,7 +3,7 @@ import { MONTH } from "@/constants/date-constants";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUserEarnings, getUserSettings } from "@/lib/user";
+import { getUser, getUserEarnings, getUserSettings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -27,20 +27,22 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
   const currentDate = getRequestDateNow();
 
   const date = new Date(+(params.year ?? currentDate.getFullYear()), +params.month);
+
   const calendarMonth = getCalendarMonth(date);
 
-  const [userEarnings, userSettings] = await query([
+  const [user, userEarnings, userSettings] = await query([
+    getUser(token.id),
     getUserEarnings(token.id, date),
     getUserSettings(token.id)
   ]);
 
-  if (!userEarnings.data?.user) {
+  if (!user.data) {
     return redirect("/logout");
   }
   return (
     <>
       <CalendarMonthWithSalary
-        user={userEarnings.data?.user}
+        user={user.data}
         calendarMonth={calendarMonth}
         userEarnings={userEarnings.data?.earnings}
         userSettings={userSettings.data}

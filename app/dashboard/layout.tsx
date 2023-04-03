@@ -18,10 +18,14 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     return redirect("/logout");
   }
 
+  if (user.activeDirectoryId !== token.activeDirectoryId) {
+    return redirect("/logout");
+  }
+
   return (
     <>
       <nav className="border-b border-b-neutral-700">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between p-4">
           <Link href="/dashboard">
             <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
           </Link>
