@@ -41,6 +41,9 @@ async function UserCalendarMonthWithSalary({
     1
   );
 
+  // sleep 10s
+  await new Promise(resolve => setTimeout(resolve, 10000));
+
   return (
     <div className="flex flex-col gap-12 lg:flex-row">
       <div className="order-1 flex max-w-[380px] flex-col gap-3 lg:-order-1 lg:min-w-[380px]">
@@ -123,8 +126,10 @@ const UserCalendarMonthWithSalarySkeleton: FC<UserCalendarMonthSkeletonProps> = 
       <div className="grow">
         <div className="flex items-start justify-between">
           <div className="">
-            <h2 className="text-base">...</h2>
-            <Skeleton className="h-[40px] w-24" />
+            <h2 className="text-base">{month.year}</h2>
+            <div className="flex h-[40px] items-center">
+              <Skeleton className="h-[20px] w-12" />
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <div className={buttonVariants({ variant: "outline" })}>
