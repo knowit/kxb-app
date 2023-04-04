@@ -1,7 +1,7 @@
+import { SalaryCalculator } from "@/app/dashboard/salary-calculator/salary-calculator";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
-import { SalaryCalculator } from "./salary-calculator";
 
 export const runtime = "experimental-edge";
 

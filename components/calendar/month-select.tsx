@@ -2,7 +2,7 @@
 
 import { MONTH } from "@/constants/date-constants";
 import { useRouter } from "next/navigation";
-import { forwardRef, useTransition, type ComponentPropsWithoutRef, type ElementRef } from "react";
+import { forwardRef, type ComponentPropsWithoutRef, type ElementRef } from "react";
 
 import {
   Select,
@@ -22,26 +22,15 @@ const MonthSelect = forwardRef<
   }
 >(({ className, year, month, isSelected = false, ...other }, forwardedRef) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   return (
     <Select
       defaultValue={month.toString()}
-      onValueChange={value => {
-        router.prefetch(`/dashboard/year/${year}/month/${value}`);
-        // update url
+      onValueChange={value =>
         router.push(`/dashboard/year/${year}/month/${value}`, {
           forceOptimisticNavigation: true
-        });
-
-        // start transition
-        startTransition(() => {
-          // Refresh the current route and fetch new data from the server without
-          // losing client-side browser or React state.
-          router.refresh();
-        });
-      }}
-      disabled={isPending}
+        })
+      }
     >
       <SelectTrigger
         className={cn(

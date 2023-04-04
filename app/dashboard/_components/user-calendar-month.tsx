@@ -1,31 +1,52 @@
 import { CalendarDay } from "@/components/calendar/calendar-day";
+import { CalendarMonth } from "@/components/calendar/calendar-month";
+import { CalendarMonthLegend } from "@/components/calendar/calendar-month-legend";
 import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-day-detail-dialog";
+import { getUserWorkDayDetailsByDate } from "@/lib/user";
 import { cn } from "@/lib/utils";
-import { CalendarMonth, CalendarSizeVariant, UserWorkDayDetail } from "@/types";
+import { CalendarSizeVariant, User, UserWorkDayDetail } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
-import { type FC } from "react";
+import { FC } from "react";
 
-const CalendarMonth: FC<{
+type UserCalendarMonthProps = {
+  user: User;
   month: CalendarMonth;
   calendarSizeVariant?: CalendarSizeVariant;
   workDayDetails?: UserWorkDayDetail[];
   closeUserWorkDayDetailsDialogOnSaveSuccess?: boolean;
   showDialogOnCalendarDayClick?: boolean;
-}> = ({
+};
+
+async function UserCalendarMonth({
   month,
   calendarSizeVariant = "default",
   workDayDetails = [],
   closeUserWorkDayDetailsDialogOnSaveSuccess = false,
   showDialogOnCalendarDayClick = false,
-  ...other
-}) => {
+  user
+}: UserCalendarMonthProps) {
   const currentDate = new Date();
   const showWeeks = true && calendarSizeVariant !== "large";
   const holidayInfos = month.days.filter(day => day.holidayInformation);
 
-  const calendarEntries = getCalendarMonthEntries(month, currentDate, showWeeks, workDayDetails);
+  let userWorkDayDetails = workDayDetails;
+
+  if (user && !userWorkDayDetails.length) {
+    userWorkDayDetails = await getUserWorkDayDetailsByDate(
+      user.id.toString(),
+      month.monthNumber,
+      month.year
+    );
+  }
+
+  const calendarEntries = getCalendarMonthEntries(
+    month,
+    currentDate,
+    showWeeks,
+    userWorkDayDetails
+  );
 
   return (
     <div
@@ -33,20 +54,7 @@ const CalendarMonth: FC<{
         "min-h-[240px] lg:min-h-[410px]": calendarSizeVariant === "default"
       })}
     >
-      <div className="flex items-center justify-center gap-3">
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-3 w-3 rounded-full border-neutral-50 bg-neutral-50" />
-          <span className="text-xs">Off work</span>
-        </div>
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-3 w-3 rounded-full border-emerald-500 bg-emerald-500" />
-          <span className="text-xs">Work</span>
-        </div>
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-3 w-3 rounded-full border-red-500 bg-red-500" />
-          <span className="text-xs">Non commissioned</span>
-        </div>
-      </div>
+      <CalendarMonthLegend />
       <Card
         className={cn("mt-3 grid", {
           "grid-cols-8": showWeeks,
@@ -103,6 +111,16 @@ const CalendarMonth: FC<{
       </Show>
     </div>
   );
+}
+
+type UserCalendarMonthSkeletonProps = Pick<UserCalendarMonthProps, "month" | "calendarSizeVariant">;
+
+const UserCalendarMonthSkeleton: FC<UserCalendarMonthSkeletonProps> = ({
+  calendarSizeVariant = "default",
+  month
+}) => {
+  return <CalendarMonth month={month} calendarSizeVariant={calendarSizeVariant} />;
 };
 
-export { CalendarMonth };
+export { UserCalendarMonth, UserCalendarMonthSkeleton };
+export type { UserCalendarMonthProps, UserCalendarMonthSkeletonProps };

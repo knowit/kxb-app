@@ -1,7 +1,7 @@
-import { CalendarYear } from "@/app/dashboard/_components/calendar-year";
+import { UserCalendarYear } from "@/app/dashboard/_components/user-calendar-year";
 import { getRequestDateNow } from "@/lib/date";
 import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUserEarnings } from "@/lib/user";
+import { getUserWithEarnings } from "@/lib/user";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -20,7 +20,7 @@ export function generateMetadata({ params }: SelectedYearPageProps): Metadata {
 export default async function SelectedYearPage({ params }: SelectedYearPageProps) {
   const date = new Date(params.year ?? getRequestDateNow().getFullYear());
   const token = await getEdgeFriendlyToken();
-  const { user, earnings } = await getUserEarnings(token.id, date);
+  const { user, earnings } = await getUserWithEarnings(token.id, date);
 
   if (!user) {
     return redirect("/logout");
@@ -28,7 +28,7 @@ export default async function SelectedYearPage({ params }: SelectedYearPageProps
 
   return (
     <>
-      <CalendarYear date={date} workDayDetails={earnings?.workDayDetails} />
+      <UserCalendarYear user={user} date={date} workDayDetails={earnings?.workDayDetails} />
     </>
   );
 }

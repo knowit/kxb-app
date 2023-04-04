@@ -1,15 +1,19 @@
-import { CalendarMonth } from "@/app/dashboard/_components/calendar-month";
+import {
+  UserCalendarMonth,
+  UserCalendarMonthSkeleton
+} from "@/app/dashboard/_components/user-calendar-month";
 import { buttonVariants } from "@/components/ui/button";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { UserWorkDayDetail } from "@/types";
+import { User, UserWorkDayDetail } from "@/types";
 import { getCalendarYear } from "@/utils/calendar-utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { getYear } from "date-fns";
 import Link from "next/link";
-import { type FC } from "react";
+import { Suspense, type FC } from "react";
 
-const CalendarYear: FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
+const UserCalendarYear: FC<{ user: User; date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
+  user,
   date,
   workDayDetails = []
 }) => {
@@ -63,12 +67,18 @@ const CalendarYear: FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = (
                   {month.month}
                 </h2>
               </Link>
-              <CalendarMonth
-                month={month}
-                calendarSizeVariant="small"
-                workDayDetails={workDayDetails}
-                showDialogOnCalendarDayClick
-              />
+              <Suspense
+                fallback={<UserCalendarMonthSkeleton month={month} calendarSizeVariant="small" />}
+              >
+                {/* @ts-expect-error Async Server Component */}
+                <UserCalendarMonth
+                  user={user}
+                  month={month}
+                  calendarSizeVariant="small"
+                  workDayDetails={workDayDetails}
+                  showDialogOnCalendarDayClick
+                />
+              </Suspense>
             </div>
           );
         })}
@@ -77,4 +87,4 @@ const CalendarYear: FC<{ date: Date; workDayDetails?: UserWorkDayDetail[] }> = (
   );
 };
 
-export { CalendarYear };
+export { UserCalendarYear };

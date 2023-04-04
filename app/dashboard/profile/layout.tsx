@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-3">
+    <div className="grow space-y-3">
       <TabNavigation
         path="/dashboard/profile"
         items={[

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { queryBuilder } from "@/lib/planetscale";
 import { planetscaleEdge, Row } from "@/lib/planetscale-edge";
 import { query } from "@/lib/query";
 import { User, UserFeedback, UserSettings, UserWorkDayDetail } from "@/types";
@@ -7,7 +8,6 @@ import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
 import { redirect } from "next/navigation";
 import { cache } from "react";
-import { queryBuilder } from "./planetscale";
 
 const createUser = (
   row: Row,
@@ -78,17 +78,37 @@ const getUserWithWorkDayDetails = cache(async (id: string): Promise<User> => {
   };
 });
 
-const getUserEarnings = cache(async (id: string, activeDate?: Date) => {
-  const user = await getUserWithWorkDayDetails(id);
+const getUserWorkDayDetailsByDate = cache(async (id: string, month: number, year: number) => {
+  const { rows } = await planetscaleEdge.execute(
+    "select * from user_work_day_detail where userId = ? AND date like '%?-?'",
+    [id, month + 1, year]
+  );
 
-  if (!user) {
+  const userWorkDayDetail = rows as UserWorkDayDetail[];
+
+  return (userWorkDayDetail ?? []).map(userWorkDayDetail => ({
+    ...userWorkDayDetail,
+    nonCommissionedHours: Number(userWorkDayDetail.nonCommissionedHours),
+    extraHours: Number(userWorkDayDetail.extraHours),
+    sickDay: Boolean(userWorkDayDetail.sickDay)
+  })) as UserWorkDayDetail[];
+});
+
+const getUserWithEarnings = cache(async (id: string, activeDate?: Date) => {
+  const now = new Date();
+  const date = activeDate ?? now;
+
+  const [user, workDayDetail] = await query([
+    getUser(id),
+    getUserWorkDayDetailsByDate(id, date.getMonth(), date.getFullYear())
+  ]);
+
+  if (!user.data) {
     return {
       user: undefined,
       earnings: undefined
     };
   }
-
-  const now = new Date();
 
   const year = getCalendarYear(now.getFullYear());
 
@@ -108,14 +128,14 @@ const getUserEarnings = cache(async (id: string, activeDate?: Date) => {
   const nextMonth = getCalendarMonth(new Date(currentYear, currentMonth + 1));
 
   return {
-    user,
+    user: user.data,
     earnings: getUserEarningsDetails(
       {
-        commission: user.commission ?? 0,
-        hourlyRate: user.hourlyRate ?? 0,
-        tax: user.tax ?? 0,
-        workHours: user.workHours ?? 0,
-        taxTable: user.taxTable ?? undefined
+        commission: user.data.commission ?? 0,
+        hourlyRate: user.data.hourlyRate ?? 0,
+        tax: user.data.tax ?? 0,
+        workHours: user.data.workHours ?? 0,
+        taxTable: user.data.taxTable ?? undefined
       },
       year,
       nextYear,
@@ -123,7 +143,7 @@ const getUserEarnings = cache(async (id: string, activeDate?: Date) => {
       month,
       lastMonth,
       nextMonth,
-      (user.workDayDetails ?? []).map(x => ({
+      (workDayDetail.data ?? []).map(x => ({
         extraHours: x.extraHours ?? 0,
         nonCommissionedHours: x.nonCommissionedHours ?? 0,
         date: x.date ?? new Date().toISOString(),
@@ -242,4 +262,11 @@ const getUserAvatar = cache(async (id: string) => {
   };
 });
 
-export { createUser, getUser, getUserEarnings, getUserAvatar, getUserSettings };
+export {
+  createUser,
+  getUser,
+  getUserWithEarnings,
+  getUserAvatar,
+  getUserSettings,
+  getUserWorkDayDetailsByDate
+};

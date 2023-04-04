@@ -88,7 +88,7 @@ function UserProfileForm({ user, className, ...other }: CreateJobOfferFormProps)
         <Input id="name" disabled={isLoading} className="w-full" {...register("name")} />
         {errors?.name && <p className="px-1 text-xs text-red-600">{errors.name.message}</p>}
       </div>
-      <Button className="mt-4" type="submit" disabled={isLoading} variant="subtle">
+      <Button className="mt-4 w-fit" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
         <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
@@ -108,7 +108,7 @@ const UserProfileFormSkeleton = () => {
         <Skeleton className="mt-1 h-[17px] w-24" />
         <Skeleton className="h-[40px] w-full" />
       </div>
-      <ButtonSkeleton className="mt-4" />
+      <ButtonSkeleton className="mt-4 w-fit" />
     </div>
   );
 };

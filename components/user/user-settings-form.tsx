@@ -132,7 +132,7 @@ function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFor
           </p>
         )}
       </div>
-      <Button className="mt-4" type="submit" disabled={isLoading} variant="subtle">
+      <Button className="mt-4 w-fit" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
         <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
@@ -158,7 +158,7 @@ const UserSettingsFormSkeleton = () => {
         <Skeleton className="h-[20px] w-48" />
         <Skeleton className="h-[20px] w-[20px]" />
       </div>
-      <ButtonSkeleton className="mt-4" />
+      <ButtonSkeleton className="mt-4 w-fit" />
     </div>
   );
 };

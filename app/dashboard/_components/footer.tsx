@@ -1,3 +1,4 @@
+import { FeedbackForm } from "@/app/dashboard/_components/feedback-form";
 import { Icons } from "@/components/icons";
 import { ThemeSelect } from "@/components/theme-select";
 import { Box } from "@/components/ui/box";
@@ -5,7 +6,6 @@ import { Flex } from "@/components/ui/flex";
 import { Link } from "@/components/ui/link";
 import { UserFeedbackFormSkeleton } from "@/components/user/user-feedback-form";
 import { Suspense } from "react";
-import { FeedbackForm } from "./feedback-form";
 
 function Footer() {
   return (

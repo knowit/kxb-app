@@ -46,4 +46,10 @@ const AvatarFallback = React.forwardRef<
 
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-export { Avatar, AvatarImage, AvatarFallback };
+const AvatarSkeleton = () => (
+  <div className="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full">
+    <div className="aspect-square h-full w-full animate-pulse bg-neutral-100 dark:bg-neutral-800" />
+  </div>
+);
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarSkeleton };

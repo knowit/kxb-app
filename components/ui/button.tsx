@@ -49,13 +49,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 const ButtonSkeleton = ({
+  children,
   className,
   ...other
 }: React.ComponentPropsWithoutRef<typeof Skeleton>) => (
   <Skeleton
-    className={cn("h-10 w-44 rounded-md border border-neutral-700", className)}
+    className={cn(
+      "h-10 w-fit min-w-[94px] rounded-md border border-neutral-700 [&>span]:invisible",
+      className
+    )}
     {...other}
-  />
+  >
+    <span>{children ?? "Save"}</span>
+  </Skeleton>
 );
 
 export { Button, buttonVariants, ButtonSkeleton };

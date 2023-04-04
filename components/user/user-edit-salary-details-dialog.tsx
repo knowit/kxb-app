@@ -64,4 +64,13 @@ function UserEditSalaryDetailsDialog({
   );
 }
 
-export { UserEditSalaryDetailsDialog };
+const UserEditSalaryDetailsDialogTriggerSkeleton = () => {
+  return (
+    <Button className="gap-3" variant="subtle">
+      <Icons.Gear className="h-4 w-4" />
+      Edit salary
+    </Button>
+  );
+};
+
+export { UserEditSalaryDetailsDialog, UserEditSalaryDetailsDialogTriggerSkeleton };

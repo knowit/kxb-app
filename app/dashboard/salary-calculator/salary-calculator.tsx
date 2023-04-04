@@ -1,7 +1,7 @@
 "use client";
 
-import { CalendarMonth } from "@/app/dashboard/_components/calendar-month";
 import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
+import { CalendarMonth } from "@/components/calendar/calendar-month";
 import { Icons } from "@/components/icons";
 import { SalaryYearOverview } from "@/components/salary/salary-year-overview";
 import { Button } from "@/components/ui/button";

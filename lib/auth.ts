@@ -133,8 +133,8 @@ async function initialSignIn(
     const user = rows[0] as DbUser;
 
     await planetscaleEdge.execute(
-      "UPDATE user SET refreshToken = ?, isAdmin = ?, isSpecialist = ? WHERE id = ?",
-      [account.refresh_token, isAdmin, isSpecialist, +user.id]
+      "UPDATE user SET refreshToken = ?, isAdmin = ?, isSpecialist = ?, updated = ? WHERE id = ?",
+      [account.refresh_token, isAdmin, isSpecialist, new Date(), user.id]
     );
   }
 }

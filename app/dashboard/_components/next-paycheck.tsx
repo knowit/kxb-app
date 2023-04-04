@@ -1,10 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUserEarnings } from "@/lib/user";
+import { getUserWithEarnings } from "@/lib/user";
 
 async function NextPaycheck() {
   const token = await getEdgeFriendlyToken();
-  const { earnings } = await getUserEarnings(token.id);
+  const { earnings } = await getUserWithEarnings(token.id);
 
   return (
     <div className="min-w-[120px]">

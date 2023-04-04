@@ -1,4 +1,5 @@
 import { Avatar, AvatarSkeleton } from "@/app/dashboard/_components/avatar";
+import { FeedbackForm } from "@/app/dashboard/_components/feedback-form";
 import { Footer } from "@/app/dashboard/_components/footer";
 import { NextPaycheck, NextPaycheckSkeleton } from "@/app/dashboard/_components/next-paycheck";
 import { Icons } from "@/components/icons";
@@ -8,7 +9,6 @@ import { getUser } from "@/lib/user";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
-import { FeedbackForm } from "./_components/feedback-form";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const token = await getEdgeFriendlyToken();

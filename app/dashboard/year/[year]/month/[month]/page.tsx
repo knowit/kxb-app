@@ -1,12 +1,16 @@
-import { CalendarMonthWithSalary } from "@/app/dashboard/_components/calendar-month-with-salary";
+import {
+  UserCalendarMonthWithSalary,
+  UserCalendarMonthWithSalarySkeleton
+} from "@/app/dashboard/_components/user-calendar-month-with-salary";
 import { MONTH } from "@/constants/date-constants";
 import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUser, getUserEarnings, getUserSettings } from "@/lib/user";
+import { getUser, getUserSettings } from "@/lib/user";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 interface SelectedYearMonthPageProps {
   params: { year: string; month: string };
@@ -30,23 +34,22 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
 
   const calendarMonth = getCalendarMonth(date);
 
-  const [user, userEarnings, userSettings] = await query([
-    getUser(token.id),
-    getUserEarnings(token.id, date),
-    getUserSettings(token.id)
-  ]);
+  const [user, userSettings] = await query([getUser(token.id), getUserSettings(token.id)]);
 
   if (!user.data) {
     return redirect("/logout");
   }
+
   return (
     <>
-      <CalendarMonthWithSalary
-        user={user.data}
-        calendarMonth={calendarMonth}
-        userEarnings={userEarnings.data?.earnings}
-        userSettings={userSettings.data}
-      />
+      <Suspense fallback={<UserCalendarMonthWithSalarySkeleton month={calendarMonth} />}>
+        {/* @ts-expect-error Async Server Component */}
+        <UserCalendarMonthWithSalary
+          user={user.data}
+          calendarMonth={calendarMonth}
+          userSettings={userSettings.data}
+        />
+      </Suspense>
     </>
   );
 }

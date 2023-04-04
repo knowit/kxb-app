@@ -1,5 +1,8 @@
 import { Icons } from "@/components/icons";
-import { SalaryDetailsCard } from "@/components/salary/salary-details-card";
+import {
+  SalaryDetailsCard,
+  SalaryDetailsCardSkeleton
+} from "@/components/salary/salary-details-card";
 import { Card } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { CalendarMonth, UserEarningsDetails } from "@/types";
@@ -44,4 +47,17 @@ const UserEarnings = ({
   );
 };
 
-export { UserEarnings };
+const UserEarningsSkeleton = () => {
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-3">
+        <SalaryDetailsCardSkeleton />
+        <SalaryDetailsCardSkeleton />
+        <SalaryDetailsCardSkeleton />
+        <SalaryDetailsCardSkeleton />
+      </div>
+    </div>
+  );
+};
+
+export { UserEarnings, UserEarningsSkeleton };
