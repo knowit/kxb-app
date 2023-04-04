@@ -22,7 +22,7 @@ export default async function ProfilePage() {
   const userAvatar = await getUserAvatar(token.id);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <Label>Avatar</Label>
@@ -48,7 +48,7 @@ export default async function ProfilePage() {
           <ProfileForm />
         </Suspense>
       </div>
-      <div className="flex">
+      <div className="flex flex-col sm:flex-row">
         <Separator className="my-8 block sm:hidden" orientation="horizontal" />
         <Separator className="mx-8 hidden sm:block" orientation="vertical" />
         <UserDeleteDialog userId={token.id} />
