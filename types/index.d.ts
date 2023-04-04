@@ -1,44 +1,61 @@
 /// <reference types="node" />
 
-import { Prisma } from ".prisma/client";
-import { Session, TokenSet } from "next-auth";
+import Big from "big.js";
 
 export type WithChildren<T = {}> = T & { children?: React.ReactNode };
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T;
 
-export type UserWorkDayDetail = {
+export interface UserWorkDayDetail {
   id: number;
   date: string;
+  nonCommissionedHours: number;
   extraHours: number;
   sickDay: boolean;
-  nonCommissionedHours: number;
   userId: number;
-};
+}
+
+export interface UserFeedback {
+  id: number;
+  date: string;
+  userId: number;
+  feedback: string;
+  reaction: number;
+}
 
 export type User = {
   id: number;
   email: string;
-  name: string;
+  name?: string;
   activeDirectoryId: string;
-  refreshToken: string;
+  refreshToken?: string;
   accessTokenExpires?: number;
   hourlyRate: number;
   commission: number;
   tax: number;
+  taxTable?: string;
   workHours: number;
+  created: string;
+  updated: string;
   isAdmin: boolean;
   isSpecialist: boolean;
-  updated: string;
-  created: string;
   workDayDetails: UserWorkDayDetail[];
+  feedback: UserFeedback[];
 };
 
 export type UserSalaryDetails = {
   hourlyRate: number;
   commission: number;
   tax: number;
+  taxTable?: string;
   workHours: number;
+};
+
+export type UserSettings = {
+  id: number;
+  userId: number;
+  closeUserSalaryDialogOnSaveSuccess: boolean;
+  closeUserWorkDayDetailsDialogOnSaveSuccess: boolean;
 };
 
 export type CalendarMonthEarnings = {
@@ -46,8 +63,8 @@ export type CalendarMonthEarnings = {
   payDay: string;
   workDays: WorkDay[];
   workHours: number;
-  gross: number;
-  net: number;
+  gross: Big;
+  net: Big;
   grossFormatted: string;
   netFormatted: string;
   halfTax: boolean;
@@ -57,8 +74,8 @@ export type CalendarYearEarnings = {
   year: number;
   workDays: number;
   workHours: number;
-  gross: number;
-  net: number;
+  gross: Big;
+  net: Big;
   grossFormatted: string;
   netFormatted: string;
 };
@@ -74,13 +91,9 @@ export type UserEarningsDetails = {
   nextYearSalaryStatistics: CalendarYearEarnings;
 };
 
-export type PrismaUserUserWorkDayDetail = {
-  id: number;
-  date: string;
-  extraHours: Prisma.Decimal;
-  nonCommissionedHours: Prisma.Decimal;
-  sickDay: boolean;
-  userId: number;
+export type CalendarHolidayInformation = {
+  name: string;
+  shortDate: string;
 };
 
 export type CalendarYear = {
@@ -91,22 +104,26 @@ export type CalendarYear = {
 
 export type CalendarMonth = {
   month: string;
-  halfTax: boolean;
+  monthNumber: number;
+  year: number;
   days: CalendarDay[];
   payDay?: CalendarDay;
+  halfTax: boolean;
 };
 
 export type CalendarDay = {
-  date: Date;
+  date: string;
   day: number;
   name: string;
   weekNumber: number;
   formattedDate: string;
   formattedShortDate: string;
   formattedLongDate: string;
+  holidayInformation?: CalendarHolidayInformation;
   isHoliday: boolean;
   isWorkDay?: boolean;
-  isKnowitClosed: boolean;
+  isSunday?: boolean;
+  isKnowitClosed?: boolean;
 };
 
 export type Holiday = {
@@ -116,23 +133,21 @@ export type Holiday = {
   formattedLongDate: string;
 };
 
-export type NextAuthSessionUser = {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  id?: string | null;
-  isAdmin?: boolean;
-  isSpecialist?: boolean;
-  activeDirectoryId?: string;
+type CalendarEntries = {
+  type: "header" | "week" | "spacing" | "day";
+  value: string | number | null;
+  date: string;
+  formattedDate: string;
+  week?: number;
+  isToday?: boolean;
+  isOdd?: boolean;
+  isHoliday?: boolean;
+  isSunday?: boolean;
+  isStartOfWeek?: boolean;
+  isWorkDay?: boolean;
+  isNonCommissionedWorkDay?: boolean;
+  workDayDetails?: UserWorkDayDetail;
 };
-
-export type NextAuthSession = {
-  user?: NextAuthSessionUser;
-} & Session;
-
-export type NextAuthToken = {
-  sub: string;
-} & TokenSet;
 
 export type AzureAdTokenClaims = {
   aud: string;
@@ -164,4 +179,24 @@ export type GraphUser = {
   surname: ?string;
   userPrincipalName: string;
   id: string;
+};
+
+export type CalendarSizeVariant = "default" | "small" | "large";
+
+export type JobOffer = {
+  id: number;
+  name: string;
+  email: string;
+  commission: number;
+  guaranteeSalary: number;
+  created: string;
+  updated: string;
+  shareId: string;
+  sent: boolean;
+  sentBy: string;
+  sentDate: string;
+  accepted: boolean;
+  acceptedDate: string;
+  rejected: boolean;
+  rejectedDate: string;
 };

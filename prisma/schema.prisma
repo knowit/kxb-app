@@ -2,49 +2,87 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider          = "sqlserver"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id                 Int                 @id @default(autoincrement())
-  email              String              @unique
+model user {
+  id                 Int                    @id @default(autoincrement())
+  email              String                 @unique
   name               String?
-  activeDirectoryId  String              @unique
-  refreshToken       String?             @db.NVarChar(2000)
+  activeDirectoryId  String                 @unique
+  refreshToken       String?                @db.VarChar(2000)
   accessTokenExpires BigInt?
-  hourlyRate         Int                 @default(1000)
-  commission         Decimal             @default(0.40) @db.Decimal(5, 2)
-  tax                Decimal             @default(0.35) @db.Decimal(5, 2)
-  workHours          Decimal             @default(7.5) @db.Decimal(5, 2)
-  created            DateTime            @default(now())
-  updated            DateTime            @default(now())
-  isAdmin            Boolean             @default(false)
-  isSpecialist       Boolean             @default(false)
-  workDayDetails     UserWorkDayDetail[]
-  feedback           UserFeedback[]
+  hourlyRate         Int                    @default(1000)
+  commission         Decimal                @default(0.40) @db.Decimal(5, 2)
+  tax                Decimal                @default(0.35) @db.Decimal(5, 2)
+  taxTable           String?
+  workHours          Decimal                @default(7.5) @db.Decimal(5, 2)
+  created            DateTime               @default(now())
+  updated            DateTime               @default(now())
+  isAdmin            Boolean                @default(false)
+  isSpecialist       Boolean                @default(false)
+  workDayDetails     user_work_day_detail[]
+  feedback           user_feedback[]
+  settings           user_settings?
+
+  @@index([activeDirectoryId])
+  @@index([email])
 }
 
-model UserWorkDayDetail {
+model user_work_day_detail {
   id                   Int     @id @default(autoincrement())
   date                 String
   nonCommissionedHours Decimal @default(0) @db.Decimal(5, 2)
   extraHours           Decimal @default(0) @db.Decimal(5, 2)
   sickDay              Boolean @default(false)
-  user                 User    @relation(fields: [userId], references: [id])
+  user                 user    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId               Int
+
+  @@unique([userId, date])
+  @@index([userId])
 }
 
-model UserFeedback {
+model user_feedback {
   id       Int      @id @default(autoincrement())
   date     DateTime @default(now())
-  user     User     @relation(fields: [userId], references: [id])
+  user     user     @relation(fields: [userId], references: [id])
   userId   Int
-  feedback String   @db.NVarChar(2000)
+  feedback String   @db.VarChar(2000)
   reaction Int
+
+  @@index([userId])
+}
+
+model user_settings {
+  id                                         Int     @id @default(autoincrement())
+  user                                       user    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                                     Int     @unique
+  closeUserSalaryDialogOnSaveSuccess         Boolean @default(true)
+  closeUserWorkDayDetailsDialogOnSaveSuccess Boolean @default(true)
+}
+
+model job_offer {
+  id              Int       @id @default(autoincrement())
+  created         DateTime  @default(now())
+  updated         DateTime  @default(now())
+  commission      Decimal   @default(0.40) @db.Decimal(5, 2)
+  guaranteeSalary Int       @default(40000)
+  name            String
+  email           String    @unique
+  shareId         String    @unique
+  sent            Boolean   @default(false)
+  sentDate        DateTime?
+  sentBy          String
+  accepted        Boolean   @default(false)
+  acceptedDate    DateTime?
+  rejected        Boolean   @default(false)
+  rejectedDate    DateTime?
+
+  @@index([email])
 }

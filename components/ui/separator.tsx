@@ -1,39 +1,27 @@
+"use client";
+
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { styled } from "stitches.config";
+import * as React from "react";
 
-const Separator = styled(SeparatorPrimitive.Root, {
-  backgroundColor: "$gray",
-  "&[data-orientation=horizontal]": { height: 1, width: "100%" },
-  "&[data-orientation=vertical]": { height: "100%", width: 1 },
+import { cn } from "@/lib/utils";
 
-  variants: {
-    space: {
-      1: {
-        "&[data-orientation=horizontal]": { my: "$1" },
-        "&[data-orientation=vertical]": { mx: "$1" }
-      },
-      2: {
-        "&[data-orientation=horizontal]": { my: "$2" },
-        "&[data-orientation=vertical]": { mx: "$2" }
-      },
-      3: {
-        "&[data-orientation=horizontal]": { my: "$3" },
-        "&[data-orientation=vertical]": { mx: "$3" }
-      },
-      4: {
-        "&[data-orientation=horizontal]": { my: "$4" },
-        "&[data-orientation=vertical]": { mx: "$4" }
-      },
-      5: {
-        "&[data-orientation=horizontal]": { my: "$5" },
-        "&[data-orientation=vertical]": { mx: "$5" }
-      },
-      6: {
-        "&[data-orientation=horizontal]": { my: "$6" },
-        "&[data-orientation=vertical]": { mx: "$6" }
-      }
-    }
-  }
-});
+const Separator = React.forwardRef<
+  React.ElementRef<typeof SeparatorPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
+>(({ className, orientation = "horizontal", decorative = true, ...other }, ref) => (
+  <SeparatorPrimitive.Root
+    ref={ref}
+    decorative={decorative}
+    orientation={orientation}
+    className={cn(
+      "bg-neutral-200 dark:bg-neutral-700",
+      orientation === "horizontal" ? "h-[1px] w-full" : "h-auto w-[1px]",
+      className
+    )}
+    {...other}
+  />
+));
 
-export default Separator;
+Separator.displayName = SeparatorPrimitive.Root.displayName;
+
+export { Separator };

@@ -1,8 +1,23 @@
-import { styled } from "stitches.config";
+import { cn } from "@/lib/utils";
+import { forwardRef } from "react";
 
-const Box = styled("div", {
-  // Reset
-  boxSizing: "border-box"
-});
+type BoxElementRef = React.ElementRef<"div">;
+type BoxProps = React.ComponentPropsWithoutRef<"div"> & {
+  children?: React.ReactNode;
+  className?: string;
+};
 
-export default Box;
+const Box = forwardRef<BoxElementRef, BoxProps>(
+  ({ children, className, ...other }, forwardedRef) => {
+    return (
+      <div className={cn("box-border", className)} {...other} ref={forwardedRef}>
+        {children}
+      </div>
+    );
+  }
+);
+
+Box.displayName = "Box";
+
+export { Box };
+export type { BoxProps };

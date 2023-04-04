@@ -1,114 +1,52 @@
-import { WithChildren } from "@/types";
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import { useRouter } from "next/router";
+import { Icons } from "@/components/icons";
+import { Show } from "@/components/ui/show";
+import { cn } from "@/lib/utils";
+import NextLink from "next/link";
 import * as React from "react";
-import { CSS, styled, VariantProps } from "stitches.config";
 
-const LinkRoot = styled("a", {
-  textDecoration: "none",
-  transition: "color 0.2s ease-in-out",
-  color: "$textDark",
-  "&:hover": {
-    color: "$text"
-  },
-
-  variants: {
-    variant: {
-      full: {
-        display: "block",
-        width: "100%"
-      }
-    },
-    color: {
-      text: {
-        color: "$text"
-      },
-      textDark: {
-        color: "$textDark"
-      },
-      black: {
-        color: "$black"
-      },
-      gray: {
-        color: "$gray"
-      },
-      grayLight: {
-        color: "$grayLight"
-      },
-      grayLighter: {
-        color: "$grayLighter"
-      },
-      grayLightest: {
-        color: "$grayLightest"
-      },
-      green: {
-        color: "$green"
-      },
-      red: {
-        color: "$red"
-      },
-      white: {
-        color: "$white"
-      }
-    },
-    textDecoration: {
-      underline: {
-        textDecoration: "underline"
-      }
-    },
-    active: {
-      true: {
-        color: "$green"
-      }
-    }
-  }
-});
-
-type LinkProps = VariantProps<typeof LinkRoot> &
-  WithChildren<{
-    href: string;
-    as?: string;
-    onClick?: React.MouseEventHandler;
-    isExternal?: boolean;
-    css?: CSS;
-  }> &
-  NextLinkProps;
-
-const Link = ({ children, href, as, isExternal = false, ...other }: LinkProps) => {
-  const router = useRouter();
-  const path = router.asPath ?? router.pathname;
-  const linkPath = as ?? href;
-
-  const linkProps =
-    as !== null && as !== undefined
-      ? {
-          href,
-          as,
-          passHref: true
-        }
-      : {
-          href,
-          passHref: true
-        };
-
-  const active = React.useMemo(
-    () => linkPath !== "/" && (path === linkPath || path.startsWith(linkPath)),
-    [path, linkPath]
-  );
-
-  if (isExternal) {
-    return (
-      <LinkRoot href={href} target="_blank" rel="noreferrer" {...other}>
-        {children}
-      </LinkRoot>
-    );
-  }
-
-  return (
-    <LinkRoot as={NextLink} {...linkProps} active={active} {...other}>
-      {children}
-    </LinkRoot>
-  );
+type LinkElement = React.ElementRef<typeof NextLink>;
+type LinkProps = React.ComponentPropsWithoutRef<typeof NextLink> & {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+  showExternalLinkIcon?: boolean;
 };
 
-export default Link;
+const Link = React.forwardRef<LinkElement, LinkProps>(
+  ({ children, href, className, showExternalLinkIcon = true, ...other }, forwardedRef) => {
+    const isHrefExternal = React.useMemo(() => {
+      // server side rendering safe check for external links
+      return /^https?:\/\//.test(href);
+    }, [href]);
+
+    const externalLinkProps = React.useMemo(() => {
+      if (!isHrefExternal) {
+        return {};
+      }
+
+      return {
+        target: "_blank",
+        rel: "noopener noreferrer"
+      };
+    }, [isHrefExternal]);
+
+    return (
+      <NextLink
+        className={cn("", { "inline-flex items-center gap-1": isHrefExternal }, className)}
+        href={href}
+        ref={forwardedRef}
+        {...externalLinkProps}
+        {...other}
+      >
+        {children}
+        <Show when={showExternalLinkIcon && isHrefExternal}>
+          <Icons.ArrowTopRight className="h-4 w-4 opacity-50" />
+        </Show>
+      </NextLink>
+    );
+  }
+);
+
+Link.displayName = "Link";
+
+export { Link };
