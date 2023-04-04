@@ -41,9 +41,6 @@ async function UserCalendarMonthWithSalary({
     1
   );
 
-  // sleep 10s
-  await new Promise(resolve => setTimeout(resolve, 10000));
-
   return (
     <div className="flex flex-col gap-12 lg:flex-row">
       <div className="order-1 flex max-w-[380px] flex-col gap-3 lg:-order-1 lg:min-w-[380px]">
