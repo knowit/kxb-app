@@ -109,6 +109,20 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
       variant: "success"
     });
 
+    // TODO: Enable email after testing with SendGrid
+    // await fetch(`/api-v2/user/${user.id}/feedback/email`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     date: data.date,
+    //     feedback: data.feedback,
+    //     userId: data.userId,
+    //     reaction: data.reaction
+    //   })
+    // });
+
     // start transition
     startTransition(() => {
       // Refresh the current route and fetch new data from the server without

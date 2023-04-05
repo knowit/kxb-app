@@ -99,7 +99,7 @@ async function UserCalendarMonth({
             return (
               <div
                 key={`holiday-info-${index}`}
-                className="mr-1 inline-flex text-xs leading-tight dark:text-zinc-400"
+                className="mr-1 inline-flex text-xs leading-tight dark:text-neutral-400"
               >
                 {`${date.getDate()}.${date.getMonth() + 1}: ${day.holidayInformation?.name}${
                   holidayInfos.length === index + 1 ? "" : ","

@@ -22,20 +22,20 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
           "flex flex-col dark:bg-neutral-950",
           {
             "font-medium underline underline-offset-4": calendarDay.isToday,
-            "dark:text-emerald-500": calendarDay.isWorkDay,
-            "dark:text-red-500": calendarDay.isNonCommissionedWorkDay,
-            "dark:text-zinc-450 text-zinc-500":
+            "text-emerald-500 dark:text-emerald-500": calendarDay.isWorkDay,
+            "text-red-500 dark:text-red-500": calendarDay.isNonCommissionedWorkDay,
+            "dark:text-neutral-450 text-neutral-500":
               calendarDay.type === "spacing" ||
               calendarDay.type === "week" ||
               calendarDay.type === "header",
-            "border-l border-t border-l-zinc-700 border-t-zinc-700":
+            "border-l border-t border-l-neutral-700 border-t-neutral-700":
               calendarDay.type === "day" || calendarDay.type === "spacing",
-            "border-t border-t-zinc-700": calendarDay.type === "week",
+            "border-t border-t-neutral-700": calendarDay.type === "week",
             "": calendarDay.isOdd,
             "min-h-[50px] md:min-h-[112px]":
               calendarSizeVariant === "large" &&
               (calendarDay.type === "day" || calendarDay.type === "spacing"),
-            "items-end justify-start py-1 px-1 md:py-2 md:px-3": calendarSizeVariant === "large",
+            "items-end justify-start px-1 py-1 md:px-3 md:py-2": calendarSizeVariant === "large",
             "h-full min-h-[44px] items-center justify-center lg:min-h-[50px] lg:min-w-[50px]":
               calendarSizeVariant === "default",
             "text-sm": calendarDay.type === "header",
@@ -58,7 +58,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
           })}
         >
           {calendarSizeVariant === "large" && calendarDay.isStartOfWeek ? (
-            <div className="text-xs dark:text-zinc-600 md:text-base">{calendarDay.week}</div>
+            <div className="text-xs dark:text-neutral-600 md:text-base">{calendarDay.week}</div>
           ) : null}
           <div className="flex items-center gap-1">
             <Show when={calendarDay.type === "day"}>
@@ -89,10 +89,10 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
             )
             .map((x, index) => (
               <div key={`holiday-info-inline-${index}`} className="w-full">
-                <div className="bg-red-zinc-contrast hidden rounded-md px-2 py-1 text-xs leading-tight text-zinc-900 md:block">
+                <div className="bg-red-neutral-contrast hidden rounded-md px-2 py-1 text-xs leading-tight text-neutral-900 md:block">
                   {x.holidayInformation?.name}
                 </div>
-                <div className="dark:border-red-zinc-contrast dark:bg-red-zinc-contrast block h-2 w-full rounded-full border border-red-700 bg-red-700 md:hidden"></div>
+                <div className="dark:border-red-neutral-contrast dark:bg-red-neutral-contrast block h-2 w-full rounded-full border border-red-700 bg-red-700 md:hidden"></div>
               </div>
             ))}
       </div>

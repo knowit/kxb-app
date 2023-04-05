@@ -6,7 +6,7 @@ const CalendarMonthLegend: FC<CalendarMonthLegendProps> = () => {
   return (
     <div className="flex items-center justify-center gap-3">
       <div className="flex items-center justify-center gap-2">
-        <div className="h-3 w-3 rounded-full border-neutral-50 bg-neutral-50" />
+        <div className="h-3 w-3 rounded-full border-neutral-500 bg-neutral-500 dark:border-neutral-50 dark:bg-neutral-50" />
         <span className="text-xs">Off work</span>
       </div>
       <div className="flex items-center justify-center gap-2">

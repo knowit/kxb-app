@@ -18,6 +18,8 @@ declare global {
       SHADOW_DATABASE_URL: string;
       CV_PARTNER_API_KEY: string;
       SALES_EMAILS: string;
+      FEEDBACK_RECIPIENT_EMAIL: string;
+      SEND_GRID_API_KEY: string;
     }
   }
 }

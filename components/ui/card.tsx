@@ -9,7 +9,7 @@ function Card({ className, variant = "default", ...other }: CardProps) {
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-lg border dark:border-neutral-700 dark:bg-neutral-950",
+        "overflow-hidden rounded-lg border border-neutral-700 dark:border-neutral-700 dark:bg-neutral-950",
         {
           "dark:border-neutral-700 dark:bg-neutral-950": variant === "default",
           "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100":
