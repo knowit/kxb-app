@@ -1,11 +1,12 @@
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
 import { UserWorkDayDetail } from "@/types";
+import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 
-export const runtime = "experimental-edge";
+export const runtime: ServerRuntime = "experimental-edge";
 
 export async function PATCH(request: NextRequest) {
   const token = await getToken({ req: request });

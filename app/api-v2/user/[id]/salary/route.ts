@@ -1,10 +1,11 @@
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
+import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
 
-export const runtime = "experimental-edge";
+export const runtime: ServerRuntime = "experimental-edge";
 
 type Params = {
   id: string;

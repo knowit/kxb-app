@@ -1,10 +1,11 @@
 import { planetscaleEdge } from "@/lib/planetscale-edge";
 import { createJobOfferSchema } from "@/lib/validations/job-offer";
 import { nanoid } from "nanoid/non-secure";
+import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 
-export const runtime = "experimental-edge";
+export const runtime: ServerRuntime = "experimental-edge";
 
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request });
