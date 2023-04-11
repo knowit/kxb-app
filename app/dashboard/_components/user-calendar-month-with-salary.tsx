@@ -30,6 +30,8 @@ async function UserCalendarMonthWithSalary({
   calendarMonth: CalendarMonthType;
   userSettings?: UserSettings;
 }) {
+  const currentDate = new Date();
+
   const previousDate = new Date(
     calendarMonth.monthNumber === 0 ? calendarMonth.year - 1 : calendarMonth.year,
     calendarMonth.monthNumber === 0 ? 11 : calendarMonth.monthNumber - 1,
@@ -78,7 +80,10 @@ async function UserCalendarMonthWithSalary({
               <Icons.ChevronLeft />
             </LinkButton>
             {/* Go to current month */}
-            <LinkButton href="/dashboard" forceOptimisticNavigation>
+            <LinkButton
+              href={`/dashboard/year/${currentDate.getFullYear()}/month/${currentDate.getMonth()}`}
+              forceOptimisticNavigation
+            >
               <span className="">Today</span>
             </LinkButton>
             {/* Go to next month if month.MonthNumber is 11, go to next year and month 0 */}

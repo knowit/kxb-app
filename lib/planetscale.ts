@@ -1,4 +1,5 @@
 import { cast } from "@planetscale/database";
+import Big from "big.js";
 import type { Generated } from "kysely";
 import { Kysely } from "kysely";
 import { PlanetScaleDialect } from "kysely-planetscale";
@@ -29,23 +30,32 @@ export interface UserWorkDayDetailTable {
   nonCommissionedHours: number;
   extraHours: number;
   sickDay: boolean;
-  user: UserTable;
+  user: Generated<UserTable>;
   userId: number;
 }
 
 export interface UserFeedbackTable {
   id: Generated<number>;
   date: string;
-  user: UserTable;
+  user: Generated<UserTable>;
   userId: number;
   feedback: string;
   reaction: number;
+}
+
+export interface UserSettings {
+  id: Generated<number>;
+  user: Generated<UserTable>;
+  userId: number;
+  closeUserSalaryDialogOnSaveSuccess: Generated<boolean>;
+  closeUserWorkDayDetailsDialogOnSaveSuccess: Generated<boolean>;
 }
 
 export interface Database {
   user: UserTable;
   user_work_day_detail: UserWorkDayDetailTable;
   user_feedback: UserFeedbackTable;
+  user_settings: UserSettings;
 }
 
 export const queryBuilder = new Kysely<Database>({
@@ -54,6 +64,10 @@ export const queryBuilder = new Kysely<Database>({
     cast: (field, value) => {
       if (field.type === "INT8") {
         return value === "1";
+      }
+
+      if (value && field.type === "DECIMAL") {
+        return Big(value).toNumber();
       }
 
       return cast(field, value);

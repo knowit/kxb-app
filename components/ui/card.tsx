@@ -40,7 +40,7 @@ Card.Footer = function CardFooter({ className, ...other }: CardFooterProps) {
   return (
     <div
       className={cn(
-        "border-t border-neutral-700 bg-neutral-50 px-6 py-4 dark:bg-neutral-800",
+        "flex w-full items-center justify-center border-t border-neutral-700 bg-neutral-50 py-4 dark:bg-neutral-950",
         className
       )}
       {...other}
@@ -58,7 +58,10 @@ interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement
 
 Card.Description = function CardDescription({ className, ...other }: CardDescriptionProps) {
   return (
-    <p className={cn("text-sm text-neutral-600 dark:text-neutral-300", className)} {...other} />
+    <p
+      className={cn("px-6 text-sm text-neutral-600 dark:text-neutral-300", className)}
+      {...other}
+    />
   );
 };
 

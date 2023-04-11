@@ -26,6 +26,8 @@ export default async function DashboardPage() {
 
   const currentDate = getRequestDateNow();
 
+  // preloadUserWorkDayDetailsByDate(token.id, currentDate.getMonth(), currentDate.getFullYear());
+
   const calendarMonth = getCalendarMonth(currentDate);
 
   const [user, userSettings] = await query([getUser(token.id), getUserSettings(token.id)]);

@@ -3,13 +3,13 @@ import {
   UserCalendarMonthWithSalarySkeleton
 } from "@/app/dashboard/_components/user-calendar-month-with-salary";
 import { MONTH } from "@/constants/date-constants";
-import { getRequestDateNow } from "@/lib/date";
 import { query } from "@/lib/query";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser, getUserSettings } from "@/lib/user";
+import { selectedYearMonthPageParams } from "@/lib/validations/page-params";
 import { getCalendarMonth } from "@/utils/calendar-utils";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
 interface SelectedYearMonthPageProps {
@@ -28,11 +28,16 @@ export function generateMetadata({ params }: SelectedYearMonthPageProps): Metada
 
 export default async function SelectedYearMonthPage({ params }: SelectedYearMonthPageProps) {
   const token = await getEdgeFriendlyToken();
-  const currentDate = getRequestDateNow();
 
-  const date = new Date(+(params.year ?? currentDate.getFullYear()), +params.month);
+  const parsedParams = await selectedYearMonthPageParams.safeParseAsync(params);
 
-  const calendarMonth = getCalendarMonth(date);
+  if (!parsedParams.success) {
+    return notFound();
+  }
+
+  // preloadUserWorkDayDetailsByDate(token.id, parsedParams.data.month, parsedParams.data.year);
+
+  const calendarMonth = getCalendarMonth(new Date(parsedParams.data.year, parsedParams.data.month));
 
   const [user, userSettings] = await query([getUser(token.id), getUserSettings(token.id)]);
 

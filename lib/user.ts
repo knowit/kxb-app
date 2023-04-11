@@ -262,11 +262,26 @@ const getUserAvatar = cache(async (id: string) => {
   };
 });
 
+const preloadUserWorkDayDetailsByDate = async (id: string, month: number, year: number) => {
+  void getUserWorkDayDetailsByDate(id, month, year);
+
+  const nextMonth = month === 11 ? 0 : month + 1;
+  const nextYear = month === 11 ? year + 1 : year;
+
+  void getUserWorkDayDetailsByDate(id, nextMonth, nextYear);
+
+  const prevMonth = month === 0 ? 11 : month - 1;
+  const prevYear = month === 0 ? year - 1 : year;
+
+  void getUserWorkDayDetailsByDate(id, prevMonth, prevYear);
+};
+
 export {
   createUser,
   getUser,
   getUserWithEarnings,
   getUserAvatar,
   getUserSettings,
-  getUserWorkDayDetailsByDate
+  getUserWorkDayDetailsByDate,
+  preloadUserWorkDayDetailsByDate
 };
