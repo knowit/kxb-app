@@ -17,7 +17,6 @@ const LinkButton = ({
   const router = useRouter();
 
   useEffect(() => {
-    console.log("CALLED", href);
     router.prefetch(href);
   }, [href, router]);
 

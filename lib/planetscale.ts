@@ -1,3 +1,4 @@
+import { cast } from "@planetscale/database";
 import type { Generated } from "kysely";
 import { Kysely } from "kysely";
 import { PlanetScaleDialect } from "kysely-planetscale";
@@ -12,6 +13,7 @@ export interface UserTable {
   hourlyRate: number;
   commission: number;
   tax: number;
+  taxTable?: string;
   workHours: number;
   created: Date;
   updated: Date;
@@ -48,6 +50,13 @@ export interface Database {
 
 export const queryBuilder = new Kysely<Database>({
   dialect: new PlanetScaleDialect({
-    url: process.env.DATABASE_URL
+    url: process.env.DATABASE_URL,
+    cast: (field, value) => {
+      if (field.type === "INT8") {
+        return value === "1";
+      }
+
+      return cast(field, value);
+    }
   })
 });

@@ -1,5 +1,4 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
-import { createUser } from "@/lib/user";
+import { queryBuilder } from "@/lib/planetscale";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -21,13 +20,28 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { rows } = await planetscaleEdge.execute("SELECT * FROM user", []);
+    const users = await queryBuilder
+      .selectFrom("user")
+      .select([
+        "id",
+        "name",
+        "email",
+        "activeDirectoryId",
+        "tax",
+        "taxTable",
+        "hourlyRate",
+        "commission",
+        "workHours",
+        "isAdmin",
+        "isSpecialist",
+        "created",
+        "updated"
+      ])
+      .execute();
 
-    const users = rows
-      .map(row => createUser(row))
-      .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
-
-    return NextResponse.json(users);
+    return NextResponse.json(
+      users.sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime())
+    );
   } catch (error) {
     return new Response(error, {
       status: 422
