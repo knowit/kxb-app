@@ -74,7 +74,7 @@ const SalaryCalculator = () => {
               <div>
                 <Label htmlFor="hourlyRate">Hourly rate</Label>
                 <Input
-                  className="bg-neutral-950"
+                  variant="dark"
                   type="number"
                   name="hourlyRate"
                   id="hourlyRate"
@@ -86,7 +86,7 @@ const SalaryCalculator = () => {
               <div>
                 <Label htmlFor="workHours">Work hours</Label>
                 <Input
-                  className="bg-neutral-950"
+                  variant="dark"
                   type="number"
                   name="workHours"
                   id="workHours"
@@ -98,7 +98,7 @@ const SalaryCalculator = () => {
               <div>
                 <Label htmlFor="commission">Commission</Label>
                 <Input
-                  className="bg-neutral-950"
+                  variant="dark"
                   type="number"
                   name="commission"
                   id="commission"
@@ -110,7 +110,7 @@ const SalaryCalculator = () => {
               <div>
                 <Label htmlFor="tax">Tax</Label>
                 <Input
-                  className="bg-neutral-950"
+                  variant="dark"
                   type="number"
                   name="tax"
                   id="tax"
