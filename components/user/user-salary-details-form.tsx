@@ -5,6 +5,13 @@ import { Button, ButtonSkeleton } from "@/components/ui/button";
 import { InfoButton } from "@/components/ui/info-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { Show } from "@/components/ui/show";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -19,7 +26,6 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
   user: {
@@ -219,9 +225,9 @@ function UserSalaryDetailsForm({
         <div className="flex items-center justify-between">
           <Label htmlFor="workHours">Work hours</Label>
           <InfoButton size="sm">
-            The standard work hours for consultants is {EARNING_CONSTANTS.WORK_HOURS_PER_DAY} hours
-            per day. However, some consultants may have their lunch covered by their employers,
-            which means their work hours per day will be 8 hours.
+            Consultants usually work for {EARNING_CONSTANTS.WORK_HOURS_PER_DAY} hours per day,
+            although some may have their lunch break covered by their employers, which can increase
+            their work hours to 8 per day.
           </InfoButton>
         </div>
         <Input

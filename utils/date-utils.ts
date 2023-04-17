@@ -112,3 +112,7 @@ export const getHourAndMinutes = (date: Date) => {
 
   return `${extractedDate.hour}:${extractedDate.minute}`;
 };
+
+export const getMySQLDate = (date?: Date) => {
+  return (date ?? new Date()).toISOString().slice(0, 19).replace("T", " ");
+};

@@ -1,97 +1,60 @@
-import "server-only";
-
-import { queryBuilder } from "@/lib/planetscale";
-import { planetscaleEdge, Row } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { query } from "@/lib/query";
-import { User, UserFeedback, UserSettings, UserWorkDayDetail } from "@/types";
+import { User, UserSettings, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
+import { getMySQLDate } from "@/utils/date-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
 import { redirect } from "next/navigation";
 import { cache } from "react";
-
-const createUser = (
-  row: Row,
-  workDayDetails?: UserWorkDayDetail[],
-  feedback?: UserFeedback[]
-): User => {
-  // check if row is an array
-  const user = (Array.isArray(row) ? row[0] : row) as User;
-
-  return {
-    ...user,
-    // convert string decimal to number
-    tax: Number(user?.tax ?? 0),
-    workHours: Number(user?.workHours ?? 0),
-    commission: Number(user?.commission ?? 0),
-    hourlyRate: Number(user?.hourlyRate ?? 0),
-    isAdmin: Boolean(user?.isAdmin ?? false),
-    isSpecialist: Boolean(user?.isSpecialist ?? false),
-    workDayDetails: workDayDetails ?? user?.workDayDetails ?? [],
-    feedback: feedback ?? user?.feedback ?? []
-  };
-};
+import "server-only";
 
 const getUser = cache(async (id: string): Promise<User> => {
-  const { rows } = await planetscaleEdge.execute(
-    "SELECT id, email, name, activeDirectoryId, hourlyRate, commission, tax, taxTable, workHours, created, updated, isAdmin, isSpecialist FROM user WHERE id = ?",
-    [id]
-  );
+  const user = await db
+    .selectFrom("user")
+    .select([
+      "id",
+      "email",
+      "name",
+      "activeDirectoryId",
+      "hourlyRate",
+      "commission",
+      "tax",
+      "taxTable",
+      "workHours",
+      "created",
+      "updated",
+      "isAdmin",
+      "isSpecialist"
+    ])
+    .where("id", "=", +id)
+    .executeTakeFirst();
 
-  const row = rows?.[0];
-
-  if (!row) {
+  if (!user) {
     return redirect("/logout");
   }
 
-  return createUser(row);
+  return { ...user, workDayDetails: [], feedback: [] };
 });
 
-const getUserWorkDayDetails = cache(async (id: string) => {
-  const { rows } = await planetscaleEdge.execute(
-    "SELECT uwdd.id, uwdd.date, uwdd.nonCommissionedHours, uwdd.extraHours, uwdd.sickDay, uwdd.userId FROM user LEFT JOIN user_work_day_detail AS uwdd ON user.id = uwdd.userId WHERE user.id = ?",
-    [id]
-  );
+const getUserWorkDayDetails = cache(async (id: string): Promise<UserWorkDayDetail[]> => {
+  const userWorkDayDetail = await db
+    .selectFrom("user_work_day_detail")
+    .select(["id", "date", "nonCommissionedHours", "extraHours", "sickDay", "userId"])
+    .where("userId", "=", +id)
+    .execute();
 
-  const userWorkDayDetail = rows as UserWorkDayDetail[];
-
-  return (userWorkDayDetail ?? []).map(userWorkDayDetail => ({
-    ...userWorkDayDetail,
-    nonCommissionedHours: Number(userWorkDayDetail.nonCommissionedHours),
-    extraHours: Number(userWorkDayDetail.extraHours),
-    sickDay: Boolean(userWorkDayDetail.sickDay)
-  })) as UserWorkDayDetail[];
-});
-
-const getUserWithWorkDayDetails = cache(async (id: string): Promise<User> => {
-  const [userResult, userWorkDayDetailResult] = await query([
-    getUser(id),
-    getUserWorkDayDetails(id)
-  ]);
-
-  if (!userResult.data) {
-    return redirect("/logout");
-  }
-
-  return {
-    ...userResult.data,
-    workDayDetails: userWorkDayDetailResult.data ?? []
-  };
+  return userWorkDayDetail;
 });
 
 const getUserWorkDayDetailsByDate = cache(async (id: string, month: number, year: number) => {
-  const { rows } = await planetscaleEdge.execute(
-    "select * from user_work_day_detail where userId = ? AND date like '%?-?'",
-    [id, month + 1, year]
-  );
+  const userWorkDayDetail = await db
+    .selectFrom("user_work_day_detail")
+    .select(["id", "date", "nonCommissionedHours", "extraHours", "sickDay", "userId"])
+    .where("userId", "=", +id)
+    .where("date", "like", `%${month + 1}-${year}`)
+    .execute();
 
-  const userWorkDayDetail = rows as UserWorkDayDetail[];
-
-  return (userWorkDayDetail ?? []).map(userWorkDayDetail => ({
-    ...userWorkDayDetail,
-    nonCommissionedHours: Number(userWorkDayDetail.nonCommissionedHours),
-    extraHours: Number(userWorkDayDetail.extraHours),
-    sickDay: Boolean(userWorkDayDetail.sickDay)
-  })) as UserWorkDayDetail[];
+  return userWorkDayDetail;
 });
 
 const getUserWithEarnings = cache(async (id: string, activeDate?: Date) => {
@@ -156,42 +119,33 @@ const getUserWithEarnings = cache(async (id: string, activeDate?: Date) => {
 });
 
 const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user_settings WHERE userId = ?", [
-    id
-  ]);
+  let userSettings = await db
+    .selectFrom("user_settings")
+    .select([
+      "id",
+      "userId",
+      "closeUserSalaryDialogOnSaveSuccess",
+      "closeUserWorkDayDetailsDialogOnSaveSuccess"
+    ])
+    .where("userId", "=", +id)
+    .executeTakeFirst();
 
-  if (!rows?.length) {
+  if (!userSettings) {
     // insert
-    await planetscaleEdge.execute("INSERT INTO user_settings (userId) VALUES (?)", [id]);
+    await db.insertInto("user_settings").values({ userId: +id }).execute();
 
-    const { rows } = await planetscaleEdge.execute("SELECT * FROM user_settings WHERE userId = ?", [
-      id
-    ]);
-
-    const userSettings = rows?.[0] as UserSettings;
-
-    return {
-      ...userSettings,
-      closeUserSalaryDialogOnSaveSuccess: Boolean(userSettings.closeUserSalaryDialogOnSaveSuccess),
-      closeUserWorkDayDetailsDialogOnSaveSuccess: Boolean(
-        userSettings.closeUserWorkDayDetailsDialogOnSaveSuccess
-      )
-    };
+    userSettings = await db
+      .selectFrom("user_settings")
+      .selectAll()
+      .where("userId", "=", +id)
+      .executeTakeFirst();
   }
 
-  const userSettings = rows?.[0] as UserSettings;
-
-  return {
-    ...userSettings,
-    closeUserSalaryDialogOnSaveSuccess: Boolean(userSettings.closeUserSalaryDialogOnSaveSuccess),
-    closeUserWorkDayDetailsDialogOnSaveSuccess: Boolean(
-      userSettings.closeUserWorkDayDetailsDialogOnSaveSuccess
-    )
-  };
+  return userSettings as UserSettings;
 });
 
 const getUserAvatar = cache(async (id: string) => {
-  const user = await queryBuilder
+  const user = await db
     .selectFrom("user")
     .select(["name", "refreshToken"])
     .where("id", "=", +id)
@@ -228,21 +182,22 @@ const getUserAvatar = cache(async (id: string) => {
       name: user.name
     };
   }
+
   const [avatarResponse] = await query([
     fetch(`https://graph.microsoft.com/v1.0/me/photos/120x120/$value`, {
       headers: {
         Authorization: `Bearer ${refreshedTokens.access_token}`
       }
     }),
-    planetscaleEdge.execute(
-      "UPDATE user SET refreshToken = ?, accessTokenExpires = ?, updated = ? WHERE id = ?",
-      [
-        refreshedTokens.refresh_token,
-        Date.now() + refreshedTokens?.ext_expires_in * 1000,
-        new Date(),
-        id
-      ]
-    )
+    db
+      .updateTable("user")
+      .set({
+        refreshToken: refreshedTokens.refresh_token,
+        accessTokenExpires: Date.now() + refreshedTokens?.ext_expires_in * 1000,
+        updated: getMySQLDate()
+      })
+      .where("id", "=", +id)
+      .execute()
   ]);
 
   if (!avatarResponse?.data?.ok) {
@@ -277,7 +232,6 @@ const preloadUserWorkDayDetailsByDate = async (id: string, month: number, year: 
 };
 
 export {
-  createUser,
   getUser,
   getUserWithEarnings,
   getUserAvatar,

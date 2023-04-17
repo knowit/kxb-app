@@ -2,7 +2,7 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Link } from "@/components/ui/link";
-import { getJobOffer } from "@/lib/job-offer";
+import { db } from "@/lib/db";
 import { formatCurrency, formatPercent } from "@/utils/currency-format";
 import { getFormattedLongDate } from "@/utils/date-utils";
 import { notFound } from "next/navigation";
@@ -14,7 +14,11 @@ interface SelectedYearPageProps {
 export const runtime = "experimental-edge";
 
 export default async function JobOfferPage({ params }: SelectedYearPageProps) {
-  const jobOffer = await getJobOffer(params.id);
+  const jobOffer = await db
+    .selectFrom("job_offer")
+    .selectAll()
+    .where("id", "=", +params.id)
+    .executeTakeFirst();
 
   if (!jobOffer) {
     return notFound();
@@ -71,7 +75,9 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
             <div className="bg-neutral-100 px-4 py-5 dark:bg-neutral-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium ">Sent date</dt>
               <dd className="mt-1 text-sm sm:col-span-2 sm:mt-0">
-                {jobOffer.sent ? getFormattedLongDate(new Date(jobOffer.sentDate)) : "-"}
+                {jobOffer.sent && jobOffer.sentDate
+                  ? getFormattedLongDate(new Date(jobOffer.sentDate))
+                  : "-"}
               </dd>
             </div>
             <div className="bg-neutral-50 px-4 py-5 dark:bg-neutral-950 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -83,7 +89,9 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
             <div className="bg-neutral-100 px-4 py-5 dark:bg-neutral-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium ">Accepted date</dt>
               <dd className="mt-1 text-sm sm:col-span-2 sm:mt-0">
-                {jobOffer.sent ? getFormattedLongDate(new Date(jobOffer.acceptedDate)) : "-"}
+                {jobOffer.sent && jobOffer.acceptedDate
+                  ? getFormattedLongDate(new Date(jobOffer.acceptedDate))
+                  : "-"}
               </dd>
             </div>
             <div className="bg-neutral-50 px-4 py-5 dark:bg-neutral-950 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

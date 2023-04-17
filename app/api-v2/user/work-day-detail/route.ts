@@ -1,6 +1,5 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
-import { UserWorkDayDetail } from "@/types";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,35 +22,48 @@ export async function PATCH(request: NextRequest) {
     const { id, date, extraHours, nonCommissionedHours, sickDay } =
       userWorkDayDetailSchema.parse(res);
 
-    const { rows } = await planetscaleEdge.execute(
-      "SELECT * FROM user_work_day_detail WHERE userId = ? AND date = ?",
-      [token.id, date]
-    );
+    const userWorkDayDetail = await db
+      .selectFrom("user_work_day_detail")
+      .selectAll()
+      .where("userId", "=", +token.id)
+      .where("date", "=", date)
+      .executeTakeFirst();
 
     // update
-    if (rows?.length > 0) {
-      let existing = rows[0] as UserWorkDayDetail;
-
+    if (userWorkDayDetail) {
       if (extraHours === 0 && nonCommissionedHours === 0) {
-        await planetscaleEdge.execute("DELETE FROM user_work_day_detail WHERE id = ?", [
-          +existing.id
-        ]);
+        await db
+          .deleteFrom("user_work_day_detail")
+          .where("id", "=", userWorkDayDetail.id)
+          .executeTakeFirst();
 
         return new Response("Patched", {
           status: 200
         });
       }
 
-      await planetscaleEdge.execute(
-        "UPDATE user_work_day_detail SET nonCommissionedHours = ?, extraHours = ?, sickDay = ? WHERE id = ?",
-        [nonCommissionedHours, extraHours, sickDay, +existing.id]
-      );
+      await db
+        .updateTable("user_work_day_detail")
+        .set({ nonCommissionedHours, extraHours, sickDay })
+        .where("id", "=", userWorkDayDetail.id)
+        .executeTakeFirst();
+
+      return new Response("Patched", {
+        status: 200
+      });
+
       // create if extra hours or non commissioned hours are greater than 0
     } else if (extraHours > 0 || nonCommissionedHours > 0) {
-      await planetscaleEdge.execute(
-        "INSERT INTO user_work_day_detail (userId, date, nonCommissionedHours, extraHours, sickDay) VALUES (?, ?, ?, ?, ?)",
-        [+token.id, date, nonCommissionedHours, extraHours, sickDay]
-      );
+      await db
+        .insertInto("user_work_day_detail")
+        .values({
+          userId: +token.id,
+          date,
+          nonCommissionedHours,
+          extraHours,
+          sickDay
+        })
+        .executeTakeFirst();
     }
 
     return new Response("Patched", {

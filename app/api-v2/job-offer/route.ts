@@ -1,4 +1,5 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
+import { getUser } from "@/lib/user";
 import { createJobOfferSchema } from "@/lib/validations/job-offer";
 import { nanoid } from "nanoid/non-secure";
 import { type ServerRuntime } from "next";
@@ -31,10 +32,17 @@ export async function POST(request: NextRequest) {
 
     const shareId = nanoid();
 
-    const { insertId } = await planetscaleEdge.execute(
-      "INSERT INTO job_offer (name, email, commission, guaranteeSalary, shareId, sentBy) VALUES (?, ?, ?, ?, ?, ?)",
-      [name, email, commission, guaranteeSalary, shareId, token.email]
-    );
+    const { insertId } = await db
+      .insertInto("job_offer")
+      .values({
+        name,
+        email,
+        commission,
+        guaranteeSalary,
+        shareId,
+        sentBy: token.email ?? (await getUser(token.id)).email
+      })
+      .executeTakeFirst();
 
     return NextResponse.json({
       insertId

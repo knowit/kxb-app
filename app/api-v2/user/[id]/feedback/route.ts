@@ -1,4 +1,4 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { userFeedbackSchema } from "@/lib/validations/user";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
@@ -21,10 +21,14 @@ export async function POST(request: NextRequest) {
 
     const { feedback, reaction, userId } = await userFeedbackSchema.parseAsync(res);
 
-    await planetscaleEdge.execute(
-      "INSERT INTO user_feedback (feedback, reaction, userId) VALUES (?, ?, ?)",
-      [feedback, reaction, +userId]
-    );
+    await db
+      .insertInto("user_feedback")
+      .values({
+        feedback,
+        reaction,
+        userId: +userId
+      })
+      .executeTakeFirst();
 
     return new Response("Created", {
       status: 201

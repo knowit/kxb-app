@@ -50,6 +50,11 @@ function UserAvatar({
             Feedback
           </Link>
           <Show when={isAdmin}>
+            <Link href="/admin/users" onClick={() => setOpen(false)}>
+              Users
+            </Link>
+          </Show>
+          <Show when={isAdmin}>
             <Link href="/dashboard/salary-calculator" onClick={() => setOpen(false)}>
               Salary Calculator
             </Link>

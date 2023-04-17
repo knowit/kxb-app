@@ -1,4 +1,4 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { userProfileSchema } from "@/lib/validations/user";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
@@ -31,7 +31,7 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 
     const { name } = await userProfileSchema.parseAsync(res);
 
-    await planetscaleEdge.execute("UPDATE user SET name = ? WHERE id = ?", [name, id]);
+    await db.updateTable("user").set({ name }).where("id", "=", id).execute();
 
     return new Response("Patched", {
       status: 200
@@ -65,13 +65,13 @@ export async function DELETE(request: NextRequest, { params }: { params: Params 
   try {
     const { id } = await userParamsSchema.parseAsync(params);
 
-    await planetscaleEdge.transaction(async trx => {
+    await db.transaction().execute(async trx => {
       // delete settings
-      await trx.execute("DELETE FROM user_settings WHERE userId = ?", [id]);
+      await trx.deleteFrom("user_settings").where("userId", "=", id).execute();
       // delete work day details
-      await trx.execute("DELETE FROM user_work_day_detail WHERE userId = ?", [id]);
+      await trx.deleteFrom("user_work_day_detail").where("userId", "=", id).execute();
       // delete user
-      await trx.execute("DELETE FROM user WHERE id = ?", [id]);
+      await trx.deleteFrom("user").where("id", "=", id).execute();
     });
 
     return new Response("Deleted", {

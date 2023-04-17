@@ -1,9 +1,9 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
-import { getJobOffers } from "@/lib/job-offer";
+import { db } from "@/lib/db";
 
 export default async function JobOffersPage() {
-  const jobOffers = await getJobOffers();
+  const jobOffers = await db.selectFrom("job_offer").selectAll().orderBy("id", "desc").execute();
 
   return (
     <>

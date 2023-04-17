@@ -200,3 +200,32 @@ export type JobOffer = {
   rejected: boolean;
   rejectedDate: string;
 };
+
+export type NavItem = {
+  title: string;
+  href: string;
+  disabled?: boolean;
+};
+
+export type MainNavItem = NavItem;
+
+export type SidebarNavItem = {
+  title: string;
+  disabled?: boolean;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+} & (
+  | {
+      href: string;
+      items?: never;
+    }
+  | {
+      href?: string;
+      items: NavLink[];
+    }
+);
+
+export type AdminConfig = {
+  MAIN_NAV: MainNavItem[];
+  SIDEBAR_NAV: SidebarNavItem[];
+};

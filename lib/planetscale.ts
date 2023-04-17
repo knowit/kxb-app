@@ -1,76 +1,20 @@
-import { cast } from "@planetscale/database";
-import Big from "big.js";
-import type { Generated } from "kysely";
-import { Kysely } from "kysely";
-import { PlanetScaleDialect } from "kysely-planetscale";
+import { connect } from "@planetscale/database";
 
-export interface UserTable {
-  id: Generated<number>;
-  email: string;
-  name?: string;
-  activeDirectoryId: string;
-  refreshToken?: string;
-  accessTokenExpires?: number;
-  hourlyRate: number;
-  commission: number;
-  tax: number;
-  taxTable?: string;
-  workHours: number;
-  created: Date;
-  updated: Date;
-  isAdmin: boolean;
-  isSpecialist: boolean;
-  workDayDetails: UserWorkDayDetailTable[];
-  feedback: UserFeedbackTable[];
-}
+type Row = Record<string, any> | any[];
 
-export interface UserWorkDayDetailTable {
-  id: Generated<number>;
-  date: string;
-  nonCommissionedHours: number;
-  extraHours: number;
-  sickDay: boolean;
-  user: Generated<UserTable>;
-  userId: number;
-}
-
-export interface UserFeedbackTable {
-  id: Generated<number>;
-  date: string;
-  user: Generated<UserTable>;
-  userId: number;
-  feedback: string;
-  reaction: number;
-}
-
-export interface UserSettings {
-  id: Generated<number>;
-  user: Generated<UserTable>;
-  userId: number;
-  closeUserSalaryDialogOnSaveSuccess: Generated<boolean>;
-  closeUserWorkDayDetailsDialogOnSaveSuccess: Generated<boolean>;
-}
-
-export interface Database {
-  user: UserTable;
-  user_work_day_detail: UserWorkDayDetailTable;
-  user_feedback: UserFeedbackTable;
-  user_settings: UserSettings;
-}
-
-export const queryBuilder = new Kysely<Database>({
-  dialect: new PlanetScaleDialect({
-    url: process.env.DATABASE_URL,
-    cast: (field, value) => {
-      if (field.type === "INT8") {
-        return value === "1";
-      }
-
-      if (value && field.type === "DECIMAL") {
-        return Big(value).toNumber();
-      }
-
-      return cast(field, value);
-    }
-  })
+export const planetscaleEdge = connect({
+  url: process.env.DATABASE_URL
+  // TODO: Ensure cache is working as expected with
+  // latest Next.js versions
+  // fetch: (url, options) => {
+  //   return fetch(url, {
+  //     ...options,
+  //     // next.js cache policy is way to aggressive
+  //     // so we disable it here, ensuring that the
+  //     // database response is always fresh
+  //     cache: "no-cache"
+  //   });
+  // }
 });
+
+export type { Row };

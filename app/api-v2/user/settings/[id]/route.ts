@@ -1,4 +1,4 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { userSettingsSchema } from "@/lib/validations/user";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
@@ -30,10 +30,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const { closeUserSalaryDialogOnSaveSuccess, closeUserWorkDayDetailsDialogOnSaveSuccess } =
       await userSettingsSchema.parseAsync(body);
 
-    await planetscaleEdge.execute(
-      "UPDATE user_settings SET closeUserSalaryDialogOnSaveSuccess = ?, closeUserWorkDayDetailsDialogOnSaveSuccess = ? WHERE userId = ?",
-      [closeUserSalaryDialogOnSaveSuccess, closeUserWorkDayDetailsDialogOnSaveSuccess, +id]
-    );
+    await db
+      .updateTable("user_settings")
+      .set({
+        closeUserSalaryDialogOnSaveSuccess,
+        closeUserWorkDayDetailsDialogOnSaveSuccess
+      })
+      .where("userId", "=", +id)
+      .executeTakeFirst();
 
     return new Response("Patched", {
       status: 200
