@@ -5,11 +5,14 @@ import {
   CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CopyIcon,
   Cross2Icon,
   GearIcon,
   InfoCircledIcon,
+  LockClosedIcon,
   MinusCircledIcon,
   PaperPlaneIcon,
+  PersonIcon,
   PlusCircledIcon,
   PlusIcon,
   RocketIcon,
@@ -85,5 +88,8 @@ export const Icons = {
   ),
   Share: Share2Icon,
   Update: UpdateIcon,
-  Trash: TrashIcon
+  Trash: TrashIcon,
+  Person: PersonIcon,
+  LockClosed: LockClosedIcon,
+  Copy: CopyIcon
 };

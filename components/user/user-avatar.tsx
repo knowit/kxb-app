@@ -10,6 +10,7 @@ import { getInitials } from "@/utils/common-utils";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import { Icons } from "../icons";
 
 function UserAvatar({
   name,
@@ -50,18 +51,18 @@ function UserAvatar({
             Feedback
           </Link>
           <Show when={isAdmin}>
-            <Link href="/admin/users" onClick={() => setOpen(false)}>
-              Users
-            </Link>
-          </Show>
-          <Show when={isAdmin}>
             <Link href="/dashboard/salary-calculator" onClick={() => setOpen(false)}>
               Salary Calculator
             </Link>
           </Show>
           <Show when={isAdmin}>
-            <Link href="/dashboard/job-offer" onClick={() => setOpen(false)}>
-              Job offers
+            <Link
+              className="flex items-baseline gap-1"
+              href="/admin"
+              onClick={() => setOpen(false)}
+            >
+              <Icons.LockClosed />
+              Admin
             </Link>
           </Show>
         </div>

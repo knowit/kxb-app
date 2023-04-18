@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       .executeTakeFirst();
 
     return NextResponse.json({
-      insertId
+      insertId: Number(insertId)
     });
   } catch (error) {
     console.error(JSON.stringify(error));

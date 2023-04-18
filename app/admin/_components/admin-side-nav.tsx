@@ -15,7 +15,6 @@ function AdminSideNav({ items }: SideNavProps) {
   const path = usePathname();
 
   if (!items?.length) {
-    console.log("MEH");
     return null;
   }
 

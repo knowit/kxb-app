@@ -1,7 +1,8 @@
-import { SalaryCalculator } from "@/app/dashboard/salary-calculator/salary-calculator";
+import { SalaryCalculator } from "@/components/salary/salary-calculator";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
+import { CompanyBenefits } from "../_components/company-benefits";
 
 export const runtime = "experimental-edge";
 
@@ -20,7 +21,8 @@ export default async function SalaryCalculatorPage() {
   return (
     <>
       <h1>Salary calculator</h1>
-      <SalaryCalculator />
+      <SalaryCalculator className="mb-16" />
+      <CompanyBenefits />
     </>
   );
 }

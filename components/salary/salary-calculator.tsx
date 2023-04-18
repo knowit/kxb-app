@@ -1,6 +1,5 @@
 "use client";
 
-import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
 import { CalendarMonth } from "@/components/calendar/calendar-month";
 import { Icons } from "@/components/icons";
 import { SalaryYearOverview } from "@/components/salary/salary-year-overview";
@@ -8,20 +7,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserEarnings } from "@/components/user/user-earnings";
+import { cn } from "@/lib/utils";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
-import { atom, useAtom } from "jotai";
-import { useMemo, useState } from "react";
+import { ComponentPropsWithoutRef, useMemo, useState } from "react";
 
-const salaryAtom = atom({
-  hourlyRate: +process.env.NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE,
-  commission: +process.env.NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION,
-  tax: +process.env.NEXT_PUBLIC_SALARY_DEFAULT_TAX,
-  workHours: +process.env.NEXT_PUBLIC_SALARY_DEFAULT_WORK_HOURS
-});
+const SalaryCalculator = ({
+  className,
+  initialHourlyRate = +process.env.NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE,
+  initialCommission = +process.env.NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION,
+  initialTax = +process.env.NEXT_PUBLIC_SALARY_DEFAULT_TAX,
+  initialWorkHours = +process.env.NEXT_PUBLIC_SALARY_DEFAULT_WORK_HOURS,
+  ...other
+}: ComponentPropsWithoutRef<"div"> & {
+  initialHourlyRate?: number;
+  initialCommission?: number;
+  initialTax?: number;
+  initialWorkHours?: number;
+}) => {
+  const [hourlyRate, setHourlyRate] = useState<number>(initialHourlyRate);
+  const [commission, setCommission] = useState<number>(initialCommission);
+  const [tax, setTax] = useState<number>(initialTax);
+  const [workHours, setWorkHours] = useState<number>(initialWorkHours);
 
-const SalaryCalculator = () => {
-  const [salary, setSalary] = useAtom(salaryAtom);
   const [activeDate, setActiveDate] = useState<Date>(new Date());
 
   const { activeMonth, userEarnings } = useMemo(() => {
@@ -45,10 +53,10 @@ const SalaryCalculator = () => {
       activeMonth: activeMonth,
       userEarnings: getUserEarningsDetails(
         {
-          commission: salary.commission ?? 0,
-          hourlyRate: salary.hourlyRate ?? 0,
-          tax: salary.tax ?? 0,
-          workHours: salary.workHours ?? 0
+          commission: commission ?? 0,
+          hourlyRate: hourlyRate ?? 0,
+          tax: tax ?? 0,
+          workHours: workHours ?? 0
         },
         year,
         nextYear,
@@ -58,10 +66,10 @@ const SalaryCalculator = () => {
         nextMonth
       )
     };
-  }, [activeDate, salary]);
+  }, [activeDate, commission, hourlyRate, tax, workHours]);
 
   return (
-    <>
+    <div className={cn(className)}>
       <div className="flex flex-col gap-12 lg:flex-row">
         <div className="order-1 flex max-w-[380px] flex-col gap-3 lg:-order-1 lg:min-w-[380px]">
           <h2>
@@ -79,8 +87,8 @@ const SalaryCalculator = () => {
                   name="hourlyRate"
                   id="hourlyRate"
                   step="1"
-                  value={salary.hourlyRate}
-                  onChange={e => setSalary({ ...salary, hourlyRate: +e.target.value })}
+                  value={hourlyRate}
+                  onChange={e => setHourlyRate(+e.target.value)}
                 />
               </div>
               <div>
@@ -91,8 +99,8 @@ const SalaryCalculator = () => {
                   name="workHours"
                   id="workHours"
                   step="0.5"
-                  value={salary.workHours}
-                  onChange={e => setSalary({ ...salary, workHours: +e.target.value })}
+                  value={workHours}
+                  onChange={e => setWorkHours(+e.target.value)}
                 />
               </div>
               <div>
@@ -103,8 +111,8 @@ const SalaryCalculator = () => {
                   name="commission"
                   id="commission"
                   step="0.01"
-                  value={salary.commission}
-                  onChange={e => setSalary({ ...salary, commission: +e.target.value })}
+                  value={commission}
+                  onChange={e => setCommission(+e.target.value)}
                 />
               </div>
               <div>
@@ -115,8 +123,8 @@ const SalaryCalculator = () => {
                   name="tax"
                   id="tax"
                   step="0.01"
-                  value={salary.tax}
-                  onChange={e => setSalary({ ...salary, tax: +e.target.value })}
+                  value={tax}
+                  onChange={e => setTax(+e.target.value)}
                 />
               </div>
             </div>
@@ -161,9 +169,8 @@ const SalaryCalculator = () => {
       </div>
       <div className="flex flex-col space-y-24">
         <SalaryYearOverview yearSalaryStatistics={userEarnings?.yearSalaryStatistics} />
-        <CompanyBenefits />
       </div>
-    </>
+    </div>
   );
 };
 

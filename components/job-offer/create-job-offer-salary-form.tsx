@@ -78,7 +78,7 @@ function CreateJobOfferForm({ commission, className, ...other }: CreateJobOfferF
     startTransition(() => {
       // Refresh the current route and fetch new data from the server without
       // losing client-side browser or React state.
-      router.push(insertId ? `/dashboard/job-offer/${insertId}` : "/dashboard/job-offer");
+      router.push(insertId ? `/admin/job-offers/${insertId}` : "/dashboard/job-offer");
       router.refresh();
     });
   }

@@ -12,12 +12,17 @@ const ADMIN_CONSTANTS: AdminConfig = {
     {
       title: "Admin",
       href: "/admin",
-      icon: "Gear"
+      icon: "LockClosed"
     },
     {
       title: "Users",
       href: "/admin/users",
-      icon: "Gear"
+      icon: "Person"
+    },
+    {
+      title: "Job offers",
+      href: "/admin/job-offers",
+      icon: "Rocket"
     },
     {
       title: "Settings",

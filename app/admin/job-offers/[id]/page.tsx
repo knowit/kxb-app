@@ -1,11 +1,16 @@
-import { Icons } from "@/components/icons";
+import { AdminHeader } from "@/app/admin/_components/admin-header";
+import { AdminShell } from "@/app/admin/_components/admin-shell";
+import { JobOfferDeleteDialog } from "@/app/admin/job-offers/_components/job-offer-delete-dialog";
 import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/ui/copy-button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Link } from "@/components/ui/link";
+import { LinkButton } from "@/components/ui/link-button";
 import { db } from "@/lib/db";
+import { getAbsoluteUrl } from "@/utils/common-utils";
 import { formatCurrency, formatPercent } from "@/utils/currency-format";
 import { getFormattedLongDate } from "@/utils/date-utils";
 import { notFound } from "next/navigation";
+import { JobOfferSendDialog } from "../_components/job-offer-send-dialog";
 
 interface SelectedYearPageProps {
   params: { id: string };
@@ -25,8 +30,13 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
   }
 
   return (
-    <>
-      <Link href="/dashboard/job-offer">Back to job offers</Link>
+    <AdminShell>
+      <AdminHeader
+        heading={`Job offer for ${jobOffer.name}`}
+        text="Review job offer before sending."
+      >
+        <LinkButton href="/admin/job-offers">Back to job offers</LinkButton>
+      </AdminHeader>
       <div className="overflow-hidden rounded-md border border-neutral-700">
         <div className="flex items-center justify-between bg-neutral-50 px-4 py-5 dark:bg-neutral-950 sm:px-6">
           <div>
@@ -36,7 +46,7 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
           <div>
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Icons.Share className="h-6 w-6 text-neutral-500" />
+                <CopyButton value={`${getAbsoluteUrl()}/job-offer?shareId=${jobOffer.shareId}`} />
               </HoverCardTrigger>
               <HoverCardContent>Copy public link</HoverCardContent>
             </HoverCard>
@@ -102,7 +112,7 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
                   className="mr-auto flex items-center justify-end gap-3 rounded-md border border-neutral-700 p-3"
                 >
                   <li>
-                    <Button variant="destructive">Delete</Button>
+                    <JobOfferDeleteDialog jobOffer={jobOffer} disabled={jobOffer.sent} />
                   </li>
                   <li>
                     <Button variant="outline" disabled={jobOffer.sent}>
@@ -110,9 +120,7 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
                     </Button>
                   </li>
                   <li>
-                    <Button variant="action" disabled={jobOffer.sent}>
-                      Send
-                    </Button>
+                    <JobOfferSendDialog jobOffer={jobOffer} disabled={jobOffer.sent} />
                   </li>
                 </ul>
               </dd>
@@ -120,6 +128,6 @@ export default async function JobOfferPage({ params }: SelectedYearPageProps) {
           </dl>
         </div>
       </div>
-    </>
+    </AdminShell>
   );
 }
