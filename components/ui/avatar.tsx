@@ -4,13 +4,24 @@ import { cn } from "@/lib/utils";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import * as React from "react";
 
+type AvatarSize = "default" | "sm" | "lg" | "xl";
+
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & { size?: AvatarSize }
+>(({ className, size = "default", ...props }, ref) => (
   <AvatarPrimitive.Root
     ref={ref}
-    className={cn("relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full", className)}
+    className={cn(
+      "relative flex shrink-0 overflow-hidden rounded-full",
+      {
+        "h-12 w-12": size === "default",
+        "h-8 w-8": size === "sm",
+        "h-16 w-16": size === "lg",
+        "h-20 w-20": size === "xl"
+      },
+      className
+    )}
     {...props}
   />
 ));
@@ -46,8 +57,15 @@ const AvatarFallback = React.forwardRef<
 
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-const AvatarSkeleton = () => (
-  <div className="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full">
+const AvatarSkeleton = ({ size = "default" }: { size?: AvatarSize }) => (
+  <div
+    className={cn("relative flex shrink-0 overflow-hidden rounded-full", {
+      "h-12 w-12": size === "default",
+      "h-8 w-8": size === "sm",
+      "h-16 w-16": size === "lg",
+      "h-20 w-20": size === "xl"
+    })}
+  >
     <div className="aspect-square h-full w-full animate-pulse bg-neutral-100 dark:bg-neutral-800" />
   </div>
 );

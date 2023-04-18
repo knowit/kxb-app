@@ -1,15 +1,15 @@
 import { Icons } from "@/components/icons";
 import { Prose } from "@/components/prose";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 const CompanyBenefit = ({ text }: { text: string }) => (
   <Card className="flex min-h-[82px] items-center">
-    <Card.Content className="flex items-center gap-3 p-4">
+    <CardContent className="flex items-center gap-3 p-4">
       <div className="flex h-6 w-6 min-w-[1.5rem] items-center justify-center rounded-full border border-emerald-500 text-emerald-500">
         <Icons.Check />
       </div>
       <span>{text}</span>
-    </Card.Content>
+    </CardContent>
   </Card>
 );
 

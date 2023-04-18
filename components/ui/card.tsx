@@ -1,83 +1,64 @@
-import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import * as React from "react";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "subtle";
-}
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { variant?: "default" | "subtle" }
+>(({ className, variant = "default", ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border border-neutral-700 shadow-sm dark:border-neutral-700 dark:bg-neutral-950",
+      {
+        "dark:border-neutral-700 dark:bg-neutral-950": variant === "default",
+        "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100":
+          variant === "subtle"
+      },
+      className
+    )}
+    {...props}
+  />
+));
+Card.displayName = "Card";
 
-function Card({ className, variant = "default", ...other }: CardProps) {
-  return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-lg border border-neutral-700 dark:border-neutral-700 dark:bg-neutral-950",
-        {
-          "dark:border-neutral-700 dark:bg-neutral-950": variant === "default",
-          "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100":
-            variant === "subtle"
-        },
-        className
-      )}
-      {...other}
+const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
+  )
+);
+CardHeader.displayName = "CardHeader";
+
+const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ className, ...props }, ref) => (
+    <h3
+      ref={ref}
+      className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+      {...props}
     />
-  );
-}
+  )
+);
+CardTitle.displayName = "CardTitle";
 
-interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("text-muted-foreground text-sm", className)} {...props} />
+));
+CardDescription.displayName = "CardDescription";
 
-Card.Header = function CardHeader({ className, ...other }: CardHeaderProps) {
-  return <div className={cn("grid gap-1 p-6", className)} {...other} />;
-};
+const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  )
+);
+CardContent.displayName = "CardContent";
 
-interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn(" flex items-center p-6 pt-0", className)} {...props} />
+  )
+);
+CardFooter.displayName = "CardFooter";
 
-Card.Content = function CardContent({ className, ...other }: CardContentProps) {
-  return <div className={cn("px-6 pb-4 ", className)} {...other} />;
-};
-
-interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-Card.Footer = function CardFooter({ className, ...other }: CardFooterProps) {
-  return (
-    <div
-      className={cn(
-        "flex w-full items-center justify-center border-t border-neutral-700 bg-neutral-50 py-4 dark:bg-neutral-950",
-        className
-      )}
-      {...other}
-    />
-  );
-};
-
-interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
-
-Card.Title = function CardTitle({ className, ...other }: CardTitleProps) {
-  return <h4 className={cn("text-lg font-medium", className)} {...other} />;
-};
-
-interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
-
-Card.Description = function CardDescription({ className, ...other }: CardDescriptionProps) {
-  return (
-    <p
-      className={cn("px-6 text-sm text-neutral-600 dark:text-neutral-300", className)}
-      {...other}
-    />
-  );
-};
-
-Card.Skeleton = function CardSeleton() {
-  return (
-    <Card>
-      <Card.Header className="gap-2">
-        <Skeleton className="h-5 w-1/5" />
-        <Skeleton className="h-4 w-4/5" />
-      </Card.Header>
-      <Card.Content className="h-10" />
-      <Card.Footer>
-        <Skeleton className="h-8 w-[120px] bg-neutral-200" />
-      </Card.Footer>
-    </Card>
-  );
-};
-
-export { Card };
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };

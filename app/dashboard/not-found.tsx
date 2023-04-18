@@ -1,16 +1,16 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/link-button";
 
 export default function NotFound() {
   return (
     <Card className="mx-auto max-w-lg">
-      <Card.Content>
-        <Card.Header>404</Card.Header>
-        <Card.Description>Not found</Card.Description>
-      </Card.Content>
-      <Card.Footer>
+      <CardContent>
+        <CardHeader>404</CardHeader>
+        <CardDescription>Not found</CardDescription>
+      </CardContent>
+      <CardFooter>
         <LinkButton href="/dashboard">Take me back</LinkButton>
-      </Card.Footer>
+      </CardFooter>
     </Card>
   );
 }

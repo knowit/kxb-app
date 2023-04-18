@@ -1,5 +1,5 @@
 import { TabNavigation } from "@/components/tab-navigation";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +13,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
         ]}
       />
       <Card>
-        <Card.Content className="px-8 py-6">{children}</Card.Content>
+        <CardContent className="px-8 py-6">{children}</CardContent>
       </Card>
     </div>
   );
