@@ -1,9 +1,13 @@
 import { cache } from "react";
+import { storageExists, storageUpload } from "./ms-storage";
 
 const getMsGraphBearerToken = cache(async () => {
   const response = await fetch(
     `https://login.microsoftonline.com/${process.env.NEXTAUTH_AZURE_AD_TENANT_ID}/oauth2/v2.0/token`,
     {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
       method: "POST",
       body: new URLSearchParams({
         grant_type: "password",
@@ -25,12 +29,18 @@ const getMsGraphBearerToken = cache(async () => {
   return data.access_token;
 });
 
-const getMsGraphUserAvatar = cache(async (id: string) => {
-  const token = await getMsGraphBearerToken();
-
+const getMsGraphUserAvatar = cache(async (activeDirectoryId: string) => {
   try {
+    const exists = await storageExists(`${activeDirectoryId}.jpg`);
+
+    if (exists.success) {
+      return exists.cdnUrl;
+    }
+
+    const token = await getMsGraphBearerToken();
+
     const response = await fetch(
-      `https://graph.microsoft.com/v1.0/users/${id}/photos/240x240/$value`,
+      `https://graph.microsoft.com/v1.0/users/${activeDirectoryId}/photos/120x120/$value`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -38,12 +48,19 @@ const getMsGraphUserAvatar = cache(async (id: string) => {
       }
     );
 
+    if (!response.ok) {
+      return undefined;
+    }
+
     const pictureBuffer = await response.arrayBuffer();
+
+    await storageUpload(pictureBuffer, `${activeDirectoryId}.jpg`, "image/jpeg");
 
     return `data:image/jpeg;base64,${btoa(
       String.fromCharCode.apply(null, new Uint8Array(pictureBuffer))
     )}`;
   } catch (error) {
+    console.error(error);
     return undefined;
   }
 });

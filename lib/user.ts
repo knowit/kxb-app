@@ -7,6 +7,7 @@ import { getUserEarningsDetails } from "@/utils/user-utils";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import "server-only";
+import { storageExists, storageUpload } from "./ms-storage";
 
 const getUser = cache(async (id: string): Promise<User> => {
   const user = await db
@@ -147,7 +148,7 @@ const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
 const getUserAvatar = cache(async (id: string) => {
   const user = await db
     .selectFrom("user")
-    .select(["name", "refreshToken"])
+    .select(["name", "refreshToken", "activeDirectoryId"])
     .where("id", "=", +id)
     .executeTakeFirst();
 
@@ -155,6 +156,15 @@ const getUserAvatar = cache(async (id: string) => {
     return {
       src: undefined,
       name: user?.name
+    };
+  }
+
+  const exists = await storageExists(`${user.activeDirectoryId}.jpg`);
+
+  if (exists.success) {
+    return {
+      src: exists.cdnUrl,
+      name: user.name
     };
   }
 
@@ -208,6 +218,9 @@ const getUserAvatar = cache(async (id: string) => {
   }
 
   const pictureBuffer = await avatarResponse?.data.arrayBuffer();
+
+  // save to Azure Storage
+  await storageUpload(pictureBuffer, `${user.activeDirectoryId}.jpg`, "image/jpeg");
 
   return {
     src: `data:image/jpeg;base64,${btoa(

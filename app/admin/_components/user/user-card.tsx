@@ -27,7 +27,7 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
         <p>Created: {getFormattedDateAndTime(new Date(user.created))}</p>
         <p>Last login: {getFormattedDateAndTime(new Date(user.updated))}</p>
       </InfoButton>
-      <CardHeader className="absolute w-full -translate-y-1/2 items-center p-0">
+      <CardHeader className="absolute w-full -translate-y-1/2 items-center justify-center p-0">
         <Link href={`/admin/users/${user.id}`}>
           <Suspense fallback={<AvatarSkeleton size="xl" />}>
             {/* @ts-expect-error Async Server Component */}

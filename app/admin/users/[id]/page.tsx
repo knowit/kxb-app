@@ -18,5 +18,12 @@ export default async function UserPage({ params }: UserPageProps) {
     return notFound();
   }
 
-  return <div>{user.name}</div>;
+  return (
+    <div className="flex flex-col items-start">
+      <div className="flex gap-1">
+        <b>My name:</b>
+        <span>{user.name}</span>
+      </div>
+    </div>
+  );
 }
