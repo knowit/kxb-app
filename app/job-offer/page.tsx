@@ -1,10 +1,10 @@
+import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
 import { Prose } from "@/components/prose";
 import { SalaryCalculator } from "@/components/salary/salary-calculator";
 import { db } from "@/lib/db";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import * as z from "zod";
-import { CompanyBenefits } from "../dashboard/_components/company-benefits";
 
 export const runtime = "experimental-edge";
 
@@ -15,6 +15,10 @@ async function getJobOffer(shareId: string) {
     .where("shareId", "=", shareId)
     .executeTakeFirst();
 }
+
+const jobOfferParamsSchema = z.object({
+  shareId: z.string()
+});
 
 export async function generateMetadata({
   searchParams
@@ -41,10 +45,6 @@ export async function generateMetadata({
     title: `Tank you, ${jobOffer.name}`
   };
 }
-
-const jobOfferParamsSchema = z.object({
-  shareId: z.string()
-});
 
 export default async function JobOfferPage({
   searchParams

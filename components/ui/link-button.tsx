@@ -12,7 +12,8 @@ const LinkButton = ({
   variant = "outline",
   size = "default",
   forceOptimisticNavigation = false,
-  href
+  href,
+  disabled = false
 }: ButtonProps & { href: string; forceOptimisticNavigation?: boolean }) => {
   const router = useRouter();
 
@@ -22,7 +23,9 @@ const LinkButton = ({
 
   return (
     <Link
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, className }), {
+        "pointer-events-none opacity-50": disabled
+      })}
       href={href}
       onClick={e => {
         e.preventDefault();

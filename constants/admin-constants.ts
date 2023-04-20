@@ -29,6 +29,26 @@ const ADMIN_CONSTANTS: AdminConfig = {
       href: "/admin/settings",
       icon: "Gear"
     }
+  ],
+  USERS_PAGE_SIZE: 12,
+  USERS_SEARCH_PARAMS: ["page", "search", "sort", "tag"],
+  USERS_SORT_OPTIONS: [
+    {
+      value: "name",
+      default: false,
+      i18n: {
+        en: "Name",
+        no: "Navn"
+      }
+    },
+    {
+      value: "updated",
+      default: true,
+      i18n: {
+        en: "Updated",
+        no: "Oppdatert"
+      }
+    }
   ]
 };
 

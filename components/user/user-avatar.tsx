@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import { ThemeSelect } from "@/components/theme-select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,6 @@ import { getInitials } from "@/utils/common-utils";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
-import { Icons } from "../icons";
 
 function UserAvatar({
   name,

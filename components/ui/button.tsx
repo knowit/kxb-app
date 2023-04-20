@@ -50,12 +50,18 @@ Button.displayName = "Button";
 
 const ButtonSkeleton = ({
   children,
+  size = "default",
   className,
   ...other
-}: React.ComponentPropsWithoutRef<typeof Skeleton>) => (
+}: React.ComponentPropsWithoutRef<typeof Skeleton> & { size?: "default" | "sm" | "lg" }) => (
   <Skeleton
     className={cn(
-      "h-10 w-fit min-w-[94px] rounded-md border border-neutral-700 [&>span]:invisible",
+      "w-fit min-w-[94px] rounded-md border border-neutral-700 [&>span]:invisible",
+      {
+        "h-10": size === "default",
+        "h-9": size === "sm",
+        "h-11": size === "lg"
+      },
       className
     )}
     {...other}

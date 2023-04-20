@@ -243,7 +243,21 @@ export type SidebarNavItem = {
     }
 );
 
+export type UsersSortOption = "name" | "updated";
+export type UsersSort = {
+  value: UsersSortOption;
+  default: boolean;
+  i18n: {
+    en: string;
+    no: string;
+  };
+};
+export type UsersSearchParams = "page" | "search" | "sort" | "tag";
+
 export type AdminConfig = {
   MAIN_NAV: MainNavItem[];
   SIDEBAR_NAV: SidebarNavItem[];
+  USERS_SEARCH_PARAMS: UsersSearchParams[];
+  USERS_PAGE_SIZE: number;
+  USERS_SORT_OPTIONS: UsersSort[];
 };

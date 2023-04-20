@@ -1,9 +1,9 @@
+import { AdminContent } from "@/app/admin/_components/admin-content";
+import { AdminHeader } from "@/app/admin/_components/admin-header";
 import { AdminShell } from "@/app/admin/_components/admin-shell";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import { db } from "@/lib/db";
-import { AdminContent } from "../_components/admin-content";
-import { AdminHeader } from "../_components/admin-header";
 
 export const runtime = "experimental-edge";
 

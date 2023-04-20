@@ -1,8 +1,8 @@
+import { CompanyBenefits } from "@/app/dashboard/_components/company-benefits";
 import { SalaryCalculator } from "@/components/salary/salary-calculator";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
-import { CompanyBenefits } from "../_components/company-benefits";
 
 export const runtime = "experimental-edge";
 

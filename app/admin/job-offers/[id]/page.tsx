@@ -1,6 +1,7 @@
 import { AdminHeader } from "@/app/admin/_components/admin-header";
 import { AdminShell } from "@/app/admin/_components/admin-shell";
 import { JobOfferDeleteDialog } from "@/app/admin/job-offers/_components/job-offer-delete-dialog";
+import { JobOfferSendDialog } from "@/app/admin/job-offers/_components/job-offer-send-dialog";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/ui/copy-button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -10,7 +11,6 @@ import { getAbsoluteUrl } from "@/utils/common-utils";
 import { formatCurrency, formatPercent } from "@/utils/currency-format";
 import { getFormattedLongDate } from "@/utils/date-utils";
 import { notFound } from "next/navigation";
-import { JobOfferSendDialog } from "../_components/job-offer-send-dialog";
 
 interface SelectedYearPageProps {
   params: { id: string };

@@ -1,8 +1,8 @@
+import { AdminContent } from "@/app/admin/_components/admin-content";
+import { AdminHeader } from "@/app/admin/_components/admin-header";
+import { AdminShell } from "@/app/admin/_components/admin-shell";
 import { CreateJobOfferForm } from "@/components/job-offer/create-job-offer-salary-form";
 import { Prose } from "@/components/prose";
-import { AdminContent } from "../../_components/admin-content";
-import { AdminHeader } from "../../_components/admin-header";
-import { AdminShell } from "../../_components/admin-shell";
 
 interface SelectedYearPageProps {
   params: { commission: string };

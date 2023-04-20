@@ -12,6 +12,7 @@ import { Suspense } from "react";
 
 async function UserCardAvatar({ user }: { user: Omit<User, "workDayDetails" | "feedback"> }) {
   const src = await getMsGraphUserAvatar(user.activeDirectoryId);
+
   return (
     <Avatar size="xl">
       <AvatarImage src={src} alt={`Avatar image of ${user.name}`} />
@@ -37,8 +38,8 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
       </CardHeader>
       <CardContent className="pt-16">
         <CardTitle className="mb-1 min-h-[36px] text-center">{user.name}</CardTitle>
-        <CardDescription className="text-center">{user.email}</CardDescription>
-        <div className="flex items-center justify-center gap-3 py-3">
+        <CardDescription className="text-center">Bergen</CardDescription>
+        <div className="flex flex-col items-center justify-center gap-3 py-3 lg:flex-row">
           <Show when={user.isAdmin}>
             <Badge variant="green">Admin</Badge>
           </Show>
