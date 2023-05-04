@@ -19,7 +19,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
     return (
       <div
         className={cn(
-          "flex flex-col dark:bg-neutral-950",
+          "flex aspect-[16/11] flex-col items-center justify-center",
           {
             "font-medium underline underline-offset-4": calendarDay.isToday,
             "text-emerald-500 dark:text-emerald-500": calendarDay.isWorkDay,
@@ -32,15 +32,9 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
               calendarDay.type === "day" || calendarDay.type === "spacing",
             "border-t border-t-neutral-700": calendarDay.type === "week",
             "": calendarDay.isOdd,
-            "min-h-[50px] md:min-h-[112px]":
-              calendarSizeVariant === "large" &&
-              (calendarDay.type === "day" || calendarDay.type === "spacing"),
             "items-end justify-start px-1 py-1 md:px-3 md:py-2": calendarSizeVariant === "large",
-            "h-full min-h-[44px] items-center justify-center lg:min-h-[50px] lg:min-w-[50px]":
-              calendarSizeVariant === "default",
             "text-sm": calendarDay.type === "header",
-            "text-xs": calendarDay.type === "header" && calendarSizeVariant === "small",
-            "h-full min-h-[36px] items-center justify-center": calendarSizeVariant === "small"
+            "text-xs": calendarDay.type === "header" && calendarSizeVariant === "small"
           },
           className
         )}
