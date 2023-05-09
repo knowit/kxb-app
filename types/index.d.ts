@@ -58,24 +58,6 @@ export type UserSettings = {
   closeUserWorkDayDetailsDialogOnSaveSuccess: boolean;
 };
 
-export type JobOffer = {
-  id: number;
-  name: string;
-  commission: number;
-  email: string;
-  created: string;
-  updated: string;
-  guaranteeSalary: number;
-  shareId: string;
-  sent: boolean;
-  sentDate?: string;
-  sentBy: string;
-  accepted: boolean;
-  acceptedDate?: string;
-  rejected: boolean;
-  rejectedDate?: string;
-};
-
 export type CalendarMonthEarnings = {
   monthName: string;
   payDay: string;
@@ -189,7 +171,6 @@ export type GraphUser = {
   businessPhones: string[];
   displayName: string;
   givenName: ?string;
-  jobTitle: ?string;
   mail: ?string;
   mobilePhone: ?string;
   officeLocation: ?string;
@@ -200,24 +181,6 @@ export type GraphUser = {
 };
 
 export type CalendarSizeVariant = "default" | "small" | "large";
-
-export type JobOffer = {
-  id: number;
-  name: string;
-  email: string;
-  commission: number;
-  guaranteeSalary: number;
-  created: string;
-  updated: string;
-  shareId: string;
-  sent: boolean;
-  sentBy: string;
-  sentDate: string;
-  accepted: boolean;
-  acceptedDate: string;
-  rejected: boolean;
-  rejectedDate: string;
-};
 
 export type NavItem = {
   title: string;

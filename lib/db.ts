@@ -49,30 +49,11 @@ export interface UserSettingsTable {
   closeUserWorkDayDetailsDialogOnSaveSuccess: Generated<boolean>;
 }
 
-export interface JobOfferTable {
-  id: Generated<number>;
-  created: Generated<string>;
-  updated: Generated<string>;
-  commission: number;
-  guaranteeSalary: number;
-  name: string;
-  email: string;
-  shareId: string;
-  sent: Generated<boolean>;
-  sentDate?: string;
-  sentBy: string;
-  accepted: Generated<boolean>;
-  acceptedDate?: string;
-  rejected: Generated<boolean>;
-  rejectedDate?: string;
-}
-
 export interface Database {
   user: UserTable;
   user_work_day_detail: UserWorkDayDetailTable;
   user_feedback: UserFeedbackTable;
   user_settings: UserSettingsTable;
-  job_offer: JobOfferTable;
 }
 
 const db = new Kysely<Database>({

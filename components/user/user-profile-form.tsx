@@ -16,13 +16,13 @@ import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-interface CreateJobOfferFormProps extends HTMLAttributes<HTMLFormElement> {
+interface UserProfileFormProps extends HTMLAttributes<HTMLFormElement> {
   user: User;
 }
 
 type FormData = z.infer<typeof userProfileSchema>;
 
-function UserProfileForm({ user, className, ...other }: CreateJobOfferFormProps) {
+function UserProfileForm({ user, className, ...other }: UserProfileFormProps) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
