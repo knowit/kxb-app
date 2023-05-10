@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 
 export const runtime = "edge";
 
-export default async function AdminPage() {
+export default async function SettingsPage() {
   return (
     <AdminShell>
-      <AdminHeader heading="Dashboard" text="Admin overview">
+      <AdminHeader heading="Settings" text="Manage settings">
         <Button>Click</Button>
       </AdminHeader>
-      <div>Admin dashboard</div>
+      <div>Settings..</div>
     </AdminShell>
   );
 }

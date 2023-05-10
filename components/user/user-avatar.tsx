@@ -37,7 +37,7 @@ function UserAvatar({
       <PopoverContent
         align="start"
         side="bottom"
-        className="flex min-w-[10rem] flex-col gap-y-2 p-0"
+        className="flex min-w-[18rem] flex-col gap-y-2 p-0"
       >
         <div className="px-6 py-4">
           <span className="text-lg font-bold uppercase">{name}</span>

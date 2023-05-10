@@ -1,6 +1,5 @@
 import { AdminMainNav } from "@/app/admin/_components/admin-main-nav";
 import { AdminSideNav } from "@/app/admin/_components/admin-side-nav";
-import { ADMIN_CONSTANTS } from "@/constants/admin-constants";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
@@ -21,14 +20,12 @@ export default async function AdminLayout({ children, modal }: AdminLayoutProps)
   return (
     <>
       <div className="mx-auto flex min-h-screen flex-col">
-        <header className="sticky top-0 z-40 bg-neutral-950">
-          <div className="flex h-16 items-center justify-between border-b border-b-neutral-700 p-4">
-            <AdminMainNav items={ADMIN_CONSTANTS.MAIN_NAV} />
-          </div>
+        <header className="sticky top-0 z-40 bg-neutral-950 p-4">
+          <AdminMainNav />
         </header>
         <div className="container relative grid grow gap-12 bg-neutral-900 md:grid-cols-[200px_1fr]">
           <aside className="sticky top-0 hidden w-[200px] flex-col border-r border-r-neutral-700 pr-6 pt-8 md:flex">
-            <AdminSideNav items={ADMIN_CONSTANTS.SIDEBAR_NAV} />
+            <AdminSideNav />
           </aside>
           <main className="flex w-full flex-1 flex-col overflow-hidden ">{children}</main>
         </div>

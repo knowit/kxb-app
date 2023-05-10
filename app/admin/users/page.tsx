@@ -13,7 +13,7 @@ import { Suspense } from "react";
 import * as z from "zod";
 import { UsersSort } from "./_components/users-sort";
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 type UsersPageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -75,7 +75,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
           <UsersSearch className="my-4" />
           <UsersSort />
         </div>
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
           {users.data?.map(user => (
             <Suspense key={`suspense-${user.id}`} fallback={<div>loading...</div>}>
               {/* @ts-expect-error Async Server Component */}

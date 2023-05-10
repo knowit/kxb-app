@@ -6,7 +6,7 @@ interface Params {
   year: string;
 }
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 export async function GET(request: NextRequest, { params }: { params: Params }) {
   const now = new Date();

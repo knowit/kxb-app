@@ -6,7 +6,7 @@ import { Show } from "@/components/ui/show";
 import { getMsGraphUserAvatar } from "@/lib/ms-graph";
 import { User } from "@/types";
 import { getInitials } from "@/utils/common-utils";
-import { getFormattedDateAndTime } from "@/utils/date-utils";
+import { getHumanizedDateFromNow } from "@/utils/date-utils";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -25,8 +25,8 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
   return (
     <Card className="relative mt-12">
       <InfoButton className="absolute right-2 top-2 z-10">
-        <p>Created: {getFormattedDateAndTime(new Date(user.created))}</p>
-        <p>Last login: {getFormattedDateAndTime(new Date(user.updated))}</p>
+        <p>Created: {getHumanizedDateFromNow(new Date(user.created))}</p>
+        <p>Updated: {getHumanizedDateFromNow(new Date(user.updated))}</p>
       </InfoButton>
       <CardHeader className="absolute w-full -translate-y-1/2 items-center justify-center p-0">
         <Link href={`/admin/users/${user.id}`}>

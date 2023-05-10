@@ -11,7 +11,7 @@ import { getUserAvatar } from "@/lib/user";
 import { getInitials } from "@/utils/common-utils";
 import { Suspense } from "react";
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 export const metadata = {
   title: "Profile"

@@ -5,7 +5,7 @@ interface UserPageProps {
   params: { id: string };
 }
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 export default async function UserPage({ params }: UserPageProps) {
   const user = await db

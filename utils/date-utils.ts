@@ -39,6 +39,54 @@ export const getFormattedTime = (date: Date, locale?: string): string =>
 export const getFormattedDateAndTime = (date: Date, locale?: string) =>
   `${getFormattedDate(date, locale)} ${getFormattedTime(date, locale)}`;
 
+export const getHumanizedDateFromNow = (date: Date, locale?: string) => {
+  const now = new Date();
+
+  // if the date is today, we want to show X hours ago
+  if (
+    getDate(date) === getDate(now) &&
+    getMonth(date) === getMonth(now) &&
+    getYear(date) === getYear(now)
+  ) {
+    const hours = getHours(now) - getHours(date);
+    const minutes = getMinutes(now) - getMinutes(date);
+    const seconds = getSeconds(now) - getSeconds(date);
+
+    if (hours > 0) {
+      return `${hours}h`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return `${seconds}s`;
+    }
+  }
+
+  // if the date is yesterday, we want to show yesterday
+  if (
+    getDate(date) === getDate(now) - 1 &&
+    getMonth(date) === getMonth(now) &&
+    getYear(date) === getYear(now)
+  ) {
+    return "Yesterday";
+  }
+
+  // if the date is within the current month, we want to show X days ago
+  if (getMonth(date) === getMonth(now) && getYear(date) === getYear(now)) {
+    const days = getDate(now) - getDate(date);
+    return `${days}d`;
+  }
+
+  // if the date is within the current year, we want to show X months ago
+  if (getYear(date) === getYear(now)) {
+    const months = getMonth(now) - getMonth(date);
+    return `${months}m`;
+  }
+
+  // if the date is not within the current year, we want to show X years ago
+  const years = getYear(now) - getYear(date);
+  return `${years}y`;
+};
+
 export const getFormattedIsoDateAndTime = (date: Date, locale?: string) =>
   format(date, "yyyy-MM-dd'T'HH:mm:ssXX", { locale: getLocale(locale) });
 

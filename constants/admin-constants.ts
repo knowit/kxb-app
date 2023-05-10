@@ -3,6 +3,11 @@ import { AdminConfig } from "@/types";
 const ADMIN_CONSTANTS: AdminConfig = {
   MAIN_NAV: [
     {
+      title: "Admin",
+      href: "/admin",
+      disabled: false
+    },
+    {
       title: "Dashboard",
       href: "/dashboard",
       disabled: false

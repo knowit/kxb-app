@@ -2,25 +2,17 @@
 
 import { Icons } from "@/components/icons";
 import { buttonVariants } from "@/components/ui/button";
+import { ADMIN_CONSTANTS } from "@/constants/admin-constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SidebarNavItem } from "types";
 
-interface SideNavProps {
-  items: SidebarNavItem[];
-}
-
-function AdminSideNav({ items }: SideNavProps) {
+function AdminSideNav() {
   const path = usePathname();
-
-  if (!items?.length) {
-    return null;
-  }
 
   return (
     <nav className="grid items-start gap-2">
-      {items.map((item, index) => {
+      {ADMIN_CONSTANTS.SIDEBAR_NAV.map((item, index) => {
         const Icon = Icons[item.icon ?? "ChevronRight"];
 
         return (

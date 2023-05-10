@@ -7,7 +7,9 @@ import {
   ChevronRightIcon,
   CopyIcon,
   Cross2Icon,
+  DashboardIcon,
   GearIcon,
+  HamburgerMenuIcon,
   InfoCircledIcon,
   LockClosedIcon,
   MinusCircledIcon,
@@ -91,5 +93,7 @@ export const Icons = {
   Trash: TrashIcon,
   Person: PersonIcon,
   LockClosed: LockClosedIcon,
-  Copy: CopyIcon
+  Copy: CopyIcon,
+  HamburgerMenu: HamburgerMenuIcon,
+  Dashboard: DashboardIcon
 };
