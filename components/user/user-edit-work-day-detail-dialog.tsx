@@ -9,16 +9,23 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import { UserWorkDayDetailForm } from "@/components/user/user-work-day-detail-form";
-import { CalendarDay as CalendarDayType, CalendarEntries, CalendarSizeVariant } from "@/types";
+import {
+  CalendarDay as CalendarDayType,
+  CalendarEntries,
+  CalendarSizeVariant,
+  User
+} from "@/types";
 import { useState } from "react";
 
 function UserEditWorkDayDetailDialog({
+  user,
   calendarDay,
   calendarSizeVariant = "default",
   holidayInfos = [],
   closeDialogOnFormSubmitSuccess = false,
   ...other
 }: {
+  user: User;
   calendarDay: CalendarEntries;
   calendarSizeVariant?: CalendarSizeVariant;
   holidayInfos?: CalendarDayType[];
@@ -40,6 +47,7 @@ function UserEditWorkDayDetailDialog({
         <DialogTitle>{calendarDay.formattedDate}</DialogTitle>
         <DialogDescription>Edit work day details</DialogDescription>
         <UserWorkDayDetailForm
+          user={user}
           calendarDay={calendarDay}
           userWorkDayDetail={calendarDay.workDayDetails}
           onFormSubmitSuccess={() => {

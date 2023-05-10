@@ -20,7 +20,7 @@ export default async function AdminLayout({ children, modal }: AdminLayoutProps)
   return (
     <>
       <div className="mx-auto flex min-h-screen flex-col">
-        <header className="sticky top-0 z-40 bg-neutral-950 p-4">
+        <header className="sticky top-0 z-40 border-b border-b-neutral-700 bg-neutral-950 px-4">
           <AdminMainNav />
         </header>
         <div className="container relative grid grow gap-12 bg-neutral-900 md:grid-cols-[200px_1fr]">

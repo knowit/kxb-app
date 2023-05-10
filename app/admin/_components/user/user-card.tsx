@@ -25,8 +25,8 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
   return (
     <Card className="relative mt-12">
       <InfoButton className="absolute right-2 top-2 z-10">
-        <p>Created: {getHumanizedDateFromNow(new Date(user.created))}</p>
-        <p>Updated: {getHumanizedDateFromNow(new Date(user.updated))}</p>
+        <p>Created: {getHumanizedDateFromNow(new Date(user.created))} ago</p>
+        <p>Updated: {getHumanizedDateFromNow(new Date(user.updated))} ago</p>
       </InfoButton>
       <CardHeader className="absolute w-full -translate-y-1/2 items-center justify-center p-0">
         <Link href={`/admin/users/${user.id}`}>

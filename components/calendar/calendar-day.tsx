@@ -19,7 +19,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
     return (
       <div
         className={cn(
-          "flex aspect-[16/11] flex-col items-center justify-center",
+          "flex aspect-square flex-col items-center justify-center lg:aspect-[16/11]",
           {
             "font-medium underline underline-offset-4": calendarDay.isToday,
             "text-emerald-500 dark:text-emerald-500": calendarDay.isWorkDay,
@@ -42,7 +42,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
         ref={ref}
       >
         <div
-          className={cn("flex items-center justify-center", {
+          className={cn("", {
             "w-full items-center justify-end pb-1.5 md:pb-2":
               calendarSizeVariant === "large" &&
               (calendarDay.type === "day" || calendarDay.type === "spacing"),

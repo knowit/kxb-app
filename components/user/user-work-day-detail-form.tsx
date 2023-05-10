@@ -9,9 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Link } from "@/components/ui/link";
 import { Show } from "@/components/ui/show";
 import { toast } from "@/hooks/use-toast";
+import { mutateUserWorkDayDetail } from "@/lib/actions/user-actions";
 import { cn } from "@/lib/utils";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
-import { CalendarEntries, UserWorkDayDetail } from "@/types";
+import { CalendarEntries, User, UserWorkDayDetail } from "@/types";
 import { getFormattedLongDate } from "@/utils/date-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -20,6 +21,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 interface UserWorkDayDetailFormProps extends HTMLAttributes<HTMLFormElement> {
+  user: User;
   calendarDay: CalendarEntries;
   userWorkDayDetail?: UserWorkDayDetail;
   isWorkDay?: boolean;
@@ -29,6 +31,7 @@ interface UserWorkDayDetailFormProps extends HTMLAttributes<HTMLFormElement> {
 type FormData = z.infer<typeof userWorkDayDetailSchema>;
 
 function UserWorkDayDetailForm({
+  user,
   calendarDay,
   userWorkDayDetail,
   isWorkDay = false,
@@ -59,6 +62,8 @@ function UserWorkDayDetailForm({
     }
   });
 
+  console.log(userWorkDayDetail);
+
   const nonCommissionedHours = watch("nonCommissionedHours");
   const extraHours = watch("extraHours");
 
@@ -71,23 +76,17 @@ function UserWorkDayDetailForm({
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api-v2/user/work-day-detail`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: data.id,
-        date: data.date,
-        nonCommissionedHours: data.nonCommissionedHours,
-        extraHours: data.extraHours,
-        sickDay: data.sickDay
-      })
+    const action = await mutateUserWorkDayDetail(user.id, {
+      id: data.id,
+      date: data.date,
+      nonCommissionedHours: data.nonCommissionedHours,
+      extraHours: data.extraHours,
+      sickDay: data.sickDay
     });
 
     setIsSaving(false);
 
-    if (!response?.ok) {
+    if (!action?.ok) {
       return toast({
         title: "Something went wrong.",
         description: "Your salary details was not updated. Please try again.",
