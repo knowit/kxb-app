@@ -39,7 +39,7 @@ export const getFormattedTime = (date: Date, locale?: string): string =>
 export const getFormattedDateAndTime = (date: Date, locale?: string) =>
   `${getFormattedDate(date, locale)} ${getFormattedTime(date, locale)}`;
 
-export const getHumanizedDateFromNow = (date: Date, locale?: string) => {
+export const getHumanizedDateFromNow = (date: Date) => {
   const now = new Date();
 
   // if the date is today, we want to show X hours ago
@@ -59,15 +59,6 @@ export const getHumanizedDateFromNow = (date: Date, locale?: string) => {
     } else {
       return `${seconds}s`;
     }
-  }
-
-  // if the date is yesterday, we want to show yesterday
-  if (
-    getDate(date) === getDate(now) - 1 &&
-    getMonth(date) === getMonth(now) &&
-    getYear(date) === getYear(now)
-  ) {
-    return "Yesterday";
   }
 
   // if the date is within the current month, we want to show X days ago
