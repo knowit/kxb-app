@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 
       await sendGridMail.send({
         to: process.env.FEEDBACK_RECIPIENT_EMAIL,
-        from: "tommy.barvag@knowit.no",
+        from: "post@kxb.app",
         subject: `kxb.app feedback from ${name}`,
         html: getFeedbackEmailTemplate(name, feedback, user.email)
       });
