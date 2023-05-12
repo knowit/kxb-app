@@ -16,7 +16,7 @@ interface SelectedYearMonthPageProps {
   params: { year: string; month: string };
 }
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 export function generateMetadata({ params }: SelectedYearMonthPageProps): Metadata {
   const month = Object.values(MONTH).find(month => month.value === +params.month);

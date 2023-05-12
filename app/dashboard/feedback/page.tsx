@@ -4,7 +4,7 @@ import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 export const metadata = {
   title: "Feedback"

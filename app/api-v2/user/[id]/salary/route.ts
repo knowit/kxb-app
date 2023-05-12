@@ -1,4 +1,4 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
@@ -32,10 +32,17 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
     const { commission, hourlyRate, tax, workHours, taxTable } =
       await userSalaryDetailSchema.parseAsync(res);
 
-    await planetscaleEdge.execute(
-      "UPDATE user SET commission = ?, hourlyRate = ?, tax = ?, workHours = ?, taxTable = ? WHERE id = ?",
-      [commission, hourlyRate, tax, workHours, taxTable, id]
-    );
+    await db
+      .updateTable("user")
+      .set({
+        commission,
+        hourlyRate,
+        tax,
+        workHours,
+        taxTable
+      })
+      .where("id", "=", id)
+      .executeTakeFirst();
 
     return new Response("Patched", {
       status: 200

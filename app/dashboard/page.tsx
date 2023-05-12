@@ -15,7 +15,7 @@ import { getCalendarMonth } from "@/utils/calendar-utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 
 export const metadata = {
   title: "Dashboard"

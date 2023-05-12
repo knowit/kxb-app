@@ -1,7 +1,7 @@
-import { planetscaleEdge } from "@/lib/planetscale-edge";
+import { db } from "@/lib/db";
 import { validateEmail } from "@/logic/validation-logic";
-import type { User as DbUser } from "@/types";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
+import { getMySQLDate } from "@/utils/date-utils";
 import { fetchWithToken } from "@/utils/fetcher";
 import jwt_decode from "jwt-decode";
 import { Account, NextAuthOptions, User } from "next-auth";
@@ -112,31 +112,39 @@ async function initialSignIn(
 
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
-  const { rows } = await planetscaleEdge.execute("SELECT * FROM user WHERE activeDirectoryId = ?", [
-    token.sub
-  ]);
+  const dbUser = await db
+    .selectFrom("user")
+    .select("id")
+    .where("activeDirectoryId", "=", token.sub)
+    .executeTakeFirst();
 
-  if (rows.length === 0) {
-    await planetscaleEdge.execute(
-      "INSERT INTO user (name, email, activeDirectoryId, refreshToken, accessTokenExpires, isAdmin, isSpecialist) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [
-        user.name,
-        user.email,
-        token.sub,
-        account.refresh_token,
-        Date.now() + account?.ext_expires_in * 1000,
+  if (dbUser) {
+    await db
+      .updateTable("user")
+      .set({
+        refreshToken: account.refresh_token,
         isAdmin,
-        isSpecialist
-      ]
-    );
-  } else {
-    const user = rows[0] as DbUser;
+        isSpecialist,
+        updated: getMySQLDate()
+      })
+      .where("id", "=", dbUser.id)
+      .executeTakeFirst();
 
-    await planetscaleEdge.execute(
-      "UPDATE user SET refreshToken = ?, isAdmin = ?, isSpecialist = ?, updated = ? WHERE id = ?",
-      [account.refresh_token, isAdmin, isSpecialist, new Date(), user.id]
-    );
+    return;
   }
+
+  await db
+    .insertInto("user")
+    .values({
+      name: user.name,
+      email: user.email,
+      activeDirectoryId: token.sub,
+      refreshToken: account.refresh_token,
+      accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
+      isAdmin,
+      isSpecialist
+    })
+    .executeTakeFirst();
 }
 
 export const authOptions: NextAuthOptions = {
@@ -192,12 +200,11 @@ export const authOptions: NextAuthOptions = {
         await initialSignIn(account, user, token);
       }
 
-      const { rows } = await planetscaleEdge.execute(
-        "SELECT * FROM user WHERE activeDirectoryId = ?",
-        [token.sub]
-      );
-
-      const dbUser = rows[0] as DbUser;
+      const dbUser = await db
+        .selectFrom("user")
+        .select(["id", "email", "name", "isAdmin", "isSpecialist", "activeDirectoryId"])
+        .where("activeDirectoryId", "=", token.sub ?? "unknown")
+        .executeTakeFirst();
 
       return {
         ...token,
@@ -206,17 +213,7 @@ export const authOptions: NextAuthOptions = {
         name: dbUser?.name ?? token.name,
         isAdmin: dbUser?.isAdmin ?? false,
         isSpecialist: dbUser?.isSpecialist ?? false,
-        activeDirectoryId: dbUser?.activeDirectoryId ?? token.sub ?? "unknown",
-        commission: Number(
-          rows[0]?.["commission"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION
-        ),
-        hourlyRate: Number(
-          rows[0]?.["hourlyRate"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE
-        ),
-        tax: Number(rows[0]?.["tax"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_TAX),
-        workHours: Number(
-          rows[0]?.["workHours"] ?? process.env.NEXT_PUBLIC_SALARY_DEFAULT_WORK_HOURS
-        )
+        activeDirectoryId: dbUser?.activeDirectoryId ?? token.sub ?? "unknown"
       };
     },
     async session({ token, session }) {
@@ -228,10 +225,6 @@ export const authOptions: NextAuthOptions = {
         session.user.isAdmin = token.isAdmin;
         session.user.isSpecialist = token.isSpecialist;
         session.user.activeDirectoryId = token.activeDirectoryId;
-        session.user.commission = token.commission;
-        session.user.hourlyRate = token.hourlyRate;
-        session.user.tax = token.tax;
-        session.user.workHours = token.workHours;
       }
 
       return session;

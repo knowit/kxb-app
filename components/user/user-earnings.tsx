@@ -3,7 +3,7 @@ import {
   SalaryDetailsCard,
   SalaryDetailsCardSkeleton
 } from "@/components/salary/salary-details-card";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Show } from "@/components/ui/show";
 import { CalendarMonth, UserEarningsDetails } from "@/types";
 
@@ -32,7 +32,7 @@ const UserEarnings = ({
       </div>
       <Show when={calendarMonth.halfTax}>
         <Card className="flex items-center">
-          <Card.Content className="flex items-center gap-3 p-4">
+          <CardContent className="flex items-center gap-3 p-4">
             <div className="flex h-6 w-6 min-w-[1.5rem] items-center justify-center rounded-full border border-emerald-500 text-emerald-500">
               <Icons.Check />
             </div>
@@ -40,7 +40,7 @@ const UserEarnings = ({
               Salary for {calendarMonth.month} paid with <span className="underline">half tax</span>{" "}
               at {userEarnings?.nextMonthStatistics?.payDay}
             </span>
-          </Card.Content>
+          </CardContent>
         </Card>
       </Show>
     </div>

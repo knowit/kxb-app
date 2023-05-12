@@ -171,7 +171,6 @@ export type GraphUser = {
   businessPhones: string[];
   displayName: string;
   givenName: ?string;
-  jobTitle: ?string;
   mail: ?string;
   mobilePhone: ?string;
   officeLocation: ?string;
@@ -183,20 +182,37 @@ export type GraphUser = {
 
 export type CalendarSizeVariant = "default" | "small" | "large";
 
-export type JobOffer = {
-  id: number;
-  name: string;
-  email: string;
-  commission: number;
-  guaranteeSalary: number;
-  created: string;
-  updated: string;
-  shareId: string;
-  sent: boolean;
-  sentBy: string;
-  sentDate: string;
-  accepted: boolean;
-  acceptedDate: string;
-  rejected: boolean;
-  rejectedDate: string;
+export type NavItem = {
+  title: string;
+  href: string;
+  disabled?: boolean;
+};
+
+export type MainNavItem = NavItem;
+
+export type SidebarNavItem = {
+  title: string;
+  disabled?: boolean;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+  href: string;
+};
+
+export type UsersSortOption = "name" | "updated";
+export type UsersSort = {
+  value: UsersSortOption;
+  default: boolean;
+  i18n: {
+    en: string;
+    no: string;
+  };
+};
+export type UsersSearchParams = "page" | "search" | "sort" | "tag";
+
+export type AdminConfig = {
+  MAIN_NAV: MainNavItem[];
+  SIDEBAR_NAV: SidebarNavItem[];
+  USERS_SEARCH_PARAMS: UsersSearchParams[];
+  USERS_PAGE_SIZE: number;
+  USERS_SORT_OPTIONS: UsersSort[];
 };

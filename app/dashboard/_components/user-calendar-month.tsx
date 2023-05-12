@@ -67,6 +67,7 @@ async function UserCalendarMonth({
               return showDialogOnCalendarDayClick ? (
                 <UserEditWorkDayDetailDialog
                   key={`calendar-day-${index}`}
+                  user={user}
                   calendarDay={calendarDay}
                   calendarSizeVariant={calendarSizeVariant}
                   holidayInfos={holidayInfos}

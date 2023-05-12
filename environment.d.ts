@@ -20,6 +20,9 @@ declare global {
       SALES_EMAILS: string;
       FEEDBACK_RECIPIENT_EMAIL: string;
       SEND_GRID_API_KEY: string;
+      MICROSOFT_GRAPH_USERNAME: string;
+      MICROSOFT_GRAPH_PASSWORD: string;
+      MICROSOFT_STORAGE_SAS_TOKEN: string;
     }
   }
 }

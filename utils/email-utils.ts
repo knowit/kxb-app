@@ -102,14 +102,13 @@ export const getFeedbackEmailTemplate = (name: string, message: string, email: s
               <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 580px; padding: 10px;">
                 <table role="presentation" class="logo" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #000000; width: 100%; padding-top: 24px; padding-bottom: 24px;" width="100%">
                   <tr>
-                      <td class="content-block" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px;" valign="top">
-                        <img class="logo-image" src="https://kxb.app/logo-white.png" width="150" height="auto" alt="Logo" style="border: none; -ms-interpolation-mode: bicubic; display: block; margin: 0 auto; max-width: 140px; height: auto;">
-                      </td>
-                    </tr>
+                    <td class="content-block" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px;" valign="top">
+                      <img class="logo-image" src="https://kxb.app/logo-white.png" width="150" height="auto" alt="Logo" style="border: none; -ms-interpolation-mode: bicubic; display: block; margin: 0 auto; max-width: 140px; height: auto;">
+                    </td>
+                  </tr>
                 </table>
                 <!-- START CENTERED WHITE CONTAINER -->
                 <table role="presentation" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #121212; border-radius: 4px; box-shadow: 0 0 0 1px #333333; width: 100%;" width="100%">
-    
                   <!-- START MAIN CONTENT AREA -->
                   <tr>
                     <td class="wrapper" style="font-family: sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top">
@@ -124,11 +123,9 @@ export const getFeedbackEmailTemplate = (name: string, message: string, email: s
                       </table>
                     </td>
                   </tr>
-    
                 <!-- END MAIN CONTENT AREA -->
                 </table>
                 <!-- END CENTERED WHITE CONTAINER -->
-    
                 <!-- START FOOTER -->
                 <div class="footer" style="clear: both; margin-top: 10px; text-align: center; width: 100%;">
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
@@ -145,7 +142,6 @@ export const getFeedbackEmailTemplate = (name: string, message: string, email: s
                   </table>
                 </div>
                 <!-- END FOOTER -->
-    
               </div>
             </td>
             <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td>

@@ -49,9 +49,9 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   experimental: {
-    appDir: true
+    appDir: true,
+    serverActions: true
   },
   headers() {
     return [

@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import { ThemeSelect } from "@/components/theme-select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,7 @@ function UserAvatar({
       <PopoverContent
         align="start"
         side="bottom"
-        className="flex min-w-[10rem] flex-col gap-y-2 p-0"
+        className="flex min-w-[18rem] flex-col gap-y-2 p-0"
       >
         <div className="px-6 py-4">
           <span className="text-lg font-bold uppercase">{name}</span>
@@ -55,8 +56,13 @@ function UserAvatar({
             </Link>
           </Show>
           <Show when={isAdmin}>
-            <Link href="/dashboard/job-offer" onClick={() => setOpen(false)}>
-              Job offers
+            <Link
+              className="flex items-baseline gap-1"
+              href="/admin"
+              onClick={() => setOpen(false)}
+            >
+              <Icons.LockClosed />
+              Admin
             </Link>
           </Show>
         </div>

@@ -1,4 +1,4 @@
-import { queryBuilder } from "@/lib/planetscale";
+import { db } from "@/lib/db";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const users = await queryBuilder
+    const users = await db
       .selectFrom("user")
       .select([
         "id",
