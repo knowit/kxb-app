@@ -62,8 +62,6 @@ function UserWorkDayDetailForm({
     }
   });
 
-  console.log(userWorkDayDetail);
-
   const nonCommissionedHours = watch("nonCommissionedHours");
   const extraHours = watch("extraHours");
 

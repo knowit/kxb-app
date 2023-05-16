@@ -80,7 +80,7 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api-v2/user/${user.id}/feedback`, {
+    const response = await fetch(`/api/user/${user.id}/feedback`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -109,7 +109,7 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
       variant: "success"
     });
 
-    await fetch(`/api-v2/user/${user.id}/feedback/email`, {
+    await fetch(`/api/user/${user.id}/feedback/email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
