@@ -70,7 +70,7 @@ export async function PATCH(request: NextRequest) {
       status: 200
     });
   } catch (error) {
-    console.error(error);
+    console.error(JSON.stringify(error));
     if (error instanceof z.ZodError) {
       return NextResponse.json({ status: 422, body: error.issues });
     }

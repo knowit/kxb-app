@@ -216,12 +216,12 @@ export const authOptions: NextAuthOptions = {
 
       return {
         ...token,
-        id: dbUser?.id?.toString() ?? token.id,
-        email: dbUser?.email ?? token.email,
-        name: dbUser?.name ?? token.name,
-        isAdmin: dbUser?.isAdmin ?? false,
-        isSpecialist: dbUser?.isSpecialist ?? false,
-        activeDirectoryId: dbUser?.activeDirectoryId ?? token.sub ?? "unknown"
+        id: dbUser.id,
+        email: dbUser.email,
+        name: dbUser.name,
+        isAdmin: dbUser.isAdmin,
+        isSpecialist: dbUser.isSpecialist,
+        activeDirectoryId: dbUser.activeDirectoryId
       };
     },
     async session({ token, session }) {
@@ -229,7 +229,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id;
         session.user.name = token.name;
         session.user.email = token.email;
-        session.user.image = token.picture;
         session.user.isAdmin = token.isAdmin;
         session.user.isSpecialist = token.isSpecialist;
         session.user.activeDirectoryId = token.activeDirectoryId;

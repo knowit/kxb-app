@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { cache } from "react";
 import "server-only";
 
-const getUser = cache(async (id: string): Promise<User> => {
+const getUser = cache(async (id: number): Promise<User> => {
   const user = await db
     .selectFrom("user")
     .select([
@@ -37,7 +37,7 @@ const getUser = cache(async (id: string): Promise<User> => {
   return { ...user, workDayDetails: [], feedback: [] };
 });
 
-const getUserWorkDayDetails = cache(async (id: string): Promise<UserWorkDayDetail[]> => {
+const getUserWorkDayDetails = cache(async (id: number): Promise<UserWorkDayDetail[]> => {
   const userWorkDayDetail = await db
     .selectFrom("user_work_day_detail")
     .select(["id", "date", "nonCommissionedHours", "extraHours", "sickDay", "userId"])
@@ -47,7 +47,7 @@ const getUserWorkDayDetails = cache(async (id: string): Promise<UserWorkDayDetai
   return userWorkDayDetail;
 });
 
-const getUserWorkDayDetailsByDate = cache(async (id: string, month: number, year: number) => {
+const getUserWorkDayDetailsByDate = cache(async (id: number, month: number, year: number) => {
   const userWorkDayDetail = await db
     .selectFrom("user_work_day_detail")
     .select(["id", "date", "nonCommissionedHours", "extraHours", "sickDay", "userId"])
@@ -58,7 +58,7 @@ const getUserWorkDayDetailsByDate = cache(async (id: string, month: number, year
   return userWorkDayDetail;
 });
 
-const getUserWithEarnings = cache(async (id: string, activeDate?: Date) => {
+const getUserWithEarnings = cache(async (id: number, activeDate?: Date) => {
   const now = new Date();
   const date = activeDate ?? now;
 
@@ -119,7 +119,7 @@ const getUserWithEarnings = cache(async (id: string, activeDate?: Date) => {
   };
 });
 
-const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
+const getUserSettings = cache(async (id: number): Promise<UserSettings> => {
   let userSettings = await db
     .selectFrom("user_settings")
     .select([
@@ -145,7 +145,7 @@ const getUserSettings = cache(async (id: string): Promise<UserSettings> => {
   return userSettings as UserSettings;
 });
 
-const getUserAvatar = cache(async (id: string) => {
+const getUserAvatar = cache(async (id: number) => {
   const user = await db
     .selectFrom("user")
     .select(["name", "refreshToken", "activeDirectoryId"])
@@ -230,7 +230,7 @@ const getUserAvatar = cache(async (id: string) => {
   };
 });
 
-const preloadUserWorkDayDetailsByDate = async (id: string, month: number, year: number) => {
+const preloadUserWorkDayDetailsByDate = async (id: number, month: number, year: number) => {
   void getUserWorkDayDetailsByDate(id, month, year);
 
   const nextMonth = month === 11 ? 0 : month + 1;

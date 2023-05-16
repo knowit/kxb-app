@@ -34,11 +34,7 @@ async function UserCalendarMonth({
   let userWorkDayDetails = workDayDetails;
 
   if (user && !userWorkDayDetails.length) {
-    userWorkDayDetails = await getUserWorkDayDetailsByDate(
-      user.id.toString(),
-      month.monthNumber,
-      month.year
-    );
+    userWorkDayDetails = await getUserWorkDayDetailsByDate(user.id, month.monthNumber, month.year);
   }
 
   const calendarEntries = getCalendarMonthEntries(

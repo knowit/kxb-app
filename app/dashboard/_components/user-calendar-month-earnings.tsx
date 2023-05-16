@@ -10,7 +10,7 @@ type UserCalendarMonthProps = {
 
 async function UserCalendarMonthEarnings({ user, month, ...other }: UserCalendarMonthProps) {
   const { earnings } = await getUserWithEarnings(
-    user.id.toString(),
+    user.id,
     new Date(month.year, month.monthNumber, 15)
   );
 

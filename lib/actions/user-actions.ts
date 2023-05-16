@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
-import { UserWorkDayDetail } from "@/types";
+import { User, UserWorkDayDetail } from "@/types";
 
 type ActionResponse = {
   ok: boolean;
@@ -60,4 +60,22 @@ async function mutateUserWorkDayDetail(
   }
 }
 
-export { mutateUserWorkDayDetail };
+async function updateUser(
+  userId: number,
+  user: Omit<Partial<User>, "feedback" | "workDayDetails">
+) {
+  try {
+    console.log("Update user", user);
+    const updateResult = await db
+      .updateTable("user")
+      .set(user)
+      .where("id", "=", userId)
+      .executeTakeFirst();
+
+    return { ok: updateResult.numUpdatedRows > 0 };
+  } catch (error) {
+    return { ok: false, error: error.message };
+  }
+}
+
+export { mutateUserWorkDayDetail, updateUser };

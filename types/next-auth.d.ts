@@ -1,32 +1,28 @@
-import { User } from "next-auth";
+import "next-auth";
 import "next-auth/jwt";
 
-type UserId = string
+type UserId = number;
 
 declare module "next-auth/jwt" {
   interface JWT {
-    id: UserId;
+    id: number;
+    name?: string;
+    email: string;
     isAdmin: boolean;
     isSpecialist: boolean;
     activeDirectoryId: string;
-    commission: number;
-    hourlyRate: number;
-    tax: number;
-    workHours: number;
   }
 }
-  
+
 declare module "next-auth" {
   interface Session {
-    user: User & {
-      id: UserId;
+    user: {
+      id: number;
+      name?: string;
+      email: string;
       isAdmin: boolean;
       isSpecialist: boolean;
       activeDirectoryId: string;
-      commission: number;
-      hourlyRate: number;
-      tax: number;
-      workHours: number;
-    }
+    };
   }
 }
