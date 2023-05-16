@@ -37,7 +37,7 @@ const UserDeleteDialog = forwardRef<
       variant: "success"
     });
 
-    const response = await fetch(`/api-v2/user/${userId}`, {
+    const response = await fetch(`/api/user/${userId}`, {
       method: "DELETE"
     });
 

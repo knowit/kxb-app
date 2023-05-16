@@ -78,7 +78,7 @@ function UserSalaryDetailsForm({
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api-v2/user/${user.id}/salary`, {
+    const response = await fetch(`/api/user/${user.id}/salary`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

@@ -43,7 +43,7 @@ function UserProfileForm({ user, className, ...other }: UserProfileFormProps) {
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api-v2/user/${user.id}`, {
+    const response = await fetch(`/api/user/${user.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

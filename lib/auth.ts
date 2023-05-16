@@ -196,15 +196,23 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account, profile, isNewUser }) {
       // Initial sign in
+      // Create or update user in database
       if (account && user) {
         await initialSignIn(account, user, token);
       }
 
+      // The user should exist in the database at this point
+      // after initial sign in
       const dbUser = await db
         .selectFrom("user")
         .select(["id", "email", "name", "isAdmin", "isSpecialist", "activeDirectoryId"])
         .where("activeDirectoryId", "=", token.sub ?? "unknown")
         .executeTakeFirst();
+
+      // throw if user is not found in database
+      if (!dbUser) {
+        throw new Error("User not found in database");
+      }
 
       return {
         ...token,

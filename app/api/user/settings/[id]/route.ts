@@ -5,7 +5,7 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
 
-export const runtime: ServerRuntime = "experimental-edge";
+export const runtime: ServerRuntime = "edge";
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   const token = await getToken({ req: request });

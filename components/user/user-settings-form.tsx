@@ -47,7 +47,7 @@ function UserSettingsForm({ userSettings, className, ...other }: UserSettingsFor
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api-v2/user/settings/${userSettings.id}`, {
+    const response = await fetch(`/api/user/settings/${userSettings.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
