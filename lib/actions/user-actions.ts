@@ -65,7 +65,6 @@ async function updateUser(
   user: Omit<Partial<User>, "feedback" | "workDayDetails">
 ) {
   try {
-    console.log("Update user", user);
     const updateResult = await db
       .updateTable("user")
       .set(user)
