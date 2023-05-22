@@ -9,6 +9,7 @@ import { getUser } from "@/lib/user";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
+import { UserHeartbeat, UserHeartbeatSkeleton } from "./_components/user-heartbeat";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const token = await getEdgeFriendlyToken();
@@ -49,6 +50,10 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       </nav>
       <main className="dark:bg-neutral-900">
         <div className="mx-auto max-w-5xl px-4 py-12 lg:py-24">{children}</div>
+        <Suspense fallback={<UserHeartbeatSkeleton />}>
+          {/* @ts-expect-error Async Server Component */}
+          <UserHeartbeat />
+        </Suspense>
       </main>
       <Footer />
     </>
