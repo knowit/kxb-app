@@ -1,5 +1,4 @@
 import { getToken } from "next-auth/jwt";
-import { RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
@@ -10,7 +9,7 @@ const getEdgeFriendlyToken = cache(async () => {
   // @ts-ignore
   const req: NextRequest = {
     headers: headers(),
-    cookies: cookies() as RequestCookies
+    cookies: cookies()
   };
 
   const token = await getToken({ req });
