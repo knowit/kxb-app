@@ -33,16 +33,13 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <div className="flex items-center gap-8">
             <div className="hidden sm:block">
               <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
-                {/* @ts-expect-error Async Server Component */}
                 <FeedbackForm asPopover />
               </Suspense>
             </div>
             <Suspense fallback={<NextPaycheckSkeleton />}>
-              {/* @ts-expect-error Async Server Component */}
               <NextPaycheck />
             </Suspense>
             <Suspense fallback={<AvatarSkeleton />}>
-              {/* @ts-expect-error Async Server Component */}
               <Avatar />
             </Suspense>
           </div>
@@ -51,7 +48,6 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       <main className="dark:bg-neutral-900">
         <div className="mx-auto max-w-5xl px-4 py-12 lg:py-24">{children}</div>
         <Suspense fallback={<UserHeartbeatSkeleton />}>
-          {/* @ts-expect-error Async Server Component */}
           <UserHeartbeat />
         </Suspense>
       </main>

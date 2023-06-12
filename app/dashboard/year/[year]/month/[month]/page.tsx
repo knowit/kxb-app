@@ -48,7 +48,6 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
   return (
     <>
       <Suspense fallback={<UserCalendarMonthWithSalarySkeleton month={calendarMonth} />}>
-        {/* @ts-expect-error Async Server Component */}
         <UserCalendarMonthWithSalary
           user={user.data}
           calendarMonth={calendarMonth}

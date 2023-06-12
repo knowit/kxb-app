@@ -31,7 +31,6 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
       <CardHeader className="absolute w-full -translate-y-1/2 items-center justify-center p-0">
         <Link href={`/admin/users/${user.id}`}>
           <Suspense fallback={<AvatarSkeleton size="xl" />}>
-            {/* @ts-expect-error Async Server Component */}
             <UserCardAvatar user={user} className="h-12 w-12 rounded-full p-0" />
           </Suspense>
         </Link>
@@ -55,4 +54,4 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
   );
 }
 
-export { UserCard, AvatarSkeleton };
+export { AvatarSkeleton, UserCard };

@@ -78,7 +78,6 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
           {users.data?.map(user => (
             <Suspense key={`suspense-${user.id}`} fallback={<div>loading...</div>}>
-              {/* @ts-expect-error Async Server Component */}
               <UserCard key={`user-card-${user.id}`} user={user} />
             </Suspense>
           ))}
