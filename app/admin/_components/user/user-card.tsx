@@ -8,13 +8,17 @@ import { User } from "@/types";
 import { getInitials } from "@/utils/common-utils";
 import { getHumanizedDateFromNow } from "@/utils/date-utils";
 import Link from "next/link";
-import { Suspense } from "react";
+import { ComponentPropsWithoutRef, Suspense } from "react";
 
-async function UserCardAvatar({ user }: { user: Omit<User, "workDayDetails" | "feedback"> }) {
+async function UserCardAvatar({
+  user,
+  size = "xl",
+  ...other
+}: ComponentPropsWithoutRef<typeof Avatar> & { user: Omit<User, "workDayDetails" | "feedback"> }) {
   const src = await getMsGraphUserAvatar(user.activeDirectoryId);
 
   return (
-    <Avatar size="xl">
+    <Avatar size={size} {...other}>
       <AvatarImage src={src} alt={`Avatar image of ${user.name}`} />
       <AvatarFallback delayMs={500}>{getInitials(user.name)}</AvatarFallback>
     </Avatar>
@@ -31,7 +35,7 @@ async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedbac
       <CardHeader className="absolute w-full -translate-y-1/2 items-center justify-center p-0">
         <Link href={`/admin/users/${user.id}`}>
           <Suspense fallback={<AvatarSkeleton size="xl" />}>
-            <UserCardAvatar user={user} className="h-12 w-12 rounded-full p-0" />
+            <UserCardAvatar user={user} />
           </Suspense>
         </Link>
       </CardHeader>
