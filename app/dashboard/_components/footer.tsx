@@ -67,7 +67,6 @@ function Footer() {
           <Box className="max-w-[360px] grow">
             <h2 className="mb-3 text-lg  font-bold">Feedback</h2>
             <Suspense fallback={<UserFeedbackFormSkeleton />}>
-              {/* @ts-expect-error Async Server Component */}
               <FeedbackForm />
             </Suspense>
             <ThemeSelect className="ml-auto mt-8" />

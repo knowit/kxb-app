@@ -44,7 +44,6 @@ export default async function ProfilePage() {
           </HoverCard>
         </div>
         <Suspense fallback={<UserProfileFormSkeleton />}>
-          {/* @ts-expect-error Async Server Component */}
           <ProfileForm />
         </Suspense>
       </div>

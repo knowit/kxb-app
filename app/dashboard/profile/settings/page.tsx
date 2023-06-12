@@ -12,7 +12,6 @@ export default async function SettingsPage() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2">
       <Suspense fallback={<UserSettingsFormSkeleton />}>
-        {/* @ts-expect-error Async Server Component */}
         <SettingsForm />
       </Suspense>
     </div>

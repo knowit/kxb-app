@@ -13,7 +13,6 @@ export default async function ProfilePage() {
     <div className="grid grid-cols-1 lg:grid-cols-2">
       <div>
         <Suspense fallback={<UserSalaryDetailsFormSkeleton />}>
-          {/* @ts-expect-error Async Server Component */}
           <SalaryForm />
         </Suspense>
       </div>

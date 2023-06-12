@@ -39,7 +39,6 @@ export default async function DashboardPage() {
   return (
     <>
       <Suspense fallback={<UserCalendarMonthWithSalarySkeleton month={calendarMonth} />}>
-        {/* @ts-expect-error Async Server Component */}
         <UserCalendarMonthWithSalary
           user={user.data}
           calendarMonth={calendarMonth}
@@ -48,7 +47,6 @@ export default async function DashboardPage() {
       </Suspense>
       <CompanyBenefits />
       <Suspense fallback={<YearlyEconomicOverviewSkeleton />}>
-        {/* @ts-expect-error Async Server Component */}
         <YearlyEconomicOverview />
       </Suspense>
     </>

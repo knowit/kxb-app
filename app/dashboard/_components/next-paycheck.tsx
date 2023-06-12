@@ -1,18 +1,16 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUserWithEarnings } from "@/lib/user";
+import { getNextPaycheck } from "@/lib/user";
 
 async function NextPaycheck() {
   const token = await getEdgeFriendlyToken();
-  const { earnings } = await getUserWithEarnings(token.id);
+  const { earnings } = await getNextPaycheck(token.id);
 
   return (
     <div className="min-w-[120px]">
       <div className="text-xs text-neutral-400">Next paycheck</div>
-      <div className="text-sm">{earnings?.nextPayDayStatistics.payDay}</div>
-      <div className="text-sm font-bold text-emerald-500">
-        {earnings?.nextPayDayStatistics.netFormatted}
-      </div>
+      <div className="text-sm">{earnings?.payDay}</div>
+      <div className="text-sm font-bold text-emerald-500">{earnings?.netFormatted}</div>
     </div>
   );
 }

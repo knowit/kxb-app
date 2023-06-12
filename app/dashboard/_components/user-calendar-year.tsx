@@ -70,7 +70,6 @@ const UserCalendarYear: FC<{ user: User; date: Date; workDayDetails?: UserWorkDa
               <Suspense
                 fallback={<UserCalendarMonthSkeleton month={month} calendarSizeVariant="small" />}
               >
-                {/* @ts-expect-error Async Server Component */}
                 <UserCalendarMonth
                   user={user}
                   month={month}

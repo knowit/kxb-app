@@ -15,7 +15,6 @@ export default async function MonthLayout({ children }: MonthLayoutProps) {
       {children}
       <CompanyBenefits />
       <Suspense fallback={<YearlyEconomicOverviewSkeleton />}>
-        {/* @ts-expect-error Async Server Component */}
         <YearlyEconomicOverview />
       </Suspense>
     </>

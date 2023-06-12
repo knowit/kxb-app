@@ -1,10 +1,12 @@
 import { db } from "@/lib/db";
 import { storageExists, storageUpload } from "@/lib/ms-storage";
 import { query } from "@/lib/query";
+import { getEarningsForMonth } from "@/logic/earnings-logic";
 import { User, UserSettings, UserWorkDayDetail } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getMySQLDate } from "@/utils/date-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
+import { setMonth } from "date-fns";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import "server-only";
@@ -116,6 +118,64 @@ const getUserWithEarnings = cache(async (id: number, activeDate?: Date) => {
         userId: x.userId ?? 0
       }))
     )
+  };
+});
+
+const getNextPaycheck = cache(async (id: number) => {
+  const now = new Date();
+
+  const lastMonth = setMonth(now, now.getMonth() - 1);
+
+  const [user, workDayDetail] = await query([
+    getUser(id),
+    getUserWorkDayDetailsByDate(id, lastMonth.getMonth(), lastMonth.getFullYear())
+  ]);
+
+  if (!user.data) {
+    return {
+      user: undefined,
+      earnings: undefined
+    };
+  }
+
+  const currentYear = new Date().getFullYear();
+
+  const currentMonth = now.getMonth();
+
+  const calendarMonth = getCalendarMonth(now);
+
+  const lastCalendarMonth = getCalendarMonth(new Date(currentYear, currentMonth - 1));
+
+  const { hourlyRate, commission, tax, workHours, taxTable } = {
+    commission: user.data.commission ?? 0,
+    hourlyRate: user.data.hourlyRate ?? 0,
+    tax: user.data.tax ?? 0,
+    workHours: user.data.workHours ?? 0,
+    taxTable: user.data.taxTable ?? undefined
+  };
+
+  return {
+    user: user.data,
+    earnings:
+      new Date().getDate() > 20
+        ? getEarningsForMonth(
+            calendarMonth,
+            hourlyRate,
+            commission,
+            tax,
+            workHours,
+            workDayDetail.data ?? [],
+            taxTable
+          )
+        : getEarningsForMonth(
+            lastCalendarMonth,
+            hourlyRate,
+            commission,
+            tax,
+            workHours,
+            workDayDetail.data ?? [],
+            taxTable
+          )
   };
 });
 
@@ -250,5 +310,6 @@ export {
   getUserAvatar,
   getUserSettings,
   getUserWorkDayDetailsByDate,
-  preloadUserWorkDayDetailsByDate
+  preloadUserWorkDayDetailsByDate,
+  getNextPaycheck
 };

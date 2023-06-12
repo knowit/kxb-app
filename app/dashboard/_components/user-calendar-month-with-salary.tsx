@@ -50,7 +50,6 @@ async function UserCalendarMonthWithSalary({
           Salary details for {calendarMonth.month} {calendarMonth.year}
         </h2>
         <Suspense fallback={<UserCalendarMonthEarningsSkeleton />}>
-          {/* @ts-expect-error Async Server Component */}
           <UserCalendarMonthEarnings user={user} month={calendarMonth} />
         </Suspense>
         <UserEditSalaryDetailsDialog
@@ -97,7 +96,6 @@ async function UserCalendarMonthWithSalary({
           </div>
         </div>
         <Suspense fallback={<UserCalendarMonthSkeleton month={calendarMonth} />}>
-          {/* @ts-expect-error Async Server Component */}
           <UserCalendarMonth
             month={calendarMonth}
             closeUserWorkDayDetailsDialogOnSaveSuccess={
