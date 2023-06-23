@@ -124,7 +124,7 @@ const getUserWithEarnings = cache(async (id: number, activeDate?: Date) => {
 const getNextPaycheck = cache(async (id: number) => {
   const now = new Date();
 
-  const lastMonth = setMonth(now, now.getMonth() - 1);
+  const lastMonth = setMonth(now, new Date().getDate() > 20 ? now.getMonth() : now.getMonth() - 1);
 
   const [user, workDayDetail] = await query([
     getUser(id),
@@ -305,11 +305,11 @@ const preloadUserWorkDayDetailsByDate = async (id: number, month: number, year: 
 };
 
 export {
+  getNextPaycheck,
   getUser,
-  getUserWithEarnings,
   getUserAvatar,
   getUserSettings,
+  getUserWithEarnings,
   getUserWorkDayDetailsByDate,
-  preloadUserWorkDayDetailsByDate,
-  getNextPaycheck
+  preloadUserWorkDayDetailsByDate
 };

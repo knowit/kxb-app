@@ -1,14 +1,12 @@
-import { type NextRequest } from "next/server";
-
 import { getUser } from "@/lib/user";
 import { userFeedbackSchema } from "@/lib/validations/user";
 import { getFeedbackEmailTemplate } from "@/utils/email-utils";
-import sendGridMail from "@sendgrid/mail";
+import { ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
 
-export const runtime = "nodejs";
+export const runtime: ServerRuntime = "edge";
 
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request });
@@ -24,21 +22,27 @@ export async function POST(request: NextRequest) {
 
     const { feedback } = await userFeedbackSchema.parseAsync(res);
 
-    const sendGridApiKey = process.env.SEND_GRID_API_KEY;
+    const user = await getUser(token.id);
 
-    if (sendGridApiKey) {
-      sendGridMail.setApiKey(sendGridApiKey);
+    const name = user.name ?? user.email;
 
-      const user = await getUser(token.id);
-
-      const name = user.name ?? user.email;
-
-      await sendGridMail.send({
+    const resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_SENDING_API_KEY}`
+      },
+      body: JSON.stringify({
         to: process.env.FEEDBACK_RECIPIENT_EMAIL,
         from: "post@kxb.app",
         subject: `kxb.app feedback from ${name}`,
         html: getFeedbackEmailTemplate(name, feedback, user.email)
-      });
+      })
+    });
+
+    if (resendResponse.ok) {
+      const data = await res.json();
+      console.log(data);
     }
 
     return new Response("Created", {
