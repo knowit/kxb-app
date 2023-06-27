@@ -10,6 +10,7 @@ import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUserAvatar } from "@/lib/user";
 import { getInitials } from "@/utils/common-utils";
 import { Suspense } from "react";
+import { UserForceAvatarRefresh } from "../_components/user-force-avatar-refresh";
 
 export const runtime = "edge";
 
@@ -40,6 +41,14 @@ export default async function ProfilePage() {
             </HoverCardTrigger>
             <HoverCardContent alignOffset={20}>
               Click to edit your avatar at Microsoft Delve.
+            </HoverCardContent>
+          </HoverCard>
+          <HoverCard>
+            <HoverCardTrigger>
+              <UserForceAvatarRefresh />
+            </HoverCardTrigger>
+            <HoverCardContent alignOffset={20}>
+              Click to force a refresh of your avatar.
             </HoverCardContent>
           </HoverCard>
         </div>

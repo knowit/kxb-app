@@ -3,6 +3,8 @@
 import { db } from "@/lib/db";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
 import { User, UserWorkDayDetail } from "@/types";
+import { getEdgeFriendlyToken } from "../token";
+import { getUser } from "../user";
 
 type ActionResponse = {
   ok: boolean;
@@ -74,6 +76,20 @@ async function updateUser(
     return { ok: updateResult.numUpdatedRows > 0 };
   } catch (error) {
     return { ok: false, error: error.message };
+  }
+}
+
+async function refreshUserAvatar() {
+  const token = await getEdgeFriendlyToken();
+
+  if (!token) {
+    return;
+  }
+
+  const user = await getUser(token.id);
+
+  if (!user) {
+    return;
   }
 }
 

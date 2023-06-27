@@ -1,5 +1,6 @@
 import { AdminMainNav } from "@/app/admin/_components/admin-main-nav";
 import { AdminSideNav } from "@/app/admin/_components/admin-side-nav";
+import { RefreshRSCOnFocus } from "@/components/refresh-rsc-on-focus";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
 import { redirect } from "next/navigation";
@@ -31,6 +32,7 @@ export default async function AdminLayout({ children, modal }: AdminLayoutProps)
         </div>
       </div>
       {modal}
+      <RefreshRSCOnFocus />
     </>
   );
 }

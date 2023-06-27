@@ -34,7 +34,7 @@ const getMsGraphUserAvatar = cache(async (activeDirectoryId: string) => {
     const exists = await storageExists(`${activeDirectoryId}.jpg`);
 
     if (exists.success) {
-      return exists.cdnUrl;
+      return exists.url;
     }
 
     const token = await getMsGraphBearerToken();

@@ -205,7 +205,7 @@ const getUserSettings = cache(async (id: number): Promise<UserSettings> => {
   return userSettings as UserSettings;
 });
 
-const getUserAvatar = cache(async (id: number) => {
+const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
   const user = await db
     .selectFrom("user")
     .select(["name", "refreshToken", "activeDirectoryId"])
@@ -221,9 +221,9 @@ const getUserAvatar = cache(async (id: number) => {
 
   const exists = await storageExists(`${user.activeDirectoryId}.jpg`);
 
-  if (exists.success) {
+  if (exists.success && !forceRefresh) {
     return {
-      src: exists.cdnUrl,
+      src: exists.url,
       name: user.name
     };
   }

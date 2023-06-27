@@ -3,6 +3,7 @@ import { FeedbackForm } from "@/app/dashboard/_components/feedback-form";
 import { Footer } from "@/app/dashboard/_components/footer";
 import { NextPaycheck, NextPaycheckSkeleton } from "@/app/dashboard/_components/next-paycheck";
 import { Icons } from "@/components/icons";
+import { RefreshRSCOnFocus } from "@/components/refresh-rsc-on-focus";
 import { UserFeedbackPopoverSkeleton } from "@/components/user/user-feedback-popover";
 import { getEdgeFriendlyToken } from "@/lib/token";
 import { getUser } from "@/lib/user";
@@ -52,6 +53,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         </Suspense>
       </main>
       <Footer />
+      <RefreshRSCOnFocus />
     </>
   );
 }
