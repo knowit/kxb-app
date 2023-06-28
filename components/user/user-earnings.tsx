@@ -38,7 +38,7 @@ const UserEarnings = ({
             </div>
             <span className="text-emerald-500">
               Salary for {calendarMonth.month} paid with <span className="underline">half tax</span>{" "}
-              at {userEarnings?.nextMonthStatistics?.payDay}
+              at {userEarnings?.activeCalendarMonthStatistics?.payDay}
             </span>
           </CardContent>
         </Card>
