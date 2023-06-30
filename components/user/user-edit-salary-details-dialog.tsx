@@ -26,7 +26,7 @@ function UserEditSalaryDetailsDialog({
   return (
     <Dialog open={isOpen} onOpenChange={open => setIsOpen(open)}>
       <DialogTrigger asChild>
-        <Button className="gap-3" variant="subtle">
+        <Button className="gap-3" variant="outline">
           <Icons.Gear className="h-4 w-4" />
           Edit salary
         </Button>

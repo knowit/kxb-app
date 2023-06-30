@@ -152,7 +152,7 @@ function UserFeedbackForm({ user, className, ...other }: UserFeedbackFormProps) 
       </div>
       <div className="mt-2 flex items-center justify-between">
         <FeedbackEmojiSelector onSelected={emojiValue => setValue("reaction", emojiValue)} />
-        <Button type="submit" disabled={isLoading} variant="subtle">
+        <Button type="submit" disabled={isLoading} variant="outline">
           <span>Send</span>
           <Show when={!isLoading}>
             <Icons.PaperPlane className="ml-2 h-4 w-4" />
