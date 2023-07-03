@@ -21,7 +21,6 @@ import { cn } from "@/lib/utils";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { user } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
@@ -29,7 +28,7 @@ import * as z from "zod";
 
 interface UserSalaryDetailsFormProps extends HTMLAttributes<HTMLFormElement> {
   user: {
-    id: user["id"];
+    id: User["id"];
     commission: number;
     hourlyRate: number;
     tax: number;
