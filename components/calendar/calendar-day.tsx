@@ -1,9 +1,12 @@
+"use client";
+
 import { Icons } from "@/components/icons";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Show } from "@/components/ui/show";
 import { cn } from "@/lib/utils";
 import { CalendarDay, CalendarEntries, CalendarSizeVariant } from "@/types";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
+import { ComponentPropsWithoutRef, forwardRef, useMemo } from "react";
+import { CalendarDayWeekDropdownMenu } from "./calendar-day-week-dropdown-menu";
 
 type CalendarDayProps = ComponentPropsWithoutRef<"div"> & {
   calendarDay: CalendarEntries;
@@ -16,6 +19,9 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
     { className, calendarDay, calendarSizeVariant = "default", holidayInfos = [], ...other },
     ref
   ) => {
+    const showHoverCard = useMemo(() => calendarDay.type === "day", [calendarDay.type]);
+    const showDropdownMenu = useMemo(() => calendarDay.type === "week", [calendarDay.type]);
+
     return (
       <div
         className={cn(
@@ -55,7 +61,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
             <div className="text-xs dark:text-neutral-600 md:text-base">{calendarDay.week}</div>
           ) : null}
           <div className="flex items-center gap-1">
-            <Show when={calendarDay.type === "day"}>
+            <Show when={showHoverCard}>
               <HoverCard>
                 <HoverCardTrigger>{calendarDay.value}</HoverCardTrigger>
                 <HoverCardContent className="text-neutral-50" sideOffset={10}>
@@ -63,7 +69,10 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
                 </HoverCardContent>
               </HoverCard>
             </Show>
-            <Show when={calendarDay.type !== "day"}>{calendarDay.value}</Show>
+            <Show when={showDropdownMenu}>
+              <CalendarDayWeekDropdownMenu calendarDay={calendarDay} />
+            </Show>
+            <Show when={!showHoverCard && !showDropdownMenu}>{calendarDay.value}</Show>
             <Show when={(calendarDay?.workDayDetails?.extraHours ?? 0) > 0}>
               <Icons.PlusCircled />
             </Show>

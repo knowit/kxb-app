@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
 import { User, UserWorkDayDetail } from "@/types";
+import { createDate, getAllDaysInWeek } from "@/utils/calendar-utils";
 import { getEdgeFriendlyToken } from "../token";
 import { getUser } from "../user";
 
@@ -93,4 +94,58 @@ async function refreshUserAvatar() {
   }
 }
 
-export { mutateUserWorkDayDetail, updateUser };
+async function toggleVacationWeek(date: string) {
+  const token = await getEdgeFriendlyToken();
+
+  if (!token) {
+    return;
+  }
+
+  const _date = new Date(date);
+  const days = getAllDaysInWeek(_date)
+    .map(d => createDate(d))
+    .filter(x => x.isWorkDay ?? false);
+
+  const existingWorkDayDetails = await db
+    .selectFrom("user_work_day_detail")
+    .select("date")
+    .where("userId", "=", token.id)
+    .where(
+      "date",
+      "in",
+      days.map(d => d.formattedDate)
+    )
+    .execute();
+
+  if (existingWorkDayDetails.length === days.length) {
+    await db
+      .deleteFrom("user_work_day_detail")
+      .where("userId", "=", token.id)
+      .where(
+        "date",
+        "in",
+        days.map(d => d.formattedDate)
+      )
+      .execute();
+  } else {
+    const insertResult = await db
+      .insertInto("user_work_day_detail")
+      .values(
+        days
+          .filter(day => day.isWorkDay ?? false)
+          .map(day => ({
+            userId: token.id,
+            date: day.formattedDate,
+            nonCommissionedHours: 7.5,
+            extraHours: 0,
+            sickDay: false
+          }))
+      )
+      .executeTakeFirst();
+  }
+
+  // sleep 1s
+  await new Promise(resolve => setTimeout(resolve, 1000));
+}
+
+export { mutateUserWorkDayDetail, toggleVacationWeek, updateUser };
