@@ -52,6 +52,7 @@
     "react-hook-form": "^7.45.1",
     "server-only": "^0.0.1",
     "tailwind-merge": "^1.13.2",
+    "vaul": "^0.0.6",
     "zod": "^3.21.4"
   },
   "devDependencies": {

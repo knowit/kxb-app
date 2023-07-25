@@ -46,7 +46,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           </div>
         </div>
       </nav>
-      <main className="dark:bg-neutral-900">
+      <main vaul-drawer-wrapper="" className="dark:bg-neutral-900">
         <div className="mx-auto max-w-5xl px-4 py-12 lg:py-24">{children}</div>
         <Suspense fallback={<UserHeartbeatSkeleton />}>
           <UserHeartbeat />
