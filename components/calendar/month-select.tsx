@@ -26,11 +26,7 @@ const MonthSelect = forwardRef<
   return (
     <Select
       defaultValue={month.toString()}
-      onValueChange={value =>
-        router.push(`/dashboard/year/${year}/month/${value}`, {
-          forceOptimisticNavigation: true
-        })
-      }
+      onValueChange={value => router.push(`/dashboard/year/${year}/month/${value}`)}
     >
       <SelectTrigger
         className={cn(

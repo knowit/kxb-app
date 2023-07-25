@@ -73,7 +73,6 @@ async function UserCalendarMonthWithSalary({
             {/* Go to previous month if month.MonthNumber is 0, go to previous year and month 11 */}
             <LinkButton
               href={`/dashboard/year/${previousDate.getFullYear()}/month/${previousDate.getMonth()}`}
-              forceOptimisticNavigation
             >
               <span className="sr-only">Forrige måned</span>
               <Icons.ChevronLeft />
@@ -81,14 +80,12 @@ async function UserCalendarMonthWithSalary({
             {/* Go to current month */}
             <LinkButton
               href={`/dashboard/year/${currentDate.getFullYear()}/month/${currentDate.getMonth()}`}
-              forceOptimisticNavigation
             >
               <span className="">Today</span>
             </LinkButton>
             {/* Go to next month if month.MonthNumber is 11, go to next year and month 0 */}
             <LinkButton
               href={`/dashboard/year/${nextDate.getFullYear()}/month/${nextDate.getMonth()}`}
-              forceOptimisticNavigation
             >
               <span className="sr-only">Neste måned</span>
               <Icons.ChevronRight />
