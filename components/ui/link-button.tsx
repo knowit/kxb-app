@@ -11,10 +11,9 @@ const LinkButton = ({
   className,
   variant = "outline",
   size = "default",
-  forceOptimisticNavigation = false,
   href,
   disabled = false
-}: ButtonProps & { href: string; forceOptimisticNavigation?: boolean }) => {
+}: ButtonProps & { href: string }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -29,9 +28,7 @@ const LinkButton = ({
       href={href}
       onClick={e => {
         e.preventDefault();
-        router.push(href, {
-          forceOptimisticNavigation
-        });
+        router.push(href);
       }}
     >
       {children}
