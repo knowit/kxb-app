@@ -26,33 +26,34 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   return (
     <>
-      <nav className="border-b border-b-neutral-700">
-        <div className="mx-auto flex max-w-5xl items-center justify-between p-4">
-          <Link href="/dashboard">
-            <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
-          </Link>
-          <div className="flex items-center gap-8">
-            <div className="hidden sm:block">
-              <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
-                <FeedbackForm asPopover />
+      <main vaul-drawer-wrapper="" className="dark:bg-neutral-900">
+        <nav className="border-b border-b-neutral-700 bg-neutral-950">
+          <div className="mx-auto flex max-w-5xl items-center justify-between p-4">
+            <Link href="/dashboard">
+              <Icons.Logo className="w-full max-w-[96px] lg:max-w-[140px]" />
+            </Link>
+            <div className="flex items-center gap-8">
+              <div className="hidden sm:block">
+                <Suspense fallback={<UserFeedbackPopoverSkeleton />}>
+                  <FeedbackForm asPopover />
+                </Suspense>
+              </div>
+              <Suspense fallback={<NextPaycheckSkeleton />}>
+                <NextPaycheck />
+              </Suspense>
+              <Suspense fallback={<AvatarSkeleton />}>
+                <Avatar />
               </Suspense>
             </div>
-            <Suspense fallback={<NextPaycheckSkeleton />}>
-              <NextPaycheck />
-            </Suspense>
-            <Suspense fallback={<AvatarSkeleton />}>
-              <Avatar />
-            </Suspense>
           </div>
-        </div>
-      </nav>
-      <main className="dark:bg-neutral-900">
+        </nav>
         <div className="mx-auto max-w-5xl px-4 py-12 lg:py-24">{children}</div>
         <Suspense fallback={<UserHeartbeatSkeleton />}>
           <UserHeartbeat />
         </Suspense>
+        <Footer />
       </main>
-      <Footer />
+
       <RefreshRSCOnFocus />
     </>
   );
