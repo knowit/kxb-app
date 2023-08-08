@@ -6,13 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/types";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 function UserDialog({ user }: { user: Omit<User, "workDayDetails" | "feedback"> }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
 
   return (
     <Dialog
-      open
+      open={isOpen}
       onOpenChange={open => {
         if (!open) {
           router.back();
