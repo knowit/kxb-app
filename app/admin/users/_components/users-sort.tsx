@@ -34,7 +34,7 @@ const UsersSort = ({ className, ...other }: UsersSortProps) => {
     >
       <SelectTrigger className={cn("max-w-[8rem]", className)} {...other}>
         <SelectValue placeholder="Sort" />
-        <span className="sr-only">Toggle theme</span>
+        <span className="sr-only">Users sort</span>
       </SelectTrigger>
       <SelectContent>
         {Object.values(ADMIN_CONSTANTS.USERS_SORT_OPTIONS).map(sort => (
