@@ -66,16 +66,14 @@ const DialogContent = React.forwardRef<
 
   if (isMobile) {
     return (
-      <>
+      <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Portal>
-          <Drawer.Content className="fixed inset-x-0 bottom-0 mt-24 flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 bg-white px-6 pb-6 dark:bg-neutral-900">
-            <div className="mx-auto my-3 h-1 w-12 rounded-full bg-gray-300" />
-            {children}
-          </Drawer.Content>
-          <Drawer.Overlay />
-        </Drawer.Portal>
-      </>
+        <Drawer.Content className="fixed inset-x-0 bottom-0 mt-24 flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 bg-white px-6 pb-6 dark:bg-neutral-900">
+          <div className="mx-auto my-3 h-1 w-12 rounded-full bg-gray-300" />
+          {children}
+        </Drawer.Content>
+        <Drawer.Overlay />
+      </Drawer.Portal>
     );
   }
 
