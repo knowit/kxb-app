@@ -108,8 +108,8 @@ dependencies:
     specifier: ^1.14.0
     version: 1.14.0
   vaul:
-    specifier: ^0.2.0
-    version: 0.2.0(@types/react-dom@18.2.7)(@types/react@18.2.19)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.2.2
+    version: 0.2.2(@types/react-dom@18.2.7)(@types/react@18.2.19)(react-dom@18.2.0)(react@18.2.0)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -4387,8 +4387,8 @@ packages:
     hasBin: true
     dev: false
 
-  /vaul@0.2.0(@types/react-dom@18.2.7)(@types/react@18.2.19)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-bzqiLz0RzTOewNFRptP9b9Ri5Zrz9cYoK/Qsmo+cbPBJOjiI/Y7Ch3p3BBZKmsmXcQYSp4FsQme9I5DCHxXfeg==}
+  /vaul@0.2.2(@types/react-dom@18.2.7)(@types/react@18.2.19)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2j4LLnQ0RZ0WfzzxUAZHIu19gaDaR8ZugBNUovDLB/0o/zBTGZ61DPVAhl2XL8feTrE8FFBL7bpiUUP237KuTw==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
