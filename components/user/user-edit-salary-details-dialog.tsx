@@ -44,6 +44,7 @@ function UserEditSalaryDetailsDialog({
           </DialogDescription>
         </DialogHeader>
         <UserSalaryDetailsForm
+          className="mt-3"
           user={{
             commission: user.commission,
             hourlyRate: user.hourlyRate,
