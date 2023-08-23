@@ -34,8 +34,8 @@ function CompanyBenefits() {
       </Prose>
       <div className="col-span-12 grid grid-cols-1 gap-3 lg:col-span-7 lg:grid-cols-2">
         {/* transform all to CompanyBenefit component */}
-        <CompanyBenefit text="Full pay on paternity leave" />
-        <CompanyBenefit text="Pension 5,5% of salary from 1G to 12G" />
+        <CompanyBenefit text="Full pay on parental leave" />
+        <CompanyBenefit text="Pension 5,5% of salary from 0G to 12G" />
         <CompanyBenefit text="Health insurance for all employees" />
         <CompanyBenefit text="Training facilities" />
         <CompanyBenefit text="Your choice of phone with free calls, free SMS and 15 GB data every month" />
