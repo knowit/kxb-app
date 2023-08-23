@@ -15,7 +15,7 @@ export const metadata = {
   },
   title: {
     default: "KXB",
-    template: "%s | KXB"
+    template: "%s - KXB"
   },
   icons: {
     shortcut: "/favicon.ico",
