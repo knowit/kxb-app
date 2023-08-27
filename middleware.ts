@@ -13,7 +13,7 @@ export default withAuth(
     if (isAuthPage) {
       if (isAuth) {
         if (userIsSalesPerson(token)) {
-          return NextResponse.redirect(new URL("/dashboard/salary-calculator", req.url));
+          return NextResponse.redirect(new URL("/dashboard/salary/calculator", req.url));
         }
 
         return NextResponse.redirect(new URL("/dashboard", req.url));
