@@ -61,9 +61,10 @@ export const getHumanizedDateFromNow = (date: Date) => {
     }
   }
 
-  // if the date is within the current month, we want to show X days ago
-  if (getMonth(date) === getMonth(now) && getYear(date) === getYear(now)) {
-    const days = getDate(now) - getDate(date);
+  // if the date is within the last 99 days, we want to show X days ago
+  const days = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+  if (days <= 30) {
     return `${days}d`;
   }
 
