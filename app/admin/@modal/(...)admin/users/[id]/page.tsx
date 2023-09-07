@@ -19,5 +19,5 @@ export default async function UserDialogPage({ params }: UserDialogPageProps) {
     return notFound();
   }
 
-  return <UserDialog user={user} />;
+  return <UserDialog user={user} defaultOpen />;
 }

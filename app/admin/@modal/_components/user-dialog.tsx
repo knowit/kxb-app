@@ -8,8 +8,14 @@ import { User } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-function UserDialog({ user }: { user: Omit<User, "workDayDetails" | "feedback"> }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+function UserDialog({
+  user,
+  defaultOpen = false
+}: {
+  user: Omit<User, "workDayDetails" | "feedback">;
+  defaultOpen?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
   const router = useRouter();
 
   return (
