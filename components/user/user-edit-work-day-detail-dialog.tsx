@@ -34,13 +34,7 @@ function UserEditWorkDayDetailDialog({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={open => setIsOpen(open)}
-      snapPoints={["380px", 1]}
-      activeSnapPoint="380px"
-      {...other}
-    >
+    <Dialog open={isOpen} onOpenChange={open => setIsOpen(open)} {...other}>
       <DialogTrigger asChild>
         <CalendarDay
           className="cursor-pointer"

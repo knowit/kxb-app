@@ -22,12 +22,20 @@ const Dialog = ({
 
   const [snap, setSnap] = React.useState<number | string | null>(activeSnapPoint ?? 1);
 
+  const snapProps =
+    snapPoints?.length > 1
+      ? {
+          snapPoints: snapPoints ?? [1],
+          activeSnapPoint: snap,
+          setActiveSnapPoint: setSnap,
+          fadeFromIndex: 0
+        }
+      : {};
+
   const componentProps = isMobile
     ? {
         ...props,
-        snapPoints: snapPoints ?? [1],
-        activeSnapPoint: snap,
-        setActiveSnapPoint: setSnap
+        ...snapProps
       }
     : { ...props };
 
@@ -85,14 +93,16 @@ const DialogContent = React.forwardRef<
 
   if (isMobile) {
     return (
-      <Drawer.Portal className="z-50">
-        <Drawer.Overlay className="fixed inset-0 z-50 !bg-black/40" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mt-24 flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 bg-white px-6 pb-6 dark:bg-neutral-900">
-          <div className="mx-auto mb-5 mt-3 h-1 w-12 rounded-full bg-gray-300" />
-          {children}
-        </Drawer.Content>
-        <Drawer.Overlay />
-      </Drawer.Portal>
+      <>
+        <Drawer.Portal className="z-50">
+          <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
+          <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mt-24 flex max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 bg-white px-6 pb-6 dark:bg-neutral-900">
+            <div className="mx-auto mb-5 mt-3 h-1 w-12 rounded-full bg-gray-300" />
+            {children}
+          </Drawer.Content>
+          <Drawer.Overlay />
+        </Drawer.Portal>
+      </>
     );
   }
 
