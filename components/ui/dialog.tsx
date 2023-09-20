@@ -12,7 +12,7 @@ const Dialog = ({ ...props }: DialogPrimitive.DialogProps) => {
   const { isMobile } = useWindowSize();
   const Component = isMobile ? Drawer.Root : DialogPrimitive.Root;
 
-  return <Component shouldScaleBackground {...props} />;
+  return <Component {...props} />;
 };
 
 Dialog.displayName = DialogPrimitive.Root.displayName;

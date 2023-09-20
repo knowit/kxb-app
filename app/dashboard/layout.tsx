@@ -26,7 +26,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   return (
     <>
-      <main vaul-drawer-wrapper="" className="dark:bg-neutral-900">
+      <main className="dark:bg-neutral-900">
         <nav className="border-b border-b-neutral-700 bg-neutral-950">
           <div className="mx-auto flex max-w-5xl items-center justify-between p-4">
             <Link href="/dashboard">
