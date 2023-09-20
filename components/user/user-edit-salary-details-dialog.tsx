@@ -24,7 +24,12 @@ function UserEditSalaryDetailsDialog({
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <Dialog open={isOpen} onOpenChange={open => setIsOpen(open)}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={open => setIsOpen(open)}
+      snapPoints={["480px", 1]}
+      activeSnapPoint="480px"
+    >
       <DialogTrigger asChild>
         <Button className="gap-3" variant="outline">
           <Icons.Gear className="h-4 w-4" />
