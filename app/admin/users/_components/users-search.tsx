@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { debounce } from "@/utils/common-utils";
-import { type AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ComponentPropsWithoutRef, useState } from "react";
 
