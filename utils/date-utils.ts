@@ -9,7 +9,8 @@ import {
   getMonth,
   getSeconds,
   getWeek as getWeekDateFns,
-  getYear
+  getYear,
+  intervalToDuration
 } from "date-fns";
 
 export const getFormattedDate = (date: Date, locale?: string) =>
@@ -42,40 +43,40 @@ export const getFormattedDateAndTime = (date: Date, locale?: string) =>
 export const getHumanizedDateFromNow = (date: Date) => {
   const now = new Date();
 
-  // if the date is today, we want to show X hours ago
-  if (
-    getDate(date) === getDate(now) &&
-    getMonth(date) === getMonth(now) &&
-    getYear(date) === getYear(now)
-  ) {
-    const hours = getHours(now) - getHours(date);
-    const minutes = getMinutes(now) - getMinutes(date);
-    const seconds = getSeconds(now) - getSeconds(date);
+  const { days, hours, minutes, months, seconds, weeks, years } = intervalToDuration({
+    start: date,
+    end: now
+  });
 
-    if (hours > 0) {
-      return `${hours}h`;
-    } else if (minutes > 0) {
-      return `${minutes}m`;
-    } else {
-      return `${seconds}s`;
-    }
+  if (years && years > 0) {
+    return `${years}y`;
   }
 
-  // if the date is within the current month, we want to show X days ago
-  if (getMonth(date) === getMonth(now) && getYear(date) === getYear(now)) {
-    const days = getDate(now) - getDate(date);
-    return `${days}d`;
-  }
-
-  // if the date is within the current year, we want to show X months ago
-  if (getYear(date) === getYear(now)) {
-    const months = getMonth(now) - getMonth(date);
+  if (months && months > 0) {
     return `${months}m`;
   }
 
-  // if the date is not within the current year, we want to show X years ago
-  const years = getYear(now) - getYear(date);
-  return `${years}y`;
+  if (weeks && weeks > 0) {
+    return `${weeks}w`;
+  }
+
+  if (days && days > 0) {
+    return `${days}d`;
+  }
+
+  if (hours && hours > 0) {
+    return `${hours}h`;
+  }
+
+  if (minutes && minutes > 0) {
+    return `${minutes}m`;
+  }
+
+  if (seconds && seconds > 0) {
+    return `${seconds}s`;
+  }
+
+  return "now";
 };
 
 export const getFormattedIsoDateAndTime = (date: Date, locale?: string) =>

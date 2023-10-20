@@ -21,11 +21,11 @@ export default async function AdminLayout({ children, modal }: AdminLayoutProps)
   return (
     <>
       <div className="mx-auto flex min-h-screen flex-col">
-        <header className="sticky top-0 z-40 border-b border-b-neutral-700 bg-neutral-950 px-4">
+        <header className="z-40 border-b border-b-neutral-700 bg-neutral-950 px-4">
           <AdminMainNav />
         </header>
         <div className="container relative grid grow gap-12 bg-neutral-900 md:grid-cols-[200px_1fr]">
-          <aside className="sticky top-0 hidden w-[200px] flex-col border-r border-r-neutral-700 pr-6 pt-8 md:flex">
+          <aside className="hidden w-[200px] flex-col border-r border-r-neutral-700 pr-6 pt-8 md:flex">
             <AdminSideNav />
           </aside>
           <main className="flex w-full flex-1 flex-col overflow-hidden ">{children}</main>

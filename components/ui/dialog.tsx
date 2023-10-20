@@ -8,11 +8,38 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 import { Drawer } from "vaul";
 
-const Dialog = ({ ...props }: DialogPrimitive.DialogProps) => {
+const Dialog = ({
+  snapPoints = [1],
+  activeSnapPoint = 1,
+  ...props
+}: DialogPrimitive.DialogProps & {
+  // array of
+  snapPoints?: (number | string)[];
+  activeSnapPoint?: number | string | null;
+}) => {
   const { isMobile } = useWindowSize();
   const Component = isMobile ? Drawer.Root : DialogPrimitive.Root;
 
-  return <Component shouldScaleBackground {...props} />;
+  const [snap, setSnap] = React.useState<number | string | null>(activeSnapPoint ?? 1);
+
+  const snapProps =
+    snapPoints?.length > 1
+      ? {
+          snapPoints: snapPoints ?? [1],
+          activeSnapPoint: snap,
+          setActiveSnapPoint: setSnap,
+          fadeFromIndex: 0
+        }
+      : {};
+
+  const componentProps = isMobile
+    ? {
+        ...props,
+        ...snapProps
+      }
+    : { ...props };
+
+  return <Component {...componentProps} />;
 };
 
 Dialog.displayName = DialogPrimitive.Root.displayName;
@@ -33,9 +60,18 @@ const DialogTrigger = React.forwardRef<
 
 DialogTrigger.displayName = DialogPrimitive.Trigger.displayName;
 
-const DialogPortal = ({ className, children, ...other }: DialogPrimitive.DialogPortalProps) => (
-  <DialogPrimitive.Portal className={cn(className)} {...other}>
-    <div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
+const DialogPortal = ({
+  className,
+  children,
+  ...other
+}: DialogPrimitive.DialogPortalProps & { className?: string }) => (
+  <DialogPrimitive.Portal {...other}>
+    <div
+      className={cn(
+        "fixed inset-0 z-50 flex items-start justify-center sm:items-center",
+        className
+      )}
+    >
       {children}
     </div>
   </DialogPrimitive.Portal>
@@ -66,14 +102,18 @@ const DialogContent = React.forwardRef<
 
   if (isMobile) {
     return (
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 mt-24 flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 bg-white px-6 pb-6 dark:bg-neutral-900">
-          <div className="mx-auto mb-5 mt-3 h-1 w-12 rounded-full bg-gray-300" />
-          {children}
-        </Drawer.Content>
-        <Drawer.Overlay />
-      </Drawer.Portal>
+      <>
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+          <Drawer.Content className="fixed inset-x-0 bottom-0 mt-24 flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 ">
+            <div className="flex-1 rounded-t-[10px] bg-white p-4 dark:bg-neutral-900">
+              <div className="mx-auto mb-5 mt-3 h-1 w-12 rounded-full bg-gray-300" />
+              <div className="mx-auto max-w-md">{children}</div>
+            </div>
+          </Drawer.Content>
+          <Drawer.Overlay />
+        </Drawer.Portal>
+      </>
     );
   }
 
