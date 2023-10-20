@@ -108,8 +108,8 @@ dependencies:
     specifier: ^1.14.0
     version: 1.14.0
   vaul:
-    specifier: ^0.7.5
-    version: 0.7.5(@types/react-dom@18.2.14)(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.2.2
+    version: 0.2.2(@types/react-dom@18.2.14)(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -4468,11 +4468,11 @@ packages:
     hasBin: true
     dev: false
 
-  /vaul@0.7.5(@types/react-dom@18.2.14)(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-tfihsrhkVNfIrSioiw66CqiqFAjBQ26mlbbPuypfHQV0zvQetpXgpSDLVqIz9GPi92iwWFbh1jNA/AmVmdy9GQ==}
+  /vaul@0.2.2(@types/react-dom@18.2.14)(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2j4LLnQ0RZ0WfzzxUAZHIu19gaDaR8ZugBNUovDLB/0o/zBTGZ61DPVAhl2XL8feTrE8FFBL7bpiUUP237KuTw==}
     peerDependencies:
-      react: ^16.8 || ^17.0 || ^18.0
-      react-dom: ^16.8 || ^17.0 || ^18.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
     dependencies:
       '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.14)(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
