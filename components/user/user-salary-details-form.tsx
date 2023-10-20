@@ -117,141 +117,141 @@ function UserSalaryDetailsForm({
   }
 
   return (
-    <form
-      className={cn("flex flex-col gap-y-2", className)}
-      onSubmit={handleSubmit(onSubmit)}
-      {...other}
-    >
-      <div
-        className={cn({
-          "flex gap-x-2 sm:flex-col": variant === "dialog"
-        })}
-      >
-        <div className="w-full max-w-[400px]">
-          <Label htmlFor="hourlyRate">Hourly rate</Label>
-          <Input
-            id="hourlyRate"
-            type="number"
-            className="w-full"
-            disabled={isLoading}
-            {...register("hourlyRate", {
-              valueAsNumber: true
-            })}
-          />
-          {errors?.hourlyRate && (
-            <p className="px-1 text-xs text-red-600">{errors.hourlyRate.message}</p>
-          )}
-        </div>
-        <div className="w-full max-w-[400px]">
-          <Label htmlFor="commission">Commission</Label>
-          <Input
-            id="commission"
-            type="number"
-            step="0.01"
-            className="w-full"
-            disabled={isLoading}
-            {...register("commission", {
-              valueAsNumber: true
-            })}
-          />
-          {errors?.commission && (
-            <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
-          )}
-        </div>
-      </div>
-      <div className="w-full max-w-[400px]">
-        <Label htmlFor="tax">{isTaxTableMode ? "Tax table" : "Tax"}</Label>
-        <div className="flex items-center gap-x-4">
-          <Show when={isTaxTableMode}>
+    <form onSubmit={handleSubmit(onSubmit)} {...other}>
+      <div className={cn("flex flex-col gap-y-2", className)}>
+        <div
+          className={cn({
+            "flex gap-x-2 sm:flex-col": variant === "dialog"
+          })}
+        >
+          <div className="w-full max-w-[400px]">
+            <Label htmlFor="hourlyRate">Hourly rate</Label>
             <Input
-              className="hidden"
-              id="tax-table"
-              hidden
+              id="hourlyRate"
+              type="number"
+              className="w-full"
               disabled={isLoading}
-              {...register("taxTable")}
+              {...register("hourlyRate", {
+                valueAsNumber: true
+              })}
             />
-            <Select
-              onValueChange={value => setValue("taxTable", value)}
-              defaultValue={isTaxTableMode && user?.taxTable ? user.taxTable : undefined}
+            {errors?.hourlyRate && (
+              <p className="px-1 text-xs text-red-600">{errors.hourlyRate.message}</p>
+            )}
+          </div>
+          <div className="w-full max-w-[400px]">
+            <Label htmlFor="commission">Commission</Label>
+            <Input
+              id="commission"
+              type="number"
+              step="0.01"
+              className="w-full"
               disabled={isLoading}
-            >
-              <SelectTrigger className="text-base">
-                <SelectValue placeholder="Select tax table" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(EARNING_CONSTANTS.TAX_TABLES).map(table => (
-                  <SelectItem key={table} className="text-base" value={table}>
-                    {table}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Show>
-          <Input
-            className={cn({
-              hidden: isTaxTableMode
-            })}
-            id="tax"
-            type="number"
-            step="0.01"
-            disabled={isLoading}
-            {...register("tax", {
-              valueAsNumber: true
-            })}
-          />
-          <div className="flex grow items-center gap-x-3">
-            <Label className="min-w-[82px]" htmlFor="tax-table-mode">
-              Use tax table
-            </Label>
-            <Switch
-              id="tax-table-mode"
-              defaultChecked={isTaxTableMode}
-              disabled={isLoading}
-              onCheckedChange={checked => {
-                if (!checked) {
-                  setValue("taxTable", undefined);
-                }
-
-                setIsTaxTableMode(checked);
-              }}
+              {...register("commission", {
+                valueAsNumber: true
+              })}
             />
+            {errors?.commission && (
+              <p className="px-1 text-xs text-red-600">{errors.commission.message}</p>
+            )}
           </div>
         </div>
-        {errors?.tax && <p className="px-1 text-xs text-red-600">{errors.tax.message}</p>}
-        {errors?.taxTable && <p className="px-1 text-xs text-red-600">{errors.taxTable.message}</p>}
-      </div>
-      <div className="w-full max-w-[400px]">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="workHours">Work hours</Label>
-          <InfoButton size="sm">
-            Consultants usually work for {EARNING_CONSTANTS.WORK_HOURS_PER_DAY} hours per day,
-            although some may have their lunch break covered by their employers, which can increase
-            their work hours to 8 per day.
-          </InfoButton>
+        <div className="w-full max-w-[400px]">
+          <Label htmlFor="tax">{isTaxTableMode ? "Tax table" : "Tax"}</Label>
+          <div className="flex items-center gap-x-4">
+            <Show when={isTaxTableMode}>
+              <Input
+                className="hidden"
+                id="tax-table"
+                hidden
+                disabled={isLoading}
+                {...register("taxTable")}
+              />
+              <Select
+                onValueChange={value => setValue("taxTable", value)}
+                defaultValue={isTaxTableMode && user?.taxTable ? user.taxTable : undefined}
+                disabled={isLoading}
+              >
+                <SelectTrigger className="text-base">
+                  <SelectValue placeholder="Select tax table" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(EARNING_CONSTANTS.TAX_TABLES).map(table => (
+                    <SelectItem key={table} className="text-base" value={table}>
+                      {table}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Show>
+            <Input
+              className={cn({
+                hidden: isTaxTableMode
+              })}
+              id="tax"
+              type="number"
+              step="0.01"
+              disabled={isLoading}
+              {...register("tax", {
+                valueAsNumber: true
+              })}
+            />
+            <div className="flex grow items-center gap-x-3">
+              <Label className="min-w-[82px]" htmlFor="tax-table-mode">
+                Use tax table
+              </Label>
+              <Switch
+                id="tax-table-mode"
+                defaultChecked={isTaxTableMode}
+                disabled={isLoading}
+                onCheckedChange={checked => {
+                  if (!checked) {
+                    setValue("taxTable", undefined);
+                  }
+
+                  setIsTaxTableMode(checked);
+                }}
+              />
+            </div>
+          </div>
+          {errors?.tax && <p className="px-1 text-xs text-red-600">{errors.tax.message}</p>}
+          {errors?.taxTable && (
+            <p className="px-1 text-xs text-red-600">{errors.taxTable.message}</p>
+          )}
         </div>
-        <Input
-          id="workHours"
-          type="number"
-          step="0.5"
-          className="w-full"
-          disabled={isLoading}
-          {...register("workHours", {
-            valueAsNumber: true
-          })}
-        />
-        {errors?.workHours && (
-          <p className="px-1 text-xs text-red-600">{errors.workHours.message}</p>
-        )}
+        <div className="w-full max-w-[400px]">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="workHours">Work hours</Label>
+            <InfoButton size="sm">
+              Consultants usually work for {EARNING_CONSTANTS.WORK_HOURS_PER_DAY} hours per day,
+              although some may have their lunch break covered by their employers, which can
+              increase their work hours to 8 per day.
+            </InfoButton>
+          </div>
+          <Input
+            id="workHours"
+            type="number"
+            step="0.5"
+            className="w-full"
+            disabled={isLoading}
+            {...register("workHours", {
+              valueAsNumber: true
+            })}
+          />
+          {errors?.workHours && (
+            <p className="px-1 text-xs text-red-600">{errors.workHours.message}</p>
+          )}
+        </div>
+        <Button className="mt-4 w-fit" type="submit" disabled={isLoading} variant="subtle">
+          <span>Save</span>
+          <Show when={!isLoading}>
+            <Icons.Check className="ml-2 h-4 w-4" />
+          </Show>
+          <Show when={isLoading}>
+            <Icons.Loader className="ml-2 h-4 w-4" />
+          </Show>
+        </Button>
       </div>
-      <Button className="mt-4 w-fit" type="submit" disabled={isLoading} variant="subtle">
-        <span>Save</span>
-        <Show when={!isLoading}>
-          <Icons.Check className="ml-2 h-4 w-4" />
-        </Show>
-        <Show when={isLoading}>
-          <Icons.Loader className="ml-2 h-4 w-4" />
-        </Show>
-      </Button>
     </form>
   );
 }

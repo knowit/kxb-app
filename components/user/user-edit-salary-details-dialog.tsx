@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogHeader,
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
@@ -32,19 +31,16 @@ function UserEditSalaryDetailsDialog({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit salary details</DialogTitle>
-          <DialogDescription>
-            Make changes to your salary details here. Click save when you&apos;re done. You can view
-            your{" "}
-            <Link className="underline underline-offset-2" href="/dashboard/profile">
-              profile here
-            </Link>
-            .
-          </DialogDescription>
-        </DialogHeader>
+        <DialogTitle>Edit salary details</DialogTitle>
+        <DialogDescription>
+          Make changes to your salary details here. Click save when you&apos;re done. You can view
+          your{" "}
+          <Link className="underline underline-offset-2" href="/dashboard/profile">
+            profile here
+          </Link>
+          .
+        </DialogDescription>
         <UserSalaryDetailsForm
-          className="mt-3"
           user={{
             commission: user.commission,
             hourlyRate: user.hourlyRate,
