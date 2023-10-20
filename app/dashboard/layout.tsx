@@ -53,7 +53,6 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         </Suspense>
         <Footer />
       </main>
-
       <RefreshRSCOnFocus />
     </>
   );
