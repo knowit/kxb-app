@@ -8,13 +8,15 @@ export function RefreshRSCOnFocus() {
 
   useEffect(() => {
     const onFocus = () => {
-      refresh();
+      if (document.readyState === "complete" && document.visibilityState === "visible") {
+        refresh();
+      }
     };
 
-    window.addEventListener("focus", onFocus);
+    window.addEventListener("visibilitychange", onFocus);
 
     return () => {
-      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("visibilitychange", onFocus);
     };
   }, [refresh]);
 
