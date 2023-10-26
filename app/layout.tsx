@@ -2,17 +2,19 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
+import { Viewport } from "next";
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export const metadata = {
+export const viewport: Viewport = {
   themeColor: "#18181b",
-  viewport: {
-    width: "device-width",
-    initialScale: 1
-  },
+  width: "device-width",
+  initialScale: 1
+}
+
+export const metadata = {
   title: {
     default: "KXB",
     template: "%s - KXB"
