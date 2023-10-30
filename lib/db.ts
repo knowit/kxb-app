@@ -14,7 +14,7 @@ export interface UserTable {
   hourlyRate: Generated<number>;
   commission: Generated<number>;
   tax: Generated<number>;
-  taxTable?: string;
+  taxTable: string | null;
   workHours: Generated<number>;
   created: Generated<string>;
   updated: Generated<string>;

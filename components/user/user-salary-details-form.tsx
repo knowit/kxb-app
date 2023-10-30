@@ -87,7 +87,7 @@ function UserSalaryDetailsForm({
         hourlyRate: data.hourlyRate,
         tax: data.tax,
         workHours: data.workHours,
-        taxTable: data.taxTable
+        taxTable: isTaxTableMode ? data.taxTable : null
       })
     });
 

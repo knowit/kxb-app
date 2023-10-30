@@ -19,6 +19,7 @@ export const userSalaryDetailSchema = z.object({
       message: "Invalid tax table"
     })
     .optional()
+    .nullable()
 });
 
 export const userWorkDayDetailSchema = z.object({
