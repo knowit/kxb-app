@@ -15,7 +15,8 @@ export const getUserSalaryDetails = (user: User): UserSalaryDetails => ({
   hourlyRate: user?.hourlyRate ?? DEFAULT_USER_SALARY.hourlyRate,
   commission: user?.commission ?? DEFAULT_USER_SALARY.commission,
   tax: user?.tax ?? DEFAULT_USER_SALARY.tax,
-  workHours: user?.workHours ?? DEFAULT_USER_SALARY.workHours
+  workHours: user?.workHours ?? DEFAULT_USER_SALARY.workHours,
+  taxTable: user?.taxTable ?? null
 });
 
 export const getUserEarningsDetails = (

@@ -111,7 +111,7 @@ export const getEarningsForMonth = (
   tax: number,
   workHours: number,
   workDayDetails: UserWorkDayDetail[],
-  taxTable?: string
+  taxTable: string | null
 ): CalendarMonthEarnings => {
   const workDays = getWorkDays(month);
   const nonCommissionedHoursForMonth = getNonCommissionedHoursForMonth(month, workDayDetails);
@@ -163,7 +163,7 @@ export const getEarningsForYear = (
   tax: number,
   workHours: number,
   workDayDetails: UserWorkDayDetail[],
-  taxTable?: string
+  taxTable: string | null
 ): CalendarYearEarnings => {
   const { totalWorkDays, totalWorkHours, totalNet, totalGross } = (year?.months ?? []).reduce(
     (result, month) => {

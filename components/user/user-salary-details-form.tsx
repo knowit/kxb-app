@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { EARNING_CONSTANTS } from "@/constants/earning-constants";
 import { toast } from "@/hooks/use-toast";
+import { updateUser } from "@/lib/actions/user-actions";
 import { cn } from "@/lib/utils";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
 import { User } from "@/types";
@@ -77,18 +78,12 @@ function UserSalaryDetailsForm({
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await fetch(`/api/user/${user.id}/salary`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        commission: data.commission,
-        hourlyRate: data.hourlyRate,
-        tax: data.tax,
-        workHours: data.workHours,
-        taxTable: isTaxTableMode ? data.taxTable : null
-      })
+    const response = await updateUser(user.id, {
+      commission: data.commission,
+      hourlyRate: data.hourlyRate,
+      tax: data.tax,
+      workHours: data.workHours,
+      taxTable: isTaxTableMode ? data.taxTable : null
     });
 
     setIsSaving(false);

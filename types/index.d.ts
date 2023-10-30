@@ -33,7 +33,7 @@ export type User = {
   hourlyRate: number;
   commission: number;
   tax: number;
-  taxTable?: string;
+  taxTable: string | null;
   workHours: number;
   created: string;
   updated: string;
@@ -47,7 +47,7 @@ export type UserSalaryDetails = {
   hourlyRate: number;
   commission: number;
   tax: number;
-  taxTable?: string;
+  taxTable: string | null;
   workHours: number;
 };
 

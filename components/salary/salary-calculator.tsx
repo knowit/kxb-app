@@ -56,7 +56,8 @@ const SalaryCalculator = ({
           commission: commission ?? 0,
           hourlyRate: hourlyRate ?? 0,
           tax: tax ?? 0,
-          workHours: workHours ?? 0
+          workHours: workHours ?? 0,
+          taxTable: null
         },
         year,
         nextYear,

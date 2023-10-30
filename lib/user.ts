@@ -101,7 +101,7 @@ const getUserWithEarnings = cache(async (id: number, activeDate?: Date) => {
         hourlyRate: user.data.hourlyRate ?? 0,
         tax: user.data.tax ?? 0,
         workHours: user.data.workHours ?? 0,
-        taxTable: user.data.taxTable ?? undefined
+        taxTable: user.data.taxTable ?? null
       },
       year,
       nextYear,
@@ -151,7 +151,7 @@ const getNextPaycheck = cache(async (id: number) => {
     hourlyRate: user.data.hourlyRate ?? 0,
     tax: user.data.tax ?? 0,
     workHours: user.data.workHours ?? 0,
-    taxTable: user.data.taxTable ?? undefined
+    taxTable: user.data.taxTable ?? null
   };
 
   return {
