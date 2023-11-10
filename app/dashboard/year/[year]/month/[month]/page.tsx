@@ -16,7 +16,6 @@ interface SelectedYearMonthPageProps {
   params: { year: string; month: string };
 }
 
-export const runtime = "edge";
 
 export function generateMetadata({ params }: SelectedYearMonthPageProps): Metadata {
   const month = Object.values(MONTH).find(month => month.value === +params.month);
@@ -47,12 +46,8 @@ export default async function SelectedYearMonthPage({ params }: SelectedYearMont
 
   return (
     <>
-      <Suspense fallback={<UserCalendarMonthWithSalarySkeleton month={calendarMonth} />}>
-        <UserCalendarMonthWithSalary
-          user={user.data}
-          calendarMonth={calendarMonth}
-          userSettings={userSettings.data}
-        />
+      <Suspense fallback={<UserCalendarMonthWithSalarySkeleton />}>
+        <UserCalendarMonthWithSalary />
       </Suspense>
     </>
   );

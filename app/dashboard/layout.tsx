@@ -5,25 +5,11 @@ import { NextPaycheck, NextPaycheckSkeleton } from "@/app/dashboard/_components/
 import { Icons } from "@/components/icons";
 import { RefreshRSCOnFocus } from "@/components/refresh-rsc-on-focus";
 import { UserFeedbackPopoverSkeleton } from "@/components/user/user-feedback-popover";
-import { getEdgeFriendlyToken } from "@/lib/token";
-import { getUser } from "@/lib/user";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
 import { UserHeartbeat, UserHeartbeatSkeleton } from "./_components/user-heartbeat";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
-  const token = await getEdgeFriendlyToken();
-  const user = await getUser(token.id);
-
-  if (!user) {
-    return redirect("/logout");
-  }
-
-  if (user.activeDirectoryId !== token.activeDirectoryId) {
-    return redirect("/logout");
-  }
-
   return (
     <>
       <main className="dark:bg-neutral-900">

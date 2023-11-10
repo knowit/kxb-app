@@ -9,7 +9,6 @@ interface SelectedYearPageProps {
   params: { year: string };
 }
 
-export const runtime = "edge";
 
 export function generateMetadata({ params }: SelectedYearPageProps): Metadata {
   return {

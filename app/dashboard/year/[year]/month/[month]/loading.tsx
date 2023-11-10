@@ -27,7 +27,7 @@ export default async function SelectedYearMonthLoading() {
 
   return (
     <>
-      <UserCalendarMonthWithSalarySkeleton month={calendarMonth} />
+      <UserCalendarMonthWithSalarySkeleton />
     </>
   );
 }

@@ -12,7 +12,6 @@ import { getInitials } from "@/utils/common-utils";
 import { Suspense } from "react";
 import { UserForceAvatarRefresh } from "../_components/user-force-avatar-refresh";
 
-export const runtime = "edge";
 
 export const metadata = {
   title: "Profile"

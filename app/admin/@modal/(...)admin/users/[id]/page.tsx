@@ -6,7 +6,6 @@ interface UserDialogPageProps {
   params: { id: string };
 }
 
-export const runtime = "edge";
 
 export default async function UserDialogPage({ params }: UserDialogPageProps) {
   const user = await db

@@ -121,3 +121,4 @@ const UserCalendarMonthSkeleton: FC<UserCalendarMonthSkeletonProps> = ({
 
 export { UserCalendarMonth, UserCalendarMonthSkeleton };
 export type { UserCalendarMonthProps, UserCalendarMonthSkeletonProps };
+

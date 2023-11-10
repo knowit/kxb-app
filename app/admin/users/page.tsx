@@ -13,7 +13,6 @@ import { Suspense } from "react";
 import * as z from "zod";
 import { UsersSort } from "./_components/users-sort";
 
-export const runtime = "edge";
 
 type UsersPageProps = {
   searchParams: { [key: string]: string | string[] | undefined };

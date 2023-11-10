@@ -17,19 +17,24 @@ import {
   UserEditSalaryDetailsDialog,
   UserEditSalaryDetailsDialogTriggerSkeleton
 } from "@/components/user/user-edit-salary-details-dialog";
-import { User, UserSettings, type CalendarMonth as CalendarMonthType } from "@/types";
+import { getRequestDateNow } from "@/lib/date";
+import { query } from "@/lib/query";
+import { getEdgeFriendlyToken } from "@/lib/token";
+import { getUser, getUserSettings } from "@/lib/user";
+import { getCalendarMonth } from "@/utils/calendar-utils";
 import Link from "next/link";
 import { FC, Suspense } from "react";
 
-async function UserCalendarMonthWithSalary({
-  user,
-  calendarMonth,
-  userSettings
-}: {
-  user: User;
-  calendarMonth: CalendarMonthType;
-  userSettings?: UserSettings;
-}) {
+async function UserCalendarMonthWithSalary() {
+  const calendarMonth = getCalendarMonth(getRequestDateNow());
+
+  const token = await getEdgeFriendlyToken();
+  const [user, userSettings] = await query([getUser(token.id), getUserSettings(token.id)]);
+
+  if (!user.data) {
+    return null;
+  }
+
   const currentDate = new Date();
 
   const previousDate = new Date(
@@ -50,11 +55,11 @@ async function UserCalendarMonthWithSalary({
           Salary details for {calendarMonth.month} {calendarMonth.year}
         </h2>
         <Suspense fallback={<UserCalendarMonthEarningsSkeleton />}>
-          <UserCalendarMonthEarnings user={user} month={calendarMonth} />
+          <UserCalendarMonthEarnings user={user.data} month={calendarMonth} />
         </Suspense>
         <UserEditSalaryDetailsDialog
-          user={user}
-          closeDialogOnFormSubmitSuccess={userSettings?.closeUserSalaryDialogOnSaveSuccess}
+          user={user.data}
+          closeDialogOnFormSubmitSuccess={userSettings?.data?.closeUserSalaryDialogOnSaveSuccess}
         />
       </div>
       <div className="grow">
@@ -96,10 +101,10 @@ async function UserCalendarMonthWithSalary({
           <UserCalendarMonth
             month={calendarMonth}
             closeUserWorkDayDetailsDialogOnSaveSuccess={
-              userSettings?.closeUserWorkDayDetailsDialogOnSaveSuccess
+              userSettings?.data?.closeUserWorkDayDetailsDialogOnSaveSuccess
             }
             showDialogOnCalendarDayClick
-            user={user}
+            user={user.data}
           />
         </Suspense>
       </div>
@@ -107,10 +112,12 @@ async function UserCalendarMonthWithSalary({
   );
 }
 
-const UserCalendarMonthWithSalarySkeleton: FC<UserCalendarMonthSkeletonProps> = ({
-  month,
+const UserCalendarMonthWithSalarySkeleton: FC<{
+  calendarSizeVariant?: UserCalendarMonthSkeletonProps["calendarSizeVariant"];
+}> = ({
   calendarSizeVariant = "default"
 }) => {
+  const month = getCalendarMonth(getRequestDateNow());
   return (
     <div className="flex flex-col gap-12 lg:flex-row">
       <div className="order-1 flex max-w-[380px] flex-col gap-3 lg:-order-1 lg:min-w-[380px]">
