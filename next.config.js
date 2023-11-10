@@ -56,6 +56,9 @@ const nextConfig = {
         headers: securityHeaders
       }
     ];
+  },
+  experimental: {
+    ppr: true
   }
 };
 
