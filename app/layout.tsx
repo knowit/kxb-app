@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import { Viewport } from "next";
 
+export const preferredRegion = "iad1";
+
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -12,7 +14,7 @@ export const viewport: Viewport = {
   themeColor: "#18181b",
   width: "device-width",
   initialScale: 1
-}
+};
 
 export const metadata = {
   title: {

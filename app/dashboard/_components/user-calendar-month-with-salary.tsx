@@ -25,6 +25,8 @@ import { getCalendarMonth } from "@/utils/calendar-utils";
 import Link from "next/link";
 import { FC, Suspense } from "react";
 
+export const runtime = "edge";
+
 async function UserCalendarMonthWithSalary() {
   const calendarMonth = getCalendarMonth(getRequestDateNow());
 
