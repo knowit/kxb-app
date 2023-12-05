@@ -3,7 +3,7 @@ import { validateEmail } from "@/logic/validation-logic";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
 import { getMySQLDate } from "@/utils/date-utils";
 import { fetchWithToken } from "@/utils/fetcher";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { Account, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import AzureAdProvider from "next-auth/providers/azure-ad";
@@ -17,7 +17,7 @@ const AZURE_AD_ADMIN_GROUP_ID = process.env.AZURE_AD_ADMIN_GROUP_ID;
 const AZURE_AD_SPECIALIST_GROUP_ID = process.env.AZURE_AD_SPECIALIST_GROUP_ID;
 
 const getAzureAdTokenClaims = (token: string): AzureAdTokenClaims => {
-  return jwt_decode(token) as AzureAdTokenClaims;
+  return jwtDecode(token) as AzureAdTokenClaims;
 };
 
 const getUserEmail = async (accessToken: string): Promise<string> => {
