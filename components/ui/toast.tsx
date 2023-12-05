@@ -27,7 +27,7 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700",
+        default: "bg-neutral-50 border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700",
         destructive: "group destructive bg-red-600 text-white border-red-600 dark:border-red-600",
         success:
           "group success bg-emerald-500 text-neutral-900 border-emerald-500 dark:border-emerald-500"
@@ -115,13 +115,13 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
 type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
 export {
-  type ToastProps,
-  type ToastActionElement,
-  ToastProvider,
-  ToastViewport,
   Toast,
-  ToastTitle,
-  ToastDescription,
+  ToastAction,
   ToastClose,
-  ToastAction
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+  type ToastActionElement,
+  type ToastProps
 };

@@ -8,7 +8,7 @@ async function NextPaycheck() {
 
   return (
     <div className="min-w-[120px]">
-      <div className="text-xs text-neutral-400">Next paycheck</div>
+      <div className="text-xs text-neutral-600 dark:text-neutral-400">Next paycheck</div>
       <div className="text-sm">{earnings?.payDay}</div>
       <div className="text-sm font-bold text-emerald-500">{earnings?.netFormatted}</div>
     </div>

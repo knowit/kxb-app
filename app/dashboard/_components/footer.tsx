@@ -9,7 +9,7 @@ import { Suspense } from "react";
 
 function Footer() {
   return (
-    <footer className="border-t border-t-neutral-700 bg-neutral-950">
+    <footer className="border-t border-t-neutral-700 bg-neutral-50 dark:bg-neutral-950">
       <div className="mx-auto max-w-5xl px-4 pb-24 pt-4 md:px-4 md:pt-8">
         <Flex
           className="flex-col justify-center space-y-6 md:flex-row md:justify-between md:space-y-0"

@@ -15,7 +15,7 @@ const buttonVariants = cva(
           "bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-neutral-300 dark:text-neutral-950",
         destructive: "bg-red-600 text-white hover:bg-red-700 dark:hover:bg-red-700",
         outline:
-          "bg-transparent border border-neutral-200 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-100",
+          "bg-transparent border border-neutral-400 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-100",
         subtle:
           "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 border border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:hover:border-neutral-500 dark:text-neutral-50",
         ghost:
@@ -70,4 +70,4 @@ const ButtonSkeleton = ({
   </Skeleton>
 );
 
-export { Button, buttonVariants, ButtonSkeleton };
+export { Button, ButtonSkeleton, buttonVariants };

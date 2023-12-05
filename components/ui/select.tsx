@@ -38,7 +38,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 overflow-hidden rounded-md border border-neutral-100 bg-white text-neutral-700 shadow-md animate-in fade-in-80 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-50",
+        "relative z-50 overflow-hidden rounded-md border border-neutral-100 bg-neutral-50 text-neutral-700 shadow-md animate-in fade-in-80 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-50",
         className
       )}
       {...other}
@@ -104,11 +104,11 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {
   Select,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
   SelectContent,
-  SelectLabel,
+  SelectGroup,
   SelectItem,
-  SelectSeparator
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue
 };

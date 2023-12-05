@@ -106,7 +106,7 @@ const DialogContent = React.forwardRef<
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40" />
           <Drawer.Content className="fixed inset-x-0 bottom-0 mt-24 flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-neutral-700 ">
-            <div className="flex-1 rounded-t-[10px] bg-white p-4 dark:bg-neutral-900">
+            <div className="flex-1 rounded-t-[10px] bg-neutral-50 p-4 dark:bg-neutral-900">
               <div className="mx-auto mb-5 mt-3 h-1 w-12 rounded-full bg-gray-300" />
               <div className="mx-auto max-w-md">{children}</div>
             </div>
@@ -123,7 +123,7 @@ const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "fixed top-0 z-50 grid w-full gap-4 rounded-b-lg border border-neutral-700 bg-white p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-top-full sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-top-0 lg:top-auto",
+          "fixed top-0 z-50 grid w-full gap-4 rounded-b-lg border border-neutral-700 bg-neutral-50 p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-top-full sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-top-0 lg:top-auto",
           "dark:bg-neutral-900",
           className
         )}

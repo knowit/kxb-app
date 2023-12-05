@@ -52,7 +52,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed top-0 z-50 grid w-full gap-4 rounded-b-lg border border-neutral-700 bg-white p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-top-full sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-top-0 lg:top-auto",
+        "fixed top-0 z-50 grid w-full gap-4 rounded-b-lg border border-neutral-700 bg-neutral-50 p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-top-full sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-top-0 lg:top-auto",
         "dark:bg-neutral-900",
         className
       )}

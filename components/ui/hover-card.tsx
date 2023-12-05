@@ -18,7 +18,7 @@ const HoverCardContent = React.forwardRef<
     align={align}
     sideOffset={sideOffset}
     className={cn(
-      "z-50 rounded-md border border-neutral-100 bg-white p-2 text-sm shadow-md outline-none animate-in zoom-in-90 dark:border-neutral-700 dark:bg-neutral-900",
+      "z-50 rounded-md border border-neutral-100 bg-neutral-50 p-2 text-sm shadow-md outline-none animate-in zoom-in-90 dark:border-neutral-700 dark:bg-neutral-900",
       className
     )}
     {...other}
@@ -30,4 +30,4 @@ const HoverCardContent = React.forwardRef<
 
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
-export { HoverCard, HoverCardTrigger, HoverCardContent };
+export { HoverCard, HoverCardContent, HoverCardTrigger };
