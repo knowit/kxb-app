@@ -52,7 +52,7 @@ const CalendarDay = forwardRef<React.ElementRef<"div">, CalendarDayProps>(
           })}
         >
           {calendarSizeVariant === "large" && calendarDay.isStartOfWeek ? (
-            <div className="text-xs dark:text-neutral-600 md:text-base">{calendarDay.week}</div>
+            <div className="text-xs md:text-base dark:text-neutral-600">{calendarDay.week}</div>
           ) : null}
           <div className="flex items-center gap-1">
             <Show when={calendarDay.type === "day"}>
