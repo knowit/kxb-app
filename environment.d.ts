@@ -2,7 +2,6 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       API_KEY: string;
-      SHOW_ME_THE_MONEY_SPECIALISTS_ONLY_MODE: string;
       NEXT_PUBLIC_SALARY_DEFAULT_HOURLY_RATE: string;
       NEXT_PUBLIC_SALARY_DEFAULT_COMMISSION: string;
       NEXT_PUBLIC_SALARY_DEFAULT_TAX: string;
@@ -15,11 +14,8 @@ declare global {
       AZURE_AD_ADMIN_GROUP_ID: string;
       AZURE_AD_SPECIALIST_GROUP_ID: string;
       DATABASE_URL: string;
-      SHADOW_DATABASE_URL: string;
-      CV_PARTNER_API_KEY: string;
       SALES_EMAILS: string;
       FEEDBACK_RECIPIENT_EMAIL: string;
-      SEND_GRID_API_KEY: string;
       MICROSOFT_GRAPH_USERNAME: string;
       MICROSOFT_GRAPH_PASSWORD: string;
       MICROSOFT_STORAGE_SAS_TOKEN: string;
