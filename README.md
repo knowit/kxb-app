@@ -28,3 +28,7 @@ Create a `.env` file similar to [`.env.example`](https://github.com/tommybarvaag
 ```bash
 pnpm dev
 ```
+
+## Internal documentation
+
+Further internal documentation can be found in [Confluence](https://kxb.atlassian.net/wiki/x/AYCxGw).
