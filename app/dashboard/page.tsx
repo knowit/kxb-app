@@ -38,6 +38,7 @@ export default async function DashboardPage() {
 
   return (
     <>
+      <h1>Erlend er sjef nå 👨🏻‍💼</h1>
       <Suspense fallback={<UserCalendarMonthWithSalarySkeleton month={calendarMonth} />}>
         <UserCalendarMonthWithSalary
           user={user.data}
