@@ -8,6 +8,7 @@ export const isWorkDay = (day: CalendarDay): boolean =>
   (!day?.isKnowitClosed ?? false) &&
   day?.name?.toUpperCase() !== "SATURDAY" &&
   day?.name?.toUpperCase() !== "SUNDAY";
+//test
 
 export const getWorkDays = (month: CalendarMonth): CalendarDay[] =>
   month?.days?.filter(day => isWorkDay(day)) ?? [];
