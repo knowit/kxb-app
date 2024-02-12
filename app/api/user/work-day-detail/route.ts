@@ -7,7 +7,14 @@ import * as z from "zod";
 
 export const runtime: ServerRuntime = "edge";
 
-export async function PATCH(request: NextRequest) {
+type Params = {
+  id: string;
+};
+const userParamsSchema = z.object({
+  id: z.coerce.number()
+});
+
+export async function PATCH(request: NextRequest, { params }: { params: Params }) {
   const token = await getToken({ req: request });
 
   if (!token) {
@@ -16,6 +23,15 @@ export async function PATCH(request: NextRequest) {
     });
   }
 
+  const { id } = await userParamsSchema.parseAsync(params);
+
+  if (+id !== token.id) {
+    return new Response("Bad request", {
+      status: 400
+    });
+  }
+
+  debugger;
   try {
     const res = await request.json();
 

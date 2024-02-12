@@ -25,6 +25,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       });
     }
 
+    if (+id !== token.id) {
+      return new Response("Bad request", {
+        status: 400
+      });
+    }
+
     const body = await request.json();
 
     const { closeUserSalaryDialogOnSaveSuccess, closeUserWorkDayDetailsDialogOnSaveSuccess } =

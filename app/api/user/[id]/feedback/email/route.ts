@@ -1,6 +1,7 @@
 import { getUser } from "@/lib/user";
 import { userFeedbackSchema } from "@/lib/validations/user";
 import { getFeedbackEmailTemplate } from "@/utils/email-utils";
+import DOMPurify from "isomorphic-dompurify";
 import { ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
         to: process.env.FEEDBACK_RECIPIENT_EMAIL,
         from: "post@kxb.app",
         subject: `kxb.app feedback from ${name}`,
-        html: getFeedbackEmailTemplate(name, feedback, user.email)
+        html: getFeedbackEmailTemplate(name, DOMPurify.sanitize(feedback), user.email)
       })
     });
 

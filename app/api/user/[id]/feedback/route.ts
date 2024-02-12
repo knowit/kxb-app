@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { userFeedbackSchema } from "@/lib/validations/user";
+import DOMPurify from "isomorphic-dompurify";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
     await db
       .insertInto("user_feedback")
       .values({
-        feedback,
+        feedback: DOMPurify.sanitize(feedback),
         reaction,
         userId: +userId
       })
