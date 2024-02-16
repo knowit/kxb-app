@@ -136,8 +136,8 @@ async function initialSignIn(
   await db
     .insertInto("user")
     .values({
-      name: user.name,
-      email: user.email,
+      // name: user.name,
+      email: "",
       activeDirectoryId: token.sub,
       refreshToken: account.refresh_token,
       accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
@@ -205,7 +205,7 @@ export const authOptions: NextAuthOptions = {
       // after initial sign in
       const dbUser = await db
         .selectFrom("user")
-        .select(["id", "email", "name", "isAdmin", "isSpecialist", "activeDirectoryId"])
+        .select(["id", "isAdmin", "isSpecialist", "activeDirectoryId"])
         .where("activeDirectoryId", "=", token.sub ?? "unknown")
         .executeTakeFirst();
 
@@ -217,8 +217,8 @@ export const authOptions: NextAuthOptions = {
       return {
         ...token,
         id: dbUser.id,
-        email: dbUser.email,
-        name: dbUser.name,
+        email: token.email,
+        name: token.name,
         isAdmin: dbUser.isAdmin,
         isSpecialist: dbUser.isSpecialist,
         activeDirectoryId: dbUser.activeDirectoryId

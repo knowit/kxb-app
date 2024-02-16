@@ -10,14 +10,14 @@ import { setMonth } from "date-fns";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import "server-only";
+import { getEdgeFriendlyToken } from "./token";
 
 const getUser = cache(async (id: number): Promise<User> => {
+  const token = await getEdgeFriendlyToken();
   const user = await db
     .selectFrom("user")
     .select([
       "id",
-      "email",
-      "name",
       "activeDirectoryId",
       "hourlyRate",
       "commission",
@@ -36,7 +36,7 @@ const getUser = cache(async (id: number): Promise<User> => {
     return redirect("/logout");
   }
 
-  return { ...user, workDayDetails: [], feedback: [] };
+  return { ...user, name: token?.name, email: token?.email, workDayDetails: [], feedback: [] };
 });
 
 const getUserWorkDayDetails = cache(async (id: number): Promise<UserWorkDayDetail[]> => {
@@ -206,16 +206,17 @@ const getUserSettings = cache(async (id: number): Promise<UserSettings> => {
 });
 
 const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
+  const token = await getEdgeFriendlyToken();
   const user = await db
     .selectFrom("user")
-    .select(["name", "refreshToken", "activeDirectoryId"])
+    .select(["refreshToken", "activeDirectoryId"])
     .where("id", "=", +id)
     .executeTakeFirst();
 
   if (!user?.refreshToken) {
     return {
       src: undefined,
-      name: user?.name
+      name: token?.name
     };
   }
 
@@ -224,7 +225,7 @@ const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
   if (exists.success && !forceRefresh) {
     return {
       src: exists.url,
-      name: user.name
+      name: token.name
     };
   }
 
@@ -249,7 +250,7 @@ const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
   if (!response.ok) {
     return {
       src: undefined,
-      name: user.name
+      name: token.name
     };
   }
 
@@ -273,7 +274,7 @@ const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
   if (!avatarResponse?.data?.ok) {
     return {
       src: undefined,
-      name: user.name
+      name: token.name
     };
   }
 
@@ -286,7 +287,7 @@ const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
     src: `data:image/jpeg;base64,${btoa(
       String.fromCharCode.apply(null, new Uint8Array(pictureBuffer))
     )}`,
-    name: user.name
+    name: token.name
   };
 });
 
