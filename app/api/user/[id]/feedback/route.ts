@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
 import { userFeedbackSchema } from "@/lib/validations/user";
-import DOMPurify from "isomorphic-dompurify";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
+import sanitizeHtml from "sanitize-html";
 import * as z from "zod";
 
 export const runtime: ServerRuntime = "edge";
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     await db
       .insertInto("user_feedback")
       .values({
-        feedback: DOMPurify.sanitize(feedback),
+        feedback: sanitizeHtml(feedback),
         reaction,
         userId: +userId
       })
