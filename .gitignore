@@ -35,3 +35,5 @@ yarn-error.log*
 
 # jetbrains
 .idea
+
+tsconfig.tsbuildinfo
