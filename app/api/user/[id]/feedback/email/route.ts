@@ -4,6 +4,7 @@ import { getFeedbackEmailTemplate } from "@/utils/email-utils";
 import { ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
+import sanitizeHtml from "sanitize-html";
 import * as z from "zod";
 
 export const runtime: ServerRuntime = "edge";
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
         to: process.env.FEEDBACK_RECIPIENT_EMAIL,
         from: "post@kxb.app",
         subject: `kxb.app feedback from ${name}`,
-        html: getFeedbackEmailTemplate(name, feedback, user.email)
+        html: getFeedbackEmailTemplate(name, sanitizeHtml(feedback), user.email)
       })
     });
 
