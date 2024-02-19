@@ -26,6 +26,11 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 
   try {
     const { id } = await userParamsSchema.parseAsync(params);
+    if (+id !== token.id) {
+      return new Response("Bad request", {
+        status: 400
+      });
+    }
 
     const res = await request.json();
 

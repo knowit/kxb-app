@@ -15,6 +15,12 @@ async function mutateUserWorkDayDetail(
   userId: number,
   userWorkDayDetail?: Omit<UserWorkDayDetail, "id" | "userId"> & { id?: number }
 ): Promise<ActionResponse> {
+  const token = await getEdgeFriendlyToken();
+  if (userId !== token.id) {
+    return new Response("Bad request", {
+      status: 400
+    });
+  }
   try {
     const { id, date, extraHours, nonCommissionedHours, sickDay } =
       userWorkDayDetailSchema.parse(userWorkDayDetail);
@@ -66,6 +72,13 @@ async function updateUser(
   userId: number,
   user: Omit<Partial<User>, "feedback" | "workDayDetails">
 ) {
+  const token = await getEdgeFriendlyToken();
+  if (userId !== token.id) {
+    return new Response("Bad request", {
+      status: 400
+    });
+  }
+
   try {
     const updateResult = await db
       .updateTable("user")
