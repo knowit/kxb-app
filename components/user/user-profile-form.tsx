@@ -1,10 +1,7 @@
 "use client";
 
-import { Icons } from "@/components/icons";
-import { Button, ButtonSkeleton } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ButtonSkeleton } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Show } from "@/components/ui/show";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -85,10 +82,12 @@ function UserProfileForm({ user, className, ...other }: UserProfileFormProps) {
     >
       <div className="w-full max-w-[400px]">
         <Label htmlFor="name">Name</Label>
-        <Input id="name" disabled={isLoading} className="w-full" {...register("name")} />
+        <div id="name" className="w-full">
+          {user.name}
+        </div>
         {errors?.name && <p className="px-1 text-xs text-red-600">{errors.name.message}</p>}
       </div>
-      <Button className="mt-4 w-fit" type="submit" disabled={isLoading} variant="subtle">
+      {/* <Button className="mt-4 w-fit" type="submit" disabled={isLoading} variant="subtle">
         <span>Save</span>
         <Show when={!isLoading}>
           <Icons.Check className="ml-2 h-4 w-4" />
@@ -96,7 +95,7 @@ function UserProfileForm({ user, className, ...other }: UserProfileFormProps) {
         <Show when={isLoading}>
           <Icons.Loader className="ml-2 h-4 w-4" />
         </Show>
-      </Button>
+      </Button> */}
     </form>
   );
 }
