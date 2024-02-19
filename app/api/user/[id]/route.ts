@@ -69,6 +69,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Params 
 
   try {
     const { id } = await userParamsSchema.parseAsync(params);
+    if (+id !== token.id) {
+      return new Response("Bad request", {
+        status: 400
+      });
+    }
 
     await db.transaction().execute(async trx => {
       // delete settings
