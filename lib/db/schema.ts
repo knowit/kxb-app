@@ -47,6 +47,16 @@ export const userSettingsTable = sqliteTable("user_settings", {
   )
 });
 
+export const userFeedbackTable = sqliteTable("user_feedback", {
+  id: integer("id").primaryKey(),
+  date: text("date").notNull(),
+  userId: integer("userId")
+    .notNull()
+    .references(() => usersTable.id),
+  feedback: text("feedback").notNull(),
+  reaction: integer("reaction")
+});
+
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
 
@@ -55,3 +65,6 @@ export type SelectUserWorkDayDetail = typeof userWorkDayDetailTable.$inferSelect
 
 export type InsertUserSettings = typeof userSettingsTable.$inferInsert;
 export type SelectUserSettings = typeof userSettingsTable.$inferSelect;
+
+export type InsertUserFeedback = typeof userFeedbackTable.$inferInsert;
+export type SelectUserFeedback = typeof userFeedbackTable.$inferSelect;

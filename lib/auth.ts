@@ -115,8 +115,6 @@ async function initialSignIn(
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
   const dbUser = await db.select({ id: usersTable.id }).from(usersTable).then(takeFirst);
-  // .where(eq(users.activeDirectoryId, token.sub))
-  // .limit(1)?.[0];
 
   if (dbUser) {
     await db

@@ -20,14 +20,14 @@ type UserCalendarMonthProps = {
   showDialogOnCalendarDayClick?: boolean;
 };
 
-async function UserCalendarMonth({
+export const UserCalendarMonth = async ({
   month,
   calendarSizeVariant = "default",
   workDayDetails = [],
   closeUserWorkDayDetailsDialogOnSaveSuccess = false,
   showDialogOnCalendarDayClick = false,
   user
-}: UserCalendarMonthProps) {
+}: UserCalendarMonthProps) => {
   const currentDate = new Date();
   const showWeeks = true && calendarSizeVariant !== "large";
   const holidayInfos = month.days.filter(day => day.holidayInformation);
@@ -109,7 +109,7 @@ async function UserCalendarMonth({
       </Show>
     </div>
   );
-}
+};
 
 type UserCalendarMonthSkeletonProps = Pick<UserCalendarMonthProps, "month" | "calendarSizeVariant">;
 
@@ -120,5 +120,5 @@ const UserCalendarMonthSkeleton: FC<UserCalendarMonthSkeletonProps> = ({
   return <CalendarMonth month={month} calendarSizeVariant={calendarSizeVariant} />;
 };
 
-export { UserCalendarMonth, UserCalendarMonthSkeleton };
+export { UserCalendarMonthSkeleton };
 export type { UserCalendarMonthProps, UserCalendarMonthSkeletonProps };
