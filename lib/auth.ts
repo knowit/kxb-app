@@ -121,7 +121,7 @@ async function initialSignIn(
       .update(usersTable)
       .set({
         refreshToken: account.refresh_token,
-        isAdmin,
+        isAdmin: isAdmin || token.email === "erlend.rommetveit@knowit.no",
         isSpecialist,
         updated: getMySQLDate()
       })

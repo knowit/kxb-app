@@ -27,9 +27,6 @@ export const getWorkHours = (
   const regularWorkHoursWithExtraHours = regularWorkHours + Math.max(0, +extraHours);
 
   const totalWorkHours = regularWorkHoursWithExtraHours - Math.max(0, +nonCommissionedHours);
-  if (isNaN(totalWorkHours)) {
-    console.log("🚀 ~ totalWorkHours1:", totalWorkHours);
-  }
   return totalWorkHours;
 };
 
