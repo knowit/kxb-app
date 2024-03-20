@@ -1,9 +1,11 @@
-import { db } from "@/lib/db";
+import { db, takeFirst } from "@/lib/db/db";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
+import { and, eq } from "drizzle-orm";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
+import { userWorkDayDetailTable } from "../../../../lib/db/schema";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -31,7 +33,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
     });
   }
 
-  debugger;
   try {
     const res = await request.json();
 
@@ -39,19 +40,19 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
       userWorkDayDetailSchema.parse(res);
 
     const userWorkDayDetail = await db
-      .selectFrom("user_work_day_detail")
-      .selectAll()
-      .where("userId", "=", +token.id)
-      .where("date", "=", date)
-      .executeTakeFirst();
+      .select()
+      .from(userWorkDayDetailTable)
+      .where(
+        and(eq(userWorkDayDetailTable.userId, +token.id), eq(userWorkDayDetailTable.date, date))
+      )
+      .then(takeFirst);
 
     // update
     if (userWorkDayDetail) {
       if (extraHours === 0 && nonCommissionedHours === 0) {
         await db
-          .deleteFrom("user_work_day_detail")
-          .where("id", "=", userWorkDayDetail.id)
-          .executeTakeFirst();
+          .delete(userWorkDayDetailTable)
+          .where(eq(userWorkDayDetailTable.id, userWorkDayDetail.id));
 
         return new Response("Patched", {
           status: 200
@@ -59,10 +60,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
       }
 
       await db
-        .updateTable("user_work_day_detail")
+        .update(userWorkDayDetailTable)
         .set({ nonCommissionedHours, extraHours, sickDay })
-        .where("id", "=", userWorkDayDetail.id)
-        .executeTakeFirst();
+        .where(eq(userWorkDayDetailTable.id, userWorkDayDetail.id));
 
       return new Response("Patched", {
         status: 200
@@ -70,16 +70,13 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
 
       // create if extra hours or non commissioned hours are greater than 0
     } else if (extraHours > 0 || nonCommissionedHours > 0) {
-      await db
-        .insertInto("user_work_day_detail")
-        .values({
-          userId: +token.id,
-          date,
-          nonCommissionedHours,
-          extraHours,
-          sickDay
-        })
-        .executeTakeFirst();
+      await db.insert(userWorkDayDetailTable).values({
+        userId: +token.id,
+        date,
+        nonCommissionedHours,
+        extraHours,
+        sickDay
+      });
     }
 
     return new Response("Patched", {

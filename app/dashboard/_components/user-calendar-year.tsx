@@ -5,18 +5,18 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { getRequestDateNow } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { User, UserWorkDayDetail } from "@/types";
 import { getCalendarYear } from "@/utils/calendar-utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { getYear } from "date-fns";
 import Link from "next/link";
 import { Suspense, type FC } from "react";
+import { SelectUser, SelectUserWorkDayDetail } from "../../../lib/db/schema";
 
-const UserCalendarYear: FC<{ user: User; date: Date; workDayDetails?: UserWorkDayDetail[] }> = ({
-  user,
-  date,
-  workDayDetails = []
-}) => {
+const UserCalendarYear: FC<{
+  user: SelectUser;
+  date: Date;
+  workDayDetails?: SelectUserWorkDayDetail[];
+}> = ({ user, date, workDayDetails = [] }) => {
   const currentDate = getRequestDateNow();
   const year = date.getFullYear();
   const calendarYear = getCalendarYear(year);

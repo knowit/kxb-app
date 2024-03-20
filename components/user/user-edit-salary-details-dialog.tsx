@@ -11,14 +11,14 @@ import {
 } from "@/components/ui/dialog";
 import { Link } from "@/components/ui/link";
 import { UserSalaryDetailsForm } from "@/components/user/user-salary-details-form";
-import { User } from "@/types";
 import { useState } from "react";
+import { SelectUser } from "../../lib/db/schema";
 
 function UserEditSalaryDetailsDialog({
   user,
   closeDialogOnFormSubmitSuccess = false
 }: {
-  user: User;
+  user: SelectUser;
   closeDialogOnFormSubmitSuccess?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);

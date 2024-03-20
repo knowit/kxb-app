@@ -11,6 +11,7 @@ import {
 import { formatCurrency } from "@/utils/currency-format";
 import { getTableTax } from "@/utils/tax-utils";
 import Big from "big.js";
+import { SelectUserWorkDayDetail } from "../lib/db/schema";
 
 const getHolidayPay = (gross: Big): Big => {
   return gross.times(EARNING_CONSTANTS.WORK_HOLIDAY_PAY);
@@ -25,7 +26,11 @@ export const getWorkHours = (
   const regularWorkHours = workHours * workDays;
   const regularWorkHoursWithExtraHours = regularWorkHours + Math.max(0, +extraHours);
 
-  return regularWorkHoursWithExtraHours - Math.max(0, +nonCommissionedHours);
+  const totalWorkHours = regularWorkHoursWithExtraHours - Math.max(0, +nonCommissionedHours);
+  if (isNaN(totalWorkHours)) {
+    console.log("🚀 ~ totalWorkHours1:", totalWorkHours);
+  }
+  return totalWorkHours;
 };
 
 // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
@@ -35,7 +40,7 @@ export const getGrossIncome = (
   commission: number,
   sickHours: number = 0
 ): Big => {
-  const grossCommissionedWorkHours = new Big(workHours)
+  const grossCommissionedWorkHours = new Big(isNaN(workHours) ? 0 : workHours)
     .times(hourlyRate)
     .times(commission)
     .round(2, 0);
@@ -52,7 +57,7 @@ export const getNetIncome = (grossIncome: Big, tax: number): Big =>
 
 const getNonCommissionedHoursForMonth = (
   month: CalendarMonth,
-  workDayDetails: UserWorkDayDetail[]
+  workDayDetails: SelectUserWorkDayDetail[]
 ): number => {
   return (
     month.days.reduce<number>(
@@ -72,7 +77,7 @@ const getNonCommissionedHoursForMonth = (
 // will cover i.e. 7.5 hours per day.
 const getSickHoursForMonth = (
   month: CalendarMonth,
-  workDayDetails: UserWorkDayDetail[],
+  workDayDetails: SelectUserWorkDayDetail[],
   useMaxSickHours: boolean = true
 ): number => {
   return (
@@ -92,7 +97,7 @@ const getSickHoursForMonth = (
   );
 };
 
-const getExtraHoursForMonth = (month: CalendarMonth, workDayDetails: UserWorkDayDetail[]) => {
+const getExtraHoursForMonth = (month: CalendarMonth, workDayDetails: SelectUserWorkDayDetail[]) => {
   return (
     month.days.reduce(
       (sum: number, day: CalendarDay) =>
@@ -110,7 +115,7 @@ export const getEarningsForMonth = (
   commission: number,
   tax: number,
   workHours: number,
-  workDayDetails: UserWorkDayDetail[],
+  workDayDetails: SelectUserWorkDayDetail[],
   taxTable: string | null
 ): CalendarMonthEarnings => {
   const workDays = getWorkDays(month);

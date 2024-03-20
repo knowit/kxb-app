@@ -1,7 +1,8 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/db";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
+import { usersTable } from "../../../lib/db/schema";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -21,24 +22,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const users = await db
-      .selectFrom("user")
-      .select([
-        "id",
-        "name",
-        "email",
-        "activeDirectoryId",
-        "tax",
-        "taxTable",
-        "hourlyRate",
-        "commission",
-        "workHours",
-        "isAdmin",
-        "isSpecialist",
-        "created",
-        "updated"
-      ])
-      .execute();
+    const users = await db.select().from(usersTable).all();
 
     return NextResponse.json(
       users.sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime())

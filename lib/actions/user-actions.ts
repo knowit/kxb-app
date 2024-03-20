@@ -1,8 +1,10 @@
 "use server";
 
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/db";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
 import { User, UserWorkDayDetail } from "@/types";
+import { eq } from "drizzle-orm";
+import { userWorkDayDetailTable, usersTable } from "../db/schema";
 import { getEdgeFriendlyToken } from "../token";
 import { getUser } from "../user";
 
@@ -33,36 +35,31 @@ async function mutateUserWorkDayDetail(
 
     // create
     if (!id) {
-      const insertResult = await db
-        .insertInto("user_work_day_detail")
-        .values({
-          userId,
-          date: date,
-          nonCommissionedHours: nonCommissionedHours,
-          extraHours: extraHours,
-          sickDay: sickDay
-        })
-        .executeTakeFirst();
-      return { ok: (insertResult?.numInsertedOrUpdatedRows ?? 0) > 0 };
+      const insertResult = await db.insert(userWorkDayDetailTable).values({
+        userId,
+        date: date,
+        nonCommissionedHours: nonCommissionedHours,
+        extraHours: extraHours,
+        sickDay: sickDay
+      });
+      return { ok: (insertResult?.rowsAffected ?? 0) > 0 };
     }
 
     // delete
     if (userWorkDayDetail?.extraHours === 0 && userWorkDayDetail?.nonCommissionedHours === 0) {
       const deleteResult = await db
-        .deleteFrom("user_work_day_detail")
-        .where("id", "=", id)
-        .executeTakeFirst();
-      return { ok: deleteResult.numDeletedRows > 0 };
+        .delete(userWorkDayDetailTable)
+        .where(eq(userWorkDayDetailTable.id, id));
+      return { ok: deleteResult.rowsAffected > 0 };
     }
 
     // update
     const updateResult = await db
-      .updateTable("user_work_day_detail")
+      .update(userWorkDayDetailTable)
       .set({ nonCommissionedHours, extraHours, sickDay })
-      .where("id", "=", id)
-      .executeTakeFirst();
+      .where(eq(userWorkDayDetailTable.id, id));
 
-    return { ok: updateResult.numUpdatedRows > 0 };
+    return { ok: updateResult.rowsAffected > 0 };
   } catch (error) {
     return { ok: false, error: error.message };
   }
@@ -80,13 +77,9 @@ async function updateUser(
   }
 
   try {
-    const updateResult = await db
-      .updateTable("user")
-      .set(user)
-      .where("id", "=", userId)
-      .executeTakeFirst();
+    const updateResult = await db.update(usersTable).set(user).where(eq(usersTable.id, +userId));
 
-    return { ok: updateResult.numUpdatedRows > 0 };
+    return { ok: updateResult.rowsAffected > 0 };
   } catch (error) {
     return { ok: false, error: error.message };
   }

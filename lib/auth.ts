@@ -1,12 +1,14 @@
-import { db } from "@/lib/db";
+import { db, takeFirst } from "@/lib/db/db";
 import { validateEmail } from "@/logic/validation-logic";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
 import { getMySQLDate } from "@/utils/date-utils";
 import { fetchWithToken } from "@/utils/fetcher";
+import { eq } from "drizzle-orm";
 import { jwtDecode } from "jwt-decode";
 import { Account, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import AzureAdProvider from "next-auth/providers/azure-ad";
+import { InsertUser, usersTable } from "./db/schema";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;
@@ -112,39 +114,39 @@ async function initialSignIn(
 
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
-  const dbUser = await db
-    .selectFrom("user")
-    .select("id")
-    .where("activeDirectoryId", "=", token.sub)
-    .executeTakeFirst();
+  const dbUser = await db.select({ id: usersTable.id }).from(usersTable).then(takeFirst);
+  // .where(eq(users.activeDirectoryId, token.sub))
+  // .limit(1)?.[0];
 
   if (dbUser) {
     await db
-      .updateTable("user")
+      .update(usersTable)
       .set({
         refreshToken: account.refresh_token,
         isAdmin,
         isSpecialist,
         updated: getMySQLDate()
       })
-      .where("id", "=", dbUser.id)
-      .executeTakeFirst();
-
+      .where(eq(usersTable.id, dbUser.id));
     return;
   }
 
-  await db
-    .insertInto("user")
-    .values({
-      // name: user.name,
-      email: "",
-      activeDirectoryId: token.sub,
-      refreshToken: account.refresh_token,
-      accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
-      isAdmin,
-      isSpecialist
-    })
-    .executeTakeFirst();
+  const insertUser: InsertUser = {
+    name: user.name,
+    email: "",
+    activeDirectoryId: token.sub,
+    refreshToken: account.refresh_token,
+    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
+    isAdmin,
+    hourlyRate: 1150,
+    commission: 0.4,
+    tax: 0.33,
+    workHours: 7.5,
+    created: getMySQLDate(),
+    updated: getMySQLDate(),
+    isSpecialist
+  };
+  await db.insert(usersTable).values(insertUser);
 }
 
 export const authOptions: NextAuthOptions = {
@@ -204,10 +206,10 @@ export const authOptions: NextAuthOptions = {
       // The user should exist in the database at this point
       // after initial sign in
       const dbUser = await db
-        .selectFrom("user")
-        .select(["id", "isAdmin", "isSpecialist", "activeDirectoryId"])
-        .where("activeDirectoryId", "=", token.sub ?? "unknown")
-        .executeTakeFirst();
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.activeDirectoryId, token.sub ?? "unknown"))
+        .then(takeFirst);
 
       // throw if user is not found in database
       if (!dbUser) {

@@ -1,5 +1,5 @@
 import { getPayDay } from "@/logic/calendar-logic";
-import { CalendarDay, CalendarEntries, CalendarMonth, Holiday, UserWorkDayDetail } from "@/types";
+import { CalendarDay, CalendarEntries, CalendarMonth, Holiday } from "@/types";
 import { isString, memoize, range } from "@/utils/common-utils";
 import {
   getFormattedDate,
@@ -31,6 +31,7 @@ import {
   subDays
 } from "date-fns";
 import { enUS, nb } from "date-fns/locale";
+import { SelectUserWorkDayDetail } from "../lib/db/schema";
 
 export const isWorkDay = (day: CalendarDay): boolean =>
   (!day?.isHoliday ?? false) &&
@@ -307,7 +308,7 @@ export const getCalendarMonthEntries = (
   month: CalendarMonth,
   currentDate: Date,
   showWeeks = true,
-  workDayDetails?: UserWorkDayDetail[]
+  workDayDetails?: SelectUserWorkDayDetail[]
 ) => {
   const lastMonth = getAllDaysInMonth(addMonths(new Date(month.days[0].date), -1));
 

@@ -1,9 +1,11 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/db";
 import { userSettingsSchema } from "@/lib/validations/user";
+import { eq } from "drizzle-orm";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
+import { userSettingsTable } from "../../../../../lib/db/schema";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -37,13 +39,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       await userSettingsSchema.parseAsync(body);
 
     await db
-      .updateTable("user_settings")
+      .update(userSettingsTable)
       .set({
         closeUserSalaryDialogOnSaveSuccess,
         closeUserWorkDayDetailsDialogOnSaveSuccess
       })
-      .where("userId", "=", +id)
-      .executeTakeFirst();
+      .where(eq(userSettingsTable.userId, +id));
 
     return new Response("Patched", {
       status: 200

@@ -1,63 +1,64 @@
-import { db } from "@/lib/db";
+import { db, takeFirst } from "@/lib/db/db";
 import { storageExists, storageUpload } from "@/lib/ms-storage";
 import { query } from "@/lib/query";
 import { getEarningsForMonth } from "@/logic/earnings-logic";
-import { User, UserSettings, UserWorkDayDetail } from "@/types";
+import { UserSettings } from "@/types";
 import { getCalendarMonth, getCalendarYear } from "@/utils/calendar-utils";
 import { getMySQLDate } from "@/utils/date-utils";
 import { getUserEarningsDetails } from "@/utils/user-utils";
 import { setMonth } from "date-fns";
+import { and, eq, like } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import "server-only";
+import {
+  SelectUser,
+  SelectUserWorkDayDetail,
+  userSettingsTable,
+  userWorkDayDetailTable,
+  usersTable
+} from "./db/schema";
 import { getEdgeFriendlyToken } from "./token";
 
-const getUser = cache(async (id: number): Promise<User> => {
+const getUser = cache(async (id: number): Promise<SelectUser> => {
   const token = await getEdgeFriendlyToken();
-  const user = await db
-    .selectFrom("user")
-    .select([
-      "id",
-      "activeDirectoryId",
-      "hourlyRate",
-      "commission",
-      "tax",
-      "taxTable",
-      "workHours",
-      "created",
-      "updated",
-      "isAdmin",
-      "isSpecialist"
-    ])
-    .where("id", "=", +id)
-    .executeTakeFirst();
+  const user = await db.select().from(usersTable).where(eq(usersTable.id, id)).then(takeFirst);
 
   if (!user) {
     return redirect("/logout");
   }
 
-  return { ...user, name: token?.name, email: token?.email, workDayDetails: [], feedback: [] };
+  return { ...user, name: token?.name ?? "", email: token?.email };
 });
 
-const getUserWorkDayDetails = cache(async (id: number): Promise<UserWorkDayDetail[]> => {
-  const userWorkDayDetail = await db
-    .selectFrom("user_work_day_detail")
-    .select(["id", "date", "nonCommissionedHours", "extraHours", "sickDay", "userId"])
-    .where("userId", "=", +id)
-    .execute();
+const getUserWorkDayDetails = cache(async (id: number): Promise<SelectUserWorkDayDetail[]> => {
+  const userWorkDetails = await db
+    .select({
+      id: userWorkDayDetailTable.id,
+      date: userWorkDayDetailTable.date,
+      nonCommissionedHours: userWorkDayDetailTable.nonCommissionedHours,
+      extraHours: userWorkDayDetailTable.extraHours,
+      sickDay: userWorkDayDetailTable.sickDay,
+      userId: userWorkDayDetailTable.userId
+    })
+    .from(userWorkDayDetailTable)
+    .where(eq(userWorkDayDetailTable.id, +id));
 
-  return userWorkDayDetail;
+  return userWorkDetails;
 });
 
 const getUserWorkDayDetailsByDate = cache(async (id: number, month: number, year: number) => {
-  const userWorkDayDetail = await db
-    .selectFrom("user_work_day_detail")
-    .select(["id", "date", "nonCommissionedHours", "extraHours", "sickDay", "userId"])
-    .where("userId", "=", +id)
-    .where("date", "like", `%${month + 1}-${year}`)
-    .execute();
+  const userWorkDayDetail1 = await db
+    .select()
+    .from(userWorkDayDetailTable)
+    .where(
+      and(
+        eq(userWorkDayDetailTable.userId, +id),
+        like(userWorkDayDetailTable.date, `%${month + 1}-${year}`)
+      )
+    );
 
-  return userWorkDayDetail;
+  return userWorkDayDetail1;
 });
 
 const getUserWithEarnings = cache(async (id: number, activeDate?: Date) => {
@@ -181,25 +182,20 @@ const getNextPaycheck = cache(async (id: number) => {
 
 const getUserSettings = cache(async (id: number): Promise<UserSettings> => {
   let userSettings = await db
-    .selectFrom("user_settings")
-    .select([
-      "id",
-      "userId",
-      "closeUserSalaryDialogOnSaveSuccess",
-      "closeUserWorkDayDetailsDialogOnSaveSuccess"
-    ])
-    .where("userId", "=", +id)
-    .executeTakeFirst();
+    .select()
+    .from(userSettingsTable)
+    .where(eq(userSettingsTable.id, id))
+    .then(takeFirst);
 
   if (!userSettings) {
     // insert
-    await db.insertInto("user_settings").values({ userId: +id }).execute();
+    await db.insert(userSettingsTable).values({ userId: +id });
 
     userSettings = await db
-      .selectFrom("user_settings")
-      .selectAll()
-      .where("userId", "=", +id)
-      .executeTakeFirst();
+      .select()
+      .from(userSettingsTable)
+      .where(eq(userSettingsTable.id, id))
+      .then(takeFirst);
   }
 
   return userSettings as UserSettings;
@@ -207,11 +203,7 @@ const getUserSettings = cache(async (id: number): Promise<UserSettings> => {
 
 const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
   const token = await getEdgeFriendlyToken();
-  const user = await db
-    .selectFrom("user")
-    .select(["refreshToken", "activeDirectoryId"])
-    .where("id", "=", +id)
-    .executeTakeFirst();
+  const user = await db.select().from(usersTable).where(eq(usersTable.id, id)).then(takeFirst);
 
   if (!user?.refreshToken) {
     return {
@@ -261,14 +253,13 @@ const getUserAvatar = cache(async (id: number, forceRefresh = false) => {
       }
     }),
     db
-      .updateTable("user")
+      .update(usersTable)
       .set({
         refreshToken: refreshedTokens.refresh_token,
         accessTokenExpires: Date.now() + refreshedTokens?.ext_expires_in * 1000,
         updated: getMySQLDate()
       })
-      .where("id", "=", +id)
-      .execute()
+      .where(eq(usersTable.id, id))
   ]);
 
   if (!avatarResponse?.data?.ok) {

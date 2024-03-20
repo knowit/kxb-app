@@ -1,10 +1,10 @@
 import { CalendarMonth } from "@/components/calendar/calendar-month";
 import { UserEarnings, UserEarningsSkeleton } from "@/components/user/user-earnings";
 import { getUserWithEarnings } from "@/lib/user";
-import { User } from "@/types";
+import { SelectUser } from "../../../lib/db/schema";
 
 type UserCalendarMonthProps = {
-  user: User;
+  user: SelectUser;
   month: CalendarMonth;
 };
 

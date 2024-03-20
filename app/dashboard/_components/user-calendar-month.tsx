@@ -6,15 +6,16 @@ import { Show } from "@/components/ui/show";
 import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-day-detail-dialog";
 import { getUserWorkDayDetailsByDate } from "@/lib/user";
 import { cn } from "@/lib/utils";
-import { CalendarSizeVariant, User, UserWorkDayDetail } from "@/types";
+import { CalendarSizeVariant } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
 import { FC } from "react";
+import { SelectUser, SelectUserWorkDayDetail } from "../../../lib/db/schema";
 
 type UserCalendarMonthProps = {
-  user: User;
+  user: SelectUser;
   month: CalendarMonth;
   calendarSizeVariant?: CalendarSizeVariant;
-  workDayDetails?: UserWorkDayDetail[];
+  workDayDetails?: SelectUserWorkDayDetail[];
   closeUserWorkDayDetailsDialogOnSaveSuccess?: boolean;
   showDialogOnCalendarDayClick?: boolean;
 };
