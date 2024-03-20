@@ -14,13 +14,13 @@ import { UserSalaryDetailsForm } from "@/components/user/user-salary-details-for
 import { useState } from "react";
 import { SelectUser } from "../../lib/db/schema";
 
-function UserEditSalaryDetailsDialog({
+export const UserEditSalaryDetailsDialog = ({
   user,
   closeDialogOnFormSubmitSuccess = false
 }: {
   user: SelectUser;
   closeDialogOnFormSubmitSuccess?: boolean;
-}) {
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <Dialog open={isOpen} onOpenChange={open => setIsOpen(open)}>
@@ -59,9 +59,9 @@ function UserEditSalaryDetailsDialog({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
-const UserEditSalaryDetailsDialogTriggerSkeleton = () => {
+export const UserEditSalaryDetailsDialogTriggerSkeleton = () => {
   return (
     <Button className="gap-3" variant="subtle">
       <Icons.Gear className="h-4 w-4" />
@@ -69,5 +69,3 @@ const UserEditSalaryDetailsDialogTriggerSkeleton = () => {
     </Button>
   );
 };
-
-export { UserEditSalaryDetailsDialog, UserEditSalaryDetailsDialogTriggerSkeleton };
