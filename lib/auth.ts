@@ -98,43 +98,50 @@ async function getUserRoles(token: string) {
 }
 
 async function initialSignIn(
-  account: Account & { accessToken?: string; refreshToken?: string; ext_expires_in?: number },
-  user: User,
-  token: JWT
+    account: Account & { accessToken?: string; refreshToken?: string; ext_expires_in?: number },
+    user: User,
+    token: JWT
 ): Promise<void> {
   if (
-    !account?.access_token ||
-    !token?.sub ||
-    !user?.email ||
-    !user?.name ||
-    !account?.ext_expires_in
+      !account?.access_token ||
+      !token?.sub ||
+      !user?.email ||
+      !user?.name ||
+      !account?.ext_expires_in
   ) {
     return;
   }
 
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
-  const dbUser = await db.select({ id: usersTable.id }).from(usersTable).then(takeFirst);
+  // Check if the user exists in the database
+  const dbUser = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.activeDirectoryId, token.sub))
+      .then(takeFirst);
 
   if (dbUser) {
+    // If user exists, update their information
     await db
-      .update(usersTable)
-      .set({
-        refreshToken: account.refresh_token,
-        isAdmin: isAdmin || token.email === "erlend.rommetveit@knowit.no",
-        isSpecialist,
-        updated: getMySQLDate()
-      })
-      .where(eq(usersTable.id, dbUser.id));
+        .update(usersTable)
+        .set({
+          refreshToken: account.refresh_token,
+          isAdmin: isAdmin || token.email === "asmund.garfors@knowit.no", // Customize as needed
+          isSpecialist,
+          updated: getMySQLDate(),
+        })
+        .where(eq(usersTable.id, dbUser.id));
     return;
   }
 
+  // If user does not exist, insert them into the database
   const insertUser: InsertUser = {
     name: user.name,
-    email: "",
+    email: user.email ?? "",
     activeDirectoryId: token.sub,
     refreshToken: account.refresh_token,
-    accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
+    accessTokenExpires: Date.now() + account.ext_expires_in * 1000,
     isAdmin,
     hourlyRate: 1150,
     commission: 0.4,
@@ -142,10 +149,17 @@ async function initialSignIn(
     workHours: 7.5,
     created: getMySQLDate(),
     updated: getMySQLDate(),
-    isSpecialist
+    isSpecialist,
   };
-  await db.insert(usersTable).values(insertUser);
+
+  try {
+    await db.insert(usersTable).values(insertUser);
+  } catch (error) {
+    console.error("Error inserting new user:", error);
+    throw new Error("Failed to create user in database");
+  }
 }
+
 
 export const authOptions: NextAuthOptions = {
   session: {
