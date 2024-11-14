@@ -17,16 +17,17 @@ import {
   UserEditSalaryDetailsDialog,
   UserEditSalaryDetailsDialogTriggerSkeleton
 } from "@/components/user/user-edit-salary-details-dialog";
-import { User, UserSettings, type CalendarMonth as CalendarMonthType } from "@/types";
+import { UserSettings, type CalendarMonth as CalendarMonthType } from "@/types";
 import Link from "next/link";
 import { FC, Suspense } from "react";
+import { SelectUser } from "../../../lib/db/schema";
 
 async function UserCalendarMonthWithSalary({
   user,
   calendarMonth,
   userSettings
 }: {
-  user: User;
+  user: SelectUser;
   calendarMonth: CalendarMonthType;
   userSettings?: UserSettings;
 }) {

@@ -7,10 +7,12 @@ import {
   UsersPaginationSkeleton
 } from "@/app/admin/users/_components/users-pagination";
 import { UsersSearch } from "@/app/admin/users/_components/users-search";
-import { db } from "@/lib/db";
+import { db, takeFirst } from "@/lib/db/db";
 import { query } from "@/lib/query";
+import { desc, like, sql } from "drizzle-orm";
 import { Suspense } from "react";
 import * as z from "zod";
+import { usersTable } from "../../../lib/db/schema";
 import { UsersSort } from "./_components/users-sort";
 
 export const runtime = "edge";
@@ -26,17 +28,21 @@ const usersPageParamsSchema = z.object({
 });
 
 export default async function UsersPage({ searchParams }: UsersPageProps) {
-  const { count } = db.fn;
-
   const params = await usersPageParamsSchema.safeParseAsync(searchParams);
   const pageSize = 12;
 
-  let usersQuery = db.selectFrom("user").selectAll();
-  let usersCountQuery = db.selectFrom("user").select(count("id").as("num_users"));
+  let usersQuery = db.select().from(usersTable).$dynamic();
+  let usersCountQuery = db
+    .select({
+      // usersTable,
+      count: sql<number>`cast(count(${usersTable.id}) as int)`
+    })
+    .from(usersTable)
+    .$dynamic();
 
   if (params.success && params.data.search) {
-    usersQuery = usersQuery.where("name", "like", `%${params.data.search}%`);
-    usersCountQuery = usersCountQuery.where("name", "like", `%${params.data.search}%`);
+    usersQuery = usersQuery.where(like(usersTable.name, `%${params.data.search}%`));
+    usersCountQuery = usersCountQuery.where(like(usersTable.name, `%${params.data.search}%`));
   }
 
   if (params.success && params.data.page) {
@@ -45,18 +51,18 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 
   switch (params.success && params.data.sort) {
     case "name":
-      usersQuery = usersQuery.orderBy("name", "asc");
+      usersQuery = usersQuery.orderBy(usersTable.name);
       break;
     case "updated":
-      usersQuery = usersQuery.orderBy("updated", "desc");
+      usersQuery = usersQuery.orderBy(desc(usersTable.updated));
       break;
     default:
-      usersQuery = usersQuery.orderBy("updated", "desc");
+      usersQuery = usersQuery.orderBy(desc(usersTable.updated));
   }
 
   const [users, usersCount] = await query([
     usersQuery.limit(pageSize).execute(),
-    usersCountQuery.executeTakeFirst()
+    usersCountQuery.then(takeFirst)
   ]);
 
   return (
@@ -66,7 +72,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
           <UsersPagination
             page={params.success && params.data.page ? params.data.page : 1}
             pageSize={pageSize}
-            total={Number(usersCount.data?.num_users ?? 0)}
+            total={Number(usersCount.data?.count ?? 0)}
           />
         </Suspense>
       </AdminHeader>

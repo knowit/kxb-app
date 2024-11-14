@@ -3,13 +3,13 @@
 import { Button, ButtonSkeleton } from "@/components/ui/button";
 import { Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { UserFeedbackForm } from "@/components/user/user-feedback-form";
-import { User } from "@/types";
 import { ComponentPropsWithoutRef } from "react";
+import { SelectUser } from "../../lib/db/schema";
 
 const UserFeedbackPopover = ({
   user,
   ...other
-}: ComponentPropsWithoutRef<typeof PopoverTrigger> & { user: User }) => {
+}: ComponentPropsWithoutRef<typeof PopoverTrigger> & { user: SelectUser }) => {
   return (
     <Popover>
       <PopoverTrigger asChild {...other}>

@@ -146,7 +146,7 @@ type CalendarEntries = {
   isStartOfWeek?: boolean;
   isWorkDay?: boolean;
   isNonCommissionedWorkDay?: boolean;
-  workDayDetails?: UserWorkDayDetail;
+  workDayDetails?: SelectUserWorkDayDetail;
 };
 
 export type AzureAdTokenClaims = {

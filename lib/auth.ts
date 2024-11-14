@@ -1,12 +1,14 @@
-import { db } from "@/lib/db";
+import { db, takeFirst } from "@/lib/db/db";
 import { validateEmail } from "@/logic/validation-logic";
 import { AzureAdTokenClaims, GraphUser } from "@/types";
 import { getMySQLDate } from "@/utils/date-utils";
 import { fetchWithToken } from "@/utils/fetcher";
+import { eq } from "drizzle-orm";
 import { jwtDecode } from "jwt-decode";
 import { Account, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import AzureAdProvider from "next-auth/providers/azure-ad";
+import { InsertUser, usersTable } from "./db/schema";
 
 const AZURE_AD_CLIENT_ID = process.env.NEXTAUTH_AZURE_AD_CLIENT_ID;
 const AZURE_AD_TENANT_ID = process.env.NEXTAUTH_AZURE_AD_TENANT_ID;
@@ -96,56 +98,68 @@ async function getUserRoles(token: string) {
 }
 
 async function initialSignIn(
-  account: Account & { accessToken?: string; refreshToken?: string; ext_expires_in?: number },
-  user: User,
-  token: JWT
+    account: Account & { accessToken?: string; refreshToken?: string; ext_expires_in?: number },
+    user: User,
+    token: JWT
 ): Promise<void> {
   if (
-    !account?.access_token ||
-    !token?.sub ||
-    !user?.email ||
-    !user?.name ||
-    !account?.ext_expires_in
+      !account?.access_token ||
+      !token?.sub ||
+      !user?.email ||
+      !user?.name ||
+      !account?.ext_expires_in
   ) {
     return;
   }
 
   const { isAdmin, isSpecialist } = await getUserRoles(account.access_token);
 
+  // Check if the user exists in the database
   const dbUser = await db
-    .selectFrom("user")
-    .select("id")
-    .where("activeDirectoryId", "=", token.sub)
-    .executeTakeFirst();
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.activeDirectoryId, token.sub))
+      .then(takeFirst);
 
   if (dbUser) {
+    // If user exists, update their information
     await db
-      .updateTable("user")
-      .set({
-        refreshToken: account.refresh_token,
-        isAdmin,
-        isSpecialist,
-        updated: getMySQLDate()
-      })
-      .where("id", "=", dbUser.id)
-      .executeTakeFirst();
-
+        .update(usersTable)
+        .set({
+          refreshToken: account.refresh_token,
+          isAdmin: isAdmin || token.email === "asmund.garfors@knowit.no", // Customize as needed
+          isSpecialist,
+          updated: getMySQLDate(),
+        })
+        .where(eq(usersTable.id, dbUser.id));
     return;
   }
 
-  await db
-    .insertInto("user")
-    .values({
-      // name: user.name,
-      email: "",
-      activeDirectoryId: token.sub,
-      refreshToken: account.refresh_token,
-      accessTokenExpires: Date.now() + account?.ext_expires_in * 1000,
-      isAdmin,
-      isSpecialist
-    })
-    .executeTakeFirst();
+  // If user does not exist, insert them into the database
+  const insertUser: InsertUser = {
+    name: user.name,
+    email: user.email ?? "",
+    activeDirectoryId: token.sub,
+    refreshToken: account.refresh_token,
+    accessTokenExpires: Date.now() + account.ext_expires_in * 1000,
+    isAdmin,
+    hourlyRate: 1150,
+    commission: 0.4,
+    tax: 0.33,
+    workHours: 7.5,
+    created: getMySQLDate(),
+    updated: getMySQLDate(),
+    isSpecialist,
+  };
+
+  try {
+    await db.insert(usersTable).values(insertUser);
+  } catch (error) {
+    console.error("Error inserting new user:", error);
+    throw new Error("Failed to create user in database");
+  }
 }
+
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -204,10 +218,10 @@ export const authOptions: NextAuthOptions = {
       // The user should exist in the database at this point
       // after initial sign in
       const dbUser = await db
-        .selectFrom("user")
-        .select(["id", "isAdmin", "isSpecialist", "activeDirectoryId"])
-        .where("activeDirectoryId", "=", token.sub ?? "unknown")
-        .executeTakeFirst();
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.activeDirectoryId, token.sub ?? "unknown"))
+        .then(takeFirst);
 
       // throw if user is not found in database
       if (!dbUser) {

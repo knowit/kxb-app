@@ -1,5 +1,7 @@
-import { db } from "@/lib/db";
+import { db, takeFirst } from "@/lib/db/db";
+import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { usersTable } from "../../../../lib/db/schema";
 
 interface UserPageProps {
   params: { id: string };
@@ -9,10 +11,10 @@ export const runtime = "edge";
 
 export default async function UserPage({ params }: UserPageProps) {
   const user = await db
-    .selectFrom("user")
-    .selectAll()
-    .where("id", "=", +params.id)
-    .executeTakeFirst();
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.id, +params.id))
+    .then(takeFirst);
 
   if (!user) {
     return notFound();

@@ -4,17 +4,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { InfoButton } from "@/components/ui/info-button";
 import { Show } from "@/components/ui/show";
 import { getMsGraphUserAvatar } from "@/lib/ms-graph";
-import { User } from "@/types";
 import { getInitials } from "@/utils/common-utils";
 import { getHumanizedDateFromNow } from "@/utils/date-utils";
 import Link from "next/link";
 import { ComponentPropsWithoutRef, Suspense } from "react";
+import { SelectUser } from "../../../../lib/db/schema";
 
 async function UserCardAvatar({
   user,
   size = "xl",
   ...other
-}: ComponentPropsWithoutRef<typeof Avatar> & { user: Omit<User, "workDayDetails" | "feedback"> }) {
+}: ComponentPropsWithoutRef<typeof Avatar> & {
+  user: Omit<SelectUser, "workDayDetails" | "feedback">;
+}) {
   const src = await getMsGraphUserAvatar(user.activeDirectoryId);
 
   return (
@@ -25,7 +27,7 @@ async function UserCardAvatar({
   );
 }
 
-async function UserCard({ user }: { user: Omit<User, "workDayDetails" | "feedback"> }) {
+async function UserCard({ user }: { user: Omit<SelectUser, "workDayDetails" | "feedback"> }) {
   return (
     <Card className="relative mt-12">
       <InfoButton className="absolute right-2 top-2 z-10">

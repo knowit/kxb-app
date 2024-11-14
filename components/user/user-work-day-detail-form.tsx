@@ -12,16 +12,17 @@ import { toast } from "@/hooks/use-toast";
 import { mutateUserWorkDayDetail } from "@/lib/actions/user-actions";
 import { cn } from "@/lib/utils";
 import { userWorkDayDetailSchema } from "@/lib/validations/user";
-import { CalendarEntries, User, UserWorkDayDetail } from "@/types";
+import { CalendarEntries, UserWorkDayDetail } from "@/types";
 import { getFormattedLongDate } from "@/utils/date-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { SelectUser } from "../../lib/db/schema";
 
 interface UserWorkDayDetailFormProps extends HTMLAttributes<HTMLFormElement> {
-  user: User;
+  user: SelectUser;
   calendarDay: CalendarEntries;
   userWorkDayDetail?: UserWorkDayDetail;
   isWorkDay?: boolean;

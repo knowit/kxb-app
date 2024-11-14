@@ -6,15 +6,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { userProfileSchema } from "@/lib/validations/user";
-import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition, type HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { SelectUser } from "../../lib/db/schema";
 
 interface UserProfileFormProps extends HTMLAttributes<HTMLFormElement> {
-  user: User;
+  user: SelectUser;
 }
 
 type FormData = z.infer<typeof userProfileSchema>;

@@ -1,9 +1,11 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/db";
 import { userSalaryDetailSchema } from "@/lib/validations/user";
+import { eq } from "drizzle-orm";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
+import { usersTable } from "../../../../../lib/db/schema";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -39,7 +41,7 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
       await userSalaryDetailSchema.parseAsync(res);
 
     await db
-      .updateTable("user")
+      .update(usersTable)
       .set({
         commission,
         hourlyRate,
@@ -47,8 +49,7 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
         workHours,
         taxTable
       })
-      .where("id", "=", id)
-      .executeTakeFirst();
+      .where(eq(usersTable.id, +id));
 
     return new Response("Patched", {
       status: 200

@@ -1,9 +1,11 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/db";
 import { userProfileSchema } from "@/lib/validations/user";
+import { eq } from "drizzle-orm";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import * as z from "zod";
+import { userSettingsTable, userWorkDayDetailTable, usersTable } from "../../../../lib/db/schema";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -36,7 +38,7 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 
     const { name } = await userProfileSchema.parseAsync(res);
 
-    await db.updateTable("user").set({ name }).where("id", "=", id).execute();
+    await db.update(usersTable).set({ name }).where(eq(usersTable.id, +id));
 
     return new Response("Patched", {
       status: 200
@@ -75,13 +77,13 @@ export async function DELETE(request: NextRequest, { params }: { params: Params 
       });
     }
 
-    await db.transaction().execute(async trx => {
+    await db.transaction(async trx => {
       // delete settings
-      await trx.deleteFrom("user_settings").where("userId", "=", id).execute();
+      await trx.delete(userSettingsTable).where(eq(userSettingsTable.userId, id));
       // delete work day details
-      await trx.deleteFrom("user_work_day_detail").where("userId", "=", id).execute();
+      await trx.delete(userWorkDayDetailTable).where(eq(userWorkDayDetailTable.userId, id));
       // delete user
-      await trx.deleteFrom("user").where("id", "=", id).execute();
+      await trx.delete(usersTable).where(eq(usersTable.id, id));
     });
 
     return new Response("Deleted", {

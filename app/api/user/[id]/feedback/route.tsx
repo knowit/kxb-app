@@ -1,10 +1,12 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/db";
 import { userFeedbackSchema } from "@/lib/validations/user";
 import { type ServerRuntime } from "next";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import sanitizeHtml from "sanitize-html";
 import * as z from "zod";
+import { userFeedbackTable } from "../../../../../lib/db/schema";
+import { getMySQLDate } from "../../../../../utils/date-utils";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -22,14 +24,12 @@ export async function POST(request: NextRequest) {
 
     const { feedback, reaction, userId } = await userFeedbackSchema.parseAsync(res);
 
-    await db
-      .insertInto("user_feedback")
-      .values({
-        feedback: sanitizeHtml(feedback),
-        reaction,
-        userId: +userId
-      })
-      .executeTakeFirst();
+    await db.insert(userFeedbackTable).values({
+      feedback: sanitizeHtml(feedback),
+      reaction,
+      userId: +userId,
+      date: getMySQLDate()
+    });
 
     return new Response("Created", {
       status: 201

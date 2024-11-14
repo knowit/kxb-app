@@ -6,27 +6,28 @@ import { Show } from "@/components/ui/show";
 import { UserEditWorkDayDetailDialog } from "@/components/user/user-edit-work-day-detail-dialog";
 import { getUserWorkDayDetailsByDate } from "@/lib/user";
 import { cn } from "@/lib/utils";
-import { CalendarSizeVariant, User, UserWorkDayDetail } from "@/types";
+import { CalendarSizeVariant } from "@/types";
 import { getCalendarMonthEntries } from "@/utils/calendar-utils";
 import { FC } from "react";
+import { SelectUser, SelectUserWorkDayDetail } from "../../../lib/db/schema";
 
 type UserCalendarMonthProps = {
-  user: User;
+  user: SelectUser;
   month: CalendarMonth;
   calendarSizeVariant?: CalendarSizeVariant;
-  workDayDetails?: UserWorkDayDetail[];
+  workDayDetails?: SelectUserWorkDayDetail[];
   closeUserWorkDayDetailsDialogOnSaveSuccess?: boolean;
   showDialogOnCalendarDayClick?: boolean;
 };
 
-async function UserCalendarMonth({
+export const UserCalendarMonth = async ({
   month,
   calendarSizeVariant = "default",
   workDayDetails = [],
   closeUserWorkDayDetailsDialogOnSaveSuccess = false,
   showDialogOnCalendarDayClick = false,
   user
-}: UserCalendarMonthProps) {
+}: UserCalendarMonthProps) => {
   const currentDate = new Date();
   const showWeeks = true && calendarSizeVariant !== "large";
   const holidayInfos = month.days.filter(day => day.holidayInformation);
@@ -108,7 +109,7 @@ async function UserCalendarMonth({
       </Show>
     </div>
   );
-}
+};
 
 type UserCalendarMonthSkeletonProps = Pick<UserCalendarMonthProps, "month" | "calendarSizeVariant">;
 
@@ -119,5 +120,5 @@ const UserCalendarMonthSkeleton: FC<UserCalendarMonthSkeletonProps> = ({
   return <CalendarMonth month={month} calendarSizeVariant={calendarSizeVariant} />;
 };
 
-export { UserCalendarMonth, UserCalendarMonthSkeleton };
+export { UserCalendarMonthSkeleton };
 export type { UserCalendarMonthProps, UserCalendarMonthSkeletonProps };

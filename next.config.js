@@ -56,15 +56,6 @@ const nextConfig = {
         headers: securityHeaders
       }
     ];
-  },
-  redirects() {
-    return [
-      {
-        source: "/:path*",
-        destination: "/",
-        permanent: false
-      }
-    ];
   }
 };
 
